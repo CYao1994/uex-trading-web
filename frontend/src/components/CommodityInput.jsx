@@ -1,7 +1,135 @@
 import { useState, useRef, useEffect } from 'react';
-import { TextField, Box, Typography, Paper, IconButton, Chip, CircularProgress } from '@mui/material';
-import { Add as AddIcon, Close as CloseIcon, Inventory2 } from '@mui/icons-material';
+import { TextField, Box, Typography, Paper, IconButton, Chip, CircularProgress, InputAdornment } from '@mui/material';
+import { Add as AddIcon, Close as CloseIcon, Inventory2, Edit as EditIcon, Check as CheckIcon } from '@mui/icons-material';
 import { searchCommodities } from '../api/client';
+
+function EditableScuChip({ item, onQuantityChange, onRemove }) {
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(String(item.quantity));
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editing]);
+
+  const handleConfirm = () => {
+    const qty = parseInt(editValue) || 1;
+    if (qty < 1) {
+      setEditValue('1');
+      onQuantityChange(item.name, 1);
+    } else {
+      onQuantityChange(item.name, qty);
+    }
+    setEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleConfirm();
+    } else if (e.key === 'Escape') {
+      setEditValue(String(item.quantity));
+      setEditing(false);
+    }
+  };
+
+  if (editing) {
+    return (
+      <Box
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 0.5,
+          px: 1,
+          py: 0.3,
+          background: 'rgba(0, 212, 255, 0.12)',
+          border: '1px solid rgba(0, 212, 255, 0.4)',
+          borderRadius: '16px',
+          boxShadow: '0 0 8px rgba(0, 200, 255, 0.15)',
+        }}
+      >
+        <Inventory2 sx={{ fontSize: 16, color: '#00d4ff' }} />
+        <Typography sx={{
+          color: '#00d4ff',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          fontFamily: '"Noto Sans SC", sans-serif',
+        }}>
+          {item.name_zh}
+        </Typography>
+        <Typography sx={{ color: 'rgba(0, 212, 255, 0.5)', fontSize: '0.75rem', mx: 0.2 }}>
+          ×
+        </Typography>
+        <input
+          ref={inputRef}
+          type="number"
+          min="1"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={handleConfirm}
+          style={{
+            width: 48,
+            background: 'rgba(0, 212, 255, 0.08)',
+            border: '1px solid rgba(0, 212, 255, 0.3)',
+            borderRadius: '3px',
+            color: '#00d4ff',
+            fontSize: '0.8rem',
+            fontWeight: 700,
+            textAlign: 'center',
+            padding: '1px 4px',
+            outline: 'none',
+            fontFamily: '"Orbitron", "Rajdhani", sans-serif',
+          }}
+        />
+        <Typography sx={{ color: 'rgba(0, 212, 255, 0.5)', fontSize: '0.7rem' }}>
+          SCU
+        </Typography>
+        <Box
+          component="span"
+          onClick={handleConfirm}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            color: '#00ff88',
+            ml: 0.3,
+            '&:hover': { transform: 'scale(1.1)' },
+            transition: 'transform 0.15s',
+          }}
+        >
+          <CheckIcon sx={{ fontSize: 16 }} />
+        </Box>
+      </Box>
+    );
+  }
+
+  return (
+    <Chip
+      icon={<Inventory2 sx={{ fontSize: 16 }} />}
+      label={`${item.name_zh} × ${item.quantity} SCU`}
+      onDelete={() => onRemove(item.name)}
+      onClick={() => setEditing(true)}
+      deleteIcon={<CloseIcon />}
+      sx={{
+        background: 'rgba(0, 212, 255, 0.08)',
+        border: '1px solid rgba(0, 212, 255, 0.25)',
+        color: '#00d4ff',
+        fontWeight: 600,
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        '&:hover': {
+          background: 'rgba(0, 212, 255, 0.15)',
+          border: '1px solid rgba(0, 212, 255, 0.4)',
+          boxShadow: '0 0 8px rgba(0, 200, 255, 0.1)',
+        },
+        '& .MuiChip-deleteIcon': { color: 'rgba(0, 212, 255, 0.5)', '&:hover': { color: '#ff3366' } },
+      }}
+    />
+  );
+}
 
 function CommodityInput({ items, onItemsChange }) {
   const [query, setQuery] = useState('');
@@ -78,25 +206,36 @@ function CommodityInput({ items, onItemsChange }) {
     onItemsChange(items.filter(i => i.name !== name));
   };
 
+  const handleQuantityChange = (name, newQty) => {
+    onItemsChange(items.map(i =>
+      i.name === name ? { ...i, quantity: newQty } : i
+    ));
+  };
+
   return (
     <Box>
+      {/* Hint */}
+      {items.length > 0 && (
+        <Typography sx={{
+          color: 'rgba(0, 200, 255, 0.25)',
+          fontSize: '0.65rem',
+          mb: 1,
+          fontFamily: '"Noto Sans SC", sans-serif',
+          letterSpacing: '0.02em',
+        }}>
+          点击货物可编辑SCU数量
+        </Typography>
+      )}
+
       {/* Added items */}
       {items.length > 0 && (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
           {items.map((item) => (
-            <Chip
+            <EditableScuChip
               key={item.name}
-              icon={<Inventory2 sx={{ fontSize: 16 }} />}
-              label={`${item.name_zh} × ${item.quantity} SCU`}
-              onDelete={() => handleRemove(item.name)}
-              deleteIcon={<CloseIcon />}
-              sx={{
-                background: 'rgba(0, 212, 255, 0.08)',
-                border: '1px solid rgba(0, 212, 255, 0.25)',
-                color: '#00d4ff',
-                fontWeight: 600,
-                '& .MuiChip-deleteIcon': { color: 'rgba(0, 212, 255, 0.5)', '&:hover': { color: '#ff3366' } },
-              }}
+              item={item}
+              onQuantityChange={handleQuantityChange}
+              onRemove={handleRemove}
             />
           ))}
         </Box>

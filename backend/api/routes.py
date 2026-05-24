@@ -9,15 +9,15 @@ from .schemas import (
 from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
 from services.route_planner import plan_sell_route
-from version import VERSION
+from version import VERSION, CHANGELOG
 
 router = APIRouter(prefix="/api")
 
 
 @router.get("/version")
 async def get_version():
-    """Get current application version."""
-    return {"version": VERSION}
+    """Get current application version and changelog."""
+    return {"version": VERSION, "changelog": CHANGELOG}
 
 
 @router.post("/sell-route", response_model=SellRouteResponse)

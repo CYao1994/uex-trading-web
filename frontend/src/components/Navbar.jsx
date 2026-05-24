@@ -2,9 +2,11 @@ import { Box, Typography } from '@mui/material';
 import { RocketLaunch, SwapHoriz, AttachMoney } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
+import ChangelogDialog from './ChangelogDialog';
 
 function Navbar({ activeTab, onTabChange }) {
   const [version, setVersion] = useState('');
+  const [changelogOpen, setChangelogOpen] = useState(false);
 
   useEffect(() => {
     api.get('/version')
@@ -232,19 +234,29 @@ function Navbar({ activeTab, onTabChange }) {
         {version && (
           <Typography
             variant="caption"
+            onClick={() => setChangelogOpen(true)}
             sx={{
-              color: 'rgba(0, 200, 255, 0.2)',
+              color: 'rgba(0, 200, 255, 0.3)',
               fontSize: '0.55rem',
               fontFamily: '"Orbitron", sans-serif',
               letterSpacing: '0.05em',
               borderLeft: '1px solid rgba(0, 180, 255, 0.08)',
               pl: 1.25,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              '&:hover': {
+                color: '#00c8ff',
+                textShadow: '0 0 8px rgba(0, 200, 255, 0.4)',
+              },
             }}
           >
             v{version}
           </Typography>
         )}
       </Box>
+
+      {/* Changelog Dialog */}
+      <ChangelogDialog open={changelogOpen} onClose={() => setChangelogOpen(false)} />
     </Box>
   );
 }
