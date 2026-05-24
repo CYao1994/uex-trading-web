@@ -31,7 +31,7 @@ function Navbar({ activeTab, onTabChange }) {
         backdropFilter: 'blur(10px)',
       }}
     >
-      {/* Logo */}
+      {/* Logo + Org */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Box sx={{
           width: 36, height: 36,
@@ -39,8 +39,20 @@ function Navbar({ activeTab, onTabChange }) {
           background: 'linear-gradient(135deg, #00d4ff, #0066ff)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 0 15px rgba(0, 212, 255, 0.3)',
+          overflow: 'hidden',
+          position: 'relative',
         }}>
-          <RocketLaunch sx={{ fontSize: 20, color: '#0a0e17' }} />
+          <img
+            src="/sus2025-logo.jpg"
+            alt="SUS2025"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '50%',
+            }}
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
         </Box>
         <Box>
           <Typography
@@ -64,6 +76,66 @@ function Navbar({ activeTab, onTabChange }) {
           >
             NAVIGATOR
           </Typography>
+        </Box>
+        {/* Org Badge */}
+        <Box
+          component="a"
+          href="https://robertsspaceindustries.com/en/orgs/SUS2025"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 0.75,
+            ml: 0.5,
+            pl: 1.25,
+            borderLeft: '1px solid rgba(0, 212, 255, 0.15)',
+            textDecoration: 'none',
+            cursor: 'pointer',
+            '&:hover .org-name': {
+              color: '#00d4ff',
+            },
+          }}
+        >
+          <Box
+            component="img"
+            src="/sus2025-logo.jpg"
+            alt="SUS2025"
+            sx={{
+              width: 22,
+              height: 22,
+              borderRadius: '50%',
+              border: '1px solid rgba(0, 212, 255, 0.3)',
+              boxShadow: '0 0 8px rgba(0, 212, 255, 0.15)',
+            }}
+          />
+          <Box>
+            <Typography
+              className="org-name"
+              sx={{
+                color: 'rgba(0, 212, 255, 0.7)',
+                fontSize: '0.7rem',
+                fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+                fontWeight: 600,
+                lineHeight: 1.2,
+                transition: 'color 0.2s',
+                letterSpacing: '0.02em',
+              }}
+            >
+              斯坦顿外域探索协会
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(0, 212, 255, 0.35)',
+                fontSize: '0.55rem',
+                fontFamily: '"Orbitron", sans-serif',
+                letterSpacing: '0.1em',
+                lineHeight: 1.2,
+              }}
+            >
+              SUS2025
+            </Typography>
+          </Box>
         </Box>
       </Box>
 
