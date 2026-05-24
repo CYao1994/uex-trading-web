@@ -73,7 +73,12 @@ def api_get(endpoint: str, params: dict = None) -> dict:
 
 
 def load_terminals() -> List[Dict]:
-    """Load all commodity terminals with caching."""
+    """Load all commodity terminals with caching.
+
+    Filters out PLATINUM BAY terminals because they have zero price data
+    in the UEX API. Each PB location has a corresponding ADMIN terminal
+    that has actual buy/sell prices.
+    """
     global _terminal_cache, _terminal_cache_loaded
     if _terminal_cache_loaded:
         return _terminal_cache
@@ -86,6 +91,8 @@ def load_terminals() -> List[Dict]:
             _terminal_cache = [t for t in data.get("data", []) if t.get("type") == "commodity"]
         except Exception:
             _terminal_cache = []
+    # Filter out PLATINUM BAY terminals — they have zero price data in UEX
+    _terminal_cache = [t for t in _terminal_cache if "platinum" not in t.get("name", "").lower()]
     _terminal_cache_loaded = True
     return _terminal_cache
 
