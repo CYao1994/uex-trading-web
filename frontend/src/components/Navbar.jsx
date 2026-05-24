@@ -1,4 +1,4 @@
-import { Box, Typography, Chip } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { RocketLaunch, SwapHoriz, AttachMoney } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
@@ -25,22 +25,33 @@ function Navbar({ activeTab, onTabChange }) {
         alignItems: 'center',
         justifyContent: 'space-between',
         px: 3,
-        py: 1.5,
-        background: 'linear-gradient(180deg, rgba(13, 19, 33, 0.95) 0%, rgba(13, 19, 33, 0.8) 100%)',
-        borderBottom: '1px solid rgba(0, 212, 255, 0.15)',
-        backdropFilter: 'blur(10px)',
+        py: 1,
+        background: 'linear-gradient(180deg, rgba(3, 10, 22, 0.97) 0%, rgba(2, 8, 16, 0.95) 100%)',
+        borderBottom: '1px solid rgba(0, 180, 255, 0.1)',
+        backdropFilter: 'blur(15px)',
+        position: 'relative',
+        // Top edge glow line
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.5) 30%, rgba(0, 200, 255, 0.5) 70%, transparent 100%)',
+        },
       }}
     >
       {/* Logo + Org */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Box sx={{
-          width: 36, height: 36,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #00d4ff, #0066ff)',
+          width: 34, height: 34,
+          borderRadius: '4px',
+          background: 'linear-gradient(135deg, rgba(0, 200, 255, 0.15), rgba(0, 100, 200, 0.1))',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 15px rgba(0, 212, 255, 0.3)',
+          border: '1px solid rgba(0, 200, 255, 0.25)',
           overflow: 'hidden',
-          position: 'relative',
+          boxShadow: '0 0 10px rgba(0, 200, 255, 0.1)',
         }}>
           <img
             src="/sus2025-logo.jpg"
@@ -49,9 +60,7 @@ function Navbar({ activeTab, onTabChange }) {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              borderRadius: '50%',
             }}
-            onError={(e) => { e.target.style.display = 'none'; }}
           />
         </Box>
         <Box>
@@ -60,19 +69,17 @@ function Navbar({ activeTab, onTabChange }) {
             sx={{
               fontFamily: '"Orbitron", sans-serif',
               fontWeight: 700,
-              fontSize: '1.1rem',
-              background: 'linear-gradient(135deg, #00d4ff, #66e5ff)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              fontSize: '1rem',
+              color: '#00c8ff',
               lineHeight: 1.2,
+              letterSpacing: '0.05em',
             }}
           >
             UEX TRADE
           </Typography>
           <Typography
             variant="caption"
-            sx={{ color: 'text.secondary', fontSize: '0.65rem', letterSpacing: '0.15em' }}
+            sx={{ color: 'rgba(0, 200, 255, 0.35)', fontSize: '0.6rem', letterSpacing: '0.2em', fontFamily: '"Orbitron", sans-serif' }}
           >
             NAVIGATOR
           </Typography>
@@ -89,11 +96,11 @@ function Navbar({ activeTab, onTabChange }) {
             gap: 0.75,
             ml: 0.5,
             pl: 1.25,
-            borderLeft: '1px solid rgba(0, 212, 255, 0.15)',
+            borderLeft: '1px solid rgba(0, 180, 255, 0.12)',
             textDecoration: 'none',
             cursor: 'pointer',
             '&:hover .org-name': {
-              color: '#00d4ff',
+              color: '#00c8ff',
             },
           }}
         >
@@ -102,19 +109,18 @@ function Navbar({ activeTab, onTabChange }) {
             src="/sus2025-logo.jpg"
             alt="SUS2025"
             sx={{
-              width: 22,
-              height: 22,
-              borderRadius: '50%',
-              border: '1px solid rgba(0, 212, 255, 0.3)',
-              boxShadow: '0 0 8px rgba(0, 212, 255, 0.15)',
+              width: 20,
+              height: 20,
+              borderRadius: '2px',
+              border: '1px solid rgba(0, 180, 255, 0.2)',
             }}
           />
           <Box>
             <Typography
               className="org-name"
               sx={{
-                color: 'rgba(0, 212, 255, 0.7)',
-                fontSize: '0.7rem',
+                color: 'rgba(0, 200, 255, 0.6)',
+                fontSize: '0.68rem',
                 fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
                 fontWeight: 600,
                 lineHeight: 1.2,
@@ -126,8 +132,8 @@ function Navbar({ activeTab, onTabChange }) {
             </Typography>
             <Typography
               sx={{
-                color: 'rgba(0, 212, 255, 0.35)',
-                fontSize: '0.55rem',
+                color: 'rgba(0, 200, 255, 0.25)',
+                fontSize: '0.5rem',
                 fontFamily: '"Orbitron", sans-serif',
                 letterSpacing: '0.1em',
                 lineHeight: 1.2,
@@ -139,48 +145,65 @@ function Navbar({ activeTab, onTabChange }) {
         </Box>
       </Box>
 
-      {/* Tab switcher */}
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      {/* Tab switcher - HUD style */}
+      <Box sx={{
+        display: 'flex',
+        gap: 0.5,
+        background: 'rgba(0, 10, 20, 0.4)',
+        border: '1px solid rgba(0, 180, 255, 0.08)',
+        borderRadius: '2px',
+        p: 0.3,
+      }}>
         {tabs.map(({ key, label, icon }) => {
           const isActive = activeTab === key;
-          // Special accent color for price tab
-          const accentColor = key === 'price' ? '#ffaa00' : '#00d4ff';
-          const gradientBg = key === 'price'
-            ? 'linear-gradient(135deg, #ffaa00, #ff6b35)'
-            : 'linear-gradient(135deg, #00d4ff, #0066ff)';
+          const accentColor = key === 'price' ? '#ffaa00' : '#00c8ff';
 
           return (
-            <Chip
+            <Box
               key={key}
-              icon={icon}
-              label={label}
               onClick={() => onTabChange(key)}
-              variant={isActive ? 'filled' : 'outlined'}
               sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.75,
+                px: 2,
+                py: 0.75,
+                cursor: 'pointer',
                 fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif',
                 fontWeight: 600,
-                ...(isActive
-                  ? {
-                      background: gradientBg,
-                      color: '#0a0e17',
-                      boxShadow: `0 0 15px ${accentColor}44`,
-                    }
-                  : {
-                      borderColor: `${accentColor}4D`,
-                      color: accentColor,
-                      '&:hover': { borderColor: accentColor },
-                    }),
+                fontSize: '0.82rem',
+                letterSpacing: '0.03em',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative',
+                ...(isActive ? {
+                  color: '#020810',
+                  background: key === 'price'
+                    ? 'linear-gradient(135deg, #ffaa00, #ff7b00)'
+                    : 'linear-gradient(135deg, #00c8ff, #0088dd)',
+                  boxShadow: `0 0 12px ${accentColor}44`,
+                  // Clip corners for HUD look
+                  clipPath: 'polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)',
+                } : {
+                  color: `${accentColor}99`,
+                  '&:hover': {
+                    color: accentColor,
+                    background: `${accentColor}0A`,
+                  },
+                }),
               }}
-            />
+            >
+              {icon}
+              {label}
+            </Box>
           );
         })}
       </Box>
 
-      {/* Status indicator + Author */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      {/* Status + Author */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <Box sx={{
-            width: 6, height: 6, borderRadius: '50%',
+            width: 5, height: 5, borderRadius: '50%',
             backgroundColor: '#00ff88',
             boxShadow: '0 0 6px #00ff88',
             animation: 'pulse 2s ease-in-out infinite',
@@ -189,19 +212,19 @@ function Navbar({ activeTab, onTabChange }) {
               '50%': { opacity: 1 },
             },
           }} />
-          <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
+          <Typography variant="caption" sx={{ color: 'rgba(0, 200, 255, 0.4)', fontSize: '0.65rem', fontFamily: '"Orbitron", sans-serif', letterSpacing: '0.08em' }}>
             UEX ONLINE
           </Typography>
         </Box>
         <Typography
           variant="caption"
           sx={{
-            color: 'rgba(0, 212, 255, 0.4)',
-            fontSize: '0.65rem',
+            color: 'rgba(0, 200, 255, 0.3)',
+            fontSize: '0.6rem',
             fontFamily: '"Orbitron", sans-serif',
-            letterSpacing: '0.08em',
-            borderLeft: '1px solid rgba(0, 212, 255, 0.15)',
-            pl: 1.5,
+            letterSpacing: '0.06em',
+            borderLeft: '1px solid rgba(0, 180, 255, 0.1)',
+            pl: 1.25,
           }}
         >
           BY CYao1994
@@ -210,12 +233,12 @@ function Navbar({ activeTab, onTabChange }) {
           <Typography
             variant="caption"
             sx={{
-              color: 'rgba(0, 212, 255, 0.25)',
-              fontSize: '0.6rem',
+              color: 'rgba(0, 200, 255, 0.2)',
+              fontSize: '0.55rem',
               fontFamily: '"Orbitron", sans-serif',
               letterSpacing: '0.05em',
-              borderLeft: '1px solid rgba(0, 212, 255, 0.1)',
-              pl: 1.5,
+              borderLeft: '1px solid rgba(0, 180, 255, 0.08)',
+              pl: 1.25,
             }}
           >
             v{version}

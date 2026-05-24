@@ -77,14 +77,15 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
             {/* Stop card */}
             <Box sx={{
               p: 2,
-              borderRadius: 2,
-              background: 'rgba(13, 19, 33, 0.6)',
-              border: `1px solid ${color}18`,
+              borderRadius: '2px',
+              background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.7) 0%, rgba(2, 8, 18, 0.8) 100%)',
+              border: `1px solid ${color}15`,
               '&:hover': {
-                border: `1px solid ${color}33`,
-                background: 'rgba(13, 19, 33, 0.8)',
+                border: `1px solid ${color}30`,
+                background: 'linear-gradient(135deg, rgba(5, 15, 30, 0.8) 0%, rgba(3, 10, 22, 0.9) 100%)',
+                boxShadow: `0 0 8px ${color}0A`,
               },
-              transition: 'all 0.2s',
+              transition: 'all 0.25s',
             }}>
               {/* Terminal name + distance */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>

@@ -10,18 +10,28 @@ function Layout({ children, activeTab, onTabChange }) {
       <Box sx={{ flex: 1, p: { xs: 2, md: 3 }, maxWidth: 1400, mx: 'auto', width: '100%' }}>
         {children}
       </Box>
-      {/* Footer */}
+      {/* Footer - HUD style */}
       <Box sx={{
-        py: 1.5,
+        py: 1.2,
         px: 3,
         textAlign: 'center',
-        borderTop: '1px solid rgba(0, 212, 255, 0.08)',
-        background: 'rgba(6, 10, 19, 0.8)',
+        borderTop: '1px solid rgba(0, 180, 255, 0.06)',
+        background: 'linear-gradient(180deg, rgba(2, 8, 16, 0.9) 0%, rgba(2, 6, 12, 0.95) 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
         flexWrap: 'wrap',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.15) 30%, rgba(0, 200, 255, 0.15) 70%, transparent 100%)',
+        },
       }}>
         <Box
           component="a"

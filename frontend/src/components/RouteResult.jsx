@@ -36,7 +36,7 @@ function RouteResult({ data }) {
   return (
     <Box>
       {/* Commodity Summary */}
-      <Paper sx={{ p: 2.5, mb: 3, background: 'rgba(13, 19, 33, 0.7)' }}>
+      <Box sx={{ p: 2.5, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)', border: '1px solid rgba(0, 180, 255, 0.1)', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.3) 30%, rgba(0, 200, 255, 0.3) 70%, transparent 100%)' } }}>
         <Typography variant="h6" sx={{
           color: 'primary.main', mb: 2, fontWeight: 700,
           fontFamily: '"Orbitron", sans-serif', fontSize: '0.9rem',
@@ -71,10 +71,10 @@ function RouteResult({ data }) {
             </Box>
           </Box>
         ))}
-      </Paper>
+      </Box>
 
       {/* Comparison summary */}
-      <Paper sx={{ p: 2, mb: 3, background: 'rgba(13, 19, 33, 0.7)' }}>
+      <Box sx={{ p: 2, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)', border: '1px solid rgba(0, 180, 255, 0.08)' }}>
         <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           <Box sx={{ flex: 1, minWidth: 200 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -114,10 +114,10 @@ function RouteResult({ data }) {
             </Typography>
           </Box>
         )}
-      </Paper>
+      </Box>
 
       {/* Route detail tabs */}
-      <Paper sx={{ background: 'rgba(13, 19, 33, 0.5)' }}>
+      <Box sx={{ background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.8) 0%, rgba(2, 8, 18, 0.85) 100%)', border: '1px solid rgba(0, 180, 255, 0.06)' }}>
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
@@ -154,7 +154,7 @@ function RouteResult({ data }) {
             />
           )}
         </Box>
-      </Paper>
+      </Box>
 
       {/* Warnings */}
       {warnings && warnings.length > 0 && (

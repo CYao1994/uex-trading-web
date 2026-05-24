@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Box } from '@mui/material';
 
-const STAR_COUNT = 200;
+const STAR_COUNT = 280;
 
 function StarBackground() {
   const stars = useMemo(() => {
@@ -26,24 +26,48 @@ function StarBackground() {
         height: '100%',
         zIndex: -1,
         overflow: 'hidden',
-        background: 'radial-gradient(ellipse at 20% 50%, #0d1b2a 0%, #060a13 50%, #020408 100%)',
+        // Deep space base with nebula coloring
+        background: `
+          radial-gradient(ellipse at 15% 20%, rgba(0, 40, 80, 0.4) 0%, transparent 50%),
+          radial-gradient(ellipse at 85% 80%, rgba(10, 0, 50, 0.3) 0%, transparent 50%),
+          radial-gradient(ellipse at 50% 50%, rgba(0, 20, 40, 0.2) 0%, transparent 70%),
+          linear-gradient(180deg, #020810 0%, #050d18 30%, #030a14 60%, #010408 100%)
+        `,
       }}
     >
-      {/* Nebula glow effects */}
+      {/* Large nebula cloud - upper left */}
       <Box sx={{
-        position: 'absolute', top: '10%', left: '5%',
-        width: '40%', height: '40%',
-        background: 'radial-gradient(circle, rgba(0, 102, 255, 0.05) 0%, transparent 70%)',
+        position: 'absolute', top: '-10%', left: '-5%',
+        width: '60%', height: '60%',
+        background: `
+          radial-gradient(ellipse at 40% 50%, rgba(0, 100, 200, 0.06) 0%, transparent 60%),
+          radial-gradient(ellipse at 60% 40%, rgba(0, 60, 150, 0.04) 0%, transparent 50%)
+        `,
         borderRadius: '50%',
+        filter: 'blur(30px)',
       }} />
+
+      {/* Nebula accent - lower right */}
       <Box sx={{
-        position: 'absolute', bottom: '10%', right: '10%',
-        width: '35%', height: '35%',
-        background: 'radial-gradient(circle, rgba(0, 212, 255, 0.03) 0%, transparent 70%)',
+        position: 'absolute', bottom: '-5%', right: '-10%',
+        width: '50%', height: '50%',
+        background: `
+          radial-gradient(ellipse at 50% 50%, rgba(30, 0, 80, 0.08) 0%, transparent 55%),
+          radial-gradient(ellipse at 30% 60%, rgba(0, 50, 120, 0.04) 0%, transparent 40%)
+        `,
+        borderRadius: '50%',
+        filter: 'blur(25px)',
+      }} />
+
+      {/* Distant star clusters */}
+      <Box sx={{
+        position: 'absolute', top: '25%', right: '15%',
+        width: '20%', height: '20%',
+        background: 'radial-gradient(circle, rgba(100, 150, 255, 0.03) 0%, transparent 70%)',
         borderRadius: '50%',
       }} />
 
-      {/* Stars */}
+      {/* Star field */}
       {stars.map((star) => (
         <Box
           key={star.id}
@@ -54,8 +78,15 @@ function StarBackground() {
             width: star.size,
             height: star.size,
             borderRadius: '50%',
-            backgroundColor: star.size > 1.5 ? '#b0d4ff' : '#ffffff',
+            backgroundColor: star.size > 1.8
+              ? '#a0c8ff'
+              : star.size > 1.2
+                ? '#c0d8ff'
+                : '#ffffff',
             opacity: star.opacity,
+            boxShadow: star.size > 1.5
+              ? `0 0 ${star.size * 2}px rgba(160, 200, 255, ${star.opacity * 0.5})`
+              : 'none',
             animation: `twinkle ${star.animationDuration}s ease-in-out ${star.animationDelay}s infinite`,
             '@keyframes twinkle': {
               '0%, 100%': { opacity: star.opacity * 0.3 },
@@ -65,15 +96,48 @@ function StarBackground() {
         />
       ))}
 
-      {/* Grid lines */}
+      {/* HUD Grid - bottom layer */}
       <Box sx={{
         position: 'absolute', top: 0, left: 0,
         width: '100%', height: '100%',
         backgroundImage: `
-          linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px)
+          linear-gradient(rgba(0, 180, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 180, 255, 0.015) 1px, transparent 1px)
         `,
-        backgroundSize: '80px 80px',
+        backgroundSize: '60px 60px',
+        maskImage: 'radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%)',
+        WebkitMaskImage: 'radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%)',
+      }} />
+
+      {/* Scan line effect */}
+      <Box sx={{
+        position: 'absolute', top: 0, left: 0,
+        width: '100%', height: '100%',
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 180, 255, 0.008) 2px, rgba(0, 180, 255, 0.008) 4px)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Animated scan sweep */}
+      <Box sx={{
+        position: 'absolute', top: 0, left: 0,
+        width: '100%', height: '3px',
+        background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.15) 40%, rgba(0, 200, 255, 0.3) 50%, rgba(0, 200, 255, 0.15) 60%, transparent 100%)',
+        animation: 'scanSweep 8s linear infinite',
+        '@keyframes scanSweep': {
+          '0%': { top: '-3px', opacity: 0 },
+          '5%': { opacity: 1 },
+          '95%': { opacity: 1 },
+          '100%': { top: '100%', opacity: 0 },
+        },
+        boxShadow: '0 0 15px rgba(0, 200, 255, 0.2), 0 0 30px rgba(0, 200, 255, 0.1)',
+      }} />
+
+      {/* Vignette overlay */}
+      <Box sx={{
+        position: 'absolute', top: 0, left: 0,
+        width: '100%', height: '100%',
+        background: 'radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.4) 100%)',
+        pointerEvents: 'none',
       }} />
     </Box>
   );

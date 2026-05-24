@@ -218,22 +218,33 @@ function PricePanel() {
   return (
     <Box sx={{ display: 'flex', gap: 3, minHeight: 'calc(100vh - 120px)' }}>
       {/* Left: Search panel */}
-      <Paper sx={{
-        width: 380, flexShrink: 0, p: 3,
-        background: 'rgba(13, 19, 33, 0.7)',
-        border: '1px solid rgba(0, 212, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
+      <Box sx={{
+        width: 380, flexShrink: 0, p: 2.5,
+        background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)',
+        border: '1px solid rgba(255, 170, 0, 0.1)',
+        backdropFilter: 'blur(12px)',
         height: 'fit-content',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255, 170, 0, 0.35) 30%, rgba(255, 170, 0, 0.35) 70%, transparent 100%)',
+        },
       }}>
         {/* Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
           <Box sx={{
-            width: 36, height: 36, borderRadius: 2,
-            background: 'linear-gradient(135deg, #ffaa00, #ff6b35)',
+            width: 32, height: 32,
+            background: 'linear-gradient(135deg, rgba(255, 170, 0, 0.15), rgba(255, 107, 53, 0.1))',
+            border: '1px solid rgba(255, 170, 0, 0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(255, 170, 0, 0.3)',
+            clipPath: 'polygon(3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px), 0 3px)',
           }}>
-            <AttachMoney sx={{ color: '#0a0e17', fontSize: 20 }} />
+            <AttachMoney sx={{ color: '#ffaa00', fontSize: 18 }} />
           </Box>
           <Box>
             <Typography variant="h6" sx={{
@@ -333,7 +344,7 @@ function PricePanel() {
             {error}
           </Alert>
         )}
-      </Paper>
+      </Box>
 
       {/* Right: Results */}
       <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -350,11 +361,21 @@ function PricePanel() {
         ) : priceData ? (
           <Box>
             {/* Commodity header */}
-            <Paper sx={{
+            <Box sx={{
               p: 2.5, mb: 2,
-              background: 'rgba(13, 19, 33, 0.7)',
-              border: '1px solid rgba(255, 170, 0, 0.15)',
+              background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)',
+              border: '1px solid rgba(255, 170, 0, 0.12)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              position: 'relative',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 170, 0, 0.3) 30%, rgba(255, 170, 0, 0.3) 70%, transparent 100%)',
+              },
             }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{
@@ -404,12 +425,12 @@ function PricePanel() {
                   />
                 </Tooltip>
               </Box>
-            </Paper>
+            </Box>
 
             {/* Tab: Buy prices / Sell prices */}
-            <Paper sx={{
-              background: 'rgba(13, 19, 33, 0.7)',
-              border: '1px solid rgba(0, 212, 255, 0.1)',
+            <Box sx={{
+              background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.85) 0%, rgba(2, 8, 18, 0.9) 100%)',
+              border: '1px solid rgba(0, 180, 255, 0.1)',
             }}>
               <Tabs
                 value={activeTab}
@@ -449,7 +470,7 @@ function PricePanel() {
                   : renderPriceTable(priceData.sell_prices, 'sell')
                 }
               </Box>
-            </Paper>
+            </Box>
           </Box>
         ) : (
           <Box sx={{

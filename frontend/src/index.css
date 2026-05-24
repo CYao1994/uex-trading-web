@@ -13,36 +13,77 @@ html, body, #root {
 }
 
 body {
-  background: #060a13;
+  background: #020810;
   color: #e0e6ed;
   font-family: 'Rajdhani', 'Noto Sans SC', sans-serif;
 }
 
-/* Custom scrollbar */
+/* === Custom scrollbar - HUD style === */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1321;
+  background: rgba(0, 10, 20, 0.5);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a3a5c;
-  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(0, 200, 255, 0.3), rgba(0, 100, 200, 0.2));
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a5a8c;
+  background: linear-gradient(180deg, rgba(0, 200, 255, 0.5), rgba(0, 100, 200, 0.4));
 }
 
-/* Glow effects */
+/* === Glow effects === */
 .glow-blue {
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3), 0 0 30px rgba(0, 102, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.3), 0 0 30px rgba(0, 100, 200, 0.1);
 }
-
 .glow-text {
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 20px rgba(0, 102, 255, 0.3);
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.5), 0 0 20px rgba(0, 100, 200, 0.3);
 }
 
-/* Quantum jump animation */
+/* === HUD Panel base styles === */
+.hud-panel {
+  background: linear-gradient(135deg, rgba(5, 15, 30, 0.85) 0%, rgba(2, 10, 20, 0.9) 100%);
+  border: 1px solid rgba(0, 180, 255, 0.12);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.4) 50%, transparent 100%);
+}
+
+/* === HUD Button styles === */
+.hud-btn {
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.hud-btn:hover::after {
+  left: 100%;
+}
+
+/* === Animations === */
 @keyframes quantumJump {
   0% { opacity: 0; transform: scale(0.5); }
   50% { opacity: 1; transform: scale(1.2); }
@@ -63,8 +104,79 @@ body {
   animation: slideIn 0.5s ease-out forwards;
 }
 
-/* Star field */
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 1; }
+}
+
+/* HUD corner brackets */
+@keyframes hudBracketPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* Data stream animation for loading */
+@keyframes dataStream {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+/* HUD flicker */
+@keyframes hudFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+/* === MUI Overrides for HUD style === */
+
+/* TextField input */
+.MuiTextField-root .MuiOutlinedInput-root {
+  background: rgba(0, 15, 30, 0.4) !important;
+  border-radius: 2px !important;
+  transition: all 0.3s !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 180, 255, 0.15) !important;
+  border-radius: 2px !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 180, 255, 0.3) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 200, 255, 0.5) !important;
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.15), inset 0 0 4px rgba(0, 200, 255, 0.05) !important;
+}
+
+/* Tabs */
+.MuiTabs-root {
+  min-height: 44px !important;
+}
+
+/* Table */
+.MuiTableHead-root .MuiTableCell-head {
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* Alert override */
+.MuiAlert-root {
+  border-radius: 2px !important;
+  border: 1px solid !important;
+}
+
+.MuiAlert-standardError {
+  background: rgba(255, 51, 102, 0.08) !important;
+  border-color: rgba(255, 51, 102, 0.25) !important;
+}
+
+.MuiAlert-standardWarning {
+  background: rgba(255, 170, 0, 0.08) !important;
+  border-color: rgba(255, 170, 0, 0.25) !important;
 }
