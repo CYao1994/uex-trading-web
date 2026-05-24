@@ -7,7 +7,7 @@ from services.uex_api import (
     resolve_terminal, build_distance_matrix, get_distance,
     fetch_routes_from_terminal, _distance_cache, _routes_queried,
 )
-from services.data_mapper import get_terminal_zh, get_commodity_zh, format_location_zh, SYSTEM_ZH
+from services.data_mapper import get_terminal_zh, get_commodity_zh, format_location_zh, SYSTEM_ZH, PLANET_ZH
 
 
 def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
@@ -133,7 +133,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                     "terminal_station": td.get("space_station_name", ""),
                     "star_system": td.get("star_system_name", ""),
                     "planet": td.get("planet_name", ""),
-                    "zh_loc": format_location_zh(
+                    "zh_loc": get_terminal_zh(
                         td.get("name", ""), td.get("nickname", ""),
                         td.get("space_station_name", ""),
                         td.get("planet_name", ""), td.get("star_system_name", "")
@@ -234,7 +234,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                 "system": best_stop["star_system"],
                 "system_zh": SYSTEM_ZH.get(best_stop["star_system"], best_stop["star_system"]),
                 "planet": best_stop["planet"],
-                "planet_zh": best_stop["planet"],
+                "planet_zh": PLANET_ZH.get(best_stop["planet"], best_stop["planet"]),
                 "distance_from_prev": best_stop_distance if best_stop_distance < 9999 else None,
                 "cumulative_distance": shortest_total_distance,
                 "commodities_sold": commodities_sold,
@@ -271,7 +271,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
         max_profit_route.append({
             "terminal_id": best["tid"],
             "terminal_name": td.get("name", ""),
-            "terminal_name_zh": format_location_zh(
+            "terminal_name_zh": get_terminal_zh(
                 td.get("name", ""), td.get("nickname", ""),
                 td.get("space_station_name", ""),
                 td.get("planet_name", ""), td.get("star_system_name", "")
@@ -279,7 +279,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
             "system": td.get("star_system_name", ""),
             "system_zh": SYSTEM_ZH.get(td.get("star_system_name", ""), td.get("star_system_name", "")),
             "planet": td.get("planet_name", ""),
-            "planet_zh": td.get("planet_name", ""),
+            "planet_zh": PLANET_ZH.get(td.get("planet_name", ""), td.get("planet_name", "")),
             "distance_from_prev": d,
             "cumulative_distance": max_profit_total_distance,
             "commodities_sold": [{

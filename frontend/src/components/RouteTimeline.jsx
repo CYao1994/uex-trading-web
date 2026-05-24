@@ -94,7 +94,7 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
                     {stop.terminal_name_zh}
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    {stop.terminal_name} · {stop.system_zh}
+                    {stop.terminal_name} · {stop.planet_zh ? `${stop.planet_zh} · ` : ''}{stop.system_zh}
                   </Typography>
                 </Box>
                 <Box sx={{ textAlign: 'right' }}>
