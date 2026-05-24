@@ -4,11 +4,12 @@ API Routes - FastAPI route handlers
 from fastapi import APIRouter, Query
 from .schemas import (
     SellRouteRequest, SellRouteResponse, TerminalOption, CommodityOption,
-    PriceEntry, CommodityPricesResponse
+    PriceEntry, CommodityPricesResponse, WarbondResponse
 )
 from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
 from services.route_planner import plan_sell_route
+from services.warbond_scraper import fetch_warbonds
 from version import VERSION, CHANGELOG
 
 router = APIRouter(prefix="/api")
@@ -168,3 +169,9 @@ async def commodity_prices(commodity_id: int):
         buy_prices=buy_entries,
         sell_prices=sell_entries,
     )
+
+
+@router.get("/warbonds", response_model=WarbondResponse)
+async def get_warbonds():
+    """Get current warbond items from RSI store."""
+    return fetch_warbonds()

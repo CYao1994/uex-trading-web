@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Snackbar, Alert } from '@mui/material';
 import Layout from './components/Layout';
 import SellPanel from './components/SellPanel';
-import BuyPanel from './components/BuyPanel';
-import PricePanel from './components/PricePanel';
+import WarbondPanel from './components/WarbondPanel';
 import RouteResult from './components/RouteResult';
 import LoadingOverlay from './components/LoadingOverlay';
 
@@ -20,12 +19,12 @@ function App() {
     }
   };
 
-  // Price panel is self-contained, no result state needed
-  if (activeTab === 'price') {
+  // Warbond panel is self-contained
+  if (activeTab === 'warbond') {
     return (
       <>
         <Layout activeTab={activeTab} onTabChange={setActiveTab}>
-          <PricePanel />
+          <WarbondPanel />
         </Layout>
         <Snackbar
           open={toast.open}
@@ -53,11 +52,7 @@ function App() {
         <Box sx={{ display: 'flex', gap: 3, minHeight: 'calc(100vh - 100px)' }}>
           {/* Left panel */}
           <Box sx={{ width: 380, flexShrink: 0 }}>
-            {activeTab === 'sell' ? (
-              <SellPanel onResult={handleResult} />
-            ) : (
-              <BuyPanel />
-            )}
+            <SellPanel onResult={handleResult} />
           </Box>
 
           {/* Right result area */}

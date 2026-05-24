@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "2.1.0"
+VERSION = "3.0.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.0.0",
+        "date": "2025-05-25",
+        "changes": [
+            "新增：战争债券信息模块（CCU升级包+单船分类展示）",
+            "移除：价格查询模块和进货路线模块",
+            "战争债券数据来自starnotifier.com实时爬取",
+            "每个商品含RSI商店跳转链接",
+        ],
+    },
     {
         "version": "2.1.0",
         "date": "2025-05-25",

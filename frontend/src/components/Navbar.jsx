@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { RocketLaunch, SwapHoriz, AttachMoney } from '@mui/icons-material';
+import { RocketLaunch, SwapHoriz, MilitaryTech } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
 import ChangelogDialog from './ChangelogDialog';
@@ -16,8 +16,7 @@ function Navbar({ activeTab, onTabChange }) {
 
   const tabs = [
     { key: 'sell', label: '清仓路线', icon: <SwapHoriz sx={{ fontSize: 16 }} /> },
-    { key: 'price', label: '价格查询', icon: <AttachMoney sx={{ fontSize: 16 }} /> },
-    { key: 'buy', label: '进货路线', icon: <RocketLaunch sx={{ fontSize: 16 }} /> },
+    { key: 'warbond', label: '战争债券', icon: <MilitaryTech sx={{ fontSize: 16 }} /> },
   ];
 
   return (
@@ -158,7 +157,7 @@ function Navbar({ activeTab, onTabChange }) {
       }}>
         {tabs.map(({ key, label, icon }) => {
           const isActive = activeTab === key;
-          const accentColor = key === 'price' ? '#ffaa00' : '#00c8ff';
+          const accentColor = key === 'warbond' ? '#ffaa00' : '#00c8ff';
 
           return (
             <Box
@@ -179,7 +178,7 @@ function Navbar({ activeTab, onTabChange }) {
                 position: 'relative',
                 ...(isActive ? {
                   color: '#020810',
-                  background: key === 'price'
+                  background: key === 'warbond'
                     ? 'linear-gradient(135deg, #ffaa00, #ff7b00)'
                     : 'linear-gradient(135deg, #00c8ff, #0088dd)',
                   boxShadow: `0 0 12px ${accentColor}44`,

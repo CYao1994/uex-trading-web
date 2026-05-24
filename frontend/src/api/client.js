@@ -17,4 +17,7 @@ export const searchCommodities = (q) =>
 export const getCommodityPrices = (commodityId) =>
   api.get(`/commodity-prices/${commodityId}`);
 
+export const getWarbonds = () =>
+  api.get('/warbonds');
+
 export default api;

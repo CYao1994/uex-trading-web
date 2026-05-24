@@ -96,3 +96,21 @@ class CommodityPricesResponse(BaseModel):
     commodity_name_zh: str
     buy_prices: List[PriceEntry]  # Terminals that BUY this commodity (you sell to them)
     sell_prices: List[PriceEntry]  # Terminals that SELL this commodity (you buy from them)
+
+
+class WarbondItem(BaseModel):
+    name: str
+    category: str  # "ccu", "standalone_ship", "package", "other"
+    category_zh: str  # "升级包", "单船", "游戏包", "其他"
+    warbond_price: Optional[int] = None  # in USD cents
+    standard_price: Optional[int] = None  # in USD cents
+    rsi_url: str  # link to RSI store page
+    image_url: Optional[str] = None
+
+
+class WarbondResponse(BaseModel):
+    last_updated: str  # ISO datetime
+    ccu_items: List[WarbondItem]
+    standalone_ships: List[WarbondItem]
+    package_items: List[WarbondItem]
+    other_items: List[WarbondItem]
