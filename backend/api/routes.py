@@ -16,8 +16,14 @@ router = APIRouter(prefix="/api")
 @router.post("/sell-route", response_model=SellRouteResponse)
 async def sell_route(request: SellRouteRequest):
     """Plan a sell route for inventory."""
-    result = plan_sell_route(request.origin, [item.model_dump() for item in request.items])
-    return result
+    import traceback
+    try:
+        result = plan_sell_route(request.origin, [item.model_dump() for item in request.items])
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail=f"Route planning error: {str(e)}")
 
 
 @router.get("/terminals", response_model=list[TerminalOption])

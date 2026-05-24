@@ -29,8 +29,8 @@ class RouteStop(BaseModel):
     terminal_name_zh: str
     system: str
     system_zh: str
-    planet: str
-    planet_zh: str
+    planet: str = ""
+    planet_zh: str = ""
     distance_from_prev: Optional[int] = None
     cumulative_distance: Optional[int] = None
     commodities_sold: List[CommoditySold]

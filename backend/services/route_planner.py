@@ -108,16 +108,16 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
             "best_price": best["price_buy"],
             "best_revenue": best["price_buy"] * r["quantity"],
             "best_terminal": format_location_zh(
-                td.get("name", ""), td.get("nickname", ""),
-                td.get("space_station_name", ""),
-                td.get("planet_name", ""), td.get("star_system_name", "")
+                td.get("name") or "", td.get("nickname") or "",
+                td.get("space_station_name") or "",
+                td.get("planet_name") or "", td.get("star_system_name") or ""
             ),
         })
 
     # Step 3: Find origin terminal
     origin_terminal = search_terminal(origin)
     origin_tid = origin_terminal.get("id") if origin_terminal else None
-    origin_system = origin_terminal.get("star_system_name", "") if origin_terminal else ""
+    origin_system = (origin_terminal.get("star_system_name") or "") if origin_terminal else ""
 
     # Step 4: Build terminal-commodity map
     terminal_buy_map: Dict[int, Dict] = {}
@@ -128,15 +128,15 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
             if tid not in terminal_buy_map:
                 terminal_buy_map[tid] = {
                     "terminal_id": tid,
-                    "terminal_name": td.get("name", ""),
-                    "terminal_nickname": td.get("nickname", ""),
-                    "terminal_station": td.get("space_station_name", ""),
-                    "star_system": td.get("star_system_name", ""),
-                    "planet": td.get("planet_name", ""),
+                    "terminal_name": td.get("name") or "",
+                    "terminal_nickname": td.get("nickname") or "",
+                    "terminal_station": td.get("space_station_name") or "",
+                    "star_system": td.get("star_system_name") or "",
+                    "planet": td.get("planet_name") or "",
                     "zh_loc": get_terminal_zh(
-                        td.get("name", ""), td.get("nickname", ""),
-                        td.get("space_station_name", ""),
-                        td.get("planet_name", ""), td.get("star_system_name", "")
+                        td.get("name") or "", td.get("nickname") or "",
+                        td.get("space_station_name") or "",
+                        td.get("planet_name") or "", td.get("star_system_name") or ""
                     ),
                     "commodities": {},
                 }
@@ -233,8 +233,8 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                 "terminal_name_zh": best_stop["zh_loc"],
                 "system": best_stop["star_system"],
                 "system_zh": SYSTEM_ZH.get(best_stop["star_system"], best_stop["star_system"]),
-                "planet": best_stop["planet"],
-                "planet_zh": PLANET_ZH.get(best_stop["planet"], best_stop["planet"]),
+                "planet": best_stop["planet"] or "",
+                "planet_zh": PLANET_ZH.get(best_stop["planet"] or "", best_stop["planet"] or ""),
                 "distance_from_prev": best_stop_distance if best_stop_distance < 9999 else None,
                 "cumulative_distance": shortest_total_distance,
                 "commodities_sold": commodities_sold,
@@ -270,16 +270,16 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
 
         max_profit_route.append({
             "terminal_id": best["tid"],
-            "terminal_name": td.get("name", ""),
+            "terminal_name": td.get("name") or "",
             "terminal_name_zh": get_terminal_zh(
-                td.get("name", ""), td.get("nickname", ""),
-                td.get("space_station_name", ""),
-                td.get("planet_name", ""), td.get("star_system_name", "")
+                td.get("name") or "", td.get("nickname") or "",
+                td.get("space_station_name") or "",
+                td.get("planet_name") or "", td.get("star_system_name") or ""
             ),
-            "system": td.get("star_system_name", ""),
-            "system_zh": SYSTEM_ZH.get(td.get("star_system_name", ""), td.get("star_system_name", "")),
-            "planet": td.get("planet_name", ""),
-            "planet_zh": PLANET_ZH.get(td.get("planet_name", ""), td.get("planet_name", "")),
+            "system": td.get("star_system_name") or "",
+            "system_zh": SYSTEM_ZH.get(td.get("star_system_name") or "", td.get("star_system_name") or ""),
+            "planet": td.get("planet_name") or "",
+            "planet_zh": PLANET_ZH.get(td.get("planet_name") or "", td.get("planet_name") or ""),
             "distance_from_prev": d,
             "cumulative_distance": max_profit_total_distance,
             "commodities_sold": [{
