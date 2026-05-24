@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   Box, Paper, Typography, Autocomplete, TextField,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -31,27 +31,41 @@ function PricePanel() {
   const [priceData, setPriceData] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [error, setError] = useState('');
+  const debounceRef = useRef(null);
 
-  // Search commodities with debounce
-  const handleInputChange = useCallback(async (value) => {
-    setInputValue(value);
-    if (value.length < 1) {
+  // Debounced search — only search when user is typing, not after selection
+  useEffect(() => {
+    // Clear previous timer
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    // Don't search if a commodity is selected (input was set by selection)
+    if (selectedCommodity) return;
+
+    if (inputValue.length < 1) {
       setOptions([]);
       return;
     }
-    setSearching(true);
-    try {
-      const res = await searchCommodities(value);
-      setOptions(res.data || []);
-    } catch {
-      setOptions([]);
-    } finally {
-      setSearching(false);
-    }
-  }, []);
+
+    // Debounce 300ms
+    debounceRef.current = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const res = await searchCommodities(inputValue);
+        setOptions(res.data || []);
+      } catch {
+        setOptions([]);
+      } finally {
+        setSearching(false);
+      }
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [inputValue, selectedCommodity]);
 
   // Fetch prices when commodity selected
-  const handleSelect = async (commodity) => {
+  const handleSelect = useCallback(async (commodity) => {
     setSelectedCommodity(commodity);
     setPriceData(null);
     setError('');
@@ -67,7 +81,7 @@ function PricePanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Price table rendering
   const renderPriceTable = (entries, priceType) => {
@@ -238,14 +252,25 @@ function PricePanel() {
         {/* Commodity search */}
         <Autocomplete
           options={options}
-          getOptionLabel={(opt) => opt.name || ''}
+          getOptionLabel={(opt) => typeof opt === 'string' ? opt : (opt.name_zh || opt.name || '')}
+          value={selectedCommodity}
           inputValue={inputValue}
-          onInputChange={(_, val) => handleInputChange(val)}
+          onInputChange={(_, val, reason) => {
+            // Only update input on user typing, not on selection/reset
+            if (reason === 'input') {
+              setInputValue(val);
+              // Clear selection when user starts typing again
+              if (selectedCommodity) {
+                setSelectedCommodity(null);
+                setPriceData(null);
+              }
+            }
+          }}
           onChange={(_, val) => handleSelect(val)}
           loading={searching}
           noOptionsText="未找到商品"
           loadingText="搜索中..."
-          clearOnBlur={false}
+          isOptionEqualToValue={(opt, val) => opt.id === val.id}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -275,8 +300,24 @@ function PricePanel() {
           sx={{ mb: 2 }}
         />
 
+        {/* Selected commodity info */}
+        {selectedCommodity && (
+          <Box sx={{
+            p: 1.5, mb: 2, borderRadius: 1,
+            background: 'rgba(255, 170, 0, 0.08)',
+            border: '1px solid rgba(255, 170, 0, 0.2)',
+          }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#ffaa00' }}>
+              {selectedCommodity.name_zh}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              {selectedCommodity.name}
+            </Typography>
+          </Box>
+        )}
+
         {/* Info hint */}
-        {!priceData && !loading && (
+        {!priceData && !loading && !selectedCommodity && (
           <Box sx={{
             mt: 4, textAlign: 'center', opacity: 0.5,
           }}>
