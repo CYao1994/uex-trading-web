@@ -13,11 +13,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from api.routes import router
+from version import VERSION
 
 app = FastAPI(
     title="UEX Trade Navigator",
     description="Star Citizen Trading Route Planner API",
-    version="1.0.0",
+    version=VERSION,
 )
 
 app.add_middleware(
@@ -60,6 +61,6 @@ else:
     # Dev mode: just API, frontend served by Vite
     @app.get("/")
     async def root():
-        return {"message": "UEX Trade Navigator API", "version": "1.0.0", "mode": "dev"}
+        return {"message": "UEX Trade Navigator API", "version": VERSION, "mode": "dev"}
 
     print("[Dev] Frontend dist not found, running in API-only mode")

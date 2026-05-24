@@ -1,7 +1,17 @@
 import { Box, Typography, Chip } from '@mui/material';
 import { RocketLaunch, SwapHoriz, AttachMoney } from '@mui/icons-material';
+import { useState, useEffect } from 'react';
+import api from '../api/client';
 
 function Navbar({ activeTab, onTabChange }) {
+  const [version, setVersion] = useState('');
+
+  useEffect(() => {
+    api.get('/version')
+      .then(res => setVersion(res.data.version || ''))
+      .catch(() => {});
+  }, []);
+
   const tabs = [
     { key: 'sell', label: '清仓路线', icon: <SwapHoriz sx={{ fontSize: 16 }} /> },
     { key: 'price', label: '价格查询', icon: <AttachMoney sx={{ fontSize: 16 }} /> },
@@ -124,6 +134,21 @@ function Navbar({ activeTab, onTabChange }) {
         >
           BY CYao1994
         </Typography>
+        {version && (
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'rgba(0, 212, 255, 0.25)',
+              fontSize: '0.6rem',
+              fontFamily: '"Orbitron", sans-serif',
+              letterSpacing: '0.05em',
+              borderLeft: '1px solid rgba(0, 212, 255, 0.1)',
+              pl: 1.5,
+            }}
+          >
+            v{version}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
