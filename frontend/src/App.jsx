@@ -5,12 +5,15 @@ import SellPanel from './components/SellPanel';
 import WarbondPanel from './components/WarbondPanel';
 import RouteResult from './components/RouteResult';
 import LoadingOverlay from './components/LoadingOverlay';
+import MaintenanceOverlay from './components/MaintenanceOverlay';
+import { BackendStatusProvider, useBackendStatus } from './contexts/BackendStatus';
 
-function App() {
+function AppContent() {
   const [activeTab, setActiveTab] = useState('sell');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'info' });
+  const { isBackendUp } = useBackendStatus();
 
   const handleResult = (data) => {
     setResult(data);
@@ -18,6 +21,16 @@ function App() {
       setToast({ open: true, message: data.warnings[0], severity: 'warning' });
     }
   };
+
+  // Show maintenance overlay when backend is down
+  if (isBackendUp === false) {
+    return (
+      <>
+        <Layout activeTab={activeTab} onTabChange={setActiveTab} />
+        <MaintenanceOverlay />
+      </>
+    );
+  }
 
   // Warbond panel is self-contained
   if (activeTab === 'warbond') {
@@ -127,6 +140,14 @@ function App() {
         </Alert>
       </Snackbar>
     </>
+  );
+}
+
+function App() {
+  return (
+    <BackendStatusProvider>
+      <AppContent />
+    </BackendStatusProvider>
   );
 }
 

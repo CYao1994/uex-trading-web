@@ -1,0 +1,10 @@
+# Cloudflare Pages configuration
+name = "uex-trading-web"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./dist"
+
+# Build settings (used when connected via GitHub)
+# Build command: cd frontend && npm install && npm run build
+# Build output directory: frontend/dist

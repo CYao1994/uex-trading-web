@@ -4,10 +4,21 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.0.0"
+VERSION = "3.1.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.1.0",
+        "date": "2025-05-25",
+        "changes": [
+            "架构升级：前后端分离部署（Cloudflare Pages + Railway）",
+            "新增：GitHub Actions 自动暂停/恢复 Railway（02:00-10:00 北京时间）",
+            "新增：后端维护模式（暂停期间前端显示维护提示）",
+            "后端 API 跨域支持（CORS）",
+            "节省 Railway 免费时长：16小时/天 → 480小时/月",
+        ],
+    },
     {
         "version": "3.0.0",
         "date": "2025-05-25",

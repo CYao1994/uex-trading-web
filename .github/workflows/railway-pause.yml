@@ -1,0 +1,79 @@
+name: Railway Auto Pause/Resume
+
+on:
+  # Pause Railway at 02:00 Beijing time (18:00 UTC previous day)
+  schedule:
+    - cron: '0 18 * * *'  # 02:00 Beijing = 18:00 UTC
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'pause'
+        type: choice
+        options:
+          - pause
+          - resume
+
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+  SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+  SERVICE_INSTANCE_ID: ${{ secrets.RAILWAY_SERVICE_INSTANCE_ID }}
+
+jobs:
+  pause-railway:
+    if: github.event.inputs.action == 'pause' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest deployment
+        id: get-deployment
+        run: |
+          RESPONSE=$(curl -s -k \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST https://backboard.railway.app/graphql/v2 \
+            -d '{"query":"{ service(id: \"'$SERVICE_ID'\") { deployments { edges { node { id status } } } } }"}')
+
+          echo "Response: $RESPONSE"
+
+          # Find the latest SUCCESS deployment
+          DEPLOYMENT_ID=$(echo "$RESPONSE" | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          edges = data.get('data', {}).get('service', {}).get('deployments', {}).get('edges', [])
+          for edge in edges:
+              if edge['node']['status'] == 'SUCCESS':
+                  print(edge['node']['id'])
+                  break
+          " 2>/dev/null)
+
+          if [ -z "$DEPLOYMENT_ID" ]; then
+            echo "No active deployment found, service may already be paused"
+            echo "already_paused=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "Found deployment: $DEPLOYMENT_ID"
+
+      - name: Stop deployment (pause service)
+        if: steps.get-deployment.outputs.already_paused != 'true'
+        run: |
+          DEPLOYMENT_ID=${{ steps.get-deployment.outputs.deployment_id }}
+          echo "Stopping deployment: $DEPLOYMENT_ID"
+
+          RESPONSE=$(curl -s -k \
+            -H "Authorization: Bearer $RAILWAY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST https://backboard.railway.app/graphql/v2 \
+            -d '{"query":"mutation { deploymentStop(id: \"'$DEPLOYMENT_ID'\") { id status } }"}')
+
+          echo "Stop response: $RESPONSE"
+          echo "✅ Railway service paused successfully"
+
+      - name: Summary
+        run: |
+          echo "## 🛑 Railway Service Paused" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time**: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Beijing Time**: 02:00 (maintenance window start)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Service will resume at**: 10:00 Beijing Time (02:00 UTC)" >> $GITHUB_STEP_SUMMARY
