@@ -85,14 +85,14 @@ const theme = createTheme({
           background: 'linear-gradient(135deg, #00d4ff 0%, #0066ff 100%)',
           '&:hover': {
             background: 'linear-gradient(135deg, #33ddff 0%, #3388ff 100%)',
-            boxShadow: '0 0 20px rgba(0, 212, 255, 0.4)',
+            boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)',
           },
         },
         outlinedPrimary: {
           borderWidth: 2,
           '&:hover': {
             borderWidth: 2,
-            boxShadow: '0 0 15px rgba(0, 212, 255, 0.3)',
+            boxShadow: '0 0 8px rgba(0, 212, 255, 0.2)',
           },
         },
       },

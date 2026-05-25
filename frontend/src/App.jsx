@@ -30,7 +30,7 @@ function App() {
           open={toast.open}
           autoHideDuration={6000}
           onClose={() => setToast({ ...toast, open: false })}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <Alert
             onClose={() => setToast({ ...toast, open: false })}
@@ -51,7 +51,7 @@ function App() {
       <Layout activeTab={activeTab} onTabChange={setActiveTab}>
         <Box sx={{ display: 'flex', gap: 3, minHeight: 'calc(100vh - 100px)' }}>
           {/* Left panel */}
-          <Box sx={{ width: 380, flexShrink: 0 }}>
+          <Box sx={{ width: { xs: '100%', md: 380, lg: 420, xl: 480 }, flexShrink: 0, maxWidth: 480 }}>
             <SellPanel onResult={handleResult} />
           </Box>
 
@@ -66,7 +66,7 @@ function App() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                opacity: 0.6,
+                opacity: 0.85,
               }}>
                 {/* HUD Ship icon */}
                 <Box sx={{
@@ -88,7 +88,7 @@ function App() {
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00c8ff" strokeWidth="1" opacity="0.6">
                     <path d="M12 2L15 9L12 7L9 9Z" />
                     <path d="M4 14L12 9L20 14L12 22Z" />
-                    <circle cx="12" cy="6" r="1" fill="#00c8ff" opacity="0.5" />
+                    <circle cx="12" cy="6" r="1" fill="#00c8ff" opacity="0.8" />
                   </svg>
                 </Box>
                 <Typography variant="h6" sx={{
@@ -101,8 +101,10 @@ function App() {
                 }}>
                   等待航线计算
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(0, 200, 255, 0.35)', textAlign: 'center', fontSize: '0.8rem' }}>
-                  选择出发地并添加货物后<br/>点击"规划路线"开始计算
+                <Typography variant="body2" sx={{ color: 'rgba(0, 200, 255, 0.9)', textAlign: 'center', fontSize: '0.85rem' }}>
+                  选择出发地并添加货物后
+                  <br />
+                  点击"规划路线"开始计算
                 </Typography>
               </Box>
             )}
@@ -114,7 +116,7 @@ function App() {
         open={toast.open}
         autoHideDuration={6000}
         onClose={() => setToast({ ...toast, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={() => setToast({ ...toast, open: false })}
