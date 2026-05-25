@@ -26,8 +26,12 @@ if os.path.isfile(_env_path):
 _api_key = os.environ.get("UEX_API_KEY", "")
 if _api_key:
     print(f"[Config] UEX API Key: {_api_key[:8]}...{_api_key[-4:]}")
+    print("[Config] Authenticated mode — full price data available")
 else:
-    print("[Config] UEX API Key: not set (using unauthenticated mode)")
+    print("[Config] WARNING: UEX_API_KEY not set!")
+    print("[Config] Running in unauthenticated mode — data may be incomplete")
+    print("[Config] Set UEX_API_KEY in .env (local) or Railway env vars (deployed)")
+    print("[Config] Get your key at: https://uexcorp.space/api/apps")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
