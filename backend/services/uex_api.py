@@ -8,7 +8,7 @@ import time
 import urllib.parse
 from typing import Dict, List, Optional, Tuple
 
-BASE_URL = "https://api.uexcorp.space/v2.1"
+BASE_URL = "https://api.uexcorp.uk/2.0"
 
 # Module-level caches (shared across functions, importable by route_planner)
 _distance_cache: Dict[Tuple[int, int], int] = {}
@@ -24,11 +24,23 @@ def _get_api_key() -> str:
     return os.environ.get("UEX_API_KEY", "")
 
 
-def api_get(endpoint: str, params: dict = None) -> dict:
+def api_get(endpoint: str, params: dict = None, path_params: dict = None) -> dict:
     """GET request using curl with TLS fallback chain.
     Includes Authorization header when UEX_API_KEY is set.
+
+    Args:
+        endpoint: API resource name (e.g. "terminals", "commodities_prices")
+        params: Query string parameters (appended as ?key=value)
+        path_params: Path-style parameters (appended as /key/value/ — v2.0 native format)
     """
+    # Build URL with path parameters first
     url = f"{BASE_URL}/{endpoint}"
+    if path_params:
+        for k, v in path_params.items():
+            url += f"/{k}/{v}"
+    # Ensure trailing slash for v2.0 API compatibility
+    if not url.endswith("/"):
+        url += "/"
     if params:
         qs = "&".join(
             f"{urllib.parse.quote(str(k))}={urllib.parse.quote(str(v))}"
@@ -105,7 +117,7 @@ def load_terminals() -> List[Dict]:
     Filters out PLATINUM BAY terminals because they have zero price data
     in the UEX API. Each PB location has a corresponding ADMIN terminal
     that has actual buy/sell prices.
-    
+
     NOTE: Does NOT cache empty results from failed API calls to prevent
     "poisoned cache" — if UEX API is temporarily down, we retry on next request.
     """
@@ -113,20 +125,18 @@ def load_terminals() -> List[Dict]:
     if _terminal_cache_loaded and _terminal_cache:
         return _terminal_cache
     try:
-        data = api_get("terminals", {"per_page": 500, "type": "commodity"})
+        data = api_get("terminals", path_params={"type": "commodity"})
         terminals = data.get("data", [])
         if terminals:
-            _terminal_cache = terminals
+            _terminal_cache = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
             _terminal_cache_loaded = True
-            # Filter PLATINUM BAY after confirming data loaded
-            _terminal_cache = [t for t in _terminal_cache if "platinum" not in t.get("name", "").lower()]
             return _terminal_cache
     except Exception:
         pass
-    
-    # Fallback: try without type filter
+
+    # Fallback: try without type filter, filter locally
     try:
-        data = api_get("terminals", {"per_page": 500})
+        data = api_get("terminals")
         terminals = [t for t in data.get("data", []) if t.get("type") == "commodity"]
         if terminals:
             _terminal_cache = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
@@ -134,14 +144,14 @@ def load_terminals() -> List[Dict]:
             return _terminal_cache
     except Exception:
         pass
-    
+
     # Return empty but DON'T cache — allow retry on next request
     return []
 
 
 def load_commodities() -> List[Dict]:
     """Load all commodities with caching.
-    
+
     NOTE: Does NOT cache empty results from failed API calls to prevent
     "poisoned cache" — if UEX API is temporarily down, we retry on next request.
     """
@@ -149,7 +159,7 @@ def load_commodities() -> List[Dict]:
     if _commodity_cache_loaded and _commodity_cache:
         return _commodity_cache
     try:
-        data = api_get("commodities", {"per_page": 500})
+        data = api_get("commodities")
         commodities = data.get("data", [])
         if commodities:
             _commodity_cache = commodities
@@ -214,18 +224,22 @@ def search_commodity(query: str) -> Optional[Dict]:
 
 
 def get_commodity_prices(commodity_id: int) -> List[Dict]:
-    """Get prices for a commodity across all terminals."""
-    data = api_get(f"commodities_prices/id_commodity/{commodity_id}")
+    """Get prices for a commodity across all terminals.
+    Uses v2.0 path-style parameter: commodities_prices/id_commodity/{id}/
+    """
+    data = api_get("commodities_prices", path_params={"id_commodity": commodity_id})
     return data.get("data", [])
 
 
 def fetch_routes_from_terminal(tid: int) -> Dict[int, int]:
-    """Get route distances from a terminal. Returns {dest_tid: distance}."""
+    """Get route distances from a terminal. Returns {dest_tid: distance}.
+    Uses v2.0 path-style parameter: commodities_routes/id_terminal_origin/{tid}/
+    """
     if tid in _routes_queried:
         return {dt: d for (ot, dt), d in _distance_cache.items() if ot == tid}
 
     try:
-        data = api_get(f"commodities_routes/id_terminal_origin/{tid}", {"per_page": 500})
+        data = api_get("commodities_routes", path_params={"id_terminal_origin": tid})
         routes = data.get("data", [])
     except Exception:
         routes = []

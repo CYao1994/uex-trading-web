@@ -4,10 +4,33 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.5.1"
+VERSION = "3.7.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.7.0",
+        "date": "2025-05-25",
+        "changes": [
+            "全站中文名称校正：基于星际公民汉化组官方 global.ini 重新翻译",
+            "商品中文名更正30+条：砬兰石、艾格瑞金属、贝沙电气石、火神石、量子矿物等",
+            "站点中文名更正：R&R站使用官方缩写（弧-L1/赫-L1/十-L1/微-L1）",
+            "飞船中文名更正：圣盾短剑、德雷克黑弯刀、武藏自由枪骑兵、起源890跃动等",
+            "新增制造商中文名前缀：圣盾/铁砧/德雷克/武藏/起源/十字军/RSI等",
+            "新增月球中文名：赛琳、戴玛尔、耶拉、阿伯丁、艾瑞尔等",
+            "新增100+商品中文映射（非金属、合金、气体、违禁品等类别）",
+            "新增飞船名称智能匹配：支持制造商前缀剥离+后缀模糊匹配",
+        ],
+    },
+        "version": "3.6.0",
+        "date": "2025-05-26",
+        "changes": [
+            "API 迁移至 UEX API v2.0（api.uexcorp.uk）",
+            "使用 v2.0 原生路径参数格式（/param/value/）",
+            "移除 per_page 分页参数（v2.0 默认返回全量数据）",
+            "v2.0 返回更丰富的字段（周/月均价格、波动率、集装箱尺寸等）",
+        ],
+    },
     {
         "version": "3.5.1",
         "date": "2025-05-26",
