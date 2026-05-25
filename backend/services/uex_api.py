@@ -72,43 +72,79 @@ def api_get(endpoint: str, params: dict = None) -> dict:
     raise RuntimeError(f"API error for {endpoint}: {last_error}")
 
 
+def clear_caches():
+    """Clear all UEX API caches — forces reload on next request."""
+    global _terminal_cache, _terminal_cache_loaded
+    global _commodity_cache, _commodity_cache_loaded
+    global _distance_cache, _routes_queried
+    _terminal_cache = []
+    _terminal_cache_loaded = False
+    _commodity_cache = []
+    _commodity_cache_loaded = False
+    _distance_cache = {}
+    _routes_queried = set()
+
+
 def load_terminals() -> List[Dict]:
     """Load all commodity terminals with caching.
 
     Filters out PLATINUM BAY terminals because they have zero price data
     in the UEX API. Each PB location has a corresponding ADMIN terminal
     that has actual buy/sell prices.
+    
+    NOTE: Does NOT cache empty results from failed API calls to prevent
+    "poisoned cache" — if UEX API is temporarily down, we retry on next request.
     """
     global _terminal_cache, _terminal_cache_loaded
-    if _terminal_cache_loaded:
+    if _terminal_cache_loaded and _terminal_cache:
         return _terminal_cache
     try:
         data = api_get("terminals", {"per_page": 500, "type": "commodity"})
-        _terminal_cache = data.get("data", [])
+        terminals = data.get("data", [])
+        if terminals:
+            _terminal_cache = terminals
+            _terminal_cache_loaded = True
+            # Filter PLATINUM BAY after confirming data loaded
+            _terminal_cache = [t for t in _terminal_cache if "platinum" not in t.get("name", "").lower()]
+            return _terminal_cache
     except Exception:
-        try:
-            data = api_get("terminals", {"per_page": 500})
-            _terminal_cache = [t for t in data.get("data", []) if t.get("type") == "commodity"]
-        except Exception:
-            _terminal_cache = []
-    # Filter out PLATINUM BAY terminals — they have zero price data in UEX
-    _terminal_cache = [t for t in _terminal_cache if "platinum" not in t.get("name", "").lower()]
-    _terminal_cache_loaded = True
-    return _terminal_cache
+        pass
+    
+    # Fallback: try without type filter
+    try:
+        data = api_get("terminals", {"per_page": 500})
+        terminals = [t for t in data.get("data", []) if t.get("type") == "commodity"]
+        if terminals:
+            _terminal_cache = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
+            _terminal_cache_loaded = True
+            return _terminal_cache
+    except Exception:
+        pass
+    
+    # Return empty but DON'T cache — allow retry on next request
+    return []
 
 
 def load_commodities() -> List[Dict]:
-    """Load all commodities with caching."""
+    """Load all commodities with caching.
+    
+    NOTE: Does NOT cache empty results from failed API calls to prevent
+    "poisoned cache" — if UEX API is temporarily down, we retry on next request.
+    """
     global _commodity_cache, _commodity_cache_loaded
-    if _commodity_cache_loaded:
+    if _commodity_cache_loaded and _commodity_cache:
         return _commodity_cache
     try:
         data = api_get("commodities", {"per_page": 500})
-        _commodity_cache = data.get("data", [])
+        commodities = data.get("data", [])
+        if commodities:
+            _commodity_cache = commodities
+            _commodity_cache_loaded = True
+            return _commodity_cache
     except Exception:
-        _commodity_cache = []
-    _commodity_cache_loaded = True
-    return _commodity_cache
+        pass
+    # Return empty but DON'T cache — allow retry on next request
+    return []
 
 
 def search_terminal(query: str) -> Optional[Dict]:

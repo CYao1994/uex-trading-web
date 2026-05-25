@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.2.0"
+VERSION = "3.2.1"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.2.1",
+        "date": "2025-05-26",
+        "changes": [
+            "修复：UEX API 数据加载失败后不再缓存空结果（毒缓存问题）",
+            "修复：健康检测改用 /api/health 端点，增加至3次失败阈值",
+            "新增：/api/health 端点（检查后端状态+数据加载情况）",
+            "新增：/api/cache/clear 端点（手动清理缓存）",
+        ],
+    },
     {
         "version": "3.2.0",
         "date": "2025-05-26",

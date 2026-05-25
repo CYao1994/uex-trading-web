@@ -6,7 +6,7 @@ from .schemas import (
     SellRouteRequest, SellRouteResponse, TerminalOption, CommodityOption,
     PriceEntry, CommodityPricesResponse, WarbondResponse
 )
-from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal
+from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal, clear_caches
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
 from services.route_planner import plan_sell_route
 from services.warbond_scraper import fetch_warbonds
@@ -175,3 +175,23 @@ async def commodity_prices(commodity_id: int):
 async def get_warbonds():
     """Get current warbond items from RSI store."""
     return fetch_warbonds()
+
+
+@router.get("/health")
+async def health_check():
+    """Health check — verifies UEX API data is loaded."""
+    terminals = load_terminals()
+    commodities = load_commodities()
+    return {
+        "status": "ok" if terminals and commodities else "degraded",
+        "terminals_loaded": len(terminals),
+        "commodities_loaded": len(commodities),
+        "version": VERSION,
+    }
+
+
+@router.post("/cache/clear")
+async def clear_cache():
+    """Clear all cached UEX API data — forces reload on next request."""
+    clear_caches()
+    return {"status": "ok", "message": "All caches cleared"}

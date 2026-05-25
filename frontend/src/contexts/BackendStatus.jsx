@@ -21,15 +21,24 @@ export function BackendStatusProvider({ children }) {
 
   const checkBackend = useCallback(async () => {
     try {
-      await api.get('/version', { timeout: 8000 });
-      failCountRef.current = 0;
-      setIsBackendUp(true);
+      // Use /api/health which also checks if UEX data is loaded
+      const res = await api.get('/health', { timeout: 15000 });
+      // If UEX data not loaded yet, don't declare backend up
+      if (res.data?.status === 'ok') {
+        failCountRef.current = 0;
+        setIsBackendUp(true);
+      } else if (res.data?.status === 'degraded') {
+        // Backend is up but UEX data not loaded — still mark as up
+        // The individual search will handle the empty data case
+        failCountRef.current = 0;
+        setIsBackendUp(true);
+      }
       setLastChecked(new Date());
     } catch (err) {
       failCountRef.current += 1;
-      // Require 2 consecutive failures before declaring backend down
+      // Require 3 consecutive failures before declaring backend down
       // This prevents flickering from transient network hiccups
-      if (failCountRef.current >= 2) {
+      if (failCountRef.current >= 3) {
         setIsBackendUp(false);
       }
       setLastChecked(new Date());
