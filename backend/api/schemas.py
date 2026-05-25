@@ -2,17 +2,31 @@
 API Schemas - Pydantic models for request/response
 """
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class SellItem(BaseModel):
     name: str
     quantity: int
 
+    @field_validator('quantity')
+    @classmethod
+    def quantity_must_be_positive(cls, v):
+        if v <= 0:
+            raise ValueError('quantity must be greater than 0')
+        return v
+
 
 class SellRouteRequest(BaseModel):
     origin: str
     items: List[SellItem]
+
+    @field_validator('items')
+    @classmethod
+    def items_must_not_be_empty(cls, v):
+        if not v:
+            raise ValueError('items list must not be empty')
+        return v
 
 
 class CommoditySold(BaseModel):

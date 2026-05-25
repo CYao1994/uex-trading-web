@@ -4,10 +4,19 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.8.1"
+VERSION = "3.8.2"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.8.2",
+        "date": "2025-05-25",
+        "changes": [
+            "修复：清仓/进货路线接受空货物列表（应返回验证错误）",
+            "修复：允许数量为0或负数的无效输入",
+            "新增 Pydantic 字段验证：items 列表不能为空，数量必须大于0",
+        ],
+    },
     {
         "version": "3.8.1",
         "date": "2025-05-27",
