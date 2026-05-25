@@ -5,12 +5,13 @@ from typing import Dict, List, Optional, Tuple
 from services.uex_api import (
     search_terminal, search_commodity, get_commodity_prices,
     resolve_terminal, build_distance_matrix, get_distance,
-    fetch_routes_from_terminal, _distance_cache, _routes_queried,
+    fetch_routes_from_terminal,
 )
+from services.cache import distance_cache
 from services.data_mapper import get_terminal_zh, get_commodity_zh, format_location_zh, SYSTEM_ZH, PLANET_ZH
 
 
-def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
+def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False) -> Dict:
     """
     Plan buy route: find best sellers and optimize by distance/cost.
 
@@ -51,7 +52,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
         zh_name = get_commodity_zh(comm_name)
 
         try:
-            prices = get_commodity_prices(comm_id)
+            prices = get_commodity_prices(comm_id, refresh=refresh)
         except Exception as e:
             warnings.append(f"{zh_name}({comm_name}): 价格查询失败 - {e}")
             continue
@@ -166,7 +167,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
     candidate_tids = list(terminal_sell_map.keys())
     dist_matrix = {}
     if origin_tid:
-        dist_matrix = build_distance_matrix(origin_tid, candidate_tids)
+        dist_matrix = build_distance_matrix(origin_tid, candidate_tids, refresh=refresh)
 
     # Step 6: Nearest-neighbor greedy route (shortest distance)
     shortest_route = []
@@ -179,9 +180,9 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
         current_system = origin_system
 
         while remaining:
-            if current_tid not in _routes_queried and current_tid != origin_tid:
-                fetch_routes_from_terminal(current_tid)
-                for (ot, dt), dist in _distance_cache.items():
+            if not distance_cache.is_queried(current_tid) and current_tid != origin_tid:
+                fetch_routes_from_terminal(current_tid, refresh=refresh)
+                for (ot, dt), dist in distance_cache._distances.items():
                     if ot == current_tid or dt == current_tid:
                         dist_matrix[(ot, dt)] = dist
                         dist_matrix[(dt, ot)] = dist
@@ -319,7 +320,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
     }
 
 
-def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
+def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False) -> Dict:
     """
     Plan sell route: find best buyers and optimize by distance.
 
@@ -356,7 +357,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
         zh_name = get_commodity_zh(comm_name)
 
         try:
-            prices = get_commodity_prices(comm_id)
+            prices = get_commodity_prices(comm_id, refresh=refresh)
         except Exception as e:
             warnings.append(f"{zh_name}({comm_name}): 价格查询失败 - {e}")
             continue
@@ -470,7 +471,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
     candidate_tids = list(terminal_buy_map.keys())
     dist_matrix = {}
     if origin_tid:
-        dist_matrix = build_distance_matrix(origin_tid, candidate_tids)
+        dist_matrix = build_distance_matrix(origin_tid, candidate_tids, refresh=refresh)
 
     # Step 6: Nearest-neighbor greedy route (shortest distance)
     shortest_route = []
@@ -484,9 +485,9 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
 
         while remaining:
             # Real-time route query at current station
-            if current_tid not in _routes_queried and current_tid != origin_tid:
-                fetch_routes_from_terminal(current_tid)
-                for (ot, dt), dist in _distance_cache.items():
+            if not distance_cache.is_queried(current_tid) and current_tid != origin_tid:
+                fetch_routes_from_terminal(current_tid, refresh=refresh)
+                for (ot, dt), dist in distance_cache._distances.items():
                     if ot == current_tid or dt == current_tid:
                         dist_matrix[(ot, dt)] = dist
                         dist_matrix[(dt, ot)] = dist

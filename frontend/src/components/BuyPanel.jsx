@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Typography, Button, Divider, Alert } from '@mui/material';
-import { ShoppingCart, RocketLaunch } from '@mui/icons-material';
+import { ShoppingCart, RocketLaunch, Refresh } from '@mui/icons-material';
 import TerminalSearch from './TerminalSearch';
 import CommodityInput from './CommodityInput';
 import { buyRoute } from '../api/client';
@@ -11,7 +11,7 @@ function BuyPanel({ onResult }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSearch = async () => {
+  const handleSearch = async (refresh = false) => {
     if (!origin) {
       setError('请选择出发地');
       return;
@@ -27,7 +27,8 @@ function BuyPanel({ onResult }) {
     try {
       const res = await buyRoute(
         origin.name || origin.name_zh,
-        items.map(i => ({ name: i.name, quantity: i.quantity }))
+        items.map(i => ({ name: i.name, quantity: i.quantity })),
+        refresh
       );
       onResult(res.data);
     } catch (e) {
@@ -122,43 +123,70 @@ function BuyPanel({ onResult }) {
         </Alert>
       )}
 
-      {/* Search button */}
-      <Button
-        fullWidth
-        variant="contained"
-        size="large"
-        onClick={handleSearch}
-        disabled={loading || !origin || items.length === 0}
-        startIcon={<RocketLaunch />}
-        sx={{
-          py: 1.2,
-          fontFamily: '"Orbitron", sans-serif',
-          fontSize: '0.85rem',
-          letterSpacing: '0.08em',
-          borderRadius: '2px',
-          clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)',
-          background: loading
-            ? 'rgba(0, 180, 255, 0.08)'
-            : 'linear-gradient(135deg, #00c8ff 0%, #0080dd 100%)',
-          color: loading ? '#555' : '#020810',
-          fontWeight: 700,
-          border: loading ? '1px solid rgba(0, 180, 255, 0.15)' : '1px solid transparent',
-          transition: 'background 0.3s, box-shadow 0.3s',
-          '&:hover': {
-            boxShadow: '0 0 20px rgba(0, 200, 255, 0.4), 0 0 40px rgba(0, 150, 255, 0.15)',
+      {/* Search buttons */}
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          size="large"
+          onClick={() => handleSearch(false)}
+          disabled={loading || !origin || items.length === 0}
+          startIcon={<RocketLaunch />}
+          sx={{
+            py: 1.2,
+            fontFamily: '"Orbitron", sans-serif',
+            fontSize: '0.85rem',
+            letterSpacing: '0.08em',
+            borderRadius: '2px',
+            clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)',
             background: loading
               ? 'rgba(0, 180, 255, 0.08)'
-              : 'linear-gradient(135deg, #00ddff 0%, #0099ee 100%)',
-          },
-          '&.Mui-disabled': {
-            background: 'rgba(0, 180, 255, 0.05)',
-            color: '#333',
-            border: '1px solid rgba(0, 180, 255, 0.08)',
-          },
-        }}
-      >
-        {loading ? '计算中...' : '规划路线'}
-      </Button>
+              : 'linear-gradient(135deg, #00c8ff 0%, #0080dd 100%)',
+            color: loading ? '#555' : '#020810',
+            fontWeight: 700,
+            border: loading ? '1px solid rgba(0, 180, 255, 0.15)' : '1px solid transparent',
+            transition: 'background 0.3s, box-shadow 0.3s',
+            '&:hover': {
+              boxShadow: '0 0 20px rgba(0, 200, 255, 0.4), 0 0 40px rgba(0, 150, 255, 0.15)',
+              background: loading
+                ? 'rgba(0, 180, 255, 0.08)'
+                : 'linear-gradient(135deg, #00ddff 0%, #0099ee 100%)',
+            },
+            '&.Mui-disabled': {
+              background: 'rgba(0, 180, 255, 0.05)',
+              color: '#333',
+              border: '1px solid rgba(0, 180, 255, 0.08)',
+            },
+          }}
+        >
+          {loading ? '计算中...' : '规划路线'}
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={() => handleSearch(true)}
+          disabled={loading || !origin || items.length === 0}
+          sx={{
+            minWidth: 44,
+            px: 1,
+            borderRadius: '2px',
+            borderColor: 'rgba(0, 200, 255, 0.2)',
+            color: 'rgba(0, 200, 255, 0.5)',
+            '&:hover': {
+              borderColor: 'rgba(0, 200, 255, 0.5)',
+              background: 'rgba(0, 200, 255, 0.05)',
+              color: '#00c8ff',
+            },
+            '&.Mui-disabled': {
+              borderColor: 'rgba(0, 180, 255, 0.08)',
+              color: 'rgba(0, 180, 255, 0.15)',
+            },
+          }}
+          title="强制刷新数据（忽略缓存）"
+        >
+          <Refresh sx={{ fontSize: 18 }} />
+        </Button>
+      </Box>
     </Box>
   );
 }

@@ -200,11 +200,11 @@ function WarbondPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = async (refresh = false) => {
     setLoading(true);
     setError('');
     try {
-      const res = await getWarbonds();
+      const res = await getWarbonds(refresh);
       setData(res.data);
     } catch (e) {
       setError(e.response?.data?.detail || e.message || '获取战争债券数据失败');
@@ -358,7 +358,7 @@ function WarbondPanel() {
           </Box>
           {/* Refresh button */}
           <Box
-            onClick={fetchData}
+            onClick={() => fetchData(true)}
             sx={{
               display: 'flex',
               alignItems: 'center',

@@ -4,10 +4,24 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.7.0"
+VERSION = "3.8.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.8.0",
+        "date": "2025-05-26",
+        "changes": [
+            "新增统一 TTL 缓存层：大幅降低 UEX API 调用次数",
+            "终端/商品数据缓存 6 小时，价格数据缓存 2 小时",
+            "距离数据缓存 24 小时，战争债券缓存 4 小时",
+            "二次查询提速 450,000 倍（1.6s → 0.000004s）",
+            "清仓/进货路线新增刷新按钮（强制更新数据）",
+            "所有 API 端点支持 ?refresh=true 参数绕过缓存",
+            "新增 /api/cache/stats 端点查看缓存状态",
+            "缓存失效时优雅降级：返回过期数据而非报错",
+        ],
+    },
     {
         "version": "3.7.0",
         "date": "2025-05-25",
@@ -22,6 +36,7 @@ CHANGELOG = [
             "新增飞船名称智能匹配：支持制造商前缀剥离+后缀模糊匹配",
         ],
     },
+    {
         "version": "3.6.0",
         "date": "2025-05-26",
         "changes": [

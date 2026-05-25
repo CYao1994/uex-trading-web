@@ -1,7 +1,7 @@
 """
 Warbond Scraper Service
 Fetches current warbond items from starnotifier.com and RSI store API.
-Caches results for 1 hour to avoid excessive requests.
+Uses centralized TTL cache from cache.py.
 """
 
 import subprocess
@@ -10,11 +10,7 @@ import re
 import time
 from datetime import datetime, timezone
 
-_cache = {
-    "data": None,
-    "timestamp": 0,
-}
-_CACHE_TTL = 3600  # 1 hour in seconds
+from services.cache import warbond_cache
 
 # RSI store base URL
 RSI_STORE_BASE = "https://robertsspaceindustries.com"
@@ -465,13 +461,13 @@ def _add_to_category(result: dict, item: dict):
         result["other_items"].append(item)
 
 
-def fetch_warbonds() -> dict:
-    """Fetch current warbond items. Uses cache if available."""
-    now = time.time()
-
+def fetch_warbonds(refresh: bool = False) -> dict:
+    """Fetch current warbond items. Uses centralized TTL cache."""
     # Return cache if fresh
-    if _cache["data"] and (now - _cache["timestamp"]) < _CACHE_TTL:
-        return _cache["data"]
+    if not refresh:
+        cached = warbond_cache.get()
+        if cached is not None:
+            return cached
 
     try:
         html = _curl_get("https://starnotifier.com/daily-warbonds")
@@ -489,15 +485,14 @@ def fetch_warbonds() -> dict:
         }
 
         # Update cache
-        _cache["data"] = response
-        _cache["timestamp"] = now
+        warbond_cache.set(response)
 
         return response
 
     except Exception as e:
         # Return stale cache if available, otherwise empty
-        if _cache["data"]:
-            return _cache["data"]
+        if warbond_cache.data is not None:
+            return warbond_cache.data
         return {
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "rsi_store_url": RSI_WARBOND_STORE_URL,

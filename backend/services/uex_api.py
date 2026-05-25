@@ -1,5 +1,6 @@
 """
-UEX API Client - Handles TLS compatibility, authentication and caching
+UEX API Client - Handles TLS compatibility, authentication and caching.
+Uses centralized TTL cache from cache.py.
 """
 import json
 import os
@@ -8,15 +9,12 @@ import time
 import urllib.parse
 from typing import Dict, List, Optional, Tuple
 
-BASE_URL = "https://api.uexcorp.uk/2.0"
+from services.cache import (
+    terminal_cache, commodity_cache, price_cache, distance_cache,
+    invalidate_all,
+)
 
-# Module-level caches (shared across functions, importable by route_planner)
-_distance_cache: Dict[Tuple[int, int], int] = {}
-_routes_queried: set = set()
-_terminal_cache: List[Dict] = []
-_terminal_cache_loaded: bool = False
-_commodity_cache: List[Dict] = []
-_commodity_cache_loaded: bool = False
+BASE_URL = "https://api.uexcorp.uk/2.0"
 
 
 def _get_api_key() -> str:
@@ -100,37 +98,31 @@ def api_get(endpoint: str, params: dict = None, path_params: dict = None) -> dic
 
 def clear_caches():
     """Clear all UEX API caches — forces reload on next request."""
-    global _terminal_cache, _terminal_cache_loaded
-    global _commodity_cache, _commodity_cache_loaded
-    global _distance_cache, _routes_queried
-    _terminal_cache = []
-    _terminal_cache_loaded = False
-    _commodity_cache = []
-    _commodity_cache_loaded = False
-    _distance_cache = {}
-    _routes_queried = set()
+    invalidate_all()
 
 
-def load_terminals() -> List[Dict]:
-    """Load all commodity terminals with caching.
+def load_terminals(refresh: bool = False) -> List[Dict]:
+    """Load all commodity terminals with TTL caching.
 
     Filters out PLATINUM BAY terminals because they have zero price data
     in the UEX API. Each PB location has a corresponding ADMIN terminal
     that has actual buy/sell prices.
 
-    NOTE: Does NOT cache empty results from failed API calls to prevent
-    "poisoned cache" — if UEX API is temporarily down, we retry on next request.
+    Args:
+        refresh: If True, bypass cache and fetch fresh data.
     """
-    global _terminal_cache, _terminal_cache_loaded
-    if _terminal_cache_loaded and _terminal_cache:
-        return _terminal_cache
+    if not refresh:
+        cached = terminal_cache.get()
+        if cached is not None:
+            return cached
+
     try:
         data = api_get("terminals", path_params={"type": "commodity"})
         terminals = data.get("data", [])
         if terminals:
-            _terminal_cache = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
-            _terminal_cache_loaded = True
-            return _terminal_cache
+            filtered = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
+            terminal_cache.set(filtered)
+            return filtered
     except Exception:
         pass
 
@@ -139,35 +131,41 @@ def load_terminals() -> List[Dict]:
         data = api_get("terminals")
         terminals = [t for t in data.get("data", []) if t.get("type") == "commodity"]
         if terminals:
-            _terminal_cache = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
-            _terminal_cache_loaded = True
-            return _terminal_cache
+            filtered = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
+            terminal_cache.set(filtered)
+            return filtered
     except Exception:
         pass
 
-    # Return empty but DON'T cache — allow retry on next request
+    # Return stale cache if available, else empty
+    if terminal_cache.data is not None:
+        return terminal_cache.data
     return []
 
 
-def load_commodities() -> List[Dict]:
-    """Load all commodities with caching.
+def load_commodities(refresh: bool = False) -> List[Dict]:
+    """Load all commodities with TTL caching.
 
-    NOTE: Does NOT cache empty results from failed API calls to prevent
-    "poisoned cache" — if UEX API is temporarily down, we retry on next request.
+    Args:
+        refresh: If True, bypass cache and fetch fresh data.
     """
-    global _commodity_cache, _commodity_cache_loaded
-    if _commodity_cache_loaded and _commodity_cache:
-        return _commodity_cache
+    if not refresh:
+        cached = commodity_cache.get()
+        if cached is not None:
+            return cached
+
     try:
         data = api_get("commodities")
         commodities = data.get("data", [])
         if commodities:
-            _commodity_cache = commodities
-            _commodity_cache_loaded = True
-            return _commodity_cache
+            commodity_cache.set(commodities)
+            return commodities
     except Exception:
         pass
-    # Return empty but DON'T cache — allow retry on next request
+
+    # Return stale cache if available, else empty
+    if commodity_cache.data is not None:
+        return commodity_cache.data
     return []
 
 
@@ -223,20 +221,42 @@ def search_commodity(query: str) -> Optional[Dict]:
     return None
 
 
-def get_commodity_prices(commodity_id: int) -> List[Dict]:
+def get_commodity_prices(commodity_id: int, refresh: bool = False) -> List[Dict]:
     """Get prices for a commodity across all terminals.
-    Uses v2.0 path-style parameter: commodities_prices/id_commodity/{id}/
+    Uses per-commodity TTL cache.
+
+    Args:
+        commodity_id: UEX commodity ID
+        refresh: If True, bypass cache and fetch fresh data.
     """
-    data = api_get("commodities_prices", path_params={"id_commodity": commodity_id})
-    return data.get("data", [])
+    if not refresh:
+        cached = price_cache.get(commodity_id)
+        if cached is not None:
+            return cached
+
+    try:
+        data = api_get("commodities_prices", path_params={"id_commodity": commodity_id})
+        prices = data.get("data", [])
+        price_cache.set(commodity_id, prices)
+        return prices
+    except Exception:
+        # Return stale cache on error
+        cached = price_cache.get(commodity_id)
+        if cached is not None:
+            return cached
+        return []
 
 
-def fetch_routes_from_terminal(tid: int) -> Dict[int, int]:
+def fetch_routes_from_terminal(tid: int, refresh: bool = False) -> Dict[int, int]:
     """Get route distances from a terminal. Returns {dest_tid: distance}.
-    Uses v2.0 path-style parameter: commodities_routes/id_terminal_origin/{tid}/
+    Uses TTL cache with per-terminal query tracking.
+
+    Args:
+        tid: Origin terminal ID
+        refresh: If True, bypass cache and fetch fresh data.
     """
-    if tid in _routes_queried:
-        return {dt: d for (ot, dt), d in _distance_cache.items() if ot == tid}
+    if not refresh and distance_cache.is_queried(tid):
+        return distance_cache.get_routes_from(tid)
 
     try:
         data = api_get("commodities_routes", path_params={"id_terminal_origin": tid})
@@ -244,42 +264,39 @@ def fetch_routes_from_terminal(tid: int) -> Dict[int, int]:
     except Exception:
         routes = []
 
-    result = {}
     seen = set()
     for r in routes:
         dest_tid = r.get("id_terminal_destination", 0)
         dist = r.get("distance", 0)
         if dest_tid and dist and (tid, dest_tid) not in seen:
-            _distance_cache[(tid, dest_tid)] = dist
-            result[dest_tid] = dist
+            distance_cache.set_distance(tid, dest_tid, dist)
             seen.add((tid, dest_tid))
 
-    _routes_queried.add(tid)
-    return result
+    distance_cache.mark_queried(tid)
+    return distance_cache.get_routes_from(tid)
 
 
 def get_distance(origin_tid: int, dest_tid: int) -> Optional[int]:
     """Get distance between two terminals."""
     if origin_tid == dest_tid:
         return 0
-    if (origin_tid, dest_tid) in _distance_cache:
-        return _distance_cache[(origin_tid, dest_tid)]
-    if (dest_tid, origin_tid) in _distance_cache:
-        return _distance_cache[(dest_tid, origin_tid)]
+    cached = distance_cache.get_distance(origin_tid, dest_tid)
+    if cached is not None:
+        return cached
     routes = fetch_routes_from_terminal(origin_tid)
     return routes.get(dest_tid)
 
 
-def build_distance_matrix(origin_tid: int, candidate_tids: List[int]) -> Dict[Tuple[int, int], Optional[int]]:
+def build_distance_matrix(origin_tid: int, candidate_tids: List[int], refresh: bool = False) -> Dict[Tuple[int, int], Optional[int]]:
     """Build distance matrix between origin and candidates."""
     all_tids = set([origin_tid] + candidate_tids)
 
     # Step 1: Get routes from origin
-    fetch_routes_from_terminal(origin_tid)
+    fetch_routes_from_terminal(origin_tid, refresh=refresh)
 
     # Step 2: Fill missing pairs by querying candidate terminals (max 12)
     known_pairs = set()
-    for (ot, dt) in _distance_cache.keys():
+    for (ot, dt) in distance_cache._distances.keys():
         known_pairs.add((ot, dt))
         known_pairs.add((dt, ot))
 
@@ -294,13 +311,12 @@ def build_distance_matrix(origin_tid: int, candidate_tids: List[int]) -> Dict[Tu
         def missing_count(tid):
             return sum(1 for other in all_tids
                        if other != tid
-                       and (tid, other) not in _distance_cache
-                       and (other, tid) not in _distance_cache)
+                       and distance_cache.get_distance(tid, other) is None)
 
         sorted_missing = sorted(missing_tids, key=missing_count, reverse=True)
         for i, tid in enumerate(sorted_missing[:12]):
-            if tid not in _routes_queried:
-                fetch_routes_from_terminal(tid)
+            if not distance_cache.is_queried(tid):
+                fetch_routes_from_terminal(tid, refresh=refresh)
                 time.sleep(0.2)
 
     # Build matrix
@@ -309,12 +325,9 @@ def build_distance_matrix(origin_tid: int, candidate_tids: List[int]) -> Dict[Tu
         for b in all_tids:
             if a == b:
                 matrix[(a, b)] = 0
-            elif (a, b) in _distance_cache:
-                matrix[(a, b)] = _distance_cache[(a, b)]
-            elif (b, a) in _distance_cache:
-                matrix[(a, b)] = _distance_cache[(b, a)]
             else:
-                matrix[(a, b)] = None
+                d = distance_cache.get_distance(a, b)
+                matrix[(a, b)] = d
     return matrix
 
 

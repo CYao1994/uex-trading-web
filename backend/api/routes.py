@@ -10,6 +10,7 @@ from services.uex_api import load_terminals, load_commodities, get_commodity_pri
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
 from services.route_planner import plan_sell_route, plan_buy_route
 from services.warbond_scraper import fetch_warbonds
+from services.cache import get_all_stats, invalidate_all
 from version import VERSION, CHANGELOG
 
 router = APIRouter(prefix="/api")
@@ -22,11 +23,15 @@ async def get_version():
 
 
 @router.post("/sell-route", response_model=SellRouteResponse)
-async def sell_route(request: SellRouteRequest):
-    """Plan a sell route for inventory."""
+async def sell_route(request: SellRouteRequest, refresh: bool = Query(False)):
+    """Plan a sell route for inventory.
+    
+    Args:
+        refresh: If True, bypass cache and fetch fresh data from UEX API.
+    """
     import traceback
     try:
-        result = plan_sell_route(request.origin, [item.model_dump() for item in request.items])
+        result = plan_sell_route(request.origin, [item.model_dump() for item in request.items], refresh=refresh)
         return result
     except Exception as e:
         traceback.print_exc()
@@ -35,11 +40,15 @@ async def sell_route(request: SellRouteRequest):
 
 
 @router.post("/buy-route", response_model=SellRouteResponse)
-async def buy_route(request: SellRouteRequest):
-    """Plan a buy route — find cheapest sellers for commodities."""
+async def buy_route(request: SellRouteRequest, refresh: bool = Query(False)):
+    """Plan a buy route — find cheapest sellers for commodities.
+    
+    Args:
+        refresh: If True, bypass cache and fetch fresh data from UEX API.
+    """
     import traceback
     try:
-        result = plan_buy_route(request.origin, [item.model_dump() for item in request.items])
+        result = plan_buy_route(request.origin, [item.model_dump() for item in request.items], refresh=refresh)
         return result
     except Exception as e:
         traceback.print_exc()
@@ -48,9 +57,13 @@ async def buy_route(request: SellRouteRequest):
 
 
 @router.get("/terminals", response_model=list[TerminalOption])
-async def search_terminals(q: str = Query("", max_length=100)):
-    """Search terminals by name."""
-    terminals = load_terminals()
+async def search_terminals(q: str = Query("", max_length=100), refresh: bool = Query(False)):
+    """Search terminals by name.
+    
+    Args:
+        refresh: If True, bypass cache and fetch fresh terminal data.
+    """
+    terminals = load_terminals(refresh=refresh)
     query = q.lower().strip()
 
     if not query:
@@ -89,9 +102,13 @@ async def search_terminals(q: str = Query("", max_length=100)):
 
 
 @router.get("/commodities", response_model=list[CommodityOption])
-async def search_commodities(q: str = Query("", max_length=100)):
-    """Search commodities by name."""
-    commodities = load_commodities()
+async def search_commodities(q: str = Query("", max_length=100), refresh: bool = Query(False)):
+    """Search commodities by name.
+    
+    Args:
+        refresh: If True, bypass cache and fetch fresh commodity data.
+    """
+    commodities = load_commodities(refresh=refresh)
     query = q.lower().strip()
 
     if not query:
@@ -117,8 +134,13 @@ async def search_commodities(q: str = Query("", max_length=100)):
 
 
 @router.get("/commodity-prices/{commodity_id}", response_model=CommodityPricesResponse)
-async def commodity_prices(commodity_id: int):
-    """Get buy/sell prices for a specific commodity across all terminals."""
+async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
+    """Get buy/sell prices for a specific commodity across all terminals.
+    
+    Args:
+        commodity_id: UEX commodity ID
+        refresh: If True, bypass cache and fetch fresh price data.
+    """
     # Verify commodity exists
     commodities = load_commodities()
     commodity = None
@@ -130,8 +152,8 @@ async def commodity_prices(commodity_id: int):
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Commodity not found")
 
-    # Fetch all prices
-    prices_data = get_commodity_prices(commodity_id)
+    # Fetch all prices (with TTL cache)
+    prices_data = get_commodity_prices(commodity_id, refresh=refresh)
 
     # Build price entries
     buy_entries = []  # Terminals that BUY (you sell to them)
@@ -185,9 +207,13 @@ async def commodity_prices(commodity_id: int):
 
 
 @router.get("/warbonds", response_model=WarbondResponse)
-async def get_warbonds():
-    """Get current warbond items from RSI store."""
-    return fetch_warbonds()
+async def get_warbonds(refresh: bool = Query(False)):
+    """Get current warbond items from RSI store.
+    
+    Args:
+        refresh: If True, bypass cache and fetch fresh warbond data.
+    """
+    return fetch_warbonds(refresh=refresh)
 
 
 @router.get("/health")
@@ -205,8 +231,14 @@ async def health_check():
     }
 
 
+@router.get("/cache/stats")
+async def cache_stats():
+    """Get cache statistics — shows TTL, age, and hit/miss counts for all caches."""
+    return get_all_stats()
+
+
 @router.post("/cache/clear")
 async def clear_cache():
-    """Clear all cached UEX API data — forces reload on next request."""
-    clear_caches()
+    """Clear all cached data — forces fresh data on next request."""
+    invalidate_all()
     return {"status": "ok", "message": "All caches cleared"}
