@@ -282,9 +282,302 @@ SHIP_NAME_ZH = {
     "Turret": "炮塔",
 }
 
-# RSI media image URL pattern for ships
-# Format: https://media.robertsspaceindustries.com/{slug}/heap_infobox/{ship-name}.jpg
-# We'll try to construct image URLs based on the item name
+# RSI media CDN image URL pattern
+# Correct format: https://media.robertsspaceindustries.com/{media_slug}/heap_infobox.jpg
+# The media_slug is a RSI-internal ID (e.g. "asbrpwjjho1z0" for Gladius), NOT the ship name.
+# Mapping sourced from RSI Ship Matrix API (https://robertsspaceindustries.com/ship-matrix/index)
+SHIP_MEDIA_SLUG = {
+    "100i": "ofxowq9rhbyvc",
+    "125a": "e0a0pfimgv34k",
+    "135c": "ftaf8t452ad1o",
+    "300i": "3oo06l2jgo08b",
+    "315p": "tclw2w16unsyq",
+    "325a": "splsb5xdivrxj",
+    "350r": "ni0d3xiv2wcid",
+    "400i": "x4tbq6bz7kgkg",
+    "600i Explorer": "nsl0zel8gmfxl",
+    "600i Touring": "68f2og2gz2mdq",
+    "85X": "sm8ti6o025fm3",
+    "890 Jump": "t2bky2nbdg0ms",
+    "A1 Spirit": "nsqe4f3nl1mqn",
+    "A2 Hercules": "a14ekvttpyy6w",
+    "ATLS": "99ljbpzzczrae",
+    "ATLS GEO": "rbkutfuffvdy7",
+    "Anvil Ballista Dunestalker": "7lh198t7qfugb",
+    "Anvil Ballista Snowblind": "8anej6j9umet3",
+    "Apollo Medivac": "s7p0pxsph50es",
+    "Apollo Triage": "1mu5e6wdygvl1",
+    "Ares Inferno": "txyuxxqtu8otc",
+    "Ares Ion": "a2g2ta0lq0uq5",
+    "Argo Mole Carbon Edition": "ugpy6i9pbgbax",
+    "Argo Mole Talus Edition": "ghac95q2ncobp",
+    "Arrastra": "s77g3dj3gwes9",
+    "Arrow": "je860sn8tg87z",
+    "Asgard": "hojtsnh3dom15",
+    "Aurora Mk I CL": "ycbkp9msgs8lm",
+    "Aurora Mk I ES": "e1i4i2ixe6ouo",
+    "Aurora Mk I LN": "dh60iu47yqqpj",
+    "Aurora Mk I LX": "28jsrvn7jb54w",
+    "Aurora Mk I MR": "kinuf02r7s4oq",
+    "Aurora Mk I SE": "ungxvqb17gtre",
+    "Aurora Mk II": "rh3zjmon4w468",
+    "Avenger Stalker": "9tfhza1twrczn",
+    "Avenger Titan": "dogyaf0p2eup4",
+    "Avenger Titan Renegade": "oc8p2v3n7c0e0",
+    "Avenger Warlock": "l8znbwwoh2o8u",
+    "Ballista": "fgwmyqm1gd658",
+    "Blade": "0s9bslimticmx",
+    "Buccaneer": "9930le6zi5mn3",
+    "C1 Spirit": "ly51mm0p1vs6w",
+    "C2 Hercules": "y9nxh2pyic772",
+    "C8 Pisces": "9y6uxd82fw0ne",
+    "C8R Pisces": "k4znei4d8qkrt",
+    "C8X Pisces Expedition": "kj7oh12zn2f1l",
+    "CSV-SM": "xeksf2azf23mm",
+    "Carrack": "bau5bdotm8te8",
+    "Carrack Expedition": "gpfapokelyewn",
+    "Carrack Expedition w/C8X": "1k5nfi962y4pp",
+    "Carrack w/C8X": "twlkwwqy2mmk2",
+    "Caterpillar": "0ffxba4wywl0j",
+    "Centurion": "ve7olk5it3ybn",
+    "Clipper": "w71mw7k361seg",
+    "Constellation Andromeda": "x1aflxx72d3xs",
+    "Constellation Aquila": "u1qyvf0i8m0gv",
+    "Constellation Phoenix": "jkyny550a90um",
+    "Constellation Phoenix Emerald": "c6k45uuhq41ow",
+    "Constellation Taurus": "mw5k52yzgo7fd",
+    "Corsair": "9y19hajivybqc",
+    "Crucible": "q81gvelwf2usv",
+    "Cutlass Black": "56iszc92bl9oi",
+    "Cutlass Blue": "2hllaegtpmzyy",
+    "Cutlass Red": "wqa6lfco4amc0",
+    "Cutlass Steel": "mhuiu912ca4d1",
+    "Cutter": "f1g97yucvp6np",
+    "Cutter Rambler": "7xwtmjrvqlyee",
+    "Cutter Scout": "997gomyxfeg86",
+    "Cyclone": "vfwgefk6w5o9d",
+    "Cyclone AA": "9sdm1joxg6l5w",
+    "Cyclone MT": "vypszjy7ij306",
+    "Cyclone RC": "7w2fu56gep0vr",
+    "Cyclone RN": "9e7okmkqgc38d",
+    "Cyclone TR": "hf23s59lyp47o",
+    "Defender": "nnb2oofnrlni9",
+    "Dragonfly Black": "ts98rchnhox11",
+    "Dragonfly Yellowjacket": "olbkpbmk1sb8u",
+    "E1 Spirit": "mijopoh0bk9pb",
+    "Eclipse": "ej552bji5plg4",
+    "Endeavor": "ymfdp7ow9lm5c",
+    "Expanse": "wphusii1dnmxt",
+    "F7A Hornet Mk I": "xbj9vlcjp8xl3",
+    "F7A Hornet Mk II": "fbn41urx9yszc",
+    "F7C Hornet Mk I": "tcpakf2m1h1hx",
+    "F7C Hornet Mk II": "hvfpdcaqeeehk",
+    "F7C Hornet Wildfire Mk I": "0uqzw1kqnfvxy",
+    "F7C-M Super Hornet Heartseeker Mk I": "6ewzke6o3llh6",
+    "F7C-M Super Hornet Mk I": "pjudaw3yj3odo",
+    "F7C-M Super Hornet Mk II": "5aqjv141a62is",
+    "F7C-R Hornet Tracker Mk I": "biy2mmvcz6eb2",
+    "F7C-R Hornet Tracker Mk II": "76dfngh2320kc",
+    "F7C-S Hornet Ghost Mk I": "nbwncbo1436rs",
+    "F7C-S Hornet Ghost Mk II": "thvu42fxnagbh",
+    "F8C Lightning": "j6rvfrkux5nrm",
+    "F8C Lightning Executive Edition": "ekto72z81x9kn",
+    "Fortune": "y7rppq3nl8o1e",
+    "Freelancer": "z3mllk6zi0x7r",
+    "Freelancer DUR": "hjhbs9pvw36jc",
+    "Freelancer MAX": "myp4kfzlh11jb",
+    "Freelancer MIS": "ybkygputhkx0g",
+    "Fury": "icoxi8ahyr0i9",
+    "Fury LX": "c63hvy3xb308p",
+    "Fury MX": "afdx1cof4p8rb",
+    "G12": "brmi1ci9rthmu",
+    "G12a": "2btmuamt8zv4g",
+    "G12r": "ou0nkzhocb2bd",
+    "Galaxy": "b2bx2kl8ewqej",
+    "Genesis": "gpdjd9p1jnxj4",
+    "Gladiator": "sonytrzapzugz",
+    "Gladius": "asbrpwjjho1z0",
+    "Gladius Pirate Edition": "9cwz2utclixvt",
+    "Gladius Valiant": "hubxawbeqj9u7",
+    "Glaive": "msy0lud5dd4eg",
+    "Golem": "yzx7t45a965dk",
+    "Golem OX": "zkl62hbt39ood",
+    "Guardian": "ihc934ai7vvyj",
+    "Guardian MX": "e92jsru2uvimx",
+    "Guardian QI": "efsw63dokhn35",
+    "Hammerhead": "zuxffe2ckazbk",
+    "Hawk": "yshd7vv3i1ds0",
+    "Herald": "eqjgd53qha550",
+    "Hermes": "lx84u9f3zauov",
+    "HoverQuad": "yz04lei9pkqob",
+    "Hull A": "3u3x96w5ixj37",
+    "Hull B": "k65brbo8a8wtc",
+    "Hull C": "0qokljtlegt4r",
+    "Hull D": "1j6650dnbblli",
+    "Hull E": "k6fla3wync6cr",
+    "Hurricane": "s4dhqqb1cug2k",
+    "Idris-M": "59wd4xwt2qms4",
+    "Idris-P": "yfj9hnf0hrali",
+    "Intrepid": "3vk6dnvwcm0rk",
+    "Ironclad": "g948zfjuiznu4",
+    "Ironclad Assault": "llaw71tcvmgmy",
+    "Javelin": "oc89p5ksizcla",
+    "Khartu-Al": "zd5doe8h0xemz",
+    "Kraken": "nnpwaac1eqp4p",
+    "Kraken Privateer": "nnu9953me3vod",
+    "L-21 Wolf": "eq3u8zmal8k32",
+    "L-22 Alpha Wolf": "dc1sfdhjkdhgr",
+    "Legionnaire": "qxgdodjdhuvsr",
+    "Liberator": "k2zu1md2ulfxn",
+    "Lynx": "m6ikrk16sokre",
+    "M2 Hercules": "3s79isis6qti3",
+    "M50": "l7p21pakfkth2",
+    "M80": "nledgsyyzmjov",
+    "MDC": "td5w87d85m3j7",
+    "MOLE": "wgai60tvwa3vs",
+    "MOTH": "e6qe6d6cyguo3",
+    "MPUV Cargo": "yah6nttyhb9rv",
+    "MPUV Personnel": "ee5eljtb2gs4b",
+    "MPUV Tractor": "yld5zspxuczza",
+    "MTC": "mbsnp3745enyi",
+    "Mantis": "ohk97bvmweor0",
+    "Merchantman": "gmtme5pca7eis",
+    "Mercury": "219rro1mjtov6",
+    "Meteor": "y0r5156e7qcf7",
+    "Mule": "kl5rmiujift5l",
+    "Mustang Alpha": "g0lupo5x3wp8u",
+    "Mustang Alpha Vindicator": "iohmvf24h4rsz",
+    "Mustang Beta": "h5us6lo3z1iwb",
+    "Mustang Delta": "7gb75f5yivup7",
+    "Mustang Gamma": "0awy4emw400yy",
+    "Mustang Omega": "udupgv9cpj76b",
+    "Nautilus": "c6t6mr400hgx6",
+    "Nautilus Solstice Edition": "mp9p2pzrvdxw9",
+    "Nomad": "inqdpb67v815c",
+    "Nova": "698j1tw6sqq4t",
+    "Nox": "945jxtrweugj1",
+    "Nox Kue": "wluwxxxf8vyel",
+    "Odin": "dygjbkb1e28bz",
+    "Odyssey": "xpz8d5rv7fl2n",
+    "Orion": "b3nwvt5ye3zj0",
+    "P-52 Merlin": "dpsn2y1j9wy6w",
+    "P-72 Archimedes": "8p4kt5rzv0t39",
+    "P-72 Archimedes Emerald": "mib6i79az3zcr",
+    "PTV": "6h1t0fw20lxv8",
+    "Paladin": "5hz1jf9dkrfhc",
+    "Perseus": "1zli0ngsh3vk7",
+    "Pioneer": "vtodzxlks918l",
+    "Pitbull": "9jazkmawt8ggi",
+    "Polaris": "oe0wikh6g3ltm",
+    "Prospector": "7rfmcpg9qcpmm",
+    "Prowler": "iaps0ps9oo83s",
+    "Prowler Utility": "ixg2xt4sauv1x",
+    "Pulse": "undl2onw5a826",
+    "Pulse LX": "4a24kqwjx1x4a",
+    "RAFT": "x4b15hx3vui08",
+    "ROC": "kuw6hsllahest",
+    "ROC-DS": "9ozbp8j2455mw",
+    "Railen": "i3aybjtr4j7fq",
+    "Ranger CV": "1pe4mpq4m650v",
+    "Ranger RC": "86p4ac1l3rmra",
+    "Ranger TR": "eehhr9ql9y04w",
+    "Razor": "ryf59d1orpnzh",
+    "Razor EX": "7ryipnsxv61xe",
+    "Razor LX": "k8vf8c6y16gcp",
+    "Reclaimer": "mp4b03l05po17",
+    "Redeemer": "fi748d6hqv9jj",
+    "Reliant Kore": "0ofjqpjk23gqz",
+    "Reliant Mako": "4f25lfzd4vaqr",
+    "Reliant Sen": "dhvoh5wvqe5wi",
+    "Reliant Tana": "z0qh46jnljtuf",
+    "Retaliator": "29xzv1mq4fgt7",
+    "SRV": "zni3y3co999z9",
+    "STV": "ryfsd44qh96d9",
+    "Sabre": "5ahkbuex0r8wm",
+    "Sabre Comet": "6uravr46xw6qf",
+    "Sabre Firebird": "jf3l706gczrz9",
+    "Sabre Peregrine": "9hyc1w8drlprn",
+    "Sabre Raven": "x1a8n7to5l1rp",
+    "Salvation": "7u3ybzv7nbyg9",
+    "San'tok.yai": "4s0zrs2svm1n9",
+    "Scorpius": "7u4jmdb7ev4h7",
+    "Scorpius Antares": "ib2pmees0vrq3",
+    "Scythe": "kysobeqkurqyd",
+    "Shiv": "wzn84c0qyz4ib",
+    "Spartan": "edmbk733mir8t",
+    "Starfarer": "wcxbs18v57gxv",
+    "Starfarer Gemini": "c6423etmvm52z",
+    "Starlancer MAX": "c59t62rz5xud9",
+    "Starlancer TAC": "emx6dhzo9kbox",
+    "Starlite": "6cdv5u7nvigrn",
+    "Stinger": "90r0njd8ob87b",
+    "Storm": "kwrokktl2sfx0",
+    "Storm AA": "x42epibkm0264",
+    "Syulen": "8xho65s0f1emp",
+    "Talon": "5ldm3z0l75na6",
+    "Talon Shrike": "tfej2rg70irt2",
+    "Terrapin": "c59bnvpymcqr9",
+    "Terrapin Medic": "hj0gxtjk6wd4h",
+    "Tiburon": "yqgidk6parmtz",
+    "UTV": "szj2zc8m5hair",
+    "Ursa": "22yuqerzgide5",
+    "Ursa Fortuna": "g62q7c3956cu1",
+    "Ursa Medivac": "opl9wsa1a3tvu",
+    "Valkyrie": "yjh17ca5zprfr",
+    "Valkyrie Liberator Edition": "c67fpurhnm5jz",
+    "Vanguard Harbinger": "enygi6572pnkl",
+    "Vanguard Hoplite": "t0y17e7z9qq4o",
+    "Vanguard Sentinel": "u7jflg98ld4d9",
+    "Vanguard Warden": "xd9clc660apc3",
+    "Vulcan": "6q50bb3oy5q8b",
+    "Vulture": "ryxb5u7q09x06",
+    "X1": "dfby6tstm2ddk",
+    "X1 Force": "8gw5uoifiylxq",
+    "X1 Velocity": "cz8otyln1w1tp",
+    "Zeus Mk II CL": "bkvyglm2hgmzd",
+    "Zeus Mk II ES": "dzqbjbxnpfjha",
+    "Zeus Mk II MR": "pj51owg973q4h",
+}
+
+# Also map common alias names used in warbond data to their canonical RSI ship matrix names
+_SHIP_NAME_ALIASES = {
+    "Aurora ES": "Aurora Mk I ES",
+    "Aurora MR": "Aurora Mk I MR",
+    "Aurora CL": "Aurora Mk I CL",
+    "Aurora LX": "Aurora Mk I LX",
+    "Aurora LN": "Aurora Mk I LN",
+    "Aurora Mk II plus Combat Module": "Aurora Mk II",
+    "Hornet F7C": "F7C Hornet Mk I",
+    "Hornet F7C Wildfire": "F7C Hornet Wildfire Mk I",
+    "Hornet F7CM": "F7C-M Super Hornet Mk I",
+    "Super Hornet": "F7C-M Super Hornet Mk I",
+    "F7C Hornet": "F7C Hornet Mk I",
+    "F7C-M Super Hornet": "F7C-M Super Hornet Mk I",
+    "F7C-R Hornet Tracker": "F7C-R Hornet Tracker Mk I",
+    "F7C-S Hornet Ghost": "F7C-S Hornet Ghost Mk I",
+    "F8 Lightning": "F8C Lightning",
+    "C2": "C2 Hercules",
+    "M2": "M2 Hercules",
+    "A2": "A2 Hercules",
+    "Ares Inferno": "Ares Inferno",
+    "Ballista Dunestalker": "Anvil Ballista Dunestalker",
+    "Ballista Snowblind": "Anvil Ballista Snowblind",
+    "Dragonfly": "Dragonfly Black",
+    "MOLE Carbon": "Argo Mole Carbon Edition",
+    "MOLE Talus": "Argo Mole Talus Edition",
+    "Mercury Star Runner": "Mercury",
+    "Reliant": "Reliant Kore",
+    "Razor": "Razor",
+    "Ursa Rover": "Ursa",
+    "600i": "600i Touring",
+    "Apollo": "Apollo Triage",
+    "Nautilus": "Nautilus",
+    "Lynx": "Lynx",
+    "Cutlass": "Cutlass Black",
+    "Avenger": "Avenger Titan",
+    "Mustang": "Mustang Alpha",
+    "Buccaneer": "Buccaneer",
+}
 
 
 def _get_name_zh(name: str) -> str:
@@ -324,13 +617,49 @@ def _get_name_zh(name: str) -> str:
 
 
 def _get_image_url(name: str) -> str:
-    """Generate RSI media image URL for a ship/item."""
-    # Convert ship name to URL slug
-    slug = name.lower().replace(" ", "-")
-    # Remove special characters
-    slug = re.sub(r'[^a-z0-9-]', '', slug)
-    # Use the RSI media CDN pattern
-    return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox/{slug}.jpg"
+    """Generate RSI media image URL for a ship/item using media slug lookup.
+
+    URL format: https://media.robertsspaceindustries.com/{media_slug}/heap_infobox.jpg
+    The media_slug is a RSI-internal ID mapped from the ship matrix API.
+    """
+    # 1. Direct lookup in SHIP_MEDIA_SLUG
+    slug = SHIP_MEDIA_SLUG.get(name)
+    if slug:
+        return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
+
+    # 2. Try alias mapping (e.g. "Hornet F7C" -> "F7C Hornet Mk I")
+    alias = _SHIP_NAME_ALIASES.get(name)
+    if alias:
+        slug = SHIP_MEDIA_SLUG.get(alias)
+        if slug:
+            return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
+
+    # 3. Prefix match in SHIP_MEDIA_SLUG (handles suffixes like " Warbond Edition")
+    for key, slug_val in sorted(SHIP_MEDIA_SLUG.items(), key=lambda x: -len(x[0])):
+        if name.startswith(key):
+            return f"https://media.robertsspaceindustries.com/{slug_val}/heap_infobox.jpg"
+
+    # 4. Strip manufacturer prefix and try again
+    for mfr in MANUFACTURER_ZH:
+        prefix = mfr + " "
+        if name.startswith(prefix):
+            base = name[len(prefix):]
+            slug = SHIP_MEDIA_SLUG.get(base)
+            if slug:
+                return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
+            # Prefix match on base name
+            for key, slug_val in sorted(SHIP_MEDIA_SLUG.items(), key=lambda x: -len(x[0])):
+                if base.startswith(key):
+                    return f"https://media.robertsspaceindustries.com/{slug_val}/heap_infobox.jpg"
+            # Alias on base name
+            alias = _SHIP_NAME_ALIASES.get(base)
+            if alias:
+                slug = SHIP_MEDIA_SLUG.get(alias)
+                if slug:
+                    return f"https://media.robertsspaceindustries.com/{slug_val}/heap_infobox.jpg"
+
+    # 5. No match found - return empty string (frontend will show fallback icon)
+    return ""
 
 
 def _curl_get(url: str, timeout: int = 15) -> str:

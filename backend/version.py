@@ -4,10 +4,21 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.8.0"
+VERSION = "3.8.1"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.8.1",
+        "date": "2025-05-27",
+        "changes": [
+            "修复：战争债券图片全部 404 无法显示",
+            "图片 URL 从船名 slug 改为 RSI 内部 media ID 映射",
+            "新增 250+ 船只 media slug 映射（来自 RSI Ship Matrix API）",
+            "新增船只名称别名映射（处理 warbond 名称与 matrix 名称差异）",
+            "无图片时直接显示 HUD 飞船图标，不再尝试错误 URL",
+        ],
+    },
     {
         "version": "3.8.0",
         "date": "2025-05-26",

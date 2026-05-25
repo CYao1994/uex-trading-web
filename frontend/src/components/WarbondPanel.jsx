@@ -15,40 +15,11 @@ function formatDiscount(wbPrice, stdPrice) {
   return `-${(diff / 100).toFixed(2)}`;
 }
 
-// Try multiple image sources for a ship/item
-function getShipImageUrls(name) {
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  // Extract base ship name for erkul (remove "Warbond Edition" etc.)
-  const baseName = name.replace(/\s*(Warbond|Edition|Plus|Upgrade|Standalone|Package|CCU).*$/i, '').trim();
-  const baseSlug = baseName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-  return [
-    // RSI media CDN (primary)
-    `https://media.robertsspaceindustries.com/${slug}/heap_infobox/${slug}.jpg`,
-    // RSI media with base slug
-    `https://media.robertsspaceindustries.com/${baseSlug}/heap_infobox/${baseSlug}.jpg`,
-    // Erkul.games ship viewer (fallback for ships)
-    `https://api.erkul.games/static/ships/${baseSlug}.png`,
-  ];
-}
-
 function WarbondCard({ item, accentColor }) {
-  const [imgSrc, setImgSrc] = useState(() => getShipImageUrls(item.name)[0]);
-  const [imgIndex, setImgIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);
+  const hasImage = item.image_url && item.image_url.length > 0;
 
   const discount = formatDiscount(item.warbond_price, item.standard_price);
-
-  const handleImgError = () => {
-    const urls = getShipImageUrls(item.name);
-    const nextIndex = imgIndex + 1;
-    if (nextIndex < urls.length) {
-      setImgIndex(nextIndex);
-      setImgSrc(urls[nextIndex]);
-    } else {
-      setImgFailed(true);
-    }
-  };
 
   return (
     <Box sx={{
@@ -85,7 +56,7 @@ function WarbondCard({ item, accentColor }) {
         overflow: 'hidden',
         position: 'relative',
       }}>
-        {imgFailed ? (
+        {(!hasImage || imgFailed) ? (
           // Fallback: HUD ship icon
           <Box sx={{
             width: 80, height: 80,
@@ -102,9 +73,9 @@ function WarbondCard({ item, accentColor }) {
           </Box>
         ) : (
           <img
-            src={item.image_url || imgSrc}
+            src={item.image_url}
             alt={item.name_zh || item.name}
-            onError={handleImgError}
+            onError={() => setImgFailed(true)}
             loading="lazy"
             style={{
               width: '100%',
