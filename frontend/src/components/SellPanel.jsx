@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Paper, Typography, Button, Divider, Alert } from '@mui/material';
+import { Box, Typography, Button, Divider, Alert } from '@mui/material';
 import { SwapHoriz, RocketLaunch } from '@mui/icons-material';
 import TerminalSearch from './TerminalSearch';
 import CommodityInput from './CommodityInput';
@@ -40,13 +40,14 @@ function SellPanel({ onResult }) {
   return (
     <Box sx={{
       p: 2.5,
-      background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)',
+      background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.92) 0%, rgba(2, 8, 18, 0.95) 100%)',
       border: '1px solid rgba(0, 180, 255, 0.1)',
-      backdropFilter: 'blur(12px)',
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
+      willChange: 'transform',
+      transform: 'translateZ(0)',
       // Top edge highlight
       '&::before': {
         content: '""',
@@ -103,6 +104,18 @@ function SellPanel({ onResult }) {
         <CommodityInput items={items} onItemsChange={setItems} />
       </Box>
 
+      {/* Data source */}
+      <Typography sx={{
+        color: 'rgba(0, 200, 255, 0.2)',
+        fontSize: '0.6rem',
+        fontFamily: '"Orbitron", sans-serif',
+        letterSpacing: '0.05em',
+        mb: 2,
+        textAlign: 'center',
+      }}>
+        DATA FROM UEXCORP.SPACE
+      </Typography>
+
       {/* Error */}
       {error && (
         <Alert severity="error" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '0.8rem' }, borderRadius: '2px' }}>
@@ -131,7 +144,7 @@ function SellPanel({ onResult }) {
           color: loading ? '#555' : '#020810',
           fontWeight: 700,
           border: loading ? '1px solid rgba(0, 180, 255, 0.15)' : '1px solid transparent',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'background 0.3s, box-shadow 0.3s',
           '&:hover': {
             boxShadow: '0 0 20px rgba(0, 200, 255, 0.4), 0 0 40px rgba(0, 150, 255, 0.15)',
             background: loading

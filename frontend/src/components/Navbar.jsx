@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { RocketLaunch, SwapHoriz, MilitaryTech } from '@mui/icons-material';
+import { SwapHoriz, ShoppingCart, MilitaryTech } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
 import ChangelogDialog from './ChangelogDialog';
@@ -16,6 +16,7 @@ function Navbar({ activeTab, onTabChange }) {
 
   const tabs = [
     { key: 'sell', label: '清仓路线', icon: <SwapHoriz sx={{ fontSize: 16 }} /> },
+    { key: 'buy', label: '进货路线', icon: <ShoppingCart sx={{ fontSize: 16 }} /> },
     { key: 'warbond', label: '战争债券', icon: <MilitaryTech sx={{ fontSize: 16 }} /> },
   ];
 
@@ -29,9 +30,7 @@ function Navbar({ activeTab, onTabChange }) {
         py: 1,
         background: 'linear-gradient(180deg, rgba(3, 10, 22, 0.97) 0%, rgba(2, 8, 16, 0.95) 100%)',
         borderBottom: '1px solid rgba(0, 180, 255, 0.1)',
-        backdropFilter: 'blur(15px)',
         position: 'relative',
-        // Top edge glow line
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -146,7 +145,7 @@ function Navbar({ activeTab, onTabChange }) {
         </Box>
       </Box>
 
-      {/* Tab switcher - HUD style */}
+      {/* Tab switcher */}
       <Box sx={{
         display: 'flex',
         gap: 0.5,
@@ -174,7 +173,7 @@ function Navbar({ activeTab, onTabChange }) {
                 fontWeight: 600,
                 fontSize: '0.82rem',
                 letterSpacing: '0.03em',
-                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'color 0.25s, background 0.25s',
                 position: 'relative',
                 ...(isActive ? {
                   color: '#020810',
@@ -182,7 +181,6 @@ function Navbar({ activeTab, onTabChange }) {
                     ? 'linear-gradient(135deg, #ffaa00, #ff7b00)'
                     : 'linear-gradient(135deg, #00c8ff, #0088dd)',
                   boxShadow: `0 0 12px ${accentColor}44`,
-                  // Clip corners for HUD look
                   clipPath: 'polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)',
                 } : {
                   color: `${accentColor}99`,
@@ -242,10 +240,9 @@ function Navbar({ activeTab, onTabChange }) {
               borderLeft: '1px solid rgba(0, 180, 255, 0.08)',
               pl: 1.25,
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'color 0.2s',
               '&:hover': {
                 color: '#00c8ff',
-                textShadow: '0 0 8px rgba(0, 200, 255, 0.4)',
               },
             }}
           >
@@ -254,7 +251,6 @@ function Navbar({ activeTab, onTabChange }) {
         )}
       </Box>
 
-      {/* Changelog Dialog */}
       <ChangelogDialog open={changelogOpen} onClose={() => setChangelogOpen(false)} />
     </Box>
   );

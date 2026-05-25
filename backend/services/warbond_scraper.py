@@ -288,29 +288,12 @@ def _parse_starnotifier(html: str) -> dict:
 
 
 def _classify_item(name: str, is_ccu: bool, is_standalone: bool) -> tuple:
-    """Classify an item into a category based on its name and section context."""
-    name_lower = name.lower()
-
-    # Paint/skin detection
-    if any(kw in name_lower for kw in ["paint", "skin", "涂装", "livery", "pattern", "camo", "trim", "carbon", "titanium", "behring"]):
-        return "paint", "涂装"
-
-    # Equipment detection
-    if any(kw in name_lower for kw in ["weapon", "shield", "power plant", "cooler", "quantum drive",
-                                         "engine", "missile", "gun", "turret", "module", "kit",
-                                         "rack", "blade", "bomb", "flare"]):
-        return "equipment", "游戏装备"
-
-    # Combo pack detection
-    if any(kw in name_lower for kw in ["plus", "bundle", "pack", "combo", "package", "&"]):
-        if is_standalone:
-            return "combo", "组合包"
-
+    """Classify an item into a category. Only CCU and standalone_ship are kept."""
     if is_ccu:
         return "ccu", "升级包"
     if is_standalone:
         return "standalone_ship", "单船"
-
+    # Items that are not CCU or standalone ships are ignored
     return "other", "其他"
 
 
@@ -348,17 +331,12 @@ def fetch_warbonds() -> dict:
 
         parsed = _parse_starnotifier(html)
 
-        # Build response
+        # Build response (only CCU and standalone ships)
         response = {
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "rsi_store_url": RSI_WARBOND_STORE_URL,
             "ccu_items": parsed["ccu_items"],
             "standalone_ships": parsed["standalone_ships"],
-            "package_items": parsed["package_items"],
-            "equipment_items": parsed["equipment_items"],
-            "paint_items": parsed["paint_items"],
-            "combo_items": parsed["combo_items"],
-            "other_items": parsed["other_items"],
         }
 
         # Update cache
@@ -376,10 +354,5 @@ def fetch_warbonds() -> dict:
             "rsi_store_url": RSI_WARBOND_STORE_URL,
             "ccu_items": [],
             "standalone_ships": [],
-            "package_items": [],
-            "equipment_items": [],
-            "paint_items": [],
-            "combo_items": [],
-            "other_items": [],
             "error": str(e),
         }

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Typography, Paper, Tabs, Tab, Alert } from '@mui/material';
+import { Box, Typography, Tabs, Tab, Alert } from '@mui/material';
 import RouteTimeline from './RouteTimeline';
 import { TrendingUp, Speed } from '@mui/icons-material';
 
-function RouteResult({ data }) {
+function RouteResult({ data, mode = 'sell' }) {
   if (!data) return null;
 
   const [tab, setTab] = useState(0);
+
+  const isBuyMode = mode === 'buy';
 
   const {
     commodity_summary,
@@ -19,6 +21,15 @@ function RouteResult({ data }) {
     warnings,
   } = data;
 
+  // Labels based on mode
+  const summaryTitle = isBuyMode ? '各商品最低进货价' : '各商品最高收购价';
+  const shortestLabel = isBuyMode ? '最短距离进货路线' : '最短距离清仓路线';
+  const maxProfitLabel = isBuyMode ? '最省钱进货路线' : '最高利润清仓路线';
+  const shortestTab = isBuyMode ? '最短距离' : '最短距离';
+  const maxProfitTab = isBuyMode ? '最省钱' : '最高利润';
+  const costLabel = isBuyMode ? '进货成本' : '预计收入';
+  const revenueUnit = isBuyMode ? 'aUEC (成本)' : 'aUEC';
+
   // Distance savings
   const distSaved = max_profit_route_total_distance && shortest_route_total_distance
     ? max_profit_route_total_distance - shortest_route_total_distance
@@ -27,7 +38,7 @@ function RouteResult({ data }) {
     ? Math.round((distSaved / max_profit_route_total_distance) * 100)
     : 0;
 
-  // Revenue diff
+  // Cost/revenue diff
   const revDiff = max_profit_route_total_revenue - shortest_route_total_revenue;
   const revDiffPct = max_profit_route_total_revenue
     ? Math.round((revDiff / max_profit_route_total_revenue) * 100)
@@ -36,12 +47,12 @@ function RouteResult({ data }) {
   return (
     <Box>
       {/* Commodity Summary */}
-      <Box sx={{ p: 2.5, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)', border: '1px solid rgba(0, 180, 255, 0.1)', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.3) 30%, rgba(0, 200, 255, 0.3) 70%, transparent 100%)' } }}>
+      <Box sx={{ p: 2.5, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.92) 0%, rgba(2, 8, 18, 0.95) 100%)', border: '1px solid rgba(0, 180, 255, 0.1)', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.3) 30%, rgba(0, 200, 255, 0.3) 70%, transparent 100%)' } }}>
         <Typography variant="h6" sx={{
           color: 'primary.main', mb: 2, fontWeight: 700,
           fontFamily: '"Orbitron", sans-serif', fontSize: '0.9rem',
         }}>
-          各商品最高收购价
+          {summaryTitle}
         </Typography>
         {commodity_summary.map((c, i) => (
           <Box key={i} sx={{
@@ -62,7 +73,7 @@ function RouteResult({ data }) {
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="body1" sx={{ color: '#00ff88', fontWeight: 700 }}>
+              <Typography variant="body1" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', fontWeight: 700 }}>
                 {c.best_revenue.toLocaleString()} aUEC
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
@@ -74,7 +85,7 @@ function RouteResult({ data }) {
       </Box>
 
       {/* Comparison summary */}
-      <Box sx={{ p: 2, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)', border: '1px solid rgba(0, 180, 255, 0.08)' }}>
+      <Box sx={{ p: 2, mb: 3, background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.92) 0%, rgba(2, 8, 18, 0.95) 100%)', border: '1px solid rgba(0, 180, 255, 0.08)' }}>
         <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           <Box sx={{ flex: 1, minWidth: 200 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -94,7 +105,7 @@ function RouteResult({ data }) {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <TrendingUp sx={{ color: '#ff6b35', fontSize: 20 }} />
               <Typography variant="subtitle2" sx={{ color: '#ff6b35', fontWeight: 700 }}>
-                最高利润路线
+                {isBuyMode ? '最省钱路线' : '最高利润路线'}
               </Typography>
             </Box>
             <Typography variant="h5" sx={{ color: '#ff6b35', fontWeight: 700, fontFamily: '"Rajdhani", sans-serif' }}>
@@ -110,14 +121,17 @@ function RouteResult({ data }) {
           <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(0, 212, 255, 0.1)' }}>
             <Typography variant="body2" sx={{ color: '#00ff88' }}>
               选择最短路线可节省 <strong>{distSaved} AU</strong> 距离（{distSavedPct}% 更短），
-              仅少赚 <strong>{revDiff.toLocaleString()} aUEC</strong>（{revDiffPct}% 差额）
+              {isBuyMode
+                ? <>仅多花费 <strong>{revDiff.toLocaleString()} aUEC</strong>（{revDiffPct}% 差额）</>
+                : <>仅少赚 <strong>{revDiff.toLocaleString()} aUEC</strong>（{revDiffPct}% 差额）</>
+              }
             </Typography>
           </Box>
         )}
       </Box>
 
       {/* Route detail tabs */}
-      <Box sx={{ background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.8) 0%, rgba(2, 8, 18, 0.85) 100%)', border: '1px solid rgba(0, 180, 255, 0.06)' }}>
+      <Box sx={{ background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.9) 0%, rgba(2, 8, 18, 0.92) 100%)', border: '1px solid rgba(0, 180, 255, 0.06)' }}>
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
@@ -130,30 +144,48 @@ function RouteResult({ data }) {
             },
           }}
         >
-          <Tab icon={<Speed sx={{ fontSize: 18 }} />} iconPosition="start" label="最短距离" />
-          <Tab icon={<TrendingUp sx={{ fontSize: 18 }} />} iconPosition="start" label="最高利润" />
+          <Tab icon={<Speed sx={{ fontSize: 18 }} />} iconPosition="start" label={shortestTab} />
+          <Tab icon={<TrendingUp sx={{ fontSize: 18 }} />} iconPosition="start" label={maxProfitTab} />
         </Tabs>
 
         <Box sx={{ p: 2.5 }}>
           {tab === 0 && (
             <RouteTimeline
               route={shortest_route}
-              title="最短距离清仓路线"
+              title={shortestLabel}
               totalDistance={shortest_route_total_distance}
               totalRevenue={shortest_route_total_revenue}
               color="#00d4ff"
+              mode={mode}
             />
           )}
           {tab === 1 && (
             <RouteTimeline
               route={max_profit_route}
-              title="最高利润清仓路线"
+              title={maxProfitLabel}
               totalDistance={max_profit_route_total_distance || 0}
               totalRevenue={max_profit_route_total_revenue}
               color="#ff6b35"
+              mode={mode}
             />
           )}
         </Box>
+      </Box>
+
+      {/* Data source */}
+      <Box sx={{
+        mt: 2,
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
+        <Typography sx={{
+          color: 'rgba(0, 200, 255, 0.15)',
+          fontSize: '0.55rem',
+          fontFamily: '"Orbitron", sans-serif',
+          letterSpacing: '0.05em',
+        }}>
+          DATA FROM UEXCORP.SPACE
+        </Typography>
       </Box>
 
       {/* Warnings */}

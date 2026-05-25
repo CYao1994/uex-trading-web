@@ -18,18 +18,13 @@ export function BackendStatusProvider({ children }) {
   const [isMaintenance, setIsMaintenance] = useState(isMaintenanceTime());
   const [lastChecked, setLastChecked] = useState(null);
   const failCountRef = useRef(0);
+  const stableTimerRef = useRef(null);
 
   const checkBackend = useCallback(async () => {
     try {
       // Use /api/health which also checks if UEX data is loaded
       const res = await api.get('/health', { timeout: 15000 });
-      // If UEX data not loaded yet, don't declare backend up
-      if (res.data?.status === 'ok') {
-        failCountRef.current = 0;
-        setIsBackendUp(true);
-      } else if (res.data?.status === 'degraded') {
-        // Backend is up but UEX data not loaded — still mark as up
-        // The individual search will handle the empty data case
+      if (res.data?.status === 'ok' || res.data?.status === 'degraded') {
         failCountRef.current = 0;
         setIsBackendUp(true);
       }
@@ -37,7 +32,6 @@ export function BackendStatusProvider({ children }) {
     } catch (err) {
       failCountRef.current += 1;
       // Require 3 consecutive failures before declaring backend down
-      // This prevents flickering from transient network hiccups
       if (failCountRef.current >= 3) {
         setIsBackendUp(false);
       }
@@ -45,16 +39,14 @@ export function BackendStatusProvider({ children }) {
     }
   }, []);
 
-  // Initial check (run twice quickly to establish state)
+  // Initial check - only one attempt, don't spam
   useEffect(() => {
     checkBackend();
-    const timer = setTimeout(checkBackend, 3000);
-    return () => clearTimeout(timer);
   }, [checkBackend]);
 
-  // Periodic check every 60 seconds
+  // Periodic check every 90 seconds (reduced frequency to prevent flickering)
   useEffect(() => {
-    const interval = setInterval(checkBackend, 60000);
+    const interval = setInterval(checkBackend, 90000);
     return () => clearInterval(interval);
   }, [checkBackend]);
 
@@ -66,8 +58,26 @@ export function BackendStatusProvider({ children }) {
     return () => clearInterval(interval);
   }, []);
 
-  const showMaintenance = isBackendUp === false && isMaintenance;
-  const showBackendError = isBackendUp === false && !isMaintenance;
+  // Debounced overlay: don't show/hide maintenance overlay for brief outages
+  // Only show overlay when backend has been down for at least 5 seconds
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  useEffect(() => {
+    if (isBackendUp === false) {
+      // Wait 5 seconds before showing overlay (prevents flicker)
+      stableTimerRef.current = setTimeout(() => {
+        setShowOverlay(true);
+      }, 5000);
+    } else {
+      // Immediately hide overlay when backend comes back
+      clearTimeout(stableTimerRef.current);
+      setShowOverlay(false);
+    }
+    return () => clearTimeout(stableTimerRef.current);
+  }, [isBackendUp]);
+
+  const showMaintenance = showOverlay && isBackendUp === false && isMaintenance;
+  const showBackendError = showOverlay && isBackendUp === false && !isMaintenance;
 
   return (
     <BackendStatusContext.Provider value={{

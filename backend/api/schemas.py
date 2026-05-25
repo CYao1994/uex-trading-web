@@ -113,8 +113,3 @@ class WarbondResponse(BaseModel):
     rsi_store_url: str  # Link to RSI store warbond page
     ccu_items: List[WarbondItem]
     standalone_ships: List[WarbondItem]
-    package_items: List[WarbondItem]
-    equipment_items: List[WarbondItem]
-    paint_items: List[WarbondItem]
-    combo_items: List[WarbondItem]
-    other_items: List[WarbondItem]

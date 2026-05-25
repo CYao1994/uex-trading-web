@@ -27,6 +27,9 @@ const api = axios.create({
 export const sellRoute = (origin, items) =>
   api.post('/sell-route', { origin, items });
 
+export const buyRoute = (origin, items) =>
+  api.post('/buy-route', { origin, items });
+
 export const searchTerminals = (q) =>
   api.get('/terminals', { params: { q } });
 

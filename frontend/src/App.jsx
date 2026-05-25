@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Snackbar, Alert } from '@mui/material';
 import Layout from './components/Layout';
 import SellPanel from './components/SellPanel';
+import BuyPanel from './components/BuyPanel';
 import WarbondPanel from './components/WarbondPanel';
 import RouteResult from './components/RouteResult';
 import LoadingOverlay from './components/LoadingOverlay';
@@ -22,6 +23,14 @@ function AppContent() {
     }
   };
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setResult(null); // Clear results when switching tabs
+  };
+
+  // Warbond panel is self-contained (no route results)
+  const isWarbond = activeTab === 'warbond';
+
   return (
     <>
       {loading && <LoadingOverlay />}
@@ -29,20 +38,24 @@ function AppContent() {
       {/* Maintenance overlay on top — does NOT unmount the app */}
       {isBackendUp === false && <MaintenanceOverlay />}
 
-      <Layout activeTab={activeTab} onTabChange={setActiveTab}>
-        {activeTab === 'warbond' ? (
+      <Layout activeTab={activeTab} onTabChange={handleTabChange}>
+        {isWarbond ? (
           <WarbondPanel />
         ) : (
           <Box sx={{ display: 'flex', gap: 3, minHeight: 'calc(100vh - 100px)' }}>
             {/* Left panel */}
             <Box sx={{ width: { xs: '100%', md: 380, lg: 420, xl: 480 }, flexShrink: 0, maxWidth: 480 }}>
-              <SellPanel onResult={handleResult} />
+              {activeTab === 'buy' ? (
+                <BuyPanel onResult={handleResult} />
+              ) : (
+                <SellPanel onResult={handleResult} />
+              )}
             </Box>
 
             {/* Right result area */}
             <Box sx={{ flex: 1, minWidth: 0 }}>
               {result ? (
-                <RouteResult data={result} />
+                <RouteResult data={result} mode={activeTab} />
               ) : (
                 <Box sx={{
                   height: '100%',
@@ -52,7 +65,6 @@ function AppContent() {
                   justifyContent: 'center',
                   opacity: 0.85,
                 }}>
-                  {/* HUD Ship icon */}
                   <Box sx={{
                     width: 90, height: 90,
                     background: 'linear-gradient(135deg, rgba(0, 200, 255, 0.05), rgba(0, 100, 200, 0.03))',
@@ -86,7 +98,7 @@ function AppContent() {
                     等待航线计算
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(0, 200, 255, 0.9)', textAlign: 'center', fontSize: '0.85rem' }}>
-                    选择出发地并添加货物后
+                    {activeTab === 'buy' ? '选择出发地并添加进货商品后' : '选择出发地并添加货物后'}
                     <br />
                     点击"规划路线"开始计算
                   </Typography>

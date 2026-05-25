@@ -4,10 +4,23 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.2.1"
+VERSION = "3.3.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.3.0",
+        "date": "2025-05-26",
+        "changes": [
+            "修复：鼠标悬停时 UI 闪烁和消失问题（移除 backdrop-filter、增加 GPU 加速）",
+            "修复：维护遮罩增加5秒防抖延迟，避免短暂网络波动时闪烁",
+            "修复：健康检测频率降低至90秒，减少对后端的压力",
+            "战争债券：仅保留升级包(CCU)和单船分类",
+            "战争债券：切换为大图卡片显示，多图源自动降级",
+            "新增：进货路线模块 — 规划最短距离和最省钱的进货路线",
+            "新增：各模块标注数据来源（UEX Corp / StarNotifier / RSI）",
+        ],
+    },
     {
         "version": "3.2.1",
         "date": "2025-05-26",

@@ -8,7 +8,7 @@ from .schemas import (
 )
 from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal, clear_caches
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
-from services.route_planner import plan_sell_route
+from services.route_planner import plan_sell_route, plan_buy_route
 from services.warbond_scraper import fetch_warbonds
 from version import VERSION, CHANGELOG
 
@@ -32,6 +32,19 @@ async def sell_route(request: SellRouteRequest):
         traceback.print_exc()
         from fastapi import HTTPException
         raise HTTPException(status_code=500, detail=f"Route planning error: {str(e)}")
+
+
+@router.post("/buy-route", response_model=SellRouteResponse)
+async def buy_route(request: SellRouteRequest):
+    """Plan a buy route — find cheapest sellers for commodities."""
+    import traceback
+    try:
+        result = plan_buy_route(request.origin, [item.model_dump() for item in request.items])
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail=f"Buy route planning error: {str(e)}")
 
 
 @router.get("/terminals", response_model=list[TerminalOption])

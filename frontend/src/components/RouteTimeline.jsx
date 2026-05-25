@@ -1,7 +1,7 @@
 import { Box, Typography, Chip, Stack } from '@mui/material';
 import { LocationOn, ArrowForward, Inventory2 } from '@mui/icons-material';
 
-function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00d4ff' }) {
+function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00d4ff', mode = 'sell' }) {
   if (!route || route.length === 0) return null;
 
   return (
@@ -108,7 +108,7 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
                 </Box>
               </Box>
 
-              {/* Commodities sold */}
+              {/* Commodities */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                 {stop.commodities_sold.map((comm, ci) => (
                   <Box
@@ -117,17 +117,17 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       px: 1.5, py: 0.5,
                       borderRadius: 1,
-                      background: 'rgba(0, 255, 136, 0.04)',
-                      border: '1px solid rgba(0, 255, 136, 0.08)',
+                      background: mode === 'buy' ? 'rgba(255, 136, 68, 0.04)' : 'rgba(0, 255, 136, 0.04)',
+                      border: mode === 'buy' ? '1px solid rgba(255, 136, 68, 0.08)' : '1px solid rgba(0, 255, 136, 0.08)',
                     }}
                   >
-                    <Typography variant="body2" sx={{ color: '#00ff88', fontWeight: 600 }}>
+                    <Typography variant="body2" sx={{ color: mode === 'buy' ? '#ff8844' : '#00ff88', fontWeight: 600 }}>
                       <Inventory2 sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
                       {comm.name_zh} × {comm.quantity} SCU
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 600 }}>
                       {comm.price_per_scu.toLocaleString()} × {comm.quantity} =
-                      <Box component="span" sx={{ color: '#00ff88', ml: 0.5 }}>
+                      <Box component="span" sx={{ color: mode === 'buy' ? '#ff8844' : '#00ff88', ml: 0.5 }}>
                         {comm.revenue.toLocaleString()} aUEC
                       </Box>
                     </Typography>
@@ -144,8 +144,8 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   累计距离: {stop.cumulative_distance || 0} AU
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#00ff88', fontWeight: 700 }}>
-                  本站: {stop.stop_revenue.toLocaleString()} aUEC
+                <Typography variant="body2" sx={{ color: mode === 'buy' ? '#ff8844' : '#00ff88', fontWeight: 700 }}>
+                  本站{mode === 'buy' ? '进货' : '收入'}: {stop.stop_revenue.toLocaleString()} aUEC
                 </Typography>
               </Box>
             </Box>

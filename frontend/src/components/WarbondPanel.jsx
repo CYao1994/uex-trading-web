@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
-import { MilitaryTech, OpenInNew, Refresh, Upgrade, DirectionsBoat, Inventory2, Construction, Palette, Category } from '@mui/icons-material';
+import { MilitaryTech, OpenInNew, Refresh, Upgrade, DirectionsBoat } from '@mui/icons-material';
 import { getWarbonds } from '../api/client';
 
 function formatPrice(cents) {
@@ -15,204 +15,181 @@ function formatDiscount(wbPrice, stdPrice) {
   return `-${(diff / 100).toFixed(2)}`;
 }
 
-function WarbondCategorySection({ title, icon, items, accentColor, emptyText }) {
-  if (!items || items.length === 0) {
-    if (!emptyText) return null;
-    return (
-      <Box sx={{ mb: 3 }}>
-        <Typography sx={{
-          fontFamily: '"Orbitron", sans-serif',
-          fontWeight: 700,
-          fontSize: '0.85rem',
-          color: accentColor,
-          mb: 1.5,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          letterSpacing: '0.05em',
-        }}>
-          {icon}
-          {title}
-        </Typography>
-        <Typography sx={{
-          color: 'rgba(200, 220, 255, 0.3)',
-          fontSize: '0.8rem',
-          fontStyle: 'italic',
-          pl: 1,
-        }}>
-          {emptyText}
-        </Typography>
-      </Box>
-    );
-  }
+// Try multiple image sources for a ship/item
+function getShipImageUrls(name) {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  // Extract base ship name for erkul (remove "Warbond Edition" etc.)
+  const baseName = name.replace(/\s*(Warbond|Edition|Plus|Upgrade|Standalone|Package|CCU).*$/i, '').trim();
+  const baseSlug = baseName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  return [
+    // RSI media CDN (primary)
+    `https://media.robertsspaceindustries.com/${slug}/heap_infobox/${slug}.jpg`,
+    // RSI media with base slug
+    `https://media.robertsspaceindustries.com/${baseSlug}/heap_infobox/${baseSlug}.jpg`,
+    // Erkul.games ship viewer (fallback for ships)
+    `https://api.erkul.games/static/ships/${baseSlug}.png`,
+  ];
+}
+
+function WarbondCard({ item, accentColor }) {
+  const [imgSrc, setImgSrc] = useState(() => getShipImageUrls(item.name)[0]);
+  const [imgIndex, setImgIndex] = useState(0);
+  const [imgFailed, setImgFailed] = useState(false);
+
+  const discount = formatDiscount(item.warbond_price, item.standard_price);
+
+  const handleImgError = () => {
+    const urls = getShipImageUrls(item.name);
+    const nextIndex = imgIndex + 1;
+    if (nextIndex < urls.length) {
+      setImgIndex(nextIndex);
+      setImgSrc(urls[nextIndex]);
+    } else {
+      setImgFailed(true);
+    }
+  };
 
   return (
-    <Box sx={{ mb: 3 }}>
-      {/* Section title */}
-      <Typography sx={{
-        fontFamily: '"Orbitron", sans-serif',
-        fontWeight: 700,
-        fontSize: '0.85rem',
-        color: accentColor,
-        mb: 1.5,
+    <Box sx={{
+      background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.85) 0%, rgba(2, 8, 18, 0.9) 100%)',
+      border: '1px solid rgba(0, 180, 255, 0.08)',
+      borderRadius: '4px',
+      overflow: 'hidden',
+      position: 'relative',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+      '&:hover': {
+        borderColor: `${accentColor}30`,
+        boxShadow: `0 0 20px ${accentColor}15`,
+      },
+      // Top edge glow
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: `linear-gradient(90deg, transparent 0%, ${accentColor}30 30%, ${accentColor}30 70%, transparent 100%)`,
+        zIndex: 1,
+      },
+    }}>
+      {/* Large image area */}
+      <Box sx={{
+        width: '100%',
+        height: 180,
+        background: 'linear-gradient(180deg, rgba(0, 20, 40, 0.6) 0%, rgba(0, 10, 20, 0.8) 100%)',
         display: 'flex',
         alignItems: 'center',
-        gap: 1,
-        letterSpacing: '0.05em',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        position: 'relative',
       }}>
-        {icon}
-        {title}
-        <Typography component="span" sx={{
-          color: `${accentColor}55`,
-          fontSize: '0.7rem',
-          ml: 'auto',
-          fontFamily: '"Rajdhani", sans-serif',
-          fontWeight: 400,
+        {imgFailed ? (
+          // Fallback: HUD ship icon
+          <Box sx={{
+            width: 80, height: 80,
+            opacity: 0.15,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="0.5" opacity="0.6">
+              <path d="M12 2L15 9L12 7L9 9Z" />
+              <path d="M4 14L12 9L20 14L12 22Z" />
+              <circle cx="12" cy="6" r="1" fill={accentColor} opacity="0.8" />
+            </svg>
+          </Box>
+        ) : (
+          <img
+            src={item.image_url || imgSrc}
+            alt={item.name_zh || item.name}
+            onError={handleImgError}
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              padding: '8px 16px',
+            }}
+          />
+        )}
+        {/* Discount badge */}
+        {discount && (
+          <Box sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            px: 1,
+            py: 0.25,
+            background: 'rgba(0, 255, 136, 0.15)',
+            border: '1px solid rgba(0, 255, 136, 0.3)',
+            borderRadius: '2px',
+            color: '#00ff88',
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            fontFamily: '"Rajdhani", sans-serif',
+          }}>
+            {discount}
+          </Box>
+        )}
+      </Box>
+
+      {/* Info area */}
+      <Box sx={{ p: 2 }}>
+        {/* Chinese name (primary) */}
+        <Typography sx={{
+          color: 'rgba(220, 235, 255, 0.95)',
+          fontWeight: 600,
+          fontSize: '1rem',
+          mb: 0.25,
+          fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
         }}>
-          {items.length} 项
+          {item.name_zh || item.name}
         </Typography>
-      </Typography>
 
-      {/* Items grid */}
-      <Box sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: 1.5,
-      }}>
-        {items.map((item, idx) => {
-          const discount = formatDiscount(item.warbond_price, item.standard_price);
-          return (
-            <Box
-              key={idx}
-              sx={{
-                p: 2,
-                background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.7) 0%, rgba(2, 8, 18, 0.8) 100%)',
-                border: '1px solid rgba(0, 180, 255, 0.08)',
-                borderRadius: '3px',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'all 0.25s',
-                display: 'flex',
-                gap: 2,
-                '&:hover': {
-                  border: `1px solid ${accentColor}33`,
-                  boxShadow: `0 0 15px ${accentColor}11`,
-                  transform: 'translateY(-1px)',
-                },
-                // Top edge glow
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  background: `linear-gradient(90deg, transparent 0%, ${accentColor}35 30%, ${accentColor}35 70%, transparent 100%)`,
-                },
-              }}
-            >
-              {/* Item image */}
-              <Box sx={{
-                width: 72,
-                height: 72,
-                flexShrink: 0,
-                borderRadius: '3px',
-                overflow: 'hidden',
-                background: 'rgba(0, 20, 40, 0.5)',
-                border: '1px solid rgba(0, 180, 255, 0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <img
-                  src={item.image_url || ''}
-                  alt={item.name_zh || item.name}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="1" opacity="0.3"><path d="M12 2L15 9L12 7L9 9Z"/><path d="M4 14L12 9L20 14L12 22Z"/></svg>`;
-                  }}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Box>
+        {/* English name (secondary) */}
+        {item.name_zh && item.name_zh !== item.name && (
+          <Typography sx={{
+            color: 'rgba(200, 220, 255, 0.3)',
+            fontSize: '0.65rem',
+            mb: 1,
+            fontFamily: '"Rajdhani", sans-serif',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}>
+            {item.name}
+          </Typography>
+        )}
 
-              {/* Item info */}
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                {/* Chinese name (primary) */}
-                <Typography sx={{
-                  color: 'rgba(220, 235, 255, 0.95)',
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  mb: 0.25,
-                  fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {item.name_zh || item.name}
-                </Typography>
-
-                {/* English name (secondary, smaller) */}
-                {item.name_zh && item.name_zh !== item.name && (
-                  <Typography sx={{
-                    color: 'rgba(200, 220, 255, 0.35)',
-                    fontSize: '0.65rem',
-                    mb: 0.75,
-                    fontFamily: '"Rajdhani", sans-serif',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {item.name}
-                  </Typography>
-                )}
-
-                {/* Price row */}
-                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5 }}>
-                  {item.warbond_price && (
-                    <Typography sx={{
-                      color: accentColor,
-                      fontWeight: 700,
-                      fontSize: '1rem',
-                      fontFamily: '"Orbitron", "Rajdhani", sans-serif',
-                      letterSpacing: '0.03em',
-                    }}>
-                      {formatPrice(item.warbond_price)}
-                    </Typography>
-                  )}
-                  {item.standard_price && item.warbond_price && (
-                    <Typography sx={{
-                      color: 'rgba(200, 220, 255, 0.35)',
-                      fontSize: '0.7rem',
-                      textDecoration: 'line-through',
-                      fontFamily: '"Rajdhani", sans-serif',
-                    }}>
-                      {formatPrice(item.standard_price)}
-                    </Typography>
-                  )}
-                  {discount && (
-                    <Box sx={{
-                      px: 0.75,
-                      py: 0.1,
-                      background: 'rgba(0, 255, 136, 0.1)',
-                      border: '1px solid rgba(0, 255, 136, 0.2)',
-                      borderRadius: '2px',
-                      color: '#00ff88',
-                      fontSize: '0.6rem',
-                      fontWeight: 700,
-                      fontFamily: '"Rajdhani", sans-serif',
-                    }}>
-                      {discount}
-                    </Box>
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          );
-        })}
+        {/* Price row */}
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5, mt: 1 }}>
+          {item.warbond_price && (
+            <Typography sx={{
+              color: accentColor,
+              fontWeight: 700,
+              fontSize: '1.2rem',
+              fontFamily: '"Orbitron", "Rajdhani", sans-serif',
+              letterSpacing: '0.03em',
+            }}>
+              {formatPrice(item.warbond_price)}
+            </Typography>
+          )}
+          {item.standard_price && item.warbond_price && (
+            <Typography sx={{
+              color: 'rgba(200, 220, 255, 0.3)',
+              fontSize: '0.75rem',
+              textDecoration: 'line-through',
+              fontFamily: '"Rajdhani", sans-serif',
+            }}>
+              {formatPrice(item.standard_price)}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -222,7 +199,6 @@ function WarbondPanel() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [lastUpdated, setLastUpdated] = useState('');
 
   const fetchData = async () => {
     setLoading(true);
@@ -230,7 +206,6 @@ function WarbondPanel() {
     try {
       const res = await getWarbonds();
       setData(res.data);
-      setLastUpdated(res.data.last_updated || '');
     } catch (e) {
       setError(e.response?.data?.detail || e.message || '获取战争债券数据失败');
     } finally {
@@ -241,21 +216,6 @@ function WarbondPanel() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const formatLastUpdated = (isoStr) => {
-    if (!isoStr) return '';
-    try {
-      const d = new Date(isoStr);
-      return d.toLocaleString('zh-CN', {
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } catch {
-      return isoStr;
-    }
-  };
 
   if (loading) {
     return (
@@ -282,10 +242,7 @@ function WarbondPanel() {
 
   if (error) {
     return (
-      <Box sx={{
-        p: 4,
-        textAlign: 'center',
-      }}>
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography sx={{ color: '#ff4466', mb: 2, fontWeight: 600 }}>
           {error}
         </Typography>
@@ -308,22 +265,19 @@ function WarbondPanel() {
     );
   }
 
-  const totalItems = (data?.ccu_items?.length || 0) +
-    (data?.standalone_ships?.length || 0) +
-    (data?.package_items?.length || 0) +
-    (data?.equipment_items?.length || 0) +
-    (data?.paint_items?.length || 0) +
-    (data?.combo_items?.length || 0) +
-    (data?.other_items?.length || 0);
+  const ccuItems = data?.ccu_items || [];
+  const shipItems = data?.standalone_ships || [];
+  const totalItems = ccuItems.length + shipItems.length;
 
   return (
     <Box sx={{
       p: 2.5,
-      background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.88) 0%, rgba(2, 8, 18, 0.92) 100%)',
+      background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.92) 0%, rgba(2, 8, 18, 0.95) 100%)',
       border: '1px solid rgba(0, 180, 255, 0.1)',
-      backdropFilter: 'blur(12px)',
       borderRadius: '4px',
       position: 'relative',
+      willChange: 'transform',
+      transform: 'translateZ(0)',
       '&::before': {
         content: '""',
         position: 'absolute',
@@ -362,13 +316,16 @@ function WarbondPanel() {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          {lastUpdated && (
+          {data?.last_updated && (
             <Typography sx={{
               color: 'rgba(255, 170, 0, 0.25)',
               fontSize: '0.6rem',
               fontFamily: '"Rajdhani", sans-serif',
             }}>
-              更新于 {formatLastUpdated(lastUpdated)}
+              更新于 {new Date(data.last_updated).toLocaleString('zh-CN', {
+                month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit',
+              })}
             </Typography>
           )}
           {/* RSI Store link */}
@@ -387,11 +344,10 @@ function WarbondPanel() {
               border: '1px solid rgba(0, 200, 255, 0.2)',
               borderRadius: '2px',
               textDecoration: 'none',
-              transition: 'all 0.2s',
+              transition: 'color 0.2s, border-color 0.2s',
               '&:hover': {
                 color: '#00c8ff',
                 borderColor: 'rgba(0, 200, 255, 0.5)',
-                background: 'rgba(0, 200, 255, 0.05)',
               },
             }}
           >
@@ -413,11 +369,10 @@ function WarbondPanel() {
               color: 'rgba(255, 170, 0, 0.4)',
               border: '1px solid rgba(255, 170, 0, 0.15)',
               borderRadius: '2px',
-              transition: 'all 0.2s',
+              transition: 'color 0.2s, border-color 0.2s',
               '&:hover': {
                 color: '#ffaa00',
                 borderColor: 'rgba(255, 170, 0, 0.4)',
-                background: 'rgba(255, 170, 0, 0.05)',
               },
             }}
           >
@@ -438,6 +393,8 @@ function WarbondPanel() {
         background: 'rgba(255, 170, 0, 0.03)',
         border: '1px solid rgba(255, 170, 0, 0.08)',
         borderRadius: '3px',
+        alignItems: 'center',
+        flexWrap: 'wrap',
       }}>
         <Typography sx={{
           color: 'rgba(255, 170, 0, 0.6)',
@@ -445,6 +402,7 @@ function WarbondPanel() {
           fontFamily: '"Noto Sans SC", sans-serif',
         }}>
           当前在售 <strong style={{ color: '#ffaa00' }}>{totalItems}</strong> 项战争债券商品
+          （升级包 {ccuItems.length} + 单船 {shipItems.length}）
         </Typography>
         <Typography sx={{
           color: 'rgba(255, 170, 0, 0.25)',
@@ -457,72 +415,94 @@ function WarbondPanel() {
       </Box>
 
       {/* CCU Upgrades */}
-      <WarbondCategorySection
-        title="升级包 (CCU)"
-        icon={<Upgrade sx={{ fontSize: 18 }} />}
-        items={data?.ccu_items}
-        accentColor="#ffaa00"
-        emptyText="暂无升级包类战争债券"
-      />
+      {ccuItems.length > 0 && (
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+            <Upgrade sx={{ fontSize: 20, color: '#ffaa00' }} />
+            <Typography sx={{
+              fontFamily: '"Orbitron", sans-serif',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              color: '#ffaa00',
+              letterSpacing: '0.05em',
+            }}>
+              升级包 (CCU)
+            </Typography>
+            <Typography component="span" sx={{
+              color: 'rgba(255, 170, 0, 0.3)',
+              fontSize: '0.7rem',
+              ml: 'auto',
+              fontFamily: '"Rajdhani", sans-serif',
+            }}>
+              {ccuItems.length} 项
+            </Typography>
+          </Box>
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+            gap: 2,
+          }}>
+            {ccuItems.map((item, idx) => (
+              <WarbondCard key={idx} item={item} accentColor="#ffaa00" />
+            ))}
+          </Box>
+        </Box>
+      )}
 
       {/* Standalone Ships */}
-      <WarbondCategorySection
-        title="单船 (STANDALONE)"
-        icon={<DirectionsBoat sx={{ fontSize: 18 }} />}
-        items={data?.standalone_ships}
-        accentColor="#00c8ff"
-        emptyText="暂无单船类战争债券"
-      />
+      {shipItems.length > 0 && (
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+            <DirectionsBoat sx={{ fontSize: 20, color: '#00c8ff' }} />
+            <Typography sx={{
+              fontFamily: '"Orbitron", sans-serif',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              color: '#00c8ff',
+              letterSpacing: '0.05em',
+            }}>
+              单船 (STANDALONE)
+            </Typography>
+            <Typography component="span" sx={{
+              color: 'rgba(0, 200, 255, 0.3)',
+              fontSize: '0.7rem',
+              ml: 'auto',
+              fontFamily: '"Rajdhani", sans-serif',
+            }}>
+              {shipItems.length} 项
+            </Typography>
+          </Box>
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+            gap: 2,
+          }}>
+            {shipItems.map((item, idx) => (
+              <WarbondCard key={idx} item={item} accentColor="#00c8ff" />
+            ))}
+          </Box>
+        </Box>
+      )}
 
-      {/* Combo Packs (ships with extras) */}
-      <WarbondCategorySection
-        title="组合包 (COMBO)"
-        icon={<Category sx={{ fontSize: 18 }} />}
-        items={data?.combo_items}
-        accentColor="#ff8844"
-        emptyText="暂无组合包类战争债券"
-      />
-
-      {/* Game Packages */}
-      <WarbondCategorySection
-        title="游戏包 (PACKAGE)"
-        icon={<Inventory2 sx={{ fontSize: 18 }} />}
-        items={data?.package_items}
-        accentColor="#00ff88"
-        emptyText="暂无游戏包类战争债券"
-      />
-
-      {/* Equipment */}
-      <WarbondCategorySection
-        title="游戏装备 (EQUIPMENT)"
-        icon={<Construction sx={{ fontSize: 18 }} />}
-        items={data?.equipment_items}
-        accentColor="#88aaff"
-        emptyText="暂无装备类战争债券"
-      />
-
-      {/* Paints */}
-      <WarbondCategorySection
-        title="涂装 (PAINT)"
-        icon={<Palette sx={{ fontSize: 18 }} />}
-        items={data?.paint_items}
-        accentColor="#ff66aa"
-        emptyText="暂无涂装类战争债券"
-      />
-
-      {/* Other items */}
-      {data?.other_items?.length > 0 && (
-        <WarbondCategorySection
-          title="其他"
-          icon={<MilitaryTech sx={{ fontSize: 18 }} />}
-          items={data?.other_items}
-          accentColor="#aa88ff"
-        />
+      {/* Empty state */}
+      {totalItems === 0 && (
+        <Box sx={{
+          py: 6,
+          textAlign: 'center',
+        }}>
+          <Typography sx={{
+            color: 'rgba(255, 170, 0, 0.3)',
+            fontFamily: '"Orbitron", sans-serif',
+            fontSize: '0.8rem',
+          }}>
+            暂无战争债券数据
+          </Typography>
+        </Box>
       )}
 
       {/* Footer info */}
       <Box sx={{
-        mt: 3,
+        mt: 2,
         pt: 2,
         borderTop: '1px solid rgba(255, 170, 0, 0.06)',
         display: 'flex',

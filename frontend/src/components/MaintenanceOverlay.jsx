@@ -18,7 +18,12 @@ function MaintenanceOverlay() {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'radial-gradient(ellipse at center, rgba(2, 8, 16, 0.97) 0%, rgba(2, 6, 12, 0.99) 100%)',
-      backdropFilter: 'blur(20px)',
+      animation: 'fadeIn 0.5s ease-out',
+      '@keyframes fadeIn': {
+        '0%': { opacity: 0 },
+        '100%': { opacity: 1 },
+      },
+      pointerEvents: 'auto',
     }}>
       <Box sx={{
         textAlign: 'center',
