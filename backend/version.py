@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.3.0"
+VERSION = "3.4.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.4.0",
+        "date": "2025-05-26",
+        "changes": [
+            "集成 UEX API Key 认证，所有请求携带 Authorization 头",
+            "价格数据更准确：认证后可获取完整收购/出售价数据",
+            "新增：健康检查显示 API Key 配置状态",
+            "新增：.env 文件支持（本地开发）",
+        ],
+    },
     {
         "version": "3.3.0",
         "date": "2025-05-26",

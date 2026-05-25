@@ -1,7 +1,8 @@
 """
-UEX API Client - Handles TLS compatibility and caching
+UEX API Client - Handles TLS compatibility, authentication and caching
 """
 import json
+import os
 import subprocess
 import time
 import urllib.parse
@@ -9,17 +10,16 @@ from typing import Dict, List, Optional, Tuple
 
 BASE_URL = "https://api.uexcorp.space/v2.1"
 
-# Caches
-_terminal_cache: List[Dict] = []
-_terminal_cache_loaded: bool = False
-_commodity_cache: List[Dict] = []
-_commodity_cache_loaded: bool = False
-_distance_cache: Dict[Tuple[int, int], int] = {}
-_routes_queried: set = set()
+
+def _get_api_key() -> str:
+    """Read UEX API Key from environment (lazy, so .env is loaded first)."""
+    return os.environ.get("UEX_API_KEY", "")
 
 
 def api_get(endpoint: str, params: dict = None) -> dict:
-    """GET request using curl with TLS fallback chain."""
+    """GET request using curl with TLS fallback chain.
+    Includes Authorization header when UEX_API_KEY is set.
+    """
     url = f"{BASE_URL}/{endpoint}"
     if params:
         qs = "&".join(
@@ -27,6 +27,12 @@ def api_get(endpoint: str, params: dict = None) -> dict:
             for k, v in params.items()
         )
         url += "?" + qs
+
+    # Build curl headers — lazy read so .env is loaded first
+    api_key = _get_api_key()
+    header_args = []
+    if api_key:
+        header_args += ["-H", f"Authorization: Bearer {api_key}"]
 
     tls_options = [
         ["--tlsv1.2"],
@@ -38,7 +44,7 @@ def api_get(endpoint: str, params: dict = None) -> dict:
     for tls_args in tls_options:
         for attempt in range(2):
             try:
-                cmd = ["curl", "-k", "-s"] + tls_args + ["--max-time", "90", url]
+                cmd = ["curl", "-k", "-s"] + tls_args + ["--max-time", "90"] + header_args + [url]
                 result = subprocess.run(
                     cmd, capture_output=True, text=True, timeout=120
                 )

@@ -8,6 +8,27 @@ import os
 # Ensure backend dir is in path for both package and direct execution
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Load .env file for local development (Railway uses its own env vars)
+_env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '.env')
+if os.path.isfile(_env_path):
+    with open(_env_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, _, value = line.partition('=')
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = value
+    print(f"[Config] Loaded .env from {_env_path}")
+
+# Log API key status
+_api_key = os.environ.get("UEX_API_KEY", "")
+if _api_key:
+    print(f"[Config] UEX API Key: {_api_key[:8]}...{_api_key[-4:]}")
+else:
+    print("[Config] UEX API Key: not set (using unauthenticated mode)")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

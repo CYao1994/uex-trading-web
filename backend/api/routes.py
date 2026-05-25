@@ -193,12 +193,14 @@ async def get_warbonds():
 @router.get("/health")
 async def health_check():
     """Health check — verifies UEX API data is loaded."""
+    from services.uex_api import _get_api_key
     terminals = load_terminals()
     commodities = load_commodities()
     return {
         "status": "ok" if terminals and commodities else "degraded",
         "terminals_loaded": len(terminals),
         "commodities_loaded": len(commodities),
+        "api_key_configured": bool(_get_api_key()),
         "version": VERSION,
     }
 
