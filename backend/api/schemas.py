@@ -21,6 +21,8 @@ class CommoditySold(BaseModel):
     quantity: int
     price_per_scu: int
     revenue: int
+    scu_buy: int = 0       # Terminal demand (how much they want to buy from you) — for sell routes
+    scu_sell: int = 0      # Terminal stock (how much they have to sell to you) — for buy routes
 
 
 class RouteStop(BaseModel):
@@ -44,6 +46,8 @@ class CommoditySummary(BaseModel):
     best_price: int
     best_revenue: int
     best_terminal: str
+    scu_buy: int = 0       # Best terminal demand (sell routes)
+    scu_sell: int = 0      # Best terminal stock (buy routes)
 
 
 class SellRouteResponse(BaseModel):

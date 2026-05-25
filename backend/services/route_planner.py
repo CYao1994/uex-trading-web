@@ -61,7 +61,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
         for p in prices:
             ps = p.get("price_sell", 0) or 0
             tid = p.get("id_terminal", 0)
-            scu = p.get("scu_sell", 0) or 0
+            scu = p.get("scu_sell_stock", 0) or 0   # scu_sell_stock = current stock
             if ps > 0:
                 sellers.append({"tid": tid, "price_sell": ps, "scu_sell": scu})
 

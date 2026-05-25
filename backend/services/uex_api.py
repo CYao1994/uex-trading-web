@@ -10,6 +10,14 @@ from typing import Dict, List, Optional, Tuple
 
 BASE_URL = "https://api.uexcorp.space/v2.1"
 
+# Module-level caches (shared across functions, importable by route_planner)
+_distance_cache: Dict[Tuple[int, int], int] = {}
+_routes_queried: set = set()
+_terminal_cache: List[Dict] = []
+_terminal_cache_loaded: bool = False
+_commodity_cache: List[Dict] = []
+_commodity_cache_loaded: bool = False
+
 
 def _get_api_key() -> str:
     """Read UEX API Key from environment (lazy, so .env is loaded first)."""

@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.5.0"
+VERSION = "3.5.1"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.5.1",
+        "date": "2025-05-26",
+        "changes": [
+            "修复：scu_buy/scu_sell 数据未出现在 API 返回中（Pydantic schema 缺少字段）",
+            "修复：uex_api.py 模块级缓存变量未初始化导致导入错误",
+            "修复：进货路线使用 scu_sell_stock 替代 scu_sell 获取终端库存",
+            "API 数据与 UEX 网站价格完全一致（已验证5种核心商品）",
+        ],
+    },
     {
         "version": "3.5.0",
         "date": "2025-05-26",
