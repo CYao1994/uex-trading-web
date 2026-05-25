@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Tabs, Tab, Alert } from '@mui/material';
 import RouteTimeline from './RouteTimeline';
-import { TrendingUp, Speed } from '@mui/icons-material';
+import { TrendingUp, Speed, ShoppingCart, Storefront } from '@mui/icons-material';
 
 function RouteResult({ data, mode = 'sell' }) {
   if (!data) return null;
@@ -54,34 +54,48 @@ function RouteResult({ data, mode = 'sell' }) {
         }}>
           {summaryTitle}
         </Typography>
-        {commodity_summary.map((c, i) => (
-          <Box key={i} sx={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            py: 1, px: 1.5,
-            borderBottom: '1px solid rgba(0, 212, 255, 0.05)',
-            '&:last-child': { borderBottom: 'none' },
-          }}>
-            <Box>
-              <Typography variant="body1" sx={{ color: '#00d4ff', fontWeight: 600 }}>
-                {c.name_zh}
-                <Typography component="span" variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
-                  {c.name}
+        {commodity_summary.map((c, i) => {
+          const scuAvailable = isBuyMode ? c.scu_sell : c.scu_buy;
+          const hasStockWarning = scuAvailable > 0 && scuAvailable < c.quantity;
+
+          return (
+            <Box key={i} sx={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              py: 1, px: 1.5,
+              borderBottom: '1px solid rgba(0, 212, 255, 0.05)',
+              '&:last-child': { borderBottom: 'none' },
+            }}>
+              <Box>
+                <Typography variant="body1" sx={{ color: '#00d4ff', fontWeight: 600 }}>
+                  {c.name_zh}
+                  <Typography component="span" variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
+                    {c.name}
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {c.quantity} SCU @ {c.best_terminal}
-              </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  {c.quantity} SCU @ {c.best_terminal}
+                  {scuAvailable > 0 && (
+                    <Box component="span" sx={{ ml: 1, color: hasStockWarning ? '#ffc832' : 'text.secondary' }}>
+                      {isBuyMode ? (
+                        <><Storefront sx={{ fontSize: 11, verticalAlign: 'middle', mr: 0.3 }} />库存{scuAvailable.toLocaleString()}</>
+                      ) : (
+                        <><ShoppingCart sx={{ fontSize: 11, verticalAlign: 'middle', mr: 0.3 }} />收购{scuAvailable.toLocaleString()}</>
+                      )}
+                    </Box>
+                  )}
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'right' }}>
+                <Typography variant="body1" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', fontWeight: 700 }}>
+                  {c.best_revenue.toLocaleString()} aUEC
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  {c.best_price.toLocaleString()} / SCU
+                </Typography>
+              </Box>
             </Box>
-            <Box sx={{ textAlign: 'right' }}>
-              <Typography variant="body1" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', fontWeight: 700 }}>
-                {c.best_revenue.toLocaleString()} aUEC
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {c.best_price.toLocaleString()} / SCU
-              </Typography>
-            </Box>
-          </Box>
-        ))}
+          );
+        })}
       </Box>
 
       {/* Comparison summary */}

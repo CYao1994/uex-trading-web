@@ -1,5 +1,18 @@
 import { Box, Typography, Chip, Stack } from '@mui/material';
-import { LocationOn, ArrowForward, Inventory2 } from '@mui/icons-material';
+import { LocationOn, ArrowForward, Inventory2, ShoppingCart, Storefront } from '@mui/icons-material';
+
+function ScuBadge({ value, label, color }) {
+  if (!value && value !== 0) return null;
+  return (
+    <Typography component="span" variant="caption" sx={{
+      color: color || 'text.secondary',
+      ml: 0.5,
+      opacity: 0.85,
+    }}>
+      {label}{value.toLocaleString()} SCU
+    </Typography>
+  );
+}
 
 function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00d4ff', mode = 'sell' }) {
   if (!route || route.length === 0) return null;
@@ -110,29 +123,57 @@ function RouteTimeline({ route, title, totalDistance, totalRevenue, color = '#00
 
               {/* Commodities */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                {stop.commodities_sold.map((comm, ci) => (
-                  <Box
-                    key={ci}
-                    sx={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      px: 1.5, py: 0.5,
-                      borderRadius: 1,
-                      background: mode === 'buy' ? 'rgba(255, 136, 68, 0.04)' : 'rgba(0, 255, 136, 0.04)',
-                      border: mode === 'buy' ? '1px solid rgba(255, 136, 68, 0.08)' : '1px solid rgba(0, 255, 136, 0.08)',
-                    }}
-                  >
-                    <Typography variant="body2" sx={{ color: mode === 'buy' ? '#ff8844' : '#00ff88', fontWeight: 600 }}>
-                      <Inventory2 sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
-                      {comm.name_zh} × {comm.quantity} SCU
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 600 }}>
-                      {comm.price_per_scu.toLocaleString()} × {comm.quantity} =
-                      <Box component="span" sx={{ color: mode === 'buy' ? '#ff8844' : '#00ff88', ml: 0.5 }}>
-                        {comm.revenue.toLocaleString()} aUEC
+                {stop.commodities_sold.map((comm, ci) => {
+                  // Determine stock fields based on mode
+                  const isBuyMode = mode === 'buy';
+                  const scuAvailable = isBuyMode ? comm.scu_sell : comm.scu_buy;
+                  const hasStockWarning = scuAvailable > 0 && scuAvailable < comm.quantity;
+
+                  return (
+                    <Box
+                      key={ci}
+                      sx={{
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        px: 1.5, py: 0.5,
+                        borderRadius: 1,
+                        background: isBuyMode ? 'rgba(255, 136, 68, 0.04)' : 'rgba(0, 255, 136, 0.04)',
+                        border: hasStockWarning
+                          ? '1px solid rgba(255, 200, 50, 0.25)'
+                          : isBuyMode
+                            ? '1px solid rgba(255, 136, 68, 0.08)'
+                            : '1px solid rgba(0, 255, 136, 0.08)',
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Typography variant="body2" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', fontWeight: 600 }}>
+                          <Inventory2 sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+                          {comm.name_zh} × {comm.quantity} SCU
+                        </Typography>
+                        {scuAvailable > 0 && (
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3, ml: 0.5 }}>
+                            {isBuyMode ? (
+                              <Storefront sx={{ fontSize: 12, color: 'text.secondary', verticalAlign: 'middle' }} />
+                            ) : (
+                              <ShoppingCart sx={{ fontSize: 12, color: 'text.secondary', verticalAlign: 'middle' }} />
+                            )}
+                            <Typography variant="caption" sx={{
+                              color: hasStockWarning ? '#ffc832' : 'text.secondary',
+                              fontWeight: hasStockWarning ? 600 : 400,
+                            }}>
+                              {isBuyMode ? '库存' : '收购'}{scuAvailable.toLocaleString()}
+                            </Typography>
+                          </Box>
+                        )}
                       </Box>
-                    </Typography>
-                  </Box>
-                ))}
+                      <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 600 }}>
+                        {comm.price_per_scu.toLocaleString()} × {comm.quantity} =
+                        <Box component="span" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', ml: 0.5 }}>
+                          {comm.revenue.toLocaleString()} aUEC
+                        </Box>
+                      </Typography>
+                    </Box>
+                  );
+                })}
               </Box>
 
               {/* Stop total */}

@@ -61,8 +61,9 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
         for p in prices:
             ps = p.get("price_sell", 0) or 0
             tid = p.get("id_terminal", 0)
+            scu = p.get("scu_sell", 0) or 0
             if ps > 0:
-                sellers.append({"tid": tid, "price_sell": ps})
+                sellers.append({"tid": tid, "price_sell": ps, "scu_sell": scu})
 
         if not sellers:
             warnings.append(f"{zh_name}({comm_name}): UEX 无出售价数据")
@@ -80,6 +81,11 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
 
         # Sort by price_sell ascending (cheapest first)
         sorted_sellers = sorted(best_per_loc.values(), key=lambda x: x["price_sell"])
+
+        # Check stock availability
+        best_stock = sorted_sellers[0].get("scu_sell", 0) if sorted_sellers else 0
+        if best_stock > 0 and best_stock < qty:
+            warnings.append(f"{zh_name}({comm_name}): 最佳站点库存仅 {best_stock} SCU，需求 {qty} SCU")
 
         buyable_results.append({
             "commodity_id": comm_id,
@@ -112,6 +118,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
             "quantity": r["quantity"],
             "best_price": best["price_sell"],
             "best_revenue": best["price_sell"] * r["quantity"],
+            "scu_sell": best.get("scu_sell", 0),
             "best_terminal": format_location_zh(
                 td.get("name") or "", td.get("nickname") or "",
                 td.get("space_station_name") or "",
@@ -149,6 +156,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
                s["price_sell"] < terminal_sell_map[tid]["commodities"][r["name"]]["price_sell"]:
                 terminal_sell_map[tid]["commodities"][r["name"]] = {
                     "price_sell": s["price_sell"],
+                    "scu_sell": s.get("scu_sell", 0),
                     "quantity": r["quantity"],
                     "name_zh": r["name_zh"],
                     "revenue": s["price_sell"] * r["quantity"],
@@ -225,6 +233,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
                     "quantity": comm_info["quantity"],
                     "price_per_scu": comm_info["price_sell"],
                     "revenue": comm_info["revenue"],
+                    "scu_sell": comm_info.get("scu_sell", 0),
                 })
 
             shortest_total_revenue += sum(c["revenue"] for c in commodities_bought)
@@ -292,6 +301,7 @@ def plan_buy_route(origin: str, items: List[Dict]) -> Dict:
                 "quantity": r["quantity"],
                 "price_per_scu": best["price_sell"],
                 "revenue": stop_cost,
+                "scu_sell": best.get("scu_sell", 0),
             }],
             "stop_revenue": stop_cost,
         })
@@ -356,8 +366,9 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
         for p in prices:
             pb = p.get("price_buy", 0) or 0
             tid = p.get("id_terminal", 0)
+            scu = p.get("scu_buy", 0) or 0
             if pb > 0:
-                buyers.append({"tid": tid, "price_buy": pb})
+                buyers.append({"tid": tid, "price_buy": pb, "scu_buy": scu})
 
         if not buyers:
             warnings.append(f"{zh_name}({comm_name}): UEX 无收购价数据，建议去就近 Admin 终端")
@@ -374,6 +385,11 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                 best_per_loc[loc_key] = {**b, "terminal_info": td}
 
         sorted_buyers = sorted(best_per_loc.values(), key=lambda x: x["price_buy"], reverse=True)
+
+        # Check demand availability
+        best_demand = sorted_buyers[0].get("scu_buy", 0) if sorted_buyers else 0
+        if best_demand > 0 and best_demand < qty:
+            warnings.append(f"{zh_name}({comm_name}): 最佳站点收购量仅 {best_demand} SCU，库存 {qty} SCU")
 
         sellable_results.append({
             "commodity_id": comm_id,
@@ -406,6 +422,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
             "quantity": r["quantity"],
             "best_price": best["price_buy"],
             "best_revenue": best["price_buy"] * r["quantity"],
+            "scu_buy": best.get("scu_buy", 0),
             "best_terminal": format_location_zh(
                 td.get("name") or "", td.get("nickname") or "",
                 td.get("space_station_name") or "",
@@ -443,6 +460,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                b["price_buy"] > terminal_buy_map[tid]["commodities"][r["name"]]["price_buy"]:
                 terminal_buy_map[tid]["commodities"][r["name"]] = {
                     "price_buy": b["price_buy"],
+                    "scu_buy": b.get("scu_buy", 0),
                     "quantity": r["quantity"],
                     "name_zh": r["name_zh"],
                     "revenue": b["price_buy"] * r["quantity"],
@@ -520,6 +538,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                     "quantity": comm_info["quantity"],
                     "price_per_scu": comm_info["price_buy"],
                     "revenue": comm_info["revenue"],
+                    "scu_buy": comm_info.get("scu_buy", 0),
                 })
 
             shortest_total_revenue += sum(c["revenue"] for c in commodities_sold)
@@ -587,6 +606,7 @@ def plan_sell_route(origin: str, items: List[Dict]) -> Dict:
                 "quantity": r["quantity"],
                 "price_per_scu": best["price_buy"],
                 "revenue": stop_revenue,
+                "scu_buy": best.get("scu_buy", 0),
             }],
             "stop_revenue": stop_revenue,
         })

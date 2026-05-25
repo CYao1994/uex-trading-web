@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.4.0"
+VERSION = "3.5.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.5.0",
+        "date": "2025-05-26",
+        "changes": [
+            "清仓路线：站点卡片显示收购量(scu_buy)，库存不足时黄色警告",
+            "进货路线：站点卡片显示出售量(scu_sell)，库存不足时黄色警告",
+            "商品汇总显示站点库存/收购量",
+            "库存不足时自动生成提醒（收购量/出售量 < 需求量）",
+        ],
+    },
     {
         "version": "3.4.0",
         "date": "2025-05-26",
