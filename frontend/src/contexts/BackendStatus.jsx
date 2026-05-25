@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api/client';
 
 const BackendStatusContext = createContext(null);
@@ -17,30 +17,37 @@ export function BackendStatusProvider({ children }) {
   const [isBackendUp, setIsBackendUp] = useState(null); // null = checking, true = up, false = down
   const [isMaintenance, setIsMaintenance] = useState(isMaintenanceTime());
   const [lastChecked, setLastChecked] = useState(null);
+  const failCountRef = useRef(0);
 
   const checkBackend = useCallback(async () => {
     try {
       await api.get('/version', { timeout: 8000 });
+      failCountRef.current = 0;
       setIsBackendUp(true);
       setLastChecked(new Date());
     } catch (err) {
-      setIsBackendUp(false);
+      failCountRef.current += 1;
+      // Require 2 consecutive failures before declaring backend down
+      // This prevents flickering from transient network hiccups
+      if (failCountRef.current >= 2) {
+        setIsBackendUp(false);
+      }
       setLastChecked(new Date());
     }
   }, []);
 
-  // Initial check
+  // Initial check (run twice quickly to establish state)
   useEffect(() => {
     checkBackend();
+    const timer = setTimeout(checkBackend, 3000);
+    return () => clearTimeout(timer);
   }, [checkBackend]);
 
-  // Periodic check every 60 seconds when backend is down
+  // Periodic check every 60 seconds
   useEffect(() => {
-    if (isBackendUp === false) {
-      const interval = setInterval(checkBackend, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [isBackendUp, checkBackend]);
+    const interval = setInterval(checkBackend, 60000);
+    return () => clearInterval(interval);
+  }, [checkBackend]);
 
   // Update maintenance time status every minute
   useEffect(() => {
@@ -50,8 +57,6 @@ export function BackendStatusProvider({ children }) {
     return () => clearInterval(interval);
   }, []);
 
-  // If backend goes down and we're in maintenance window, no need to keep checking
-  // If backend goes down outside maintenance window, something is wrong
   const showMaintenance = isBackendUp === false && isMaintenance;
   const showBackendError = isBackendUp === false && !isMaintenance;
 

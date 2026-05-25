@@ -4,10 +4,23 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.1.0"
+VERSION = "3.2.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.2.0",
+        "date": "2025-05-26",
+        "changes": [
+            "修复：Cloudflare Pages 部署后 UI 闪烁问题（维护遮罩不再卸载整个应用）",
+            "修复：后端健康检测增加防抖逻辑，避免短暂网络波动导致闪烁",
+            "战争债券：物品显示中文名称+英文副标题",
+            "战争债券：每个物品显示对应图片",
+            "战争债券：移除单个物品的RSI链接，新增统一RSI商店入口按钮",
+            "战争债券：新增分类 — 组合包、游戏装备、涂装",
+            "战争债券：智能分类（含'plus/kit/module'等关键词自动归类）",
+        ],
+    },
     {
         "version": "3.1.0",
         "date": "2025-05-25",

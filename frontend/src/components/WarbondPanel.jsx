@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
-import { MilitaryTech, OpenInNew, Refresh, Upgrade, DirectionsBoat, Inventory2 } from '@mui/icons-material';
+import { MilitaryTech, OpenInNew, Refresh, Upgrade, DirectionsBoat, Inventory2, Construction, Palette, Category } from '@mui/icons-material';
 import { getWarbonds } from '../api/client';
 
 function formatPrice(cents) {
@@ -92,6 +92,8 @@ function WarbondCategorySection({ title, icon, items, accentColor, emptyText }) 
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'all 0.25s',
+                display: 'flex',
+                gap: 2,
                 '&:hover': {
                   border: `1px solid ${accentColor}33`,
                   boxShadow: `0 0 15px ${accentColor}11`,
@@ -109,97 +111,104 @@ function WarbondCategorySection({ title, icon, items, accentColor, emptyText }) 
                 },
               }}
             >
-              {/* Item name */}
-              <Typography sx={{
-                color: 'rgba(220, 235, 255, 0.9)',
-                fontWeight: 600,
-                fontSize: '0.85rem',
-                mb: 1,
-                fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+              {/* Item image */}
+              <Box sx={{
+                width: 72,
+                height: 72,
+                flexShrink: 0,
+                borderRadius: '3px',
+                overflow: 'hidden',
+                background: 'rgba(0, 20, 40, 0.5)',
+                border: '1px solid rgba(0, 180, 255, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-                {item.name}
-              </Typography>
-
-              {/* Price row */}
-              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5, mb: 1 }}>
-                {item.warbond_price && (
-                  <Typography sx={{
-                    color: accentColor,
-                    fontWeight: 700,
-                    fontSize: '1.1rem',
-                    fontFamily: '"Orbitron", "Rajdhani", sans-serif',
-                    letterSpacing: '0.03em',
-                  }}>
-                    {formatPrice(item.warbond_price)}
-                  </Typography>
-                )}
-                {item.standard_price && item.warbond_price && (
-                  <Typography sx={{
-                    color: 'rgba(200, 220, 255, 0.35)',
-                    fontSize: '0.75rem',
-                    textDecoration: 'line-through',
-                    fontFamily: '"Rajdhani", sans-serif',
-                  }}>
-                    {formatPrice(item.standard_price)}
-                  </Typography>
-                )}
-                {discount && (
-                  <Box sx={{
-                    px: 0.75,
-                    py: 0.1,
-                    background: 'rgba(0, 255, 136, 0.1)',
-                    border: '1px solid rgba(0, 255, 136, 0.2)',
-                    borderRadius: '2px',
-                    color: '#00ff88',
-                    fontSize: '0.65rem',
-                    fontWeight: 700,
-                    fontFamily: '"Rajdhani", sans-serif',
-                  }}>
-                    {discount}
-                  </Box>
-                )}
+                <img
+                  src={item.image_url || ''}
+                  alt={item.name_zh || item.name}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="1" opacity="0.3"><path d="M12 2L15 9L12 7L9 9Z"/><path d="M4 14L12 9L20 14L12 22Z"/></svg>`;
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
               </Box>
 
-              {/* Category tag + Link */}
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box sx={{
-                  px: 0.75,
-                  py: 0.15,
-                  background: `${accentColor}0A`,
-                  border: `1px solid ${accentColor}22`,
-                  borderRadius: '2px',
-                  color: `${accentColor}88`,
-                  fontSize: '0.65rem',
+              {/* Item info */}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                {/* Chinese name (primary) */}
+                <Typography sx={{
+                  color: 'rgba(220, 235, 255, 0.95)',
                   fontWeight: 600,
-                  fontFamily: '"Noto Sans SC", sans-serif',
+                  fontSize: '0.9rem',
+                  mb: 0.25,
+                  fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}>
-                  {item.category_zh}
-                </Box>
+                  {item.name_zh || item.name}
+                </Typography>
 
-                {item.rsi_url && (
-                  <Box
-                    component="a"
-                    href={item.rsi_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 0.5,
-                      color: `${accentColor}66`,
-                      fontSize: '0.7rem',
-                      textDecoration: 'none',
-                      fontFamily: '"Rajdhani", sans-serif',
-                      transition: 'color 0.2s',
-                      '&:hover': {
-                        color: accentColor,
-                      },
-                    }}
-                  >
-                    RSI商店
-                    <OpenInNew sx={{ fontSize: 12 }} />
-                  </Box>
+                {/* English name (secondary, smaller) */}
+                {item.name_zh && item.name_zh !== item.name && (
+                  <Typography sx={{
+                    color: 'rgba(200, 220, 255, 0.35)',
+                    fontSize: '0.65rem',
+                    mb: 0.75,
+                    fontFamily: '"Rajdhani", sans-serif',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {item.name}
+                  </Typography>
                 )}
+
+                {/* Price row */}
+                <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5 }}>
+                  {item.warbond_price && (
+                    <Typography sx={{
+                      color: accentColor,
+                      fontWeight: 700,
+                      fontSize: '1rem',
+                      fontFamily: '"Orbitron", "Rajdhani", sans-serif',
+                      letterSpacing: '0.03em',
+                    }}>
+                      {formatPrice(item.warbond_price)}
+                    </Typography>
+                  )}
+                  {item.standard_price && item.warbond_price && (
+                    <Typography sx={{
+                      color: 'rgba(200, 220, 255, 0.35)',
+                      fontSize: '0.7rem',
+                      textDecoration: 'line-through',
+                      fontFamily: '"Rajdhani", sans-serif',
+                    }}>
+                      {formatPrice(item.standard_price)}
+                    </Typography>
+                  )}
+                  {discount && (
+                    <Box sx={{
+                      px: 0.75,
+                      py: 0.1,
+                      background: 'rgba(0, 255, 136, 0.1)',
+                      border: '1px solid rgba(0, 255, 136, 0.2)',
+                      borderRadius: '2px',
+                      color: '#00ff88',
+                      fontSize: '0.6rem',
+                      fontWeight: 700,
+                      fontFamily: '"Rajdhani", sans-serif',
+                    }}>
+                      {discount}
+                    </Box>
+                  )}
+                </Box>
               </Box>
             </Box>
           );
@@ -302,6 +311,9 @@ function WarbondPanel() {
   const totalItems = (data?.ccu_items?.length || 0) +
     (data?.standalone_ships?.length || 0) +
     (data?.package_items?.length || 0) +
+    (data?.equipment_items?.length || 0) +
+    (data?.paint_items?.length || 0) +
+    (data?.combo_items?.length || 0) +
     (data?.other_items?.length || 0);
 
   return (
@@ -359,6 +371,36 @@ function WarbondPanel() {
               更新于 {formatLastUpdated(lastUpdated)}
             </Typography>
           )}
+          {/* RSI Store link */}
+          <Box
+            component="a"
+            href={data?.rsi_store_url || 'https://robertsspaceindustries.com/store/pledge/browse/extras/standalone-ships?sort=weight&direction=desc'}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              px: 1.5,
+              py: 0.5,
+              color: 'rgba(0, 200, 255, 0.5)',
+              border: '1px solid rgba(0, 200, 255, 0.2)',
+              borderRadius: '2px',
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+              '&:hover': {
+                color: '#00c8ff',
+                borderColor: 'rgba(0, 200, 255, 0.5)',
+                background: 'rgba(0, 200, 255, 0.05)',
+              },
+            }}
+          >
+            <OpenInNew sx={{ fontSize: 14 }} />
+            <Typography sx={{ fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif', fontWeight: 600 }}>
+              RSI商店
+            </Typography>
+          </Box>
+          {/* Refresh button */}
           <Box
             onClick={fetchData}
             sx={{
@@ -432,13 +474,40 @@ function WarbondPanel() {
         emptyText="暂无单船类战争债券"
       />
 
-      {/* Packages */}
+      {/* Combo Packs (ships with extras) */}
+      <WarbondCategorySection
+        title="组合包 (COMBO)"
+        icon={<Category sx={{ fontSize: 18 }} />}
+        items={data?.combo_items}
+        accentColor="#ff8844"
+        emptyText="暂无组合包类战争债券"
+      />
+
+      {/* Game Packages */}
       <WarbondCategorySection
         title="游戏包 (PACKAGE)"
         icon={<Inventory2 sx={{ fontSize: 18 }} />}
         items={data?.package_items}
         accentColor="#00ff88"
         emptyText="暂无游戏包类战争债券"
+      />
+
+      {/* Equipment */}
+      <WarbondCategorySection
+        title="游戏装备 (EQUIPMENT)"
+        icon={<Construction sx={{ fontSize: 18 }} />}
+        items={data?.equipment_items}
+        accentColor="#88aaff"
+        emptyText="暂无装备类战争债券"
+      />
+
+      {/* Paints */}
+      <WarbondCategorySection
+        title="涂装 (PAINT)"
+        icon={<Palette sx={{ fontSize: 18 }} />}
+        items={data?.paint_items}
+        accentColor="#ff66aa"
+        emptyText="暂无涂装类战争债券"
       />
 
       {/* Other items */}

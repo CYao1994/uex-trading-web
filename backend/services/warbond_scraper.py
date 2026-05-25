@@ -16,12 +16,176 @@ _cache = {
 }
 _CACHE_TTL = 3600  # 1 hour in seconds
 
-# RSI store base URL for warbond items
+# RSI store base URL
 RSI_STORE_BASE = "https://robertsspaceindustries.com"
-
-# Category URL slugs on RSI store
+RSI_WARBOND_STORE_URL = f"{RSI_STORE_BASE}/store/pledge/browse/extras/standalone-ships?sort=weight&direction=desc"
 RSI_SHIPS_URL = f"{RSI_STORE_BASE}/store/pledge/browse/extras/standalone-ships?sort=weight&direction=desc"
 RSI_UPGRADES_URL = f"{RSI_STORE_BASE}/store/pledge/browse/extras/ship-upgrades?sort=weight&direction=desc"
+
+# Chinese name mapping for common Star Citizen ships and items
+SHIP_NAME_ZH = {
+    # Small ships
+    "Aurora": "极光",
+    "Aurora Mk II plus Combat Module": "极光 Mk II + 战斗模块",
+    "Mustang": "野马",
+    "Reliant": "信赖",
+    "Arrow": "箭矢",
+    "Buccaneer": "海盗",
+    "Drake Buccaneer plus Flight Blades Kit": "德雷克 海盗 + 飞行刃套件",
+    "Gladius": "角斗士",
+    "Eclipse": "日蚀",
+    "Hurricane": "飓风",
+    "Vanguard": "先锋",
+    "Hornet": "大黄蜂",
+    "Super Hornet": "超级大黄蜂",
+    "Sabre": "军刀",
+    "Sabre Comet": "军刀 彗星",
+    "Blade": "刃",
+    "Scythe": "镰刀",
+    "Glaive": "阔剑",
+    "Khartu-Al": "卡尔图-阿尔",
+    "Defender": "守卫者",
+    "Prowler": "潜行者",
+    "Banu Merchantman": "巴努 商人",
+    "Nox": "nox",
+    "X1": "X1",
+    "Dragonfly": "蜻蜓",
+    "Archimedes": "阿基米德",
+    "Merlin": "梅林",
+    "Snub": "子舰",
+
+    # Medium ships
+    "Avenger": "复仇者",
+    "300i": "300i",
+    "315p": "315p",
+    "325a": "325a",
+    "350r": "350r",
+    "Cutlass": "弯刀",
+    "Cutlass Black": "弯刀 黑色",
+    "Freelancer": "游侠",
+    "Freelancer MAX": "游侠 MAX",
+    "Freelancer DUR": "游侠 DUR",
+    "Freelancer MIS": "游侠 MIS",
+    "Constellation": "星座",
+    "Andromeda": "仙女座",
+    "Aquila": "天鹰座",
+    "Phoenix": "凤凰座",
+    "Taurus": "金牛座",
+    "Crucible": "熔炉",
+    "Retaliator": "报复者",
+    "Caterpillar": "毛虫",
+    "Hull A": "货舱 A",
+    "Hull B": "货舱 B",
+    "Hull C": "货舱 C",
+    "Hull D": "货舱 D",
+    "Hull E": "货舱 E",
+    "Starfarer": "星运者",
+    "Genesis": "创世纪",
+
+    # Large ships
+    "Reclaimer": "回收者",
+    "Carrack": "卡拉卡",
+    "890 Jump": "890 跃迁",
+    "600i": "600i",
+    "600i Explorer": "600i 探索者",
+    "Phoenix": "凤凰座",
+    "Corsair": "海盗船",
+    "Crusader": "十字军",
+    "A2": "A2 星际运兵船",
+    "C2": "C2 星际运输船",
+    "M2": "M2 星际重型运输船",
+    "Vulcan": "火神",
+    "Polaris": "北极星",
+    "Idris": "伊德里斯",
+    "Javelin": "标枪",
+
+    # Drake ships
+    "Drake Clipper plus Flight Blades Kit": "德雷克 飞剪船 + 飞行刃套件",
+
+    # Anvil ships
+    "Anvil Gladiator plus S5 Bomb Rack Weapon Kit": "铁砧 角斗士 + S5 炸弹架武器套件",
+
+    # Misc/Unique
+    "Liberator": "解放者",
+    "Ironclad": "铁甲",
+    "Ironclad Assault": "铁甲 突击型",
+    "M80": "M80",
+    "Tiburon": "提伯龙",
+    "Pitbull": "比特犬",
+    "Starlite": "星光",
+    "Kruger L-21 Wolf plus Flight Blades Kit": "克鲁格 L-21 狼 + 飞行刃套件",
+
+    # RSI ships
+    "Apollo": "阿波罗",
+    "Zeus": "宙斯",
+    "Zeus Mk II": "宙斯 Mk II",
+    "Zeus Mk II ES": "宙斯 Mk II ES",
+    "Zeus Mk II CL": "宙斯 Mk II CL",
+    "Nyx": "夜神",
+    "Mantis": "螳螂",
+
+    # Misc manufacturers
+    "Razor": "剃刀",
+    "Razor EX": "剃刀 EX",
+    "Razor LX": "剃刀 LX",
+    "M50": "M50",
+    "Racer": "竞速者",
+    "MP5U": "MP5U",
+    "URSA": "URSA",
+    "Rover": "漫游车",
+    "Cyclone": "旋风",
+    "Nova": "新星",
+    "Tank": "坦克",
+    "Ballista": "弩炮",
+    "Tread": "履带",
+
+    # Package / Game items
+    "Squadron 42": "第42中队",
+    "Star Citizen": "星际公民",
+    "Game Package": "游戏包",
+    "Starter Package": "新手包",
+
+    # Paint categories
+    "Paint": "涂装",
+    "Skin": "皮肤",
+
+    # Equipment
+    "Weapon": "武器",
+    "Shield": "护盾",
+    "Power Plant": "发电厂",
+    "Cooler": "冷却器",
+    "Quantum Drive": "量子驱动",
+    "Engine": "引擎",
+    "Missile": "导弹",
+    "Gun": "火炮",
+    "Turret": "炮塔",
+}
+
+# RSI media image URL pattern for ships
+# Format: https://media.robertsspaceindustries.com/{slug}/heap_infobox/{ship-name}.jpg
+# We'll try to construct image URLs based on the item name
+
+
+def _get_name_zh(name: str) -> str:
+    """Get Chinese name for a ship/item. Returns original name if no mapping."""
+    # Exact match first
+    if name in SHIP_NAME_ZH:
+        return SHIP_NAME_ZH[name]
+    # Try partial match (e.g., "Cutlass Black Warbond" -> "Cutlass Black")
+    for eng, zh in SHIP_NAME_ZH.items():
+        if name.startswith(eng):
+            return zh + name[len(eng):]
+    return name
+
+
+def _get_image_url(name: str) -> str:
+    """Generate RSI media image URL for a ship/item."""
+    # Convert ship name to URL slug
+    slug = name.lower().replace(" ", "-")
+    # Remove special characters
+    slug = re.sub(r'[^a-z0-9-]', '', slug)
+    # Use the RSI media CDN pattern
+    return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox/{slug}.jpg"
 
 
 def _curl_get(url: str, timeout: int = 15) -> str:
@@ -39,6 +203,9 @@ def _parse_starnotifier(html: str) -> dict:
         "ccu_items": [],
         "standalone_ships": [],
         "package_items": [],
+        "equipment_items": [],
+        "paint_items": [],
+        "combo_items": [],
         "other_items": [],
         "last_crawled": None,
     }
@@ -53,7 +220,7 @@ def _parse_starnotifier(html: str) -> dict:
 
     for section in sections:
         # Determine section type
-        is_ccu = "CCU Warbond" in section or "CCU" in section
+        is_ccu = "CCU Warbond" in section or ("CCU" in section and "Warbond" in section)
         is_standalone = "standalone" in section.lower()
 
         # Extract items: <li><b>Name</b><ul><li><i>Warbond Edition 525$</i></li>...</ul></li>
@@ -64,7 +231,6 @@ def _parse_starnotifier(html: str) -> dict:
 
         for name, details_html in items_raw:
             name = name.strip()
-            # Parse warbond and standard prices
             warbond_price = None
             standard_price = None
 
@@ -79,81 +245,92 @@ def _parse_starnotifier(html: str) -> dict:
                     elif "Standard" in detail:
                         standard_price = price_val
 
+            # Detect category from name
+            category, category_zh = _classify_item(name, is_ccu, is_standalone)
+
             item = {
                 "name": name,
-                "category": "ccu" if is_ccu else ("standalone_ship" if is_standalone else "other"),
-                "category_zh": "升级包" if is_ccu else ("单船" if is_standalone else "其他"),
+                "name_zh": _get_name_zh(name),
+                "category": category,
+                "category_zh": category_zh,
                 "warbond_price": warbond_price,
                 "standard_price": standard_price,
-                "rsi_url": RSI_UPGRADES_URL if is_ccu else RSI_SHIPS_URL,
-                "image_url": None,
+                "image_url": _get_image_url(name),
             }
 
-            if is_ccu:
-                result["ccu_items"].append(item)
-            elif is_standalone:
-                result["standalone_ships"].append(item)
-            else:
-                result["other_items"].append(item)
+            _add_to_category(result, item)
 
-    # Also check for standalone ships without prices (plain <li>Name</li>)
-    for section in sections:
-        is_standalone = "standalone" in section.lower()
-        if not is_standalone:
-            continue
-
-        # Find plain <li>Name</li> items (no <b> or <ul>)
+        # Also check for standalone ships without prices (plain <li>Name</li>)
         plain_items = re.findall(r'<li>\s*\n\s*([A-Za-z0-9][^\n<]+?)\s*\n\s*</li>', section)
         for name in plain_items:
             name = name.strip()
-            # Check if already added (from the <b> pattern above)
-            if not any(i["name"] == name for i in result["standalone_ships"]):
-                result["standalone_ships"].append({
-                    "name": name,
-                    "category": "standalone_ship",
-                    "category_zh": "单船",
-                    "warbond_price": None,
-                    "standard_price": None,
-                    "rsi_url": RSI_SHIPS_URL,
-                    "image_url": None,
-                })
+            # Check if already added
+            existing_names = {i["name"] for i in result["standalone_ships"]}
+            existing_names.update({i["name"] for i in result["combo_items"]})
+            if name in existing_names:
+                continue
+
+            category, category_zh = _classify_item(name, is_ccu, is_standalone)
+
+            item = {
+                "name": name,
+                "name_zh": _get_name_zh(name),
+                "category": category,
+                "category_zh": category_zh,
+                "warbond_price": None,
+                "standard_price": None,
+                "image_url": _get_image_url(name),
+            }
+
+            _add_to_category(result, item)
 
     return result
 
 
-def _try_rsi_api():
-    """Try to fetch warbond items directly from RSI store API."""
-    items = []
+def _classify_item(name: str, is_ccu: bool, is_standalone: bool) -> tuple:
+    """Classify an item into a category based on its name and section context."""
+    name_lower = name.lower()
 
-    try:
-        # Try fetching from the RSI getProducts API with warbond filter
-        payload = json.dumps({
-            "type": "extras",
-            "sort": "weight",
-            "search": "",
-            "item_type": "warbond",
-            "product_id": 72
-        })
-        result = subprocess.run(
-            ["curl", "-s", "-k", "--tlsv1.2",
-             f"{RSI_STORE_BASE}/api/store/getProducts",
-             "-H", "Content-Type: application/json",
-             "-d", payload],
-            capture_output=True, text=True, timeout=15
-        )
-        data = json.loads(result.stdout)
+    # Paint/skin detection
+    if any(kw in name_lower for kw in ["paint", "skin", "涂装", "livery", "pattern", "camo", "trim", "carbon", "titanium", "behring"]):
+        return "paint", "涂装"
 
-        if data.get("success"):
-            html = data.get("data", {}).get("html", "")
-            # Extract category links
-            categories = re.findall(r'href="(/pledge/[^"]+)"', html)
-            # These are category pages, not individual items
-            # We'd need to fetch each category page separately
-            # For now, just use the starnotifier data
-    except Exception:
-        pass
+    # Equipment detection
+    if any(kw in name_lower for kw in ["weapon", "shield", "power plant", "cooler", "quantum drive",
+                                         "engine", "missile", "gun", "turret", "module", "kit",
+                                         "rack", "blade", "bomb", "flare"]):
+        return "equipment", "游戏装备"
 
-    return items
+    # Combo pack detection
+    if any(kw in name_lower for kw in ["plus", "bundle", "pack", "combo", "package", "&"]):
+        if is_standalone:
+            return "combo", "组合包"
+
+    if is_ccu:
+        return "ccu", "升级包"
+    if is_standalone:
+        return "standalone_ship", "单船"
+
+    return "other", "其他"
+
+
+def _add_to_category(result: dict, item: dict):
+    """Add item to the appropriate category list in result."""
+    cat = item["category"]
+    if cat == "ccu":
+        result["ccu_items"].append(item)
+    elif cat == "standalone_ship":
+        result["standalone_ships"].append(item)
+    elif cat == "package":
+        result["package_items"].append(item)
+    elif cat == "equipment":
+        result["equipment_items"].append(item)
+    elif cat == "paint":
+        result["paint_items"].append(item)
+    elif cat == "combo":
+        result["combo_items"].append(item)
+    else:
+        result["other_items"].append(item)
 
 
 def fetch_warbonds() -> dict:
@@ -174,9 +351,13 @@ def fetch_warbonds() -> dict:
         # Build response
         response = {
             "last_updated": datetime.now(timezone.utc).isoformat(),
+            "rsi_store_url": RSI_WARBOND_STORE_URL,
             "ccu_items": parsed["ccu_items"],
             "standalone_ships": parsed["standalone_ships"],
             "package_items": parsed["package_items"],
+            "equipment_items": parsed["equipment_items"],
+            "paint_items": parsed["paint_items"],
+            "combo_items": parsed["combo_items"],
             "other_items": parsed["other_items"],
         }
 
@@ -192,9 +373,13 @@ def fetch_warbonds() -> dict:
             return _cache["data"]
         return {
             "last_updated": datetime.now(timezone.utc).isoformat(),
+            "rsi_store_url": RSI_WARBOND_STORE_URL,
             "ccu_items": [],
             "standalone_ships": [],
             "package_items": [],
+            "equipment_items": [],
+            "paint_items": [],
+            "combo_items": [],
             "other_items": [],
             "error": str(e),
         }
