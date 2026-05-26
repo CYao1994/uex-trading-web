@@ -28,7 +28,8 @@ function BuyPanel({ onResult }) {
       const res = await buyRoute(
         origin.name || origin.name_zh,
         items.map(i => ({ name: i.name, quantity: i.quantity })),
-        refresh
+        refresh,
+        origin.id
       );
       onResult(res.data);
     } catch (e) {

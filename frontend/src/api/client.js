@@ -24,11 +24,11 @@ const api = axios.create({
   timeout: 180000, // 3 min — route planning can take a while
 });
 
-export const sellRoute = (origin, items, refresh = false) =>
-  api.post('/sell-route', { origin, items }, { params: refresh ? { refresh: true } : {} });
+export const sellRoute = (origin, items, refresh = false, originId = null) =>
+  api.post('/sell-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {} });
 
-export const buyRoute = (origin, items, refresh = false) =>
-  api.post('/buy-route', { origin, items }, { params: refresh ? { refresh: true } : {} });
+export const buyRoute = (origin, items, refresh = false, originId = null) =>
+  api.post('/buy-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {} });
 
 export const searchTerminals = (q, refresh = false) =>
   api.get('/terminals', { params: { q, ...(refresh ? { refresh: true } : {}) } });

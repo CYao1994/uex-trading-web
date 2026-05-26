@@ -267,8 +267,8 @@ def fetch_routes_from_terminal(tid: int, refresh: bool = False) -> Dict[int, int
     seen = set()
     for r in routes:
         dest_tid = r.get("id_terminal_destination", 0)
-        dist = r.get("distance", 0)
-        if dest_tid and dist and (tid, dest_tid) not in seen:
+        dist = r.get("distance")
+        if dest_tid and dist is not None and (tid, dest_tid) not in seen:
             distance_cache.set_distance(tid, dest_tid, dist)
             seen.add((tid, dest_tid))
 
@@ -276,19 +276,95 @@ def fetch_routes_from_terminal(tid: int, refresh: bool = False) -> Dict[int, int
     return distance_cache.get_routes_from(tid)
 
 
+def _get_location_key(td: dict) -> str:
+    """Create a location key for a terminal to group same-location terminals.
+
+    Terminals at the same city, outpost, or space station share the same
+    location key, meaning they can use each other's route distances.
+    """
+    system = td.get("star_system_name") or ""
+    planet = td.get("planet_name") or ""
+    city = td.get("city_name") or ""
+    outpost = td.get("outpost_name") or ""
+    station = td.get("space_station_name") or ""
+    # Priority: same city > same outpost > same station > same planet
+    if city:
+        return f"{system}|{planet}|city:{city}"
+    if outpost:
+        return f"{system}|{planet}|outpost:{outpost}"
+    if station:
+        return f"{system}|{planet}|station:{station}"
+    return f"{system}|{planet}|{td.get('name', '')}"
+
+
+def _build_location_index() -> Dict[str, List[int]]:
+    """Build an index: location_key -> [terminal_ids].
+
+    Used to find same-location terminals for distance inference.
+    """
+    terminals = load_terminals()
+    index: Dict[str, List[int]] = {}
+    for t in terminals:
+        key = _get_location_key(t)
+        tid = t.get("id", 0)
+        if tid and key:
+            index.setdefault(key, []).append(tid)
+    return index
+
+
+def _infer_distance_via_location(origin_tid: int, dest_tid: int) -> Optional[int]:
+    """Try to infer distance using same-location terminals.
+
+    If we can't find distance from A to B directly, but there's a terminal A'
+    at the same location as A with a known distance to B, use that.
+    """
+    origin_td = resolve_terminal(origin_tid)
+    origin_key = _get_location_key(origin_td)
+    if not origin_key:
+        return None
+
+    loc_index = _build_location_index()
+    same_loc_tids = loc_index.get(origin_key, [])
+
+    for other_tid in same_loc_tids:
+        if other_tid == origin_tid:
+            continue
+        # Check if we have distance from this same-location terminal to dest
+        d = distance_cache.get_distance(other_tid, dest_tid)
+        if d is not None:
+            # Cache this inferred distance for future lookups
+            distance_cache.set_distance(origin_tid, dest_tid, d)
+            return d
+
+    return None
+
+
 def get_distance(origin_tid: int, dest_tid: int) -> Optional[int]:
-    """Get distance between two terminals."""
+    """Get distance between two terminals.
+
+    Lookup order:
+    1. Direct cache lookup (includes reverse)
+    2. Query routes from origin terminal
+    3. Infer via same-location terminals
+    """
     if origin_tid == dest_tid:
         return 0
     cached = distance_cache.get_distance(origin_tid, dest_tid)
     if cached is not None:
         return cached
     routes = fetch_routes_from_terminal(origin_tid)
-    return routes.get(dest_tid)
+    d = routes.get(dest_tid)
+    if d is not None:
+        return d
+    # Try inferring via same-location terminals
+    return _infer_distance_via_location(origin_tid, dest_tid)
 
 
 def build_distance_matrix(origin_tid: int, candidate_tids: List[int], refresh: bool = False) -> Dict[Tuple[int, int], Optional[int]]:
-    """Build distance matrix between origin and candidates."""
+    """Build distance matrix between origin and candidates.
+
+    Includes same-location distance inference to handle sparse UEX route data.
+    """
     all_tids = set([origin_tid] + candidate_tids)
 
     # Step 1: Get routes from origin
@@ -319,6 +395,26 @@ def build_distance_matrix(origin_tid: int, candidate_tids: List[int], refresh: b
                 fetch_routes_from_terminal(tid, refresh=refresh)
                 time.sleep(0.2)
 
+    # Step 3: Infer distances via same-location terminals
+    loc_index = _build_location_index()
+    for a in all_tids:
+        a_td = resolve_terminal(a)
+        a_key = _get_location_key(a_td)
+        same_loc = loc_index.get(a_key, [])
+        for b in all_tids:
+            if a == b:
+                continue
+            if distance_cache.get_distance(a, b) is not None:
+                continue
+            # Try to infer from same-location terminals
+            for other_tid in same_loc:
+                if other_tid == a:
+                    continue
+                d = distance_cache.get_distance(other_tid, b)
+                if d is not None:
+                    distance_cache.set_distance(a, b, d)
+                    break
+
     # Build matrix
     matrix: Dict[Tuple[int, int], Optional[int]] = {}
     for a in all_tids:
@@ -338,4 +434,5 @@ def resolve_terminal(tid: int) -> dict:
         if t.get("id") == tid:
             return t
     return {"id": tid, "name": f"Terminal-{tid}", "nickname": "",
-            "star_system_name": "", "planet_name": "", "space_station_name": ""}
+            "star_system_name": "", "planet_name": "", "space_station_name": "",
+            "city_name": "", "outpost_name": ""}

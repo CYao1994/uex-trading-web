@@ -25,21 +25,61 @@ jobs:
     if: github.event.inputs.action == 'resume' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
+      - name: Validate required secrets
+        run: |
+          MISSING=""
+          [ -z "$RAILWAY_TOKEN" ] && MISSING="$MISSING RAILWAY_API_TOKEN"
+          [ -z "$SERVICE_ID" ] && MISSING="$MISSING RAILWAY_SERVICE_ID"
+          [ -z "$SERVICE_INSTANCE_ID" ] && MISSING="$MISSING RAILWAY_SERVICE_INSTANCE_ID"
+          if [ -n "$MISSING" ]; then
+            echo "::warning::Missing secrets:$MISSING — skipping resume"
+            echo "skip=true" >> $GITHUB_ENV
+          fi
+
       - name: Check current deployment status
+        if: env.skip != 'true'
         id: check-status
         run: |
-          RESPONSE=$(curl -s -k \
+          HTTP_CODE=$(curl -s -k -o /tmp/railway_resp.json -w "%{http_code}" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
             -X POST https://backboard.railway.app/graphql/v2 \
             -d '{"query":"{ service(id: \"'$SERVICE_ID'\") { deployments { edges { node { id status } } } } }"}')
 
-          echo "Response: $RESPONSE"
+          echo "HTTP status: $HTTP_CODE"
 
-          # Check if there's an active (non-SUCCESS) deployment already running
-          HAS_ACTIVE=$(echo "$RESPONSE" | python3 -c "
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::warning::Railway API returned HTTP $HTTP_CODE — will attempt redeploy anyway"
+            echo "has_active=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check for GraphQL errors
+          HAS_ERRORS=$(python3 -c "
           import sys, json
-          data = json.load(sys.stdin)
+          with open('/tmp/railway_resp.json') as f:
+              data = json.load(f)
+          errors = data.get('errors')
+          if errors:
+              print('true')
+              for e in errors:
+                  print(f'GraphQL Error: {e.get(\"message\", \"unknown\")}', file=sys.stderr)
+          else:
+              print('false')
+          " 2>/dev/null)
+
+          if [ "$HAS_ERRORS" = "true" ]; then
+            echo "::warning::Railway GraphQL returned errors — will attempt redeploy anyway"
+            echo "has_active=false" >> $GITHUB_OUTPUT
+            cat /tmp/railway_resp.json
+            exit 0
+          fi
+
+          # Check if there's an active deployment already running
+          HAS_ACTIVE=$(python3 -c "
+          import sys, json
+          with open('/tmp/railway_resp.json') as f:
+              data = json.load(f)
           edges = data.get('data', {}).get('service', {}).get('deployments', {}).get('edges', [])
           for edge in edges:
               status = edge['node']['status']
@@ -54,17 +94,24 @@ jobs:
           echo "Has active deployment: $HAS_ACTIVE"
 
       - name: Redeploy service (resume)
-        if: steps.check-status.outputs.has_active != 'true'
+        if: steps.check-status.outputs.has_active != 'true' && env.skip != 'true'
         run: |
           echo "Redeploying service instance: $SERVICE_INSTANCE_ID"
 
-          RESPONSE=$(curl -s -k \
+          HTTP_CODE=$(curl -s -k -o /tmp/railway_deploy.json -w "%{http_code}" \
             -H "Authorization: Bearer $RAILWAY_TOKEN" \
             -H "Content-Type: application/json" \
             -X POST https://backboard.railway.app/graphql/v2 \
             -d '{"query":"mutation { serviceInstanceDeploy(id: \"'$SERVICE_INSTANCE_ID'\") { id } }"}')
 
-          echo "Deploy response: $RESPONSE"
+          echo "Deploy response (HTTP $HTTP_CODE):"
+          cat /tmp/railway_deploy.json
+
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::warning::Failed to redeploy service (HTTP $HTTP_CODE)"
+            exit 0
+          fi
+
           echo "✅ Railway service resumed successfully"
 
       - name: Already running

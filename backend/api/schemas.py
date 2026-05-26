@@ -19,6 +19,7 @@ class SellItem(BaseModel):
 
 class SellRouteRequest(BaseModel):
     origin: str
+    origin_id: Optional[int] = None  # Terminal ID from frontend — enables exact origin matching
     items: List[SellItem]
 
     @field_validator('items')
@@ -103,8 +104,8 @@ class PriceEntry(BaseModel):
     system_zh: str
     planet: str = ""
     planet_zh: str = ""
-    buy_price: Optional[int] = None  # Terminal buys (you sell here)
-    sell_price: Optional[int] = None  # Terminal sells (you buy here)
+    buy_price: Optional[int] = None  # UEX price_sell — what you get when SELLING to terminal
+    sell_price: Optional[int] = None  # UEX price_buy — what you pay when BUYING from terminal
     price_star: int = 0  # UEX price rating
 
 

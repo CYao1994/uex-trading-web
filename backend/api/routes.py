@@ -8,7 +8,7 @@ from .schemas import (
 )
 from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal, clear_caches
 from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
-from services.route_planner import plan_sell_route, plan_buy_route
+from services.route_planner import plan_sell_route, plan_buy_route, _is_valid_commodity_terminal
 from services.warbond_scraper import fetch_warbonds
 from services.cache import get_all_stats, invalidate_all
 from version import VERSION, CHANGELOG
@@ -31,7 +31,12 @@ async def sell_route(request: SellRouteRequest, refresh: bool = Query(False)):
     """
     import traceback
     try:
-        result = plan_sell_route(request.origin, [item.model_dump() for item in request.items], refresh=refresh)
+        result = plan_sell_route(
+            request.origin,
+            [item.model_dump() for item in request.items],
+            refresh=refresh,
+            origin_id=request.origin_id,
+        )
         return result
     except Exception as e:
         traceback.print_exc()
@@ -48,7 +53,12 @@ async def buy_route(request: SellRouteRequest, refresh: bool = Query(False)):
     """
     import traceback
     try:
-        result = plan_buy_route(request.origin, [item.model_dump() for item in request.items], refresh=refresh)
+        result = plan_buy_route(
+            request.origin,
+            [item.model_dump() for item in request.items],
+            refresh=refresh,
+            origin_id=request.origin_id,
+        )
         return result
     except Exception as e:
         traceback.print_exc()
@@ -156,8 +166,16 @@ async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
     prices_data = get_commodity_prices(commodity_id, refresh=refresh)
 
     # Build price entries
-    buy_entries = []  # Terminals that BUY (you sell to them)
-    sell_entries = []  # Terminals that SELL (you buy from them)
+    #
+    # UEX API 2.0 price semantics (PLAYER perspective):
+    #   price_buy  = station selling price = what you PAY when buying from terminal
+    #   price_sell = player selling price  = what you GET when selling to terminal
+    #
+    # Our PriceEntry fields (PLAYER perspective):
+    #   buy_price  = what you get when selling (maps to UEX price_sell)
+    #   sell_price = what you pay when buying (maps to UEX price_buy)
+    buy_entries = []  # Terminals that BUY from you (you sell to them) — price_sell > 0
+    sell_entries = []  # Terminals that SELL to you (you buy from them) — price_buy > 0
 
     for p in prices_data:
         tid = p.get("id_terminal", 0)
@@ -171,6 +189,13 @@ async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
         t_planet = t_info.get("planet_name") or ""
         t_system = t_info.get("star_system_name") or ""
 
+        # Filter out non-commodity-trading sub-terminals
+        if not _is_valid_commodity_terminal(t_name):
+            continue
+
+        uex_price_buy = p.get("price_buy")   # station selling price
+        uex_price_sell = p.get("price_sell")  # player selling price
+
         entry = PriceEntry(
             terminal_id=tid,
             terminal_name=t_name,
@@ -181,19 +206,19 @@ async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
             system_zh=SYSTEM_ZH.get(t_system, t_system),
             planet=t_planet,
             planet_zh=PLANET_ZH.get(t_planet, t_planet),
-            buy_price=p.get("price_buy"),
-            sell_price=p.get("price_sell"),
+            buy_price=uex_price_sell,   # what you get when selling to this terminal
+            sell_price=uex_price_buy,   # what you pay when buying from this terminal
             price_star=p.get("price_star", 0),
         )
 
-        # A terminal that buys this commodity from you
+        # A terminal that buys this commodity from you (UEX price_sell > 0)
         if entry.buy_price and entry.buy_price > 0:
             buy_entries.append(entry)
-        # A terminal that sells this commodity to you
+        # A terminal that sells this commodity to you (UEX price_buy > 0)
         if entry.sell_price and entry.sell_price > 0:
             sell_entries.append(entry)
 
-    # Sort: buy by highest buy_price (best for you), sell by lowest sell_price (cheapest to buy)
+    # Sort: buy by highest buy_price (best payout for you), sell by lowest sell_price (cheapest to buy)
     buy_entries.sort(key=lambda e: e.buy_price, reverse=True)
     sell_entries.sort(key=lambda e: e.sell_price)
 

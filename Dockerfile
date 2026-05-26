@@ -1,10 +1,8 @@
 FROM python:3.12-slim
 
-# Install curl (needed by backend for UEX API calls) and Node.js for frontend build
+# Install curl (needed by backend for UEX API calls)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl ca-certificates && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -13,14 +11,7 @@ WORKDIR /app
 COPY backend/requirements.txt ./backend/
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
-# Copy frontend and build
-COPY frontend/package.json frontend/package-lock.json ./frontend/
-RUN cd frontend && npm install --legacy-peer-deps
-
-COPY frontend/ ./frontend/
-RUN cd frontend && npx vite build
-
-# Copy backend code
+# Copy backend code only (frontend is deployed on Cloudflare Pages)
 COPY backend/ ./backend/
 
 # Environment
