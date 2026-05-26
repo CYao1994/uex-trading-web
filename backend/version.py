@@ -4,10 +4,25 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.8.2"
+VERSION = "3.8.3"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.8.3",
+        "date": "2025-05-26",
+        "changes": [
+            "修复：路线规划器距离=0的同星球路线被误删（falsy检查bug）",
+            "新增：同位置终端距离推断（同城市/站点终端共享已知距离）",
+            "修复：最短路线算法改为纯距离排序（原cost/distance评分导致排序错误）",
+            "改进：回退距离细化（同行星5/轨道站40/同星系60/跨星系200）",
+            "修正：UEX价格语义 — price_buy=站点销售价，price_sell=玩家出售价",
+            "修复：Dockerfile移除前端构建步骤，解决Railway OOM崩溃",
+            "改进：GitHub Actions增加错误处理和secret验证",
+            "改进：路线规划器不再排除出发地",
+            "修正：清仓路线价格语义同步修正",
+        ],
+    },
     {
         "version": "3.8.2",
         "date": "2025-05-25",
