@@ -18,7 +18,9 @@ from services.warbond_scraper import fetch_warbonds
 from services.cache import get_all_stats, invalidate_all
 from version import VERSION, CHANGELOG
 
-router = APIRouter(prefix="/api")
+router = APIRouter()
+# NOTE: No prefix — EdgeOne Cloud Functions strips /api before forwarding.
+# Local dev uses Vite proxy with path rewrite to match this behavior.
 
 
 @router.get("/version")
@@ -30,7 +32,7 @@ async def get_version():
 @router.post("/sell-route", response_model=SellRouteResponse)
 async def sell_route(request: SellRouteRequest, refresh: bool = Query(False)):
     """Plan a sell route for inventory.
-    
+
     Args:
         refresh: If True, bypass cache and fetch fresh data from UEX API.
     """
@@ -52,7 +54,7 @@ async def sell_route(request: SellRouteRequest, refresh: bool = Query(False)):
 @router.post("/buy-route", response_model=SellRouteResponse)
 async def buy_route(request: SellRouteRequest, refresh: bool = Query(False)):
     """Plan a buy route — find cheapest sellers for commodities.
-    
+
     Args:
         refresh: If True, bypass cache and fetch fresh data from UEX API.
     """
@@ -74,7 +76,7 @@ async def buy_route(request: SellRouteRequest, refresh: bool = Query(False)):
 @router.get("/terminals", response_model=list[TerminalOption])
 async def search_terminals(q: str = Query("", max_length=100), refresh: bool = Query(False)):
     """Search terminals by name.
-    
+
     Args:
         refresh: If True, bypass cache and fetch fresh terminal data.
     """
@@ -119,7 +121,7 @@ async def search_terminals(q: str = Query("", max_length=100), refresh: bool = Q
 @router.get("/commodities", response_model=list[CommodityOption])
 async def search_commodities(q: str = Query("", max_length=100), refresh: bool = Query(False)):
     """Search commodities by name.
-    
+
     Args:
         refresh: If True, bypass cache and fetch fresh commodity data.
     """
@@ -151,7 +153,7 @@ async def search_commodities(q: str = Query("", max_length=100), refresh: bool =
 @router.get("/commodity-prices/{commodity_id}", response_model=CommodityPricesResponse)
 async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
     """Get buy/sell prices for a specific commodity across all terminals.
-    
+
     Args:
         commodity_id: UEX commodity ID
         refresh: If True, bypass cache and fetch fresh price data.
@@ -239,7 +241,7 @@ async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
 @router.get("/warbonds", response_model=WarbondResponse)
 async def get_warbonds(refresh: bool = Query(False)):
     """Get current warbond items from RSI store.
-    
+
     Args:
         refresh: If True, bypass cache and fetch fresh warbond data.
     """

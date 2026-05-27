@@ -1,12 +1,34 @@
+# Dependencies
 node_modules/
 frontend/node_modules/
+
+# Build output
+dist/
 frontend/dist/
+
+# Python
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Environment
 .env
 .env.*
+.env.local
+
+# IDE
 .vscode/
 .idea/
+
+# Logs
 *.log
+
+# Data files
 global_zh.ini
-backend/nul
+
+# OS
+.DS_Store
+Thumbs.db
+
+# EdgeOne CLI
+.edgeone/

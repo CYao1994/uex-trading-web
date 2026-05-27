@@ -1,113 +1,122 @@
 # UEX Trade Navigator - 部署指南
 
-## 方案一：Railway 部署（推荐 ⭐ 最简单）
+## EdgeOne Pages 全栈部署（当前方案 ⭐）
+
+### 架构概览
+
+```
+EdgeOne Pages
+├── 静态文件（前端 React SPA）
+│   ├── index.html
+│   ├── assets/（JS/CSS/图片）
+│   └── favicon.svg, icons.svg
+├── Cloud Functions（后端 FastAPI）
+│   └── cloud-functions/api/
+│       ├── index.py          # FastAPI 入口
+│       ├── requirements.txt  # Python 依赖
+│       └── api/, services/   # 路由和业务逻辑
+└── edgeone.json              # 区域路由配置
+```
 
 ### 前置条件
-- GitHub 账号
-- 项目已推送到 GitHub 仓库
 
-### 步骤
+- Node.js 22+（前端构建）
+- EdgeOne CLI（部署工具）
+- UEX API Key（可选，未配置时降级运行）
 
-#### 1. 创建 GitHub 仓库并推送代码
+### 部署步骤
+
+#### 1. 构建前端
 
 ```bash
-# 在项目目录下（如果还没初始化 git）
-cd uex-trading-web
-
-# 如果还没创建 GitHub 仓库，去 https://github.com/new 创建
-# 仓库名: uex-trading-web，不要勾选 Initialize with README
-
-# 添加远程仓库并推送
-git remote add origin https://github.com/<你的用户名>/uex-trading-web.git
-git branch -M main
-git push -u origin main
+cd frontend
+npm install --legacy-peer-deps
+npm run build
+# 构建产物输出到项目根目录 dist/
 ```
 
-#### 2. 在 Railway 上部署
+#### 2. 准备部署目录
 
-1. 访问 https://railway.app ，用 GitHub 账号登录
-2. 点击 **New Project**
-3. 选择 **Deploy from GitHub repo**
-4. 选择 `uex-trading-web` 仓库
-5. Railway 会自动检测到 `Dockerfile` 和 `railway.json`，开始构建
-6. 等待构建完成（约 3-5 分钟）
+```bash
+# 将 dist 内容和 cloud-functions 一起打包
+mkdir -p uex-deploy
+cp -r dist/* uex-deploy/          # 前端文件（index.html 必须在根目录）
+cp -r cloud-functions uex-deploy/  # 后端 Cloud Functions
+cp edgeone.json uex-deploy/        # EdgeOne 配置
+```
 
-#### 3. 配置域名
+⚠️ **重要**：`index.html` 必须在部署目录的根层级，不能放在 `dist/` 子目录中。
 
-1. 在 Railway 项目页面，点击服务名称进入详情
-2. 点击 **Settings** 标签
-3. 找到 **Domains** 区域，点击 **Generate Domain**
-4. Railway 会自动分配一个 `xxx.up.railway.app` 的域名
-5. 也可以绑定自定义域名
+#### 3. 部署到 EdgeOne Pages
 
-#### 4. 验证
+```bash
+# 安装 EdgeOne CLI（首次）
+npm install -g edgeone
 
-访问 Railway 分配的域名，应该能看到 UEX Trade Navigator 页面。
+# 登录
+npx edgeone login
 
-### 费用说明
-- Railway 免费额度：$5/月额度 + 500 小时执行时间
-- 本项目轻量级，免费额度足够日常使用
-- 如果超出免费额度，Hobby 计划 $5/月
+# 部署
+npx edgeone pages deploy -n uex-trading-web ./uex-deploy
+```
 
-### 注意事项
-- Railway 通过 `PORT` 环境变量指定端口，Dockerfile 已配置自动读取
-- 如果构建失败，检查 Build Logs 中的错误信息
-- 前端 API 调用使用相对路径 `/api`，Railway 同源部署无需额外配置
+#### 4. 配置环境变量
+
+在 EdgeOne Pages 控制台 → 项目设置 → 环境变量中添加：
+
+| 变量名 | 值 | 说明 |
+|--------|-----|------|
+| `UEX_API_KEY` | 你的 UEX API Key | 未配置时 API 以降级模式运行 |
+
+#### 5. 绑定自定义域名（推荐）
+
+绑定自定义域名后，访问时无需 eo_token 认证，体验更好。
+
+### 费用说明（免费版）
+
+| 资源 | 免费额度 |
+|------|---------|
+| 静态流量 | 不限 |
+| Cloud Functions 请求 | 100 万次/月 |
+| Cloud Functions 执行时间 | 50 万 GBs/月 |
+| KV 存储 | 1GB |
+| 构建次数 | 500 次/月 |
+
+### 关键技术要点
+
+1. **路由前缀剥离**：EdgeOne Cloud Functions 转发 `/api/*` 请求时会自动剥离 `/api` 前缀，因此 FastAPI router 不设置 prefix
+2. **同源调用**：前端 `baseURL: '/api'`，无需 CORS
+3. **Cloud Functions 入口**：`cloud-functions/api/index.py` 中必须有顶层 `app` 变量
+4. **Python 运行时**：Python 3.10.11，包大小限制 128MB，内存 1GB，超时 120s
+5. **本地开发**：使用 Vite 代理 + 本地 FastAPI（见下方）
 
 ---
 
-## 方案二：Docker 部署
+## 本地开发
 
-### 1. 本地 Docker 运行
-```bash
-# 构建镜像
-docker build -t uex-trading .
+### 前置条件
 
-# 运行容器
-docker run -d -p 8000:8000 --name uex-trading uex-trading
+- Node.js 22+
+- Python 3.10+
+- UEX API Key（可选）
 
-# 访问 http://localhost:8000
-```
-
-### 2. Docker Compose
-```bash
-docker compose up -d
-```
-
----
-
-## 方案三：云服务器部署
-
-### 阿里云/腾讯云 ECS
-1. 购买轻量应用服务器（2核2G，约 50元/月）
-2. 安装 Docker：
-   ```bash
-   curl -fsSL https://get.docker.com | sh
-   ```
-3. 上传项目或 git clone
-4. 运行：
-   ```bash
-   docker compose up -d
-   ```
-5. 配置域名（可选）+ SSL
-
----
-
-## 方案四：本地生产模式（单端口）
-
-不需要 Docker，直接运行：
+### 启动步骤
 
 ```bash
-# 1. 构建前端
-cd frontend && npm install && npx vite build && cd ..
+# 终端 1：启动后端
+cd cloud-functions/api
+pip install -r requirements.txt
+UEX_API_KEY=your_key python -m uvicorn index:app --host 0.0.0.0 --port 8000 --reload
 
-# 2. 安装后端依赖
-pip install -r backend/requirements.txt
-
-# 3. 启动（单端口模式，:8000 同时服务前端和API）
-cd backend
-PYTHONPATH=/app/backend python -m uvicorn main:app --host 0.0.0.0 --port 8000
+# 终端 2：启动前端
+cd frontend
+npm install --legacy-peer-deps
+npm run dev
+# 前端 http://localhost:5173
+# API 文档 http://localhost:8000/docs
 ```
+
+Vite 开发服务器会自动将 `/api/*` 请求代理到 `localhost:8000`，并剥离 `/api` 前缀。
 
 ---
 
@@ -115,8 +124,9 @@ PYTHONPATH=/app/backend python -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 | 文件 | 作用 |
 |------|------|
-| `Dockerfile` | Docker 镜像构建配置（Python + Node.js + 前端构建 + 后端启动） |
-| `railway.json` | Railway 专用配置（指定使用 Dockerfile 构建） |
-| `docker-compose.yml` | Docker Compose 编排（含健康检查） |
-| `.dockerignore` | Docker 构建时忽略的文件 |
-| `.gitignore` | Git 忽略的文件 |
+| `edgeone.json` | EdgeOne Pages 区域路由配置 |
+| `cloud-functions/api/index.py` | Cloud Functions 入口（FastAPI app） |
+| `cloud-functions/api/requirements.txt` | Python 依赖 |
+| `frontend/vite.config.js` | Vite 构建配置 + 代理设置 |
+| `frontend/src/api/client.js` | API 客户端（同源 /api） |
+| `.gitignore` | Git 忽略规则 |
