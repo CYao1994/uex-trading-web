@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Box } from '@mui/material';
 
 const STAR_COUNT = 280;
@@ -67,7 +67,7 @@ function StarBackground() {
         borderRadius: '50%',
       }} />
 
-      {/* Star field */}
+      {/* Star field — uses global @keyframes starTwinkle from index.css */}
       {stars.map((star) => (
         <Box
           key={star.id}
@@ -87,11 +87,8 @@ function StarBackground() {
             boxShadow: star.size > 1.5
               ? `0 0 ${star.size * 2}px rgba(160, 200, 255, ${star.opacity * 0.5})`
               : 'none',
-            animation: `twinkle ${star.animationDuration}s ease-in-out ${star.animationDelay}s infinite`,
-            '@keyframes twinkle': {
-              '0%, 100%': { opacity: star.opacity * 0.3 },
-              '50%': { opacity: star.opacity },
-            },
+            animation: `starTwinkle ${star.animationDuration}s ease-in-out ${star.animationDelay}s infinite`,
+            transformOrigin: 'center center',
           }}
         />
       ))}
@@ -117,18 +114,12 @@ function StarBackground() {
         pointerEvents: 'none',
       }} />
 
-      {/* Animated scan sweep */}
+      {/* Animated scan sweep — uses global @keyframes scanSweep from index.css */}
       <Box sx={{
         position: 'absolute', top: 0, left: 0,
         width: '100%', height: '3px',
         background: 'linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.15) 40%, rgba(0, 200, 255, 0.3) 50%, rgba(0, 200, 255, 0.15) 60%, transparent 100%)',
         animation: 'scanSweep 8s linear infinite',
-        '@keyframes scanSweep': {
-          '0%': { top: '-3px', opacity: 0 },
-          '5%': { opacity: 1 },
-          '95%': { opacity: 1 },
-          '100%': { top: '100%', opacity: 0 },
-        },
         boxShadow: '0 0 15px rgba(0, 200, 255, 0.2), 0 0 30px rgba(0, 200, 255, 0.1)',
       }} />
 
@@ -143,4 +134,4 @@ function StarBackground() {
   );
 }
 
-export default StarBackground;
+export default memo(StarBackground);

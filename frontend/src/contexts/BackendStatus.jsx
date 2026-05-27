@@ -16,35 +16,34 @@ function isMaintenanceTime() {
 export function BackendStatusProvider({ children }) {
   const [isBackendUp, setIsBackendUp] = useState(null); // null = checking, true = up, false = down
   const [isMaintenance, setIsMaintenance] = useState(isMaintenanceTime());
-  const [lastChecked, setLastChecked] = useState(null);
+  // Use ref for lastChecked to avoid re-renders on every check
+  const lastCheckedRef = useRef(null);
   const failCountRef = useRef(0);
   const stableTimerRef = useRef(null);
 
   const checkBackend = useCallback(async () => {
     try {
-      // Use /api/health which also checks if UEX data is loaded
       const res = await api.get('/health', { timeout: 15000 });
       if (res.data?.status === 'ok' || res.data?.status === 'degraded') {
         failCountRef.current = 0;
         setIsBackendUp(true);
       }
-      setLastChecked(new Date());
+      lastCheckedRef.current = new Date();
     } catch (err) {
       failCountRef.current += 1;
-      // Require 3 consecutive failures before declaring backend down
       if (failCountRef.current >= 3) {
         setIsBackendUp(false);
       }
-      setLastChecked(new Date());
+      lastCheckedRef.current = new Date();
     }
   }, []);
 
-  // Initial check - only one attempt, don't spam
+  // Initial check
   useEffect(() => {
     checkBackend();
   }, [checkBackend]);
 
-  // Periodic check every 90 seconds (reduced frequency to prevent flickering)
+  // Periodic check every 90 seconds
   useEffect(() => {
     const interval = setInterval(checkBackend, 90000);
     return () => clearInterval(interval);
@@ -59,17 +58,14 @@ export function BackendStatusProvider({ children }) {
   }, []);
 
   // Debounced overlay: don't show/hide maintenance overlay for brief outages
-  // Only show overlay when backend has been down for at least 5 seconds
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
     if (isBackendUp === false) {
-      // Wait 5 seconds before showing overlay (prevents flicker)
       stableTimerRef.current = setTimeout(() => {
         setShowOverlay(true);
       }, 5000);
     } else {
-      // Immediately hide overlay when backend comes back
       clearTimeout(stableTimerRef.current);
       setShowOverlay(false);
     }
@@ -85,7 +81,7 @@ export function BackendStatusProvider({ children }) {
       showMaintenance,
       showBackendError,
       isMaintenance,
-      lastChecked,
+      lastChecked: lastCheckedRef.current,
       retryCheck: checkBackend,
     }}>
       {children}

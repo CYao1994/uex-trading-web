@@ -4,6 +4,8 @@ import Layout from './components/Layout';
 import SellPanel from './components/SellPanel';
 import BuyPanel from './components/BuyPanel';
 import WarbondPanel from './components/WarbondPanel';
+import ChainPanel from './components/ChainPanel';
+import ChainResult from './components/ChainResult';
 import RouteResult from './components/RouteResult';
 import LoadingOverlay from './components/LoadingOverlay';
 import MaintenanceOverlay from './components/MaintenanceOverlay';
@@ -30,6 +32,7 @@ function AppContent() {
 
   // Warbond panel is self-contained (no route results)
   const isWarbond = activeTab === 'warbond';
+  const isChain = activeTab === 'chain';
 
   return (
     <>
@@ -45,7 +48,9 @@ function AppContent() {
           <Box sx={{ display: 'flex', gap: 3, minHeight: 'calc(100vh - 100px)' }}>
             {/* Left panel */}
             <Box sx={{ width: { xs: '100%', md: 380, lg: 420, xl: 480 }, flexShrink: 0, maxWidth: 480 }}>
-              {activeTab === 'buy' ? (
+              {isChain ? (
+                <ChainPanel onResult={handleResult} />
+              ) : activeTab === 'buy' ? (
                 <BuyPanel onResult={handleResult} />
               ) : (
                 <SellPanel onResult={handleResult} />
@@ -55,7 +60,11 @@ function AppContent() {
             {/* Right result area */}
             <Box sx={{ flex: 1, minWidth: 0 }}>
               {result ? (
-                <RouteResult data={result} mode={activeTab} />
+                isChain ? (
+                  <ChainResult data={result} />
+                ) : (
+                  <RouteResult data={result} mode={activeTab} />
+                )
               ) : (
                 <Box sx={{
                   height: '100%',
@@ -95,12 +104,22 @@ function AppContent() {
                     mb: 1,
                     letterSpacing: '0.08em',
                   }}>
-                    等待航线计算
+                    {isChain ? '等待链式路线计算' : '等待航线计算'}
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(0, 200, 255, 0.9)', textAlign: 'center', fontSize: '0.85rem' }}>
-                    {activeTab === 'buy' ? '选择出发地并添加进货商品后' : '选择出发地并添加货物后'}
-                    <br />
-                    点击"规划路线"开始计算
+                    {isChain ? (
+                      <>
+                        选择出发地、飞船和本金后
+                        <br />
+                        点击"规划链式路线"开始计算
+                      </>
+                    ) : (
+                      <>
+                        {activeTab === 'buy' ? '选择出发地并添加进货商品后' : '选择出发地并添加货物后'}
+                        <br />
+                        点击"规划路线"开始计算
+                      </>
+                    )}
                   </Typography>
                 </Box>
               )}

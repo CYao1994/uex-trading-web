@@ -48,8 +48,8 @@ function SellPanel({ onResult }) {
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      willChange: 'transform',
-      transform: 'translateZ(0)',
+      
+      
       // Top edge highlight
       '&::before': {
         content: '""',

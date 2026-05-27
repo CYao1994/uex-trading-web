@@ -48,4 +48,13 @@ export const getCacheStats = () =>
 export const clearCache = () =>
   api.post('/cache/clear');
 
+export const searchLocations = (q, refresh = false) =>
+  api.get('/locations', { params: { q, ...(refresh ? { refresh: true } : {}) } });
+
+export const searchVehicles = (q, refresh = false) =>
+  api.get('/vehicles', { params: { q, ...(refresh ? { refresh: true } : {}) } });
+
+export const tradeChain = (params, refresh = false) =>
+  api.post('/trade-chain', params, { params: refresh ? { refresh: true } : {} });
+
 export default api;

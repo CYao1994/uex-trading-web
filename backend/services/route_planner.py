@@ -99,6 +99,12 @@ def _is_valid_commodity_terminal(name: str) -> bool:
 # UEX status: 1 = latest, 2-3 = recent, 4-7 = stale/old
 _MAX_TRUSTED_STATUS = 3
 
+# Maximum number of terminal splits per commodity.
+# When a single terminal cannot satisfy the full quantity, the commodity is
+# split across multiple terminals, up to this limit.  Additional unfulfilled
+# quantity generates a warning.
+_MAX_SPLITS = 3
+
 # Fallback distance estimates when no route data is available.
 # Based on Star Citizen quantum travel distances.
 _FALLBACK_SAME_PLANET = 5          # Same planet: short atmospheric hop
@@ -335,7 +341,7 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
             "warnings": warnings,
         }
 
-    # Step 2: Commodity summary (cheapest IN-STOCK price per commodity)
+    # Step 2: Commodity summary (cheapest IN-STOCK price per commodity, with split info)
     commodity_summary = []
     for r in buyable_results:
         # Find first in-stock seller for summary
@@ -344,20 +350,75 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
         if not best:
             continue
         td = best["terminal_info"]
-        commodity_summary.append({
-            "name": r["name"],
-            "name_zh": r["name_zh"],
-            "quantity": r["quantity"],
-            "best_price": best["price_buy"],
-            "best_revenue": best["price_buy"] * r["quantity"],
-            # Output as scu_sell for frontend compatibility (buy mode reads scu_sell)
-            "scu_sell": best.get("scu_buy", 0),
-            "best_terminal": format_location_zh(
-                td.get("name") or "", td.get("nickname") or "",
-                td.get("space_station_name") or "",
-                td.get("planet_name") or "", td.get("star_system_name") or ""
-            ),
-        })
+        best_loc = format_location_zh(
+            td.get("name") or "", td.get("nickname") or "",
+            td.get("space_station_name") or "",
+            td.get("planet_name") or "", td.get("star_system_name") or ""
+        )
+
+        # Check whether splitting is needed
+        best_capacity = best.get("scu_buy", 0)
+        needs_split = best_capacity > 0 and best_capacity < r["quantity"]
+
+        if not needs_split:
+            # Single terminal can handle everything — same as before
+            commodity_summary.append({
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": r["quantity"],
+                "best_price": best["price_buy"],
+                "best_revenue": best["price_buy"] * r["quantity"],
+                # Output as scu_sell for frontend compatibility (buy mode reads scu_sell)
+                "scu_sell": best_capacity,
+                "best_terminal": best_loc,
+            })
+        else:
+            # Split across multiple terminals (sorted by price_buy ascending = cheapest first)
+            remaining_qty = r["quantity"]
+            splits = []
+            visited_tids = set()
+
+            for seller in in_stock_sellers:
+                if remaining_qty <= 0 or len(splits) >= _MAX_SPLITS:
+                    break
+                if seller["tid"] in visited_tids:
+                    continue
+                if seller.get("scu_buy", 0) <= 0:
+                    continue
+                actual = min(seller["scu_buy"], remaining_qty)
+                seller_td = seller["terminal_info"]
+                splits.append({
+                    "terminal": format_location_zh(
+                        seller_td.get("name") or "", seller_td.get("nickname") or "",
+                        seller_td.get("space_station_name") or "",
+                        seller_td.get("planet_name") or "", seller_td.get("star_system_name") or ""
+                    ),
+                    "quantity": actual,
+                    "price": seller["price_buy"],
+                })
+                remaining_qty -= actual
+                visited_tids.add(seller["tid"])
+
+            # Compute actual total revenue across splits
+            total_revenue = sum(s["price"] * s["quantity"] for s in splits)
+
+            # Build human-readable split summary for best_terminal
+            terminal_summary = " + ".join(f"{s['terminal']}({s['quantity']})" for s in splits)
+
+            if remaining_qty > 0:
+                warnings.append(f"{r['name_zh']}({r['name']}): 拆单后仍有 {remaining_qty} SCU 未分配")
+
+            commodity_summary.append({
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": r["quantity"],
+                "best_price": best["price_buy"],
+                "best_revenue": total_revenue,
+                # Output as scu_sell for frontend compatibility (buy mode reads scu_sell)
+                "scu_sell": best_capacity,
+                "best_terminal": terminal_summary,
+                "splits": splits,
+            })
 
     # Step 3: Build terminal-commodity map
     terminal_sell_map: Dict[int, Dict] = {}
@@ -396,19 +457,23 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
     if origin_tid:
         dist_matrix = build_distance_matrix(origin_tid, candidate_tids, refresh=refresh)
 
-    # Step 5: Nearest-neighbor greedy route (shortest distance)
+    # Step 5: Nearest-neighbor greedy route (shortest distance) — with split support
     # This route prioritizes DISTANCE above all else — the closest terminal
     # with needed items is visited first, regardless of price.
+    # When a terminal's stock is insufficient, remaining quantity is carried
+    # forward to subsequent terminals (split routing).
     shortest_route = []
     shortest_total_distance = 0
     shortest_total_cost = 0
 
     if origin_tid and dist_matrix:
-        remaining = {r["name"]: {"name_zh": r["name_zh"], "quantity": r["quantity"]} for r in buyable_results}
+        remaining = {r["name"]: {"name_zh": r["name_zh"], "remaining_qty": r["quantity"]} for r in buyable_results}
+        visited_for_commodity = {r["name"]: set() for r in buyable_results}
+        splits_count = {r["name"]: 0 for r in buyable_results}
         current_tid = origin_tid
         current_td = origin_terminal or {}
 
-        while remaining:
+        while any(v["remaining_qty"] > 0 for v in remaining.values()):
             if not distance_cache.is_queried(current_tid) and current_tid != origin_tid:
                 fetch_routes_from_terminal(current_tid, refresh=refresh)
                 for (ot, dt), dist in distance_cache._distances.items():
@@ -417,15 +482,51 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
                         dist_matrix[(dt, ot)] = dist
 
             best_stop = None
-            best_distance = float('inf')
-            best_stop_items = []
+            best_effective_d = float('inf')
+            best_stop_distance = None
+            best_stop_items = []   # list of (comm_name, comm_info, actual_qty)
             best_stop_tid = None
+            best_assignable_scu = 0
 
             for tid, tinfo in terminal_sell_map.items():
                 stop_items = []
+                total_assignable_scu = 0
+                has_zero_stock = False
+
                 for comm_name, comm_info in tinfo["commodities"].items():
-                    if comm_name in remaining:
-                        stop_items.append((comm_name, comm_info))
+                    if comm_name not in remaining or remaining[comm_name]["remaining_qty"] <= 0:
+                        continue
+                    if tid in visited_for_commodity.get(comm_name, set()):
+                        continue
+                    if splits_count.get(comm_name, 0) >= _MAX_SPLITS:
+                        continue
+
+                    stock = comm_info.get("scu_buy", 0)
+                    if stock <= 0:
+                        has_zero_stock = True
+                        # Zero-stock terminals don't participate in splitting
+                        continue
+
+                    actual = min(stock, remaining[comm_name]["remaining_qty"])
+                    stop_items.append((comm_name, comm_info, actual))
+                    total_assignable_scu += actual
+
+                if not stop_items:
+                    # Check if this terminal has zero-stock items for any
+                    # remaining commodity that hasn't been visited/split-maxed.
+                    # These are included as fallback with a 500 AU penalty,
+                    # which naturally deprioritizes them behind in-stock terminals.
+                    for comm_name, comm_info in tinfo["commodities"].items():
+                        if comm_name not in remaining or remaining[comm_name]["remaining_qty"] <= 0:
+                            continue
+                        if tid in visited_for_commodity.get(comm_name, set()):
+                            continue
+                        if splits_count.get(comm_name, 0) >= _MAX_SPLITS:
+                            continue
+                        stock = comm_info.get("scu_buy", 0)
+                        if stock <= 0:
+                            stop_items.append((comm_name, comm_info, remaining[comm_name]["remaining_qty"]))
+                            has_zero_stock = True
 
                 if not stop_items:
                     continue
@@ -440,37 +541,62 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
                     # Use improved fallback based on planet/system
                     d = _estimate_fallback_distance(current_td, tinfo)
 
-                # Penalize zero-stock stops: add large distance penalty
-                has_zero_stock = any(ci.get("scu_buy", 0) == 0 for _, ci in stop_items)
-                effective_d = d + (500 if has_zero_stock else 0)
+                # Zero-stock penalty
+                zero_penalty = 500 if has_zero_stock else 0
+                # Capacity bonus: prefer terminals that handle more SCU (fewer total stops)
+                # Capped at 50% of distance to prevent negative effective distances
+                capacity_bonus = min(total_assignable_scu * 0.1, d * 0.5) if d > 0 else 0
+                # Full fulfillment bonus: if this terminal can satisfy ALL remaining
+                # quantity for every commodity it handles, give a significant bonus
+                # to avoid unnecessary splitting across multiple terminals.
+                all_fulfilled = all(
+                    actual >= remaining[comm_name]["remaining_qty"]
+                    for comm_name, _, actual in stop_items
+                    if comm_name in remaining
+                )
+                fulfillment_bonus = 20 if all_fulfilled else 0
 
-                # For shortest route: pick the CLOSEST terminal
-                # Tiebreak: more items at this stop (fewer total stops)
-                if effective_d < best_distance or \
-                   (effective_d == best_distance and len(stop_items) > len(best_stop_items)):
-                    best_distance = effective_d
+                effective_d = d - capacity_bonus - fulfillment_bonus + zero_penalty
+
+                if effective_d < best_effective_d or \
+                   (effective_d == best_effective_d and total_assignable_scu > best_assignable_scu):
+                    best_effective_d = effective_d
                     best_stop = tinfo
                     best_stop_distance = d
                     best_stop_items = stop_items
                     best_stop_tid = tid
+                    best_assignable_scu = total_assignable_scu
 
             if not best_stop:
+                # No more terminals available — warn about unfulfilled commodities
+                for comm_name, info in list(remaining.items()):
+                    if info["remaining_qty"] > 0:
+                        warnings.append(f"{info['name_zh']}({comm_name}): 无法完成全部交易，剩余 {info['remaining_qty']} SCU")
                 break
 
             commodities_bought = []
-            for comm_name, comm_info in best_stop_items:
+            for comm_name, comm_info, actual_qty in best_stop_items:
                 commodities_bought.append({
                     "name": comm_name,
                     "name_zh": comm_info["name_zh"],
-                    "quantity": comm_info["quantity"],
+                    "quantity": actual_qty,
                     "price_per_scu": comm_info["price_buy"],
-                    "revenue": comm_info["cost"],
+                    "revenue": comm_info["price_buy"] * actual_qty,
                     # Output as scu_sell for frontend compatibility
                     "scu_sell": comm_info.get("scu_buy", 0),
                 })
+                remaining[comm_name]["remaining_qty"] -= actual_qty
+                visited_for_commodity[comm_name].add(best_stop_tid)
+                splits_count[comm_name] += 1
+
+                if remaining[comm_name]["remaining_qty"] <= 0:
+                    del remaining[comm_name]
+                elif splits_count[comm_name] >= _MAX_SPLITS:
+                    warnings.append(f"{comm_info['name_zh']}({comm_name}): 已达最大拆单数({_MAX_SPLITS})，剩余 {remaining[comm_name]['remaining_qty']} SCU 未分配")
+                    del remaining[comm_name]
 
             shortest_total_cost += sum(c["revenue"] for c in commodities_bought)
-            if best_stop_distance < 9999:
+            if best_stop_distance is not None and best_stop_distance < 9999:
                 shortest_total_distance += best_stop_distance
 
             shortest_route.append({
@@ -481,37 +607,121 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
                 "system_zh": SYSTEM_ZH.get(best_stop["star_system"], best_stop["star_system"]),
                 "planet": best_stop["planet"] or "",
                 "planet_zh": PLANET_ZH.get(best_stop["planet"] or "", best_stop["planet"] or ""),
-                "distance_from_prev": best_stop_distance if best_stop_distance < 9999 else None,
+                "distance_from_prev": best_stop_distance if best_stop_distance is not None and best_stop_distance < 9999 else None,
                 "cumulative_distance": shortest_total_distance,
                 "commodities_sold": commodities_bought,
                 "stop_revenue": sum(c["revenue"] for c in commodities_bought),
             })
 
             current_tid = best_stop_tid
-            for comm_name, _ in best_stop_items:
-                if comm_name in remaining:
-                    del remaining[comm_name]
 
-    # Step 6: Cheapest route (each commodity to its cheapest IN-STOCK seller)
+    # Step 6: Cheapest route (each commodity to its cheapest IN-STOCK seller) — with split support
+    # When the best terminal's stock is insufficient, remaining quantity is
+    # split to the next cheapest terminals (up to _MAX_SPLITS terminals total).
     max_profit_route = []
     max_profit_total_cost = 0
     max_profit_total_distance = None
     prev_tid = origin_tid
     prev_td = origin_terminal
 
+    # Collect all commodity splits first, then build merged stops
+    all_splits: List[Dict] = []  # [{tid, terminal_info, commodity_info, quantity, price}]
+
     for r in buyable_results:
         # Prefer in-stock sellers for cheapest route
         in_stock_sellers = [s for s in r["sellers"] if s.get("scu_buy", 0) > 0]
-        best = in_stock_sellers[0] if in_stock_sellers else (r["sellers"][0] if r["sellers"] else None)
-        if not best:
-            continue
+        # Zero-stock sellers as fallback (prices may be unreliable)
+        zero_stock_sellers = [s for s in r["sellers"] if s.get("scu_buy", 0) == 0]
 
-        td = best["terminal_info"]
-        stop_cost = best["price_buy"] * r["quantity"]
+        remaining_qty = r["quantity"]
+        visited_tids = set()
+        commodity_splits = []
+
+        # First pass: use in-stock sellers
+        for seller in in_stock_sellers:
+            if remaining_qty <= 0 or len(commodity_splits) >= _MAX_SPLITS:
+                break
+            if seller["tid"] in visited_tids:
+                continue
+            actual = min(seller["scu_buy"], remaining_qty)
+            if actual <= 0:
+                continue
+            commodity_splits.append({
+                "tid": seller["tid"],
+                "terminal_info": seller["terminal_info"],
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": actual,
+                "price": seller["price_buy"],
+            })
+            remaining_qty -= actual
+            visited_tids.add(seller["tid"])
+
+        # Second pass: fall back to zero-stock sellers if still needed
+        if remaining_qty > 0 and len(commodity_splits) < _MAX_SPLITS:
+            for seller in zero_stock_sellers:
+                if remaining_qty <= 0 or len(commodity_splits) >= _MAX_SPLITS:
+                    break
+                if seller["tid"] in visited_tids:
+                    continue
+                # Zero-stock: assign full remaining (capacity unknown)
+                actual = remaining_qty
+                commodity_splits.append({
+                    "tid": seller["tid"],
+                    "terminal_info": seller["terminal_info"],
+                    "name": r["name"],
+                    "name_zh": r["name_zh"],
+                    "quantity": actual,
+                    "price": seller["price_buy"],
+                })
+                remaining_qty -= actual
+                visited_tids.add(seller["tid"])
+
+        if remaining_qty > 0:
+            warnings.append(f"{r['name_zh']}({r['name']}): 无法完成全部采购，剩余 {remaining_qty} SCU")
+
+        all_splits.extend(commodity_splits)
+
+    # Group splits by terminal_id, preserving order of first appearance
+    terminal_order = []
+    terminal_groups: Dict[int, List[Dict]] = {}
+    for split in all_splits:
+        tid = split["tid"]
+        if tid not in terminal_groups:
+            terminal_order.append(tid)
+            terminal_groups[tid] = []
+        terminal_groups[tid].append(split)
+
+    # Build route stops from grouped splits
+    for tid in terminal_order:
+        group = terminal_groups[tid]
+        td = group[0]["terminal_info"]
+        commodities_sold = []
+        stop_revenue = 0
+
+        for split in group:
+            item_revenue = split["price"] * split["quantity"]
+            commodities_sold.append({
+                "name": split["name"],
+                "name_zh": split["name_zh"],
+                "quantity": split["quantity"],
+                "price_per_scu": split["price"],
+                "revenue": item_revenue,
+                # Output as scu_sell for frontend compatibility
+                "scu_sell": 0,  # Will be filled from terminal data if available
+            })
+            stop_revenue += item_revenue
+
+        # Try to get SCU data from terminal_sell_map for each commodity
+        if tid in terminal_sell_map:
+            for cs in commodities_sold:
+                comm_info = terminal_sell_map[tid]["commodities"].get(cs["name"])
+                if comm_info:
+                    cs["scu_sell"] = comm_info.get("scu_buy", 0)
 
         d = None
         if prev_tid:
-            d = get_distance(prev_tid, best["tid"])
+            d = get_distance(prev_tid, tid)
             if d is None and prev_td:
                 d = _estimate_fallback_distance(prev_td, td)
 
@@ -520,10 +730,10 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
         if d is not None and max_profit_total_distance is not None:
             max_profit_total_distance += d
 
-        max_profit_total_cost += stop_cost
+        max_profit_total_cost += stop_revenue
 
         max_profit_route.append({
-            "terminal_id": best["tid"],
+            "terminal_id": tid,
             "terminal_name": td.get("name") or "",
             "terminal_name_zh": get_terminal_zh(
                 td.get("name") or "", td.get("nickname") or "",
@@ -536,18 +746,10 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
             "planet_zh": PLANET_ZH.get(td.get("planet_name") or "", td.get("planet_name") or ""),
             "distance_from_prev": d,
             "cumulative_distance": max_profit_total_distance,
-            "commodities_sold": [{
-                "name": r["name"],
-                "name_zh": r["name_zh"],
-                "quantity": r["quantity"],
-                "price_per_scu": best["price_buy"],
-                "revenue": stop_cost,
-                # Output as scu_sell for frontend compatibility
-                "scu_sell": best.get("scu_buy", 0),
-            }],
-            "stop_revenue": stop_cost,
+            "commodities_sold": commodities_sold,
+            "stop_revenue": stop_revenue,
         })
-        prev_tid = best["tid"]
+        prev_tid = tid
         prev_td = td
 
     return {
@@ -713,7 +915,7 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
             "warnings": warnings,
         }
 
-    # Step 2: Commodity summary (best price per commodity, prefer with-demand)
+    # Step 2: Commodity summary (best price per commodity, prefer with-demand, with split info)
     commodity_summary = []
     for r in sellable_results:
         with_demand_buyers = [b for b in r["buyers"] if b.get("scu_sell_stock", 0) > 0]
@@ -721,20 +923,75 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
         if not best:
             continue
         td = best["terminal_info"]
-        commodity_summary.append({
-            "name": r["name"],
-            "name_zh": r["name_zh"],
-            "quantity": r["quantity"],
-            "best_price": best["price_sell"],
-            "best_revenue": best["price_sell"] * r["quantity"],
-            # Output as scu_buy for frontend compatibility (sell mode reads scu_buy)
-            "scu_buy": best.get("scu_sell_stock", 0),
-            "best_terminal": format_location_zh(
-                td.get("name") or "", td.get("nickname") or "",
-                td.get("space_station_name") or "",
-                td.get("planet_name") or "", td.get("star_system_name") or ""
-            ),
-        })
+        best_loc = format_location_zh(
+            td.get("name") or "", td.get("nickname") or "",
+            td.get("space_station_name") or "",
+            td.get("planet_name") or "", td.get("star_system_name") or ""
+        )
+
+        # Check whether splitting is needed
+        best_capacity = best.get("scu_sell_stock", 0)
+        needs_split = best_capacity > 0 and best_capacity < r["quantity"]
+
+        if not needs_split:
+            # Single terminal can handle everything — same as before
+            commodity_summary.append({
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": r["quantity"],
+                "best_price": best["price_sell"],
+                "best_revenue": best["price_sell"] * r["quantity"],
+                # Output as scu_buy for frontend compatibility (sell mode reads scu_buy)
+                "scu_buy": best_capacity,
+                "best_terminal": best_loc,
+            })
+        else:
+            # Split across multiple terminals (sorted by price_sell descending = best payout first)
+            remaining_qty = r["quantity"]
+            splits = []
+            visited_tids = set()
+
+            for buyer in with_demand_buyers:
+                if remaining_qty <= 0 or len(splits) >= _MAX_SPLITS:
+                    break
+                if buyer["tid"] in visited_tids:
+                    continue
+                if buyer.get("scu_sell_stock", 0) <= 0:
+                    continue
+                actual = min(buyer["scu_sell_stock"], remaining_qty)
+                buyer_td = buyer["terminal_info"]
+                splits.append({
+                    "terminal": format_location_zh(
+                        buyer_td.get("name") or "", buyer_td.get("nickname") or "",
+                        buyer_td.get("space_station_name") or "",
+                        buyer_td.get("planet_name") or "", buyer_td.get("star_system_name") or ""
+                    ),
+                    "quantity": actual,
+                    "price": buyer["price_sell"],
+                })
+                remaining_qty -= actual
+                visited_tids.add(buyer["tid"])
+
+            # Compute actual total revenue across splits
+            total_revenue = sum(s["price"] * s["quantity"] for s in splits)
+
+            # Build human-readable split summary for best_terminal
+            terminal_summary = " + ".join(f"{s['terminal']}({s['quantity']})" for s in splits)
+
+            if remaining_qty > 0:
+                warnings.append(f"{r['name_zh']}({r['name']}): 拆单后仍有 {remaining_qty} SCU 未分配")
+
+            commodity_summary.append({
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": r["quantity"],
+                "best_price": best["price_sell"],
+                "best_revenue": total_revenue,
+                # Output as scu_buy for frontend compatibility (sell mode reads scu_buy)
+                "scu_buy": best_capacity,
+                "best_terminal": terminal_summary,
+                "splits": splits,
+            })
 
     # Step 3: Build terminal-commodity map
     terminal_buy_map: Dict[int, Dict] = {}
@@ -773,19 +1030,23 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
     if origin_tid:
         dist_matrix = build_distance_matrix(origin_tid, candidate_tids, refresh=refresh)
 
-    # Step 5: Nearest-neighbor greedy route (shortest distance)
+    # Step 5: Nearest-neighbor greedy route (shortest distance) — with split support
     # This route prioritizes DISTANCE above all else — the closest terminal
     # that buys needed items is visited first, regardless of payout.
+    # When a terminal's demand is insufficient, remaining quantity is carried
+    # forward to subsequent terminals (split routing).
     shortest_route = []
     shortest_total_distance = 0
     shortest_total_revenue = 0
 
     if origin_tid and dist_matrix:
-        remaining = {r["name"]: {"name_zh": r["name_zh"], "quantity": r["quantity"]} for r in sellable_results}
+        remaining = {r["name"]: {"name_zh": r["name_zh"], "remaining_qty": r["quantity"]} for r in sellable_results}
+        visited_for_commodity = {r["name"]: set() for r in sellable_results}
+        splits_count = {r["name"]: 0 for r in sellable_results}
         current_tid = origin_tid
         current_td = origin_terminal or {}
 
-        while remaining:
+        while any(v["remaining_qty"] > 0 for v in remaining.values()):
             # Real-time route query at current station
             if not distance_cache.is_queried(current_tid) and current_tid != origin_tid:
                 fetch_routes_from_terminal(current_tid, refresh=refresh)
@@ -795,15 +1056,51 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
                         dist_matrix[(dt, ot)] = dist
 
             best_stop = None
-            best_distance = float('inf')
-            best_stop_items = []
+            best_effective_d = float('inf')
+            best_stop_distance = None
+            best_stop_items = []   # list of (comm_name, comm_info, actual_qty)
             best_stop_tid = None
+            best_assignable_scu = 0
 
             for tid, tinfo in terminal_buy_map.items():
                 stop_items = []
+                total_assignable_scu = 0
+                has_zero_demand = False
+
                 for comm_name, comm_info in tinfo["commodities"].items():
-                    if comm_name in remaining:
-                        stop_items.append((comm_name, comm_info))
+                    if comm_name not in remaining or remaining[comm_name]["remaining_qty"] <= 0:
+                        continue
+                    if tid in visited_for_commodity.get(comm_name, set()):
+                        continue
+                    if splits_count.get(comm_name, 0) >= _MAX_SPLITS:
+                        continue
+
+                    demand = comm_info.get("scu_sell_stock", 0)
+                    if demand <= 0:
+                        has_zero_demand = True
+                        # Zero-demand terminals don't participate in splitting
+                        continue
+
+                    actual = min(demand, remaining[comm_name]["remaining_qty"])
+                    stop_items.append((comm_name, comm_info, actual))
+                    total_assignable_scu += actual
+
+                if not stop_items:
+                    # Check if this terminal has zero-demand items for any
+                    # remaining commodity that hasn't been visited/split-maxed.
+                    # These are included as fallback with a 500 AU penalty,
+                    # which naturally deprioritizes them behind with-demand terminals.
+                    for comm_name, comm_info in tinfo["commodities"].items():
+                        if comm_name not in remaining or remaining[comm_name]["remaining_qty"] <= 0:
+                            continue
+                        if tid in visited_for_commodity.get(comm_name, set()):
+                            continue
+                        if splits_count.get(comm_name, 0) >= _MAX_SPLITS:
+                            continue
+                        demand = comm_info.get("scu_sell_stock", 0)
+                        if demand <= 0:
+                            stop_items.append((comm_name, comm_info, remaining[comm_name]["remaining_qty"]))
+                            has_zero_demand = True
 
                 if not stop_items:
                     continue
@@ -818,37 +1115,62 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
                     # Use improved fallback based on planet/system
                     d = _estimate_fallback_distance(current_td, tinfo)
 
-                # Penalize zero-demand stops: add large distance penalty
-                has_zero_demand = any(ci.get("scu_sell_stock", 0) == 0 for _, ci in stop_items)
-                effective_d = d + (500 if has_zero_demand else 0)
+                # Zero-demand penalty
+                zero_penalty = 500 if has_zero_demand else 0
+                # Capacity bonus: prefer terminals that handle more SCU (fewer total stops)
+                # Capped at 50% of distance to prevent negative effective distances
+                capacity_bonus = min(total_assignable_scu * 0.1, d * 0.5) if d > 0 else 0
+                # Full fulfillment bonus: if this terminal can satisfy ALL remaining
+                # quantity for every commodity it handles, give a significant bonus
+                # to avoid unnecessary splitting across multiple terminals.
+                all_fulfilled = all(
+                    actual >= remaining[comm_name]["remaining_qty"]
+                    for comm_name, _, actual in stop_items
+                    if comm_name in remaining
+                )
+                fulfillment_bonus = 20 if all_fulfilled else 0
 
-                # For shortest route: pick the CLOSEST terminal
-                # Tiebreak: more items at this stop (fewer total stops)
-                if effective_d < best_distance or \
-                   (effective_d == best_distance and len(stop_items) > len(best_stop_items)):
-                    best_distance = effective_d
+                effective_d = d - capacity_bonus - fulfillment_bonus + zero_penalty
+
+                if effective_d < best_effective_d or \
+                   (effective_d == best_effective_d and total_assignable_scu > best_assignable_scu):
+                    best_effective_d = effective_d
                     best_stop = tinfo
                     best_stop_distance = d
                     best_stop_items = stop_items
                     best_stop_tid = tid
+                    best_assignable_scu = total_assignable_scu
 
             if not best_stop:
+                # No more terminals available — warn about unfulfilled commodities
+                for comm_name, info in list(remaining.items()):
+                    if info["remaining_qty"] > 0:
+                        warnings.append(f"{info['name_zh']}({comm_name}): 无法完成全部交易，剩余 {info['remaining_qty']} SCU")
                 break
 
             commodities_sold = []
-            for comm_name, comm_info in best_stop_items:
+            for comm_name, comm_info, actual_qty in best_stop_items:
                 commodities_sold.append({
                     "name": comm_name,
                     "name_zh": comm_info["name_zh"],
-                    "quantity": comm_info["quantity"],
+                    "quantity": actual_qty,
                     "price_per_scu": comm_info["price_sell"],
-                    "revenue": comm_info["revenue"],
+                    "revenue": comm_info["price_sell"] * actual_qty,
                     # Output as scu_buy for frontend compatibility
                     "scu_buy": comm_info.get("scu_sell_stock", 0),
                 })
+                remaining[comm_name]["remaining_qty"] -= actual_qty
+                visited_for_commodity[comm_name].add(best_stop_tid)
+                splits_count[comm_name] += 1
+
+                if remaining[comm_name]["remaining_qty"] <= 0:
+                    del remaining[comm_name]
+                elif splits_count[comm_name] >= _MAX_SPLITS:
+                    warnings.append(f"{comm_info['name_zh']}({comm_name}): 已达最大拆单数({_MAX_SPLITS})，剩余 {remaining[comm_name]['remaining_qty']} SCU 未分配")
+                    del remaining[comm_name]
 
             shortest_total_revenue += sum(c["revenue"] for c in commodities_sold)
-            if best_stop_distance < 9999:
+            if best_stop_distance is not None and best_stop_distance < 9999:
                 shortest_total_distance += best_stop_distance
 
             shortest_route.append({
@@ -859,37 +1181,121 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
                 "system_zh": SYSTEM_ZH.get(best_stop["star_system"], best_stop["star_system"]),
                 "planet": best_stop["planet"] or "",
                 "planet_zh": PLANET_ZH.get(best_stop["planet"] or "", best_stop["planet"] or ""),
-                "distance_from_prev": best_stop_distance if best_stop_distance < 9999 else None,
+                "distance_from_prev": best_stop_distance if best_stop_distance is not None and best_stop_distance < 9999 else None,
                 "cumulative_distance": shortest_total_distance,
                 "commodities_sold": commodities_sold,
                 "stop_revenue": sum(c["revenue"] for c in commodities_sold),
             })
 
             current_tid = best_stop_tid
-            for comm_name, _ in best_stop_items:
-                if comm_name in remaining:
-                    del remaining[comm_name]
 
-    # Step 6: Max profit route (each commodity to its best WITH-DEMAND buyer)
+    # Step 6: Max profit route (each commodity to its best WITH-DEMAND buyer) — with split support
+    # When the best terminal's demand is insufficient, remaining quantity is
+    # split to the next best-paying terminals (up to _MAX_SPLITS terminals total).
     max_profit_route = []
     max_profit_total_revenue = 0
     max_profit_total_distance = None
     prev_tid = origin_tid
     prev_td = origin_terminal
 
+    # Collect all commodity splits first, then build merged stops
+    all_splits: List[Dict] = []  # [{tid, terminal_info, commodity_info, quantity, price}]
+
     for r in sellable_results:
         # Prefer buyers with demand for max profit route
         with_demand_buyers = [b for b in r["buyers"] if b.get("scu_sell_stock", 0) > 0]
-        best = with_demand_buyers[0] if with_demand_buyers else (r["buyers"][0] if r["buyers"] else None)
-        if not best:
-            continue
+        # Zero-demand buyers as fallback (prices may be unreliable)
+        zero_demand_buyers = [b for b in r["buyers"] if b.get("scu_sell_stock", 0) == 0]
 
-        td = best["terminal_info"]
-        stop_revenue = best["price_sell"] * r["quantity"]
+        remaining_qty = r["quantity"]
+        visited_tids = set()
+        commodity_splits = []
+
+        # First pass: use with-demand buyers
+        for buyer in with_demand_buyers:
+            if remaining_qty <= 0 or len(commodity_splits) >= _MAX_SPLITS:
+                break
+            if buyer["tid"] in visited_tids:
+                continue
+            actual = min(buyer["scu_sell_stock"], remaining_qty)
+            if actual <= 0:
+                continue
+            commodity_splits.append({
+                "tid": buyer["tid"],
+                "terminal_info": buyer["terminal_info"],
+                "name": r["name"],
+                "name_zh": r["name_zh"],
+                "quantity": actual,
+                "price": buyer["price_sell"],
+            })
+            remaining_qty -= actual
+            visited_tids.add(buyer["tid"])
+
+        # Second pass: fall back to zero-demand buyers if still needed
+        if remaining_qty > 0 and len(commodity_splits) < _MAX_SPLITS:
+            for buyer in zero_demand_buyers:
+                if remaining_qty <= 0 or len(commodity_splits) >= _MAX_SPLITS:
+                    break
+                if buyer["tid"] in visited_tids:
+                    continue
+                # Zero-demand: assign full remaining (capacity unknown)
+                actual = remaining_qty
+                commodity_splits.append({
+                    "tid": buyer["tid"],
+                    "terminal_info": buyer["terminal_info"],
+                    "name": r["name"],
+                    "name_zh": r["name_zh"],
+                    "quantity": actual,
+                    "price": buyer["price_sell"],
+                })
+                remaining_qty -= actual
+                visited_tids.add(buyer["tid"])
+
+        if remaining_qty > 0:
+            warnings.append(f"{r['name_zh']}({r['name']}): 无法完成全部出售，剩余 {remaining_qty} SCU")
+
+        all_splits.extend(commodity_splits)
+
+    # Group splits by terminal_id, preserving order of first appearance
+    terminal_order = []
+    terminal_groups: Dict[int, List[Dict]] = {}
+    for split in all_splits:
+        tid = split["tid"]
+        if tid not in terminal_groups:
+            terminal_order.append(tid)
+            terminal_groups[tid] = []
+        terminal_groups[tid].append(split)
+
+    # Build route stops from grouped splits
+    for tid in terminal_order:
+        group = terminal_groups[tid]
+        td = group[0]["terminal_info"]
+        commodities_sold = []
+        stop_revenue = 0
+
+        for split in group:
+            item_revenue = split["price"] * split["quantity"]
+            commodities_sold.append({
+                "name": split["name"],
+                "name_zh": split["name_zh"],
+                "quantity": split["quantity"],
+                "price_per_scu": split["price"],
+                "revenue": item_revenue,
+                # Output as scu_buy for frontend compatibility
+                "scu_buy": 0,  # Will be filled from terminal data if available
+            })
+            stop_revenue += item_revenue
+
+        # Try to get SCU data from terminal_buy_map for each commodity
+        if tid in terminal_buy_map:
+            for cs in commodities_sold:
+                comm_info = terminal_buy_map[tid]["commodities"].get(cs["name"])
+                if comm_info:
+                    cs["scu_buy"] = comm_info.get("scu_sell_stock", 0)
 
         d = None
         if prev_tid:
-            d = get_distance(prev_tid, best["tid"])
+            d = get_distance(prev_tid, tid)
             if d is None and prev_td:
                 d = _estimate_fallback_distance(prev_td, td)
 
@@ -901,7 +1307,7 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
         max_profit_total_revenue += stop_revenue
 
         max_profit_route.append({
-            "terminal_id": best["tid"],
+            "terminal_id": tid,
             "terminal_name": td.get("name") or "",
             "terminal_name_zh": get_terminal_zh(
                 td.get("name") or "", td.get("nickname") or "",
@@ -914,18 +1320,10 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
             "planet_zh": PLANET_ZH.get(td.get("planet_name") or "", td.get("planet_name") or ""),
             "distance_from_prev": d,
             "cumulative_distance": max_profit_total_distance,
-            "commodities_sold": [{
-                "name": r["name"],
-                "name_zh": r["name_zh"],
-                "quantity": r["quantity"],
-                "price_per_scu": best["price_sell"],
-                "revenue": stop_revenue,
-                # Output as scu_buy for frontend compatibility
-                "scu_buy": best.get("scu_sell_stock", 0),
-            }],
+            "commodities_sold": commodities_sold,
             "stop_revenue": stop_revenue,
         })
-        prev_tid = best["tid"]
+        prev_tid = tid
         prev_td = td
 
     return {

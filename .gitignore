@@ -9,3 +9,4 @@ __pycache__/
 .idea/
 *.log
 global_zh.ini
+backend/nul

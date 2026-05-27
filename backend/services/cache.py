@@ -19,6 +19,10 @@ TTL_DISTANCES = 24 * 3600      # 24 hours
 TTL_WARBONDS = 4 * 3600        # 4 hours
 
 
+TTL_VEHICLES = 6 * 3600        # 6 hours
+TTL_ALL_PRICES = 2 * 3600      # 2 hours (same as per-commodity prices)
+
+
 class TTLCache:
     """Thread-safe TTL cache for a single data category."""
 
@@ -182,6 +186,8 @@ commodity_cache = TTLCache(TTL_COMMODITIES, "commodities")
 price_cache = PriceCache(TTL_PRICES)
 distance_cache = DistanceCache(TTL_DISTANCES)
 warbond_cache = TTLCache(TTL_WARBONDS, "warbonds")
+vehicle_cache = TTLCache(TTL_VEHICLES, "vehicles")
+all_prices_cache = TTLCache(TTL_ALL_PRICES, "all_prices")
 
 
 def invalidate_all() -> None:
@@ -191,6 +197,8 @@ def invalidate_all() -> None:
     price_cache.invalidate()
     distance_cache.invalidate()
     warbond_cache.invalidate()
+    vehicle_cache.invalidate()
+    all_prices_cache.invalidate()
 
 
 def get_all_stats() -> Dict:
@@ -208,4 +216,6 @@ def get_all_stats() -> Dict:
             "ttl": TTL_DISTANCES,
         },
         "warbonds": warbond_cache.stats(),
+        "vehicles": vehicle_cache.stats(),
+        "all_prices": all_prices_cache.stats(),
     }

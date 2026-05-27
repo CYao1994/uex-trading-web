@@ -54,6 +54,13 @@ class RouteStop(BaseModel):
     stop_revenue: int
 
 
+class CommoditySplit(BaseModel):
+    """Details of a single split assignment within a commodity order."""
+    terminal: str
+    quantity: int
+    price: int
+
+
 class CommoditySummary(BaseModel):
     name: str
     name_zh: str
@@ -63,6 +70,7 @@ class CommoditySummary(BaseModel):
     best_terminal: str
     scu_buy: int = 0       # Best terminal demand (sell routes)
     scu_sell: int = 0      # Best terminal stock (buy routes)
+    splits: Optional[List[CommoditySplit]] = None  # Split details (only present when splitting)
 
 
 class SellRouteResponse(BaseModel):
@@ -132,3 +140,74 @@ class WarbondResponse(BaseModel):
     rsi_store_url: str  # Link to RSI store warbond page
     ccu_items: List[WarbondItem]
     standalone_ships: List[WarbondItem]
+
+
+class LocationOption(BaseModel):
+    location_id: int
+    location_name: str
+    location_name_zh: str
+    type: str  # "space_station" | "city" | "outpost"
+    system: str = ""
+    system_zh: str = ""
+    planet: str = ""
+    planet_zh: str = ""
+    terminal_ids: List[int]
+
+
+class VehicleOption(BaseModel):
+    id: int
+    name: str
+    name_zh: str
+    scu: int
+
+
+class TradeChainRequest(BaseModel):
+    vehicle_id: Optional[int] = None
+    scu_override: Optional[int] = None
+    origin_location_id: Optional[int] = None
+    origin_location_name: Optional[str] = None
+    capital: int
+    max_legs: int = 5
+
+    @field_validator('capital')
+    @classmethod
+    def capital_must_be_positive(cls, v):
+        if v <= 0:
+            raise ValueError('capital must be greater than 0')
+        return v
+
+    @field_validator('max_legs')
+    @classmethod
+    def max_legs_range(cls, v):
+        if v < 1 or v > 5:
+            raise ValueError('max_legs must be between 1 and 5')
+        return v
+
+
+class ChainLeg(BaseModel):
+    leg_index: int  # 1-based
+    origin_name: str
+    origin_name_zh: str
+    commodity_name: str
+    commodity_name_zh: str
+    price_buy: float  # Buy price per SCU (aUEC)
+    price_sell: float  # Sell price per SCU (aUEC)
+    volume_scu: int  # Actual trade volume (SCU)
+    total_cost: float  # Total cost for this leg
+    total_revenue: float  # Total revenue for this leg
+    profit: float  # Profit for this leg
+    destination_name: str
+    destination_name_zh: str
+    destination_system: str = ""
+    destination_system_zh: str = ""
+    destination_planet: str = ""
+    destination_planet_zh: str = ""
+
+
+class TradeChainResponse(BaseModel):
+    legs: List[ChainLeg]
+    total_profit: float
+    final_capital: float
+    total_legs: int
+    early_stop_reason: Optional[str] = None
+    warnings: List[str]

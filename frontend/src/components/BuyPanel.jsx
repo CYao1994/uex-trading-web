@@ -48,8 +48,8 @@ function BuyPanel({ onResult }) {
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      willChange: 'transform',
-      transform: 'translateZ(0)',
+      
+      
       '&::before': {
         content: '""',
         position: 'absolute',

@@ -11,6 +11,7 @@ from typing import Dict, List, Optional, Tuple
 
 from services.cache import (
     terminal_cache, commodity_cache, price_cache, distance_cache,
+    vehicle_cache, all_prices_cache,
     invalidate_all,
 )
 
@@ -436,3 +437,186 @@ def resolve_terminal(tid: int) -> dict:
     return {"id": tid, "name": f"Terminal-{tid}", "nickname": "",
             "star_system_name": "", "planet_name": "", "space_station_name": "",
             "city_name": "", "outpost_name": ""}
+
+
+def load_vehicles(refresh: bool = False) -> List[Dict]:
+    """Load all vehicles with SCU > 0 with TTL caching.
+
+    Filters to only include ships that have cargo capacity (scu > 0),
+    which are relevant for trade route planning.
+
+    Args:
+        refresh: If True, bypass cache and fetch fresh data.
+    """
+    if not refresh:
+        cached = vehicle_cache.get()
+        if cached is not None:
+            return cached
+
+    try:
+        data = api_get("vehicles")
+        vehicles = data.get("data", [])
+        if vehicles:
+            filtered = [v for v in vehicles if (v.get("scu") or 0) > 0]
+            vehicle_cache.set(filtered)
+            return filtered
+    except Exception:
+        pass
+
+    # Return stale cache if available, else empty
+    if vehicle_cache.data is not None:
+        return vehicle_cache.data
+    return []
+
+
+def get_locations(q: str = "", refresh: bool = False) -> List[Dict]:
+    """Get locations grouped by space station/city/outpost.
+
+    Each location groups multiple terminals at the same physical location
+    (same space station, city, or outpost) into a single selectable option
+    for chain route origin selection.
+
+    Args:
+        q: Search query for filtering by location name (Chinese or English).
+        refresh: If True, bypass terminal cache and fetch fresh data.
+
+    Returns:
+        List of dicts with location_id, location_name, location_name_zh,
+        type, system, system_zh, planet, planet_zh, terminal_ids.
+    """
+    from services.data_mapper import get_terminal_zh, SYSTEM_ZH, PLANET_ZH
+
+    terminals = load_terminals(refresh=refresh)
+    grouped: Dict[str, Dict] = {}
+
+    for t in terminals:
+        key = _get_location_key(t)
+        if not key:
+            continue
+
+        if key not in grouped:
+            # Determine location display name and type
+            city = t.get("city_name") or ""
+            outpost = t.get("outpost_name") or ""
+            station = t.get("space_station_name") or ""
+            system = t.get("star_system_name") or ""
+            planet = t.get("planet_name") or ""
+
+            if city:
+                loc_name = city
+                loc_type = "city"
+            elif outpost:
+                loc_name = outpost
+                loc_type = "outpost"
+            elif station:
+                loc_name = station
+                loc_type = "space_station"
+            else:
+                loc_name = t.get("name", "")
+                loc_type = "space_station"
+
+            # Generate a stable positive integer ID from location key
+            # Use hashlib for deterministic hashing (Python's hash() is randomized)
+            import hashlib
+            loc_id = int(hashlib.md5(key.encode()).hexdigest()[:8], 16) % (10 ** 8)
+
+            loc_name_zh = get_terminal_zh(
+                t.get("name", ""), t.get("nickname", ""),
+                station, planet, system
+            )
+
+            grouped[key] = {
+                "location_id": loc_id,
+                "location_name": loc_name,
+                "location_name_zh": loc_name_zh,
+                "type": loc_type,
+                "system": system,
+                "system_zh": SYSTEM_ZH.get(system, system),
+                "planet": planet,
+                "planet_zh": PLANET_ZH.get(planet, planet),
+                "terminal_ids": [],
+            }
+
+        grouped[key]["terminal_ids"].append(t.get("id", 0))
+
+    locations = list(grouped.values())
+
+    # Filter by query if provided
+    if q:
+        ql = q.lower().strip()
+        locations = [
+            loc for loc in locations
+            if ql in loc["location_name"].lower()
+            or ql in loc["location_name_zh"].lower()
+            or ql in loc.get("system", "").lower()
+            or ql in loc.get("system_zh", "").lower()
+            or ql in loc.get("planet", "").lower()
+            or ql in loc.get("planet_zh", "").lower()
+        ]
+
+    return locations
+
+
+def get_all_prices(refresh: bool = False) -> List[Dict]:
+    """Get all commodity prices across all terminals with TTL caching.
+
+    Uses parallel per-commodity fetching since UEX API 2.0 requires
+    id_commodity as a mandatory path parameter for commodities_prices.
+    Leverages existing get_commodity_prices() with per-commodity caching.
+
+    Args:
+        refresh: If True, bypass cache and fetch fresh data.
+
+    Returns:
+        List of dicts with id_terminal, id_commodity, commodity_name,
+        price_buy, price_sell, scu_buy, scu_sell_stock, status_buy, status_sell.
+    """
+    if not refresh:
+        cached = all_prices_cache.get()
+        if cached is not None:
+            return cached
+
+    try:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        commodities = load_commodities(refresh=refresh)
+        if not commodities:
+            if all_prices_cache.data is not None:
+                return all_prices_cache.data
+            return []
+
+        def _fetch_one(cid):
+            return cid, get_commodity_prices(cid, refresh=refresh)
+
+        normalized = []
+        with ThreadPoolExecutor(max_workers=10) as pool:
+            futures = {pool.submit(_fetch_one, c["id"]): c["id"] for c in commodities}
+            for future in as_completed(futures):
+                cid, prices = future.result()
+                for p in prices:
+                    tid = p.get("id_terminal", 0)
+                    if not tid or not cid:
+                        continue
+                    normalized.append({
+                        "id_terminal": tid,
+                        "id_commodity": cid,
+                        "commodity_name": p.get("commodity_name", ""),
+                        "price_buy": p.get("price_buy"),
+                        "price_sell": p.get("price_sell"),
+                        "scu_buy": p.get("scu_buy", 0),
+                        "scu_sell_stock": p.get("scu_sell_stock", 0),
+                        "status_buy": p.get("status_buy", 99),
+                        "status_sell": p.get("status_sell", 99),
+                    })
+
+        if normalized:
+            all_prices_cache.set(normalized)
+            return normalized
+
+    except Exception:
+        pass
+
+    # Return stale cache if available, else empty
+    if all_prices_cache.data is not None:
+        return all_prices_cache.data
+    return []

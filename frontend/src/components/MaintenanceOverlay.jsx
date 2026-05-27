@@ -18,11 +18,7 @@ function MaintenanceOverlay() {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'radial-gradient(ellipse at center, rgba(2, 8, 16, 0.97) 0%, rgba(2, 6, 12, 0.99) 100%)',
-      animation: 'fadeIn 0.5s ease-out',
-      '@keyframes fadeIn': {
-        '0%': { opacity: 0 },
-        '100%': { opacity: 1 },
-      },
+      animation: 'overlayFadeIn 0.5s ease-out',
       pointerEvents: 'auto',
     }}>
       <Box sx={{
@@ -129,10 +125,6 @@ function MaintenanceOverlay() {
               width: 6, height: 6, borderRadius: '50%',
               backgroundColor: '#ffaa00',
               animation: 'maintPulse 2s ease-in-out infinite',
-              '@keyframes maintPulse': {
-                '0%, 100%': { opacity: 0.3 },
-                '50%': { opacity: 1 },
-              },
             }} />
             <Typography sx={{
               fontFamily: '"Orbitron", sans-serif',

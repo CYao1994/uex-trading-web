@@ -247,8 +247,8 @@ function WarbondPanel() {
       border: '1px solid rgba(0, 180, 255, 0.1)',
       borderRadius: '4px',
       position: 'relative',
-      willChange: 'transform',
-      transform: 'translateZ(0)',
+      
+      
       '&::before': {
         content: '""',
         position: 'absolute',

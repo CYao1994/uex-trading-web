@@ -352,6 +352,75 @@ def get_commodity_zh(en_name: str) -> str:
     return COMMODITY_ZH_MAP.get(en_name, en_name)
 
 
+VEHICLE_ZH_MAP = {
+    "Freelancer": "自由行者",
+    "Freelancer MAX": "自由行者 MAX",
+    "Freelancer DUR": "自由行者 DUR",
+    "Freelancer MIS": "自由行者 MIS",
+    "Constellation Andromeda": "仙女座",
+    "Constellation Taurus": "金牛座",
+    "Constellation Aquila": "天鹰座",
+    "Constellation Phoenix": "凤凰座",
+    "Caterpillar": "毛虫",
+    "Hull A": "货轮 A",
+    "Hull B": "货轮 B",
+    "Hull C": "货轮 C",
+    "Hull D": "货轮 D",
+    "Hull E": "货轮 E",
+    "Mercury Star Runner": "水星运输船",
+    "Starfarer": "星运者",
+    "Starfarer Gemini": "星运者 双子座",
+    "Crucible": "熔炉",
+    "Merchantman": "商人",
+    "Banu Merchantman": "巴努商人",
+    "RAFT": "木筏",
+    "Cutlass Black": "黑弯刀",
+    "Cutlass Red": "红弯刀",
+    "Cutlass Blue": "蓝弯刀",
+    "Corsair": "海盗船",
+    "400i": "400i 探索者",
+    "600i Explorer": "600i 探索者",
+    "600i Touring": "600i 旅游版",
+    "890 Jump": "890跃迁",
+    "Carrack": "卡拉赫",
+    "C2 Hercules": "C2 大力神",
+    "M2 Hercules": "M2 大力神",
+    "A2 Hercules": "A2 大力神",
+    "MOLE": "鼹鼠",
+    "Apollo Medivac": "阿波罗医疗船",
+    "Apollo Triage": "阿波罗分诊船",
+    "Valkyrie": "女武神",
+    "Retaliator": "报复者",
+    "Dragoon": "龙骑兵",
+    "Buccaneer": "海盗",
+    "Avenger Titan": "复仇者 泰坦",
+    "Avenger Stalker": "复仇者 追踪者",
+    "Mustang Alpha": "野马 阿尔法",
+    "Aurora CL": "极光 CL",
+    "Aurora LX": "极光 LX",
+    "Aurora MR": "极光 MR",
+    "Reliant Kore": "信赖 科尔",
+    "Reliant Tana": "信赖 塔纳",
+    "Reliant Sen": "信赖 森",
+    "Reliant Mako": "信赖 灰鲭鲨",
+    "315p": "315p 探索者",
+    "325a": "325a 战斗机",
+    "300i": "300i",
+    "350r": "350r 竞速者",
+    "Arrow": "箭矢",
+    "Gladius": "短剑",
+    "Hornet F7C": "大黄蜂 F7C",
+    "Sabre": "军刀",
+    "Vulture": "秃鹫",
+    "Prospector": "勘探者",
+}
+
+
+def get_vehicle_zh(en_name: str) -> str:
+    """Translate vehicle name to Chinese."""
+    return VEHICLE_ZH_MAP.get(en_name, en_name)
+
+
 def format_location_zh(name: str, nickname: str, station: str,
                        planet: str, system: str) -> str:
     """Generate Chinese location description."""

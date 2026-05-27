@@ -4,11 +4,16 @@ API Routes - FastAPI route handlers
 from fastapi import APIRouter, Query
 from .schemas import (
     SellRouteRequest, SellRouteResponse, TerminalOption, CommodityOption,
-    PriceEntry, CommodityPricesResponse, WarbondResponse
+    PriceEntry, CommodityPricesResponse, WarbondResponse,
+    LocationOption, VehicleOption, TradeChainRequest, TradeChainResponse, ChainLeg
 )
-from services.uex_api import load_terminals, load_commodities, get_commodity_prices, resolve_terminal, clear_caches
-from services.data_mapper import get_terminal_zh, get_commodity_zh, SYSTEM_ZH, PLANET_ZH
+from services.uex_api import (
+    load_terminals, load_commodities, get_commodity_prices, resolve_terminal,
+    clear_caches, load_vehicles, get_locations, get_all_prices
+)
+from services.data_mapper import get_terminal_zh, get_commodity_zh, get_vehicle_zh, SYSTEM_ZH, PLANET_ZH
 from services.route_planner import plan_sell_route, plan_buy_route, _is_valid_commodity_terminal
+from services.trade_chain import plan_trade_chain
 from services.warbond_scraper import fetch_warbonds
 from services.cache import get_all_stats, invalidate_all
 from version import VERSION, CHANGELOG
@@ -267,3 +272,76 @@ async def clear_cache():
     """Clear all cached data — forces fresh data on next request."""
     invalidate_all()
     return {"status": "ok", "message": "All caches cleared"}
+
+
+@router.get("/locations", response_model=list[LocationOption])
+async def search_locations(q: str = Query("", max_length=100), refresh: bool = Query(False)):
+    """Search locations (grouped by space station/city/outpost) for chain route origin."""
+    locations = get_locations(q=q, refresh=refresh)
+    return [
+        LocationOption(
+            location_id=loc["location_id"],
+            location_name=loc["location_name"],
+            location_name_zh=loc["location_name_zh"],
+            type=loc["type"],
+            system=loc.get("system", ""),
+            system_zh=loc.get("system_zh", ""),
+            planet=loc.get("planet", ""),
+            planet_zh=loc.get("planet_zh", ""),
+            terminal_ids=loc["terminal_ids"],
+        )
+        for loc in locations
+    ]
+
+
+@router.get("/vehicles", response_model=list[VehicleOption])
+async def search_vehicles(q: str = Query("", max_length=100), refresh: bool = Query(False)):
+    """Search vehicles with SCU capacity for chain route planning."""
+    vehicles = load_vehicles(refresh=refresh)
+    query = q.lower().strip()
+
+    if query:
+        results = []
+        for v in vehicles:
+            name = v.get("name", "").lower()
+            zh = get_vehicle_zh(v.get("name", "")).lower()
+            if query in name or query in zh:
+                results.append(v)
+            if len(results) >= 20:
+                break
+    else:
+        # Default: sort by SCU ascending, return up to 50
+        results = sorted(vehicles, key=lambda v: v.get("scu", 0))[:50]
+
+    return [
+        VehicleOption(
+            id=v.get("id", 0),
+            name=v.get("name", ""),
+            name_zh=get_vehicle_zh(v.get("name", "")),
+            scu=v.get("scu", 0),
+        )
+        for v in results
+    ]
+
+
+@router.post("/trade-chain", response_model=TradeChainResponse)
+async def trade_chain(request: TradeChainRequest, refresh: bool = Query(False)):
+    """Plan a chain of trade routes for maximum profit."""
+    import traceback
+    try:
+        if refresh:
+            from services.uex_api import clear_caches
+            clear_caches()
+        result = plan_trade_chain(
+            vehicle_id=request.vehicle_id,
+            scu_override=request.scu_override,
+            origin_location_id=request.origin_location_id,
+            origin_location_name=request.origin_location_name,
+            capital=request.capital,
+            max_legs=request.max_legs,
+        )
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail=f"Trade chain planning error: {str(e)}")

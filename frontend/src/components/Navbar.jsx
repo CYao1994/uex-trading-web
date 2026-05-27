@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { SwapHoriz, ShoppingCart, MilitaryTech } from '@mui/icons-material';
+import { SwapHoriz, ShoppingCart, MilitaryTech, Link } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import api from '../api/client';
 import ChangelogDialog from './ChangelogDialog';
@@ -17,6 +17,7 @@ function Navbar({ activeTab, onTabChange }) {
   const tabs = [
     { key: 'sell', label: '清仓路线', icon: <SwapHoriz sx={{ fontSize: 16 }} /> },
     { key: 'buy', label: '进货路线', icon: <ShoppingCart sx={{ fontSize: 16 }} /> },
+    { key: 'chain', label: '链式跑商', icon: <Link sx={{ fontSize: 16 }} /> },
     { key: 'warbond', label: '战争债券', icon: <MilitaryTech sx={{ fontSize: 16 }} /> },
   ];
 
@@ -206,10 +207,6 @@ function Navbar({ activeTab, onTabChange }) {
             backgroundColor: '#00ff88',
             boxShadow: '0 0 6px #00ff88',
             animation: 'pulse 2s ease-in-out infinite',
-            '@keyframes pulse': {
-              '0%, 100%': { opacity: 0.4 },
-              '50%': { opacity: 1 },
-            },
           }} />
           <Typography variant="caption" sx={{ color: 'rgba(0, 200, 255, 0.4)', fontSize: '0.65rem', fontFamily: '"Orbitron", sans-serif', letterSpacing: '0.08em' }}>
             UEX ONLINE

@@ -7,7 +7,7 @@ function Layout({ children, activeTab, onTabChange }) {
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <StarBackground />
       <Navbar activeTab={activeTab} onTabChange={onTabChange} />
-      <Box sx={{ flex: 1, p: { xs: 2, md: 3 }, maxWidth: 1400, mx: 'auto', width: '100%', willChange: 'transform', transform: 'translateZ(0)' }}>
+      <Box sx={{ flex: 1, p: { xs: 2, md: 3 }, maxWidth: 1400, mx: 'auto', width: '100%' }}>
         {children}
       </Box>
       {/* Footer - HUD style */}
