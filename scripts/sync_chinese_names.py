@@ -2,20 +2,24 @@
 """
 sync_chinese_names.py — 一键同步星际公民中文名称映射
 
-从 Gitee 星际公民汉化组仓库下载 global.ini，基于 UEX API 实时英文名
-进行智能匹配，自动更新项目中的中文名映射文件。
+从多个数据源下载翻译，基于 UEX API 实时英文名进行智能匹配，
+自动更新项目中的中文名映射文件。
 
-数据源: https://gitee.com/StarCitizen_CN/sc_l10n_zh_s
-用法: python scripts/sync_chinese_names.py [--dry-run] [--global-ini PATH]
+数据源:
+  1. ParaTranz project 8340 (https://paratranz.cn/projects/8340) — 主数据源
+     - 65,000+ 条翻译，覆盖 3.24 ~ 4.8 版本
+     - 需 API Token (在 https://paratranz.cn/profile 设置)
+  2. Gitee 星际公民汉化组仓库 global.ini — 补充数据源
+     - https://gitee.com/StarCitizen_CN/sc_l10n_zh_s
+
+用法: python scripts/sync_chinese_names.py [--dry-run] [--paratranz-token TOKEN]
 
 策略:
-  1. 下载 global.ini (key=中文值 格式)
-  2. 从 UEX API 获取英文名 (终端/商品)
-  3. 对每个英文名，在 global.ini 中搜索匹配:
-     - 商品: items_commodities_{lowercase_name} → 直接匹配
-     - 终端: 多模式搜索 (ATC_, text_level_info_, 描述性key等)
-     - 飞船: item_Name{MFR_CODE}_{SHIP} → 制造商+船型匹配
-  4. 合并现有手动映射 + 新自动映射 → 输出更新后的文件
+  1. 从 ParaTranz 下载完整翻译包（优先）
+  2. 从 Gitee 下载 global.ini 作为补充
+  3. 从 UEX API 获取英文名 (终端/商品)
+  4. 对每个英文名进行智能匹配
+  5. 合并现有手动映射 + 新自动映射 → 输出更新后的文件
 """
 
 import argparse
@@ -35,6 +39,9 @@ GLOBAL_INI_URL = (
     "https://gitee.com/StarCitizen_CN/sc_l10n_zh_s/raw/main/"
     "all/data/Localization/chineset/global.ini"
 )
+
+PARATRANZ_PROJECT_ID = 8340
+PARATRANZ_API_BASE = "https://paratranz.cn/api"
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
@@ -105,6 +112,102 @@ def parse_global_ini(path: str) -> dict[str, str]:
 def build_search_index(ini_data: dict) -> dict[str, str]:
     """Build a lowercase key → original key index for fast lookup."""
     return {k.lower(): k for k in ini_data}
+
+
+# ============================================================
+# ParaTranz translation source
+# ============================================================
+
+def download_paratranz_translations(token: str = "") -> dict[str, str]:
+    """Download all translations from ParaTranz project.
+
+    Returns: dict of {english_original: chinese_translation}
+    """
+    import json
+    import zipfile
+    import tempfile
+
+    all_translations = {}  # original -> (translation, stage)
+
+    # Method 1: Download full export zip (requires token)
+    if token:
+        print(f"📥 正在从 ParaTranz 下载完整翻译包...")
+        tmp = tempfile.NamedTemporaryFile(suffix=".zip", delete=False)
+        tmp_path = tmp.name
+        tmp.close()
+
+        try:
+            cmd = ["curl", "-sL", "-k",
+                   "-H", f"Authorization: {token}",
+                   "-o", tmp_path,
+                   f"{PARATRANZ_API_BASE}/projects/{PARATRANZ_PROJECT_ID}/artifacts/download"]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+
+            if result.returncode == 0 and os.path.getsize(tmp_path) > 1000:
+                print(f"✅ ParaTranz 翻译包下载成功: {os.path.getsize(tmp_path):,} 字节")
+
+                with zipfile.ZipFile(tmp_path, 'r') as zf:
+                    for name in zf.namelist():
+                        if not name.endswith('.json'):
+                            continue
+                        try:
+                            with zf.open(name) as f:
+                                entries = json.load(f)
+                            for entry in entries:
+                                orig = entry.get('original', '').strip()
+                                trans = entry.get('translation', '').strip()
+                                stage = entry.get('stage', 0)
+                                if orig and trans and any('\u4e00' <= c <= '\u9fff' for c in trans):
+                                    if orig in all_translations:
+                                        existing_stage = all_translations[orig][1]
+                                        if stage <= existing_stage:
+                                            all_translations[orig] = (trans, stage)
+                                    else:
+                                        all_translations[orig] = (trans, stage)
+                        except Exception:
+                            continue
+            else:
+                print(f"⚠️ ParaTranz 下载失败，尝试术语 API...")
+        except Exception as e:
+            print(f"⚠️ ParaTranz 下载异常: {e}")
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+
+    # Method 2: Fallback to terms API (no auth needed, but fewer entries)
+    if not all_translations:
+        print(f"📥 正在从 ParaTranz 术语 API 获取翻译...")
+        page = 1
+        while True:
+            try:
+                url = f"{PARATRANZ_API_BASE}/projects/{PARATRANZ_PROJECT_ID}/terms?page={page}&pageSize=100"
+                cmd = ["curl", "-sL", "-k", url]
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                if result.returncode != 0:
+                    break
+
+                data = json.loads(result.stdout)
+                results = data.get('results', [])
+                if not results:
+                    break
+
+                for entry in results:
+                    orig = entry.get('term', '').strip()
+                    trans = entry.get('translation', '').strip()
+                    if orig and trans and any('\u4e00' <= c <= '\u9fff' for c in trans):
+                        all_translations[orig] = (trans, 0)
+
+                page_count = data.get('pageCount', 1)
+                if page >= page_count:
+                    break
+                page += 1
+            except Exception:
+                break
+
+    # Build final dict
+    result = {k: v[0] for k, v in all_translations.items()}
+    print(f"✅ ParaTranz 翻译: {len(result)} 条")
+    return result
 
 
 # ============================================================
@@ -506,8 +609,9 @@ def generate_data_mapper_file(system_zh, planet_zh, terminal_zh, commodity_zh,
 
     content = f'''"""
 Data Mapper - Chinese/English name mappings for Star Citizen trading
-Auto-synced from 星际公民汉化组 global.ini by scripts/sync_chinese_names.py
-Source: https://gitee.com/StarCitizen_CN/sc_l10n_zh_s
+Synced from:
+  1. 星际公民汉化组 global.ini (Gitee: StarCitizen_CN/sc_l10n_zh_s)
+  2. ParaTranz project 8340 (https://paratranz.cn/projects/8340)
 """
 
 SYSTEM_ZH = {{
@@ -576,6 +680,8 @@ def main():
                         help="Show what would change without writing files")
     parser.add_argument("--global-ini", type=str, default=None,
                         help="Path to local global.ini (skip download)")
+    parser.add_argument("--paratranz-token", type=str, default=None,
+                        help="ParaTranz API token for full export download")
     args = parser.parse_args()
 
     # 1. Get global.ini
@@ -594,6 +700,14 @@ def main():
     print("\n📝 正在解析 global.ini...")
     ini_data = parse_global_ini(ini_path)
     print(f"✅ 解析完成: {len(ini_data):,} 条有效翻译")
+
+    # 2b. Download ParaTranz translations (supplementary source)
+    paratranz_token = args.paratranz_token or os.environ.get("PARATRANZ_TOKEN", "")
+    paratranz_trans = {}
+    if paratranz_token:
+        paratranz_trans = download_paratranz_translations(paratranz_token)
+    else:
+        print("ℹ️ 未提供 ParaTranz Token，跳过 ParaTranz 数据源")
 
     # 3. Fetch UEX API data for matching
     print()
@@ -657,6 +771,34 @@ def main():
     from services.data_mapper import TERMINAL_ZH_MAP as CURR_TERM
     from services.data_mapper import SYSTEM_ZH as CURR_SYS
     from services.data_mapper import PLANET_ZH as CURR_PLANET
+
+    # 7b. Apply ParaTranz translations as overrides for auto-matched items
+    if paratranz_trans:
+        print(f"\n🔄 应用 ParaTranz 翻译覆盖...")
+        para_overrides_term = 0
+        para_overrides_comm = 0
+        for en_name in list(terminal_zh.keys()):
+            if en_name in paratranz_trans:
+                new_zh = paratranz_trans[en_name]
+                if new_zh != terminal_zh[en_name]:
+                    terminal_zh[en_name] = new_zh
+                    para_overrides_term += 1
+        for en_name in list(commodity_zh.keys()):
+            if en_name in paratranz_trans:
+                new_zh = paratranz_trans[en_name]
+                if new_zh != commodity_zh[en_name]:
+                    commodity_zh[en_name] = new_zh
+                    para_overrides_comm += 1
+        # Also try to match items not found via global.ini
+        for en_name in uex_terminal_names:
+            if en_name not in terminal_zh and en_name in paratranz_trans:
+                terminal_zh[en_name] = paratranz_trans[en_name]
+                para_overrides_term += 1
+        for en_name in uex_commodity_names:
+            if en_name not in commodity_zh and en_name in paratranz_trans:
+                commodity_zh[en_name] = paratranz_trans[en_name]
+                para_overrides_comm += 1
+        print(f"   ✅ ParaTranz 覆盖: 终端 {para_overrides_term}, 商品 {para_overrides_comm}")
 
     # Current mappings override auto-matched ones (manual = authoritative)
     merged_commodity = OrderedDict(sorted({**commodity_zh, **CURR_COMM}.items()))
