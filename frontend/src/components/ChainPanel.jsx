@@ -339,43 +339,40 @@ function ChainPanel({ onResult }) {
           <Typography variant="subtitle2" sx={{ color: 'rgba(0, 200, 255, 0.5)', fontWeight: 600, fontSize: '0.75rem', letterSpacing: '0.1em', fontFamily: '"Orbitron", sans-serif' }}>
             最大段数
           </Typography>
-          <Typography sx={{ color: '#00c8ff', fontSize: '0.85rem', fontWeight: 700, fontFamily: '"Rajdhani", sans-serif' }}>
-            {maxLegs}
-          </Typography>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Box
-              key={n}
-              onClick={() => setMaxLegs(n)}
-              sx={{
-                width: 36, height: 36,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer',
-                fontFamily: '"Rajdhani", sans-serif',
-                fontWeight: 700,
-                fontSize: '1rem',
-                transition: 'all 0.2s',
-                ...(n === maxLegs ? {
-                  color: '#020810',
-                  background: 'linear-gradient(135deg, #00c8ff, #0080dd)',
-                  boxShadow: '0 0 10px rgba(0, 200, 255, 0.3)',
-                  clipPath: 'polygon(3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px), 0 3px)',
-                } : {
-                  color: 'rgba(0, 200, 255, 0.4)',
-                  border: '1px solid rgba(0, 180, 255, 0.12)',
-                  '&:hover': {
-                    color: '#00c8ff',
-                    borderColor: 'rgba(0, 180, 255, 0.3)',
-                    background: 'rgba(0, 200, 255, 0.05)',
-                  },
-                }),
-              }}
-            >
-              {n}
-            </Box>
-          ))}
-        </Box>
+        <TextField
+          fullWidth
+          size="small"
+          type="number"
+          value={maxLegs}
+          onChange={(e) => {
+            const val = Number(e.target.value);
+            if (val >= 1 && val <= 10) setMaxLegs(val);
+          }}
+          helperText="有效范围：1 - 10"
+          InputProps={{
+            startAdornment: <InputAdornment position="start" sx={{ color: 'rgba(0, 200, 255, 0.3)' }}><Link sx={{ fontSize: 16 }} /></InputAdornment>,
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              color: '#00d4ff',
+              fontSize: '0.9rem',
+              fontFamily: '"Rajdhani", sans-serif',
+              fontWeight: 600,
+              '& fieldset': { borderColor: 'rgba(0, 180, 255, 0.15)' },
+              '&:hover fieldset': { borderColor: 'rgba(0, 180, 255, 0.3)' },
+              '&.Mui-focused fieldset': { borderColor: 'rgba(0, 200, 255, 0.5)' },
+            },
+            '& .MuiFormHelperText-root': {
+              color: 'rgba(0, 200, 255, 0.25)',
+              fontSize: '0.65rem',
+              fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif',
+              ml: 1,
+              mt: 0.5,
+            },
+          }}
+          inputProps={{ min: 1, max: 10 }}
+        />
       </Box>
 
       {/* Data source */}

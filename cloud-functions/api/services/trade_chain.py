@@ -85,13 +85,15 @@ def plan_trade_chain(
             )
 
         # Check for stale data and add warning once
+        # Aligned with _scan_buyable filter (status_buy <= 5 is accepted)
+        # Only warn when data is getting noticeably stale (status 4-5)
         if not stale_warned:
             has_stale = any(
-                p.get("status_buy", 99) > 2
+                p.get("status_buy", 99) > 3
                 for p in buyable
             )
             if has_stale:
-                warnings.append("部分购买数据较旧（status>2），价格可能不完全准确")
+                warnings.append("部分购买数据较旧（status>3），价格可能不完全准确")
                 stale_warned = True
 
         best = _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, current_capital)

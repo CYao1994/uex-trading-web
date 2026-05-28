@@ -158,6 +158,67 @@ def _status_score(status: int) -> float:
     return 1.5 + (status - 4) * 0.1  # 1.5, 1.6, 1.7, 1.8
 
 
+def _sort_terminals_by_distance(
+    terminal_ids: List[int],
+    origin_tid: Optional[int],
+    origin_td: Optional[dict],
+    terminal_info_map: Dict[int, dict],
+    dist_matrix: Dict[Tuple[int, int], int],
+    refresh: bool = False,
+) -> List[int]:
+    """Sort terminal IDs using nearest-neighbor greedy from origin.
+
+    Starts from origin, iteratively picks the closest unvisited terminal.
+    This produces a distance-optimized visit order instead of commodity-list order.
+    """
+    if not terminal_ids or not origin_tid:
+        return list(terminal_ids)
+
+    sorted_ids: List[int] = []
+    remaining = set(terminal_ids)
+    current_tid = origin_tid
+    current_td = origin_td or {}
+
+    while remaining:
+        # Fetch routes from current terminal if not already queried
+        if not distance_cache.is_queried(current_tid) and current_tid != origin_tid:
+            fetch_routes_from_terminal(current_tid, refresh=refresh)
+            for (ot, dt), dist in distance_cache._distances.items():
+                if ot == current_tid or dt == current_tid:
+                    dist_matrix[(ot, dt)] = dist
+                    dist_matrix[(dt, ot)] = dist
+
+        best_tid = None
+        best_dist = float('inf')
+
+        for tid in remaining:
+            td = terminal_info_map.get(tid, {})
+
+            d = dist_matrix.get((current_tid, tid))
+            if d is None:
+                d = dist_matrix.get((tid, current_tid))
+            if d is None:
+                d = get_distance(current_tid, tid)
+            if d is None:
+                d = _estimate_fallback_distance(current_td, td)
+
+            if d < best_dist:
+                best_dist = d
+                best_tid = tid
+
+        if best_tid is None:
+            # Fallback: append remaining in any order
+            sorted_ids.extend(remaining)
+            break
+
+        sorted_ids.append(best_tid)
+        remaining.remove(best_tid)
+        current_tid = best_tid
+        current_td = terminal_info_map.get(best_tid, {})
+
+    return sorted_ids
+
+
 # ---------------------------------------------------------------------------
 # Buy Route Planner
 # ---------------------------------------------------------------------------
@@ -618,6 +679,8 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
     # Step 6: Cheapest route (each commodity to its cheapest IN-STOCK seller) — with split support
     # When the best terminal's stock is insufficient, remaining quantity is
     # split to the next cheapest terminals (up to _MAX_SPLITS terminals total).
+    # After determining which terminals to visit, sort by nearest-neighbor greedy
+    # distance from origin (instead of commodity-list order).
     max_profit_route = []
     max_profit_total_cost = 0
     max_profit_total_distance = None
@@ -682,15 +745,21 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
 
         all_splits.extend(commodity_splits)
 
-    # Group splits by terminal_id, preserving order of first appearance
-    terminal_order = []
+    # Group splits by terminal_id
     terminal_groups: Dict[int, List[Dict]] = {}
     for split in all_splits:
         tid = split["tid"]
         if tid not in terminal_groups:
-            terminal_order.append(tid)
             terminal_groups[tid] = []
         terminal_groups[tid].append(split)
+
+    # Sort terminals by nearest-neighbor greedy from origin (distance-optimized)
+    terminal_order = _sort_terminals_by_distance(
+        list(terminal_groups.keys()),
+        origin_tid, origin_terminal,
+        {tid: splits[0]["terminal_info"] for tid, splits in terminal_groups.items()},
+        dist_matrix, refresh=refresh,
+    )
 
     # Build route stops from grouped splits
     for tid in terminal_order:
@@ -1192,6 +1261,8 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
     # Step 6: Max profit route (each commodity to its best WITH-DEMAND buyer) — with split support
     # When the best terminal's demand is insufficient, remaining quantity is
     # split to the next best-paying terminals (up to _MAX_SPLITS terminals total).
+    # After determining which terminals to visit, sort by nearest-neighbor greedy
+    # distance from origin (instead of commodity-list order).
     max_profit_route = []
     max_profit_total_revenue = 0
     max_profit_total_distance = None
@@ -1256,15 +1327,21 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
 
         all_splits.extend(commodity_splits)
 
-    # Group splits by terminal_id, preserving order of first appearance
-    terminal_order = []
+    # Group splits by terminal_id
     terminal_groups: Dict[int, List[Dict]] = {}
     for split in all_splits:
         tid = split["tid"]
         if tid not in terminal_groups:
-            terminal_order.append(tid)
             terminal_groups[tid] = []
         terminal_groups[tid].append(split)
+
+    # Sort terminals by nearest-neighbor greedy from origin (distance-optimized)
+    terminal_order = _sort_terminals_by_distance(
+        list(terminal_groups.keys()),
+        origin_tid, origin_terminal,
+        {tid: splits[0]["terminal_info"] for tid, splits in terminal_groups.items()},
+        dist_matrix, refresh=refresh,
+    )
 
     # Build route stops from grouped splits
     for tid in terminal_order:

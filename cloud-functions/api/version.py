@@ -4,10 +4,33 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.12.0"
+VERSION = "3.14.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.14.0",
+        "date": "2025-05-28",
+        "changes": [
+            "修复：站点选择器不再出现虚假的「指挥部」地点（移除 Admin→指挥部 通用映射）",
+            "修复：炽天使空间站等空间站不再被错误归入城市分组（优先使用 space_station_name 分组）",
+            "修复：链式跑商地点选择器中文翻译错误（Area 18→18区，Orison→奥里森，Lorville→罗威尔）",
+            "修复：地点翻译改用地点名称本身，而非第一个终端的名称",
+            "补充：Deakins Research、Green Imperial Housing Exchange 等站点中文映射",
+        ],
+    },
+    {
+        "version": "3.13.0",
+        "date": "2025-05-28",
+        "changes": [
+            "中文映射补全：新增56条货物中文映射，覆盖UEX API全部201种货物",
+            "修复：链式跑商数据旧警告阈值与过滤阈值对齐（status>3 才警告，原status>2）",
+            "重构：进货/清仓路线最高利润路线改为距离优先排序（最近邻贪心算法）",
+            "修复：多货物路线不再按货物清单顺序折返，改为按站点距离排序避免走回头路",
+            "链式跑商最大段数从5提升至10，UI改为输入框并提示有效范围1-10",
+            "修复：sync_chinese_names.py 路径引用（backend/ → cloud-functions/api/）",
+        ],
+    },
     {
         "version": "3.12.0",
         "date": "2025-05-28",

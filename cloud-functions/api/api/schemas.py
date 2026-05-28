@@ -179,8 +179,8 @@ class TradeChainRequest(BaseModel):
     @field_validator('max_legs')
     @classmethod
     def max_legs_range(cls, v):
-        if v < 1 or v > 5:
-            raise ValueError('max_legs must be between 1 and 5')
+        if v < 1 or v > 10:
+            raise ValueError('max_legs must be between 1 and 10')
         return v
 
 

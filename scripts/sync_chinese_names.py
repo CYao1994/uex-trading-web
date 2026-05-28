@@ -45,8 +45,8 @@ PARATRANZ_API_BASE = "https://paratranz.cn/api"
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
-DATA_MAPPER_PATH = PROJECT_ROOT / "backend" / "services" / "data_mapper.py"
-WARBOND_SCRAPER_PATH = PROJECT_ROOT / "backend" / "services" / "warbond_scraper.py"
+DATA_MAPPER_PATH = PROJECT_ROOT / "cloud-functions" / "api" / "services" / "data_mapper.py"
+WARBOND_SCRAPER_PATH = PROJECT_ROOT / "cloud-functions" / "api" / "services" / "warbond_scraper.py"
 
 # Manufacturer code → English name (from SC item naming convention)
 MFR_CODE_MAP = {
@@ -730,9 +730,9 @@ def main():
     # Fallback: if UEX API returned no data, use current mapping keys
     if not uex_terminal_names:
         print("⚠️ UEX API 无数据，使用现有映射英文名作为匹配目标")
-        backend_path = str(PROJECT_ROOT / "backend")
-        if backend_path not in sys.path:
-            sys.path.insert(0, backend_path)
+        cloud_func_path = str(PROJECT_ROOT / "cloud-functions" / "api")
+        if cloud_func_path not in sys.path:
+            sys.path.insert(0, cloud_func_path)
         from services.data_mapper import TERMINAL_ZH_MAP as CURR_TERM_FALLBACK
         from services.data_mapper import COMMODITY_ZH_MAP as CURR_COMM_FALLBACK
         uex_terminal_names = list(CURR_TERM_FALLBACK.keys())
@@ -766,7 +766,8 @@ def main():
 
     # 7. Load current manual overrides (preserving hand-verified entries)
     print("\n📋 加载现有手动映射（覆盖自动匹配）...")
-    sys.path.insert(0, str(PROJECT_ROOT / "backend"))
+    cloud_func_path = str(PROJECT_ROOT / "cloud-functions" / "api")
+    sys.path.insert(0, cloud_func_path)
     from services.data_mapper import COMMODITY_ZH_MAP as CURR_COMM
     from services.data_mapper import TERMINAL_ZH_MAP as CURR_TERM
     from services.data_mapper import SYSTEM_ZH as CURR_SYS

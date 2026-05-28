@@ -282,19 +282,25 @@ def _get_location_key(td: dict) -> str:
 
     Terminals at the same city, outpost, or space station share the same
     location key, meaning they can use each other's route distances.
+
+    Priority: space_station > city > outpost > planet
+    NOTE: UEX API sometimes sets city_name for space station terminals
+    (e.g., Seraphim Station has city_name=Orison). We prioritize
+    space_station_name when both are set, since the terminal is physically
+    at the space station, not in the city.
     """
     system = td.get("star_system_name") or ""
     planet = td.get("planet_name") or ""
     city = td.get("city_name") or ""
     outpost = td.get("outpost_name") or ""
     station = td.get("space_station_name") or ""
-    # Priority: same city > same outpost > same station > same planet
+    # Priority: same station > same city > same outpost > same planet
+    if station:
+        return f"{system}|{planet}|station:{station}"
     if city:
         return f"{system}|{planet}|city:{city}"
     if outpost:
         return f"{system}|{planet}|outpost:{outpost}"
-    if station:
-        return f"{system}|{planet}|station:{station}"
     return f"{system}|{planet}|{td.get('name', '')}"
 
 
@@ -496,21 +502,22 @@ def get_locations(q: str = "", refresh: bool = False) -> List[Dict]:
 
         if key not in grouped:
             # Determine location display name and type
+            # Priority: station > city > outpost > fallback (matches _get_location_key)
             city = t.get("city_name") or ""
             outpost = t.get("outpost_name") or ""
             station = t.get("space_station_name") or ""
             system = t.get("star_system_name") or ""
             planet = t.get("planet_name") or ""
 
-            if city:
+            if station:
+                loc_name = station
+                loc_type = "space_station"
+            elif city:
                 loc_name = city
                 loc_type = "city"
             elif outpost:
                 loc_name = outpost
                 loc_type = "outpost"
-            elif station:
-                loc_name = station
-                loc_type = "space_station"
             else:
                 loc_name = t.get("name", "")
                 loc_type = "space_station"
@@ -520,9 +527,12 @@ def get_locations(q: str = "", refresh: bool = False) -> List[Dict]:
             import hashlib
             loc_id = int(hashlib.md5(key.encode()).hexdigest()[:8], 16) % (10 ** 8)
 
+            # Translate location name using the location name itself,
+            # NOT the first terminal's name (which may be a specific shop/admin).
+            # E.g., "Area 18" city → "18区", not "贸易发展部" from TDD terminal.
             loc_name_zh = get_terminal_zh(
-                t.get("name", ""), t.get("nickname", ""),
-                station, planet, system
+                loc_name, loc_name, loc_name,
+                planet, system
             )
 
             grouped[key] = {
