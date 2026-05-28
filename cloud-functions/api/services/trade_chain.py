@@ -85,14 +85,21 @@ def plan_trade_chain(
             )
 
         # Check for stale data and add warning once
-        # Aligned with _scan_buyable filter (status_buy <= 5 is accepted)
-        # Only warn when data is getting noticeably stale (status 4-5)
+        # status 4-5: slightly stale, still reliable
+        # status 6-7: stale, prices may be inaccurate but better than no data
         if not stale_warned:
-            has_stale = any(
+            has_very_stale = any(
+                p.get("status_buy", 99) > 5
+                for p in buyable
+            )
+            has_slightly_stale = any(
                 p.get("status_buy", 99) > 3
                 for p in buyable
             )
-            if has_stale:
+            if has_very_stale:
+                warnings.append("部分购买数据较旧（status>5），价格可能不准确，建议在游戏中核实")
+                stale_warned = True
+            elif has_slightly_stale:
                 warnings.append("部分购买数据较旧（status>3），价格可能不完全准确")
                 stale_warned = True
 
@@ -177,7 +184,8 @@ def _build_destination_lookup(
             price_sell = p.get("price_sell")
             scu_sell_stock = p.get("scu_sell_stock", 0)
             status_sell = p.get("status_sell", 99)
-            if not price_sell or price_sell <= 0 or status_sell > 5:
+            # Same threshold alignment as _scan_buyable: accept status up to 7
+            if not price_sell or price_sell <= 0 or status_sell > 7:
                 continue
             lookup.setdefault(cid, []).append({
                 "dest_terminal_id": tid,
@@ -220,13 +228,17 @@ def _scan_buyable(
             scu_buy = p.get("scu_buy", 0)
             status_buy = p.get("status_buy", 99)
 
-            # Filter: must have valid buy data with reasonably fresh status
-            # status_buy: 1=latest, 2=fresh, 3-5=slightly stale but usable
+            # Filter: must have valid buy data with usable status
+            # status_buy: 1=latest, 2=fresh, 3-5=slightly stale, 6-7=stale but usable
+            # Hard filter at >7: beyond this the data is too unreliable
+            # Note: status 6-7 data is included because many locations (e.g. Area 18)
+            # only have stale buy data — showing something with a warning is better
+            # than showing "no data available"
             if not price_buy or price_buy <= 0:
                 continue
             if not scu_buy or scu_buy <= 0:
                 continue
-            if status_buy > 5:
+            if status_buy > 7:
                 continue
 
             # Check if we can afford at least 1 SCU
@@ -260,18 +272,22 @@ def _find_best_leg(
     - For each destination terminal that buys this commodity:
       - actual_volume = min(buyable_qty, scu_sell_stock)
       - profit = actual_volume * (price_sell - price_buy)
+    - Apply status penalty: stale buy data gets a discount on effective profit
     - Track the best profit across all combinations
 
-    Tiebreaker: if profits are equal, pick the one with highest volume_scu.
+    Tiebreaker: if profits are equal, pick the one with highest volume_scu,
+    then prefer fresher data (lower status_buy).
     """
     best: Optional[dict] = None
     best_profit: float = 0
     best_volume: int = 0
+    best_status: int = 99
 
     for item in buyable:
         cid = item["commodity_id"]
         price_buy = item["price_buy"]
         origin_tid = item["origin_terminal_id"]
+        status_buy = item.get("status_buy", 99)
 
         # Max quantity we can buy (capped by stock, capital, and ship SCU)
         max_by_capital = math.floor(capital / price_buy) if price_buy > 0 else 0
@@ -296,10 +312,19 @@ def _find_best_leg(
 
             profit = actual_volume * (price_sell - price_buy)
 
-            # Pick highest profit; tiebreaker: highest volume
-            if profit > best_profit or (profit == best_profit and actual_volume > best_volume):
-                best_profit = profit
+            # Status penalty: stale buy data (status 6-7) gets 10% discount
+            # on effective profit so fresh data is preferred when profits are close
+            effective_profit = profit
+            if status_buy > 5:
+                effective_profit *= 0.9
+
+            # Pick highest effective profit; tiebreaker: highest volume, then freshest data
+            if (effective_profit > best_profit or
+                (effective_profit == best_profit and actual_volume > best_volume) or
+                (effective_profit == best_profit and actual_volume == best_volume and status_buy < best_status)):
+                best_profit = effective_profit
                 best_volume = actual_volume
+                best_status = status_buy
                 best = {
                     "origin_terminal_id": origin_tid,
                     "dest_terminal_id": dest_tid,

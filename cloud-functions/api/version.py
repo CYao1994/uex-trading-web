@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.14.0"
+VERSION = "3.15.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.15.0",
+        "date": "2025-05-28",
+        "changes": [
+            "修复：链式跑商从18区出发无可用购买数据（放宽 status 硬过滤阈值 5→7）",
+            "修复：13个只有较旧数据(status 6-7)的站点无法作为链式跑商起点",
+            "优化：链式跑商利润计算对旧数据(status>5)施加10%惩罚，优先使用新鲜数据",
+            "优化：stale 警告分两级——status>3 提示数据偏旧，status>5 建议游戏中核实",
+        ],
+    },
     {
         "version": "3.14.0",
         "date": "2025-05-28",
