@@ -105,6 +105,12 @@ _MAX_TRUSTED_STATUS = 3
 # quantity generates a warning.
 _MAX_SPLITS = 3
 
+# Star systems known to have limited price data in UEX API.
+# These systems' terminals may appear in search but often have no buy/sell data.
+_LOW_COVERAGE_SYSTEMS = {
+    "Pyro", "Nyx",
+}
+
 # Fallback distance estimates when no route data is available.
 # Based on Star Citizen quantum travel distances.
 _FALLBACK_SAME_PLANET = 5          # Same planet: short atmospheric hop
@@ -223,6 +229,21 @@ def _sort_terminals_by_distance(
 # Buy Route Planner
 # ---------------------------------------------------------------------------
 
+def _check_low_coverage_warning(origin_terminal: Optional[Dict]) -> Optional[str]:
+    """Check if origin is in a star system with limited UEX data coverage.
+
+    Returns a warning string if so, None otherwise.
+    """
+    if not origin_terminal:
+        return None
+    system = origin_terminal.get("star_system_name") or ""
+    if system in _LOW_COVERAGE_SYSTEMS:
+        from services.data_mapper import SYSTEM_ZH
+        system_zh = SYSTEM_ZH.get(system, system)
+        return f"⚠️ {system_zh}({system})系统的站点在UEX数据库中覆盖有限，部分商品可能无价格数据"
+    return None
+
+
 def _resolve_origin(origin: str, origin_id: int = None) -> Tuple[Optional[Dict], Optional[int]]:
     """Resolve origin terminal for distance calculation.
 
@@ -266,6 +287,11 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
     # Step 0: Resolve origin terminal — prefer origin_id for exact matching
     origin_terminal, origin_tid = _resolve_origin(origin, origin_id)
     origin_system = (origin_terminal.get("star_system_name") or "") if origin_terminal else ""
+
+    # Check for low-data-coverage systems
+    low_cov_warn = _check_low_coverage_warning(origin_terminal)
+    if low_cov_warn:
+        warnings.append(low_cov_warn)
 
     # Step 1: Find best sellers for each commodity
     # "Seller" = a terminal that SELLS this commodity TO the player
@@ -857,6 +883,11 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
     # Step 0: Resolve origin terminal — prefer origin_id for exact matching
     origin_terminal, origin_tid = _resolve_origin(origin, origin_id)
     origin_system = (origin_terminal.get("star_system_name") or "") if origin_terminal else ""
+
+    # Check for low-data-coverage systems
+    low_cov_warn = _check_low_coverage_warning(origin_terminal)
+    if low_cov_warn:
+        warnings.append(low_cov_warn)
 
     # Step 1: Find best buyers for each commodity
     # "Buyer" = a terminal that BUYS this commodity FROM the player

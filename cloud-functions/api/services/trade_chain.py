@@ -49,6 +49,16 @@ def plan_trade_chain(
     if not current_terminal_ids:
         return _empty_response(warnings, "无法解析出发地，请检查出发地选择")
 
+    # Step 2.5: Check for low-data-coverage systems
+    _LOW_COVERAGE_SYSTEMS = {"Pyro", "Nyx"}
+    if current_terminal_ids:
+        origin_td = resolve_terminal(current_terminal_ids[0])
+        origin_system = origin_td.get("star_system_name") or ""
+        if origin_system in _LOW_COVERAGE_SYSTEMS:
+            from services.data_mapper import SYSTEM_ZH
+            system_zh = SYSTEM_ZH.get(origin_system, origin_system)
+            warnings.append(f"⚠️ {system_zh}({origin_system})系统的站点在UEX数据库中覆盖有限，部分商品可能无价格数据")
+
     # Step 3: Bulk load all price data
     all_prices = get_all_prices()
 
@@ -84,23 +94,31 @@ def plan_trade_chain(
                 warnings
             )
 
-        # Check for stale data and add warning once
+        # Check for stale data and add warning with specific commodity names
         # status 4-5: slightly stale, still reliable
         # status 6-7: stale, prices may be inaccurate but better than no data
         if not stale_warned:
-            has_very_stale = any(
-                p.get("status_buy", 99) > 5
-                for p in buyable
-            )
-            has_slightly_stale = any(
-                p.get("status_buy", 99) > 3
-                for p in buyable
-            )
-            if has_very_stale:
-                warnings.append("部分购买数据较旧（status>5），价格可能不准确，建议在游戏中核实")
+            from services.data_mapper import get_commodity_zh
+            very_stale_items = []
+            slightly_stale_items = []
+            for p in buyable:
+                s = p.get("status_buy", 99)
+                cname = p.get("commodity_name", "")
+                cname_zh = get_commodity_zh(cname)
+                label = f"{cname_zh}({cname}) status={s}"
+                if s > 5:
+                    very_stale_items.append(label)
+                elif s > 3:
+                    slightly_stale_items.append(label)
+            if very_stale_items:
+                items_str = "、".join(very_stale_items[:5])
+                suffix = f"等{len(very_stale_items)}种商品" if len(very_stale_items) > 5 else ""
+                warnings.append(f"以下商品数据较旧，价格可能不准确：{items_str}{suffix}，建议在游戏中核实")
                 stale_warned = True
-            elif has_slightly_stale:
-                warnings.append("部分购买数据较旧（status>3），价格可能不完全准确")
+            elif slightly_stale_items:
+                items_str = "、".join(slightly_stale_items[:5])
+                suffix = f"等{len(slightly_stale_items)}种商品" if len(slightly_stale_items) > 5 else ""
+                warnings.append(f"以下商品数据略旧，价格可能不完全准确：{items_str}{suffix}")
                 stale_warned = True
 
         best = _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, current_capital)

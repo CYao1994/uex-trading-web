@@ -4,10 +4,19 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.16.0"
+VERSION = "3.16.1"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.16.1",
+        "date": "2026-05-29",
+        "changes": [
+            "改进：链式跑商数据时效警告列出具体商品名和status值（替代笼统的"部分数据较旧"）",
+            "改进：进货/清仓路线当最省钱路线与最短距离路线一致时，明确提示用户",
+            "改进：Pyro/Nyx等UEX数据覆盖有限的系统站点，选择时给出数据不足警告",
+        ],
+    },
     {
         "version": "3.16.0",
         "date": "2026-05-29",

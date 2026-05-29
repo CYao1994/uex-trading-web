@@ -30,6 +30,11 @@ function RouteResult({ data, mode = 'sell' }) {
   const costLabel = isBuyMode ? '进货成本' : '预计收入';
   const revenueUnit = isBuyMode ? 'aUEC (成本)' : 'aUEC';
 
+  // Check if both routes are identical (same terminals in same order)
+  const routesIdentical = shortest_route.length > 0 &&
+    shortest_route.length === max_profit_route.length &&
+    shortest_route.every((stop, i) => stop.terminal_id === max_profit_route[i].terminal_id);
+
   // Distance savings
   const distSaved = max_profit_route_total_distance && shortest_route_total_distance
     ? max_profit_route_total_distance - shortest_route_total_distance
@@ -131,7 +136,15 @@ function RouteResult({ data, mode = 'sell' }) {
           </Box>
         </Box>
 
-        {distSaved > 0 && (
+        {routesIdentical && (
+          <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(0, 212, 255, 0.1)' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(0, 200, 255, 0.7)' }}>
+              💡 当前{isBuyMode ? '最省钱路线' : '最高利润路线'}与最短距离路线一致，附近站点价格最优
+            </Typography>
+          </Box>
+        )}
+
+        {distSaved > 0 && !routesIdentical && (
           <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(0, 212, 255, 0.1)' }}>
             <Typography variant="body2" sx={{ color: '#00ff88' }}>
               选择最短路线可节省 <strong>{distSaved} AU</strong> 距离（{distSavedPct}% 更短），
