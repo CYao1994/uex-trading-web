@@ -4,17 +4,28 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.16.1"
+VERSION = "3.17.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.17.0",
+        "date": "2026-05-29",
+        "changes": [
+            "新增：Pyro/Nyx星系站点全面支持！终端搜索、路线规划、链式跑商现已覆盖所有可用星系",
+            "修复：load_terminals()原来只加载Stanton星系终端，现在按星系逐一加载（Stanton+Pyro+Nyx）",
+            "移除：Pyro/Nyx低数据覆盖警告（经验证UEX API完整覆盖这些星系，之前判断有误）",
+            "改进：链式跑商数据时效警告列出具体商品名和status值",
+            "改进：进货/清仓路线当最省钱路线与最短距离路线一致时，明确提示用户",
+            "补充：新增Pyro星系行星中文映射（Monox/Pyro IV/Pyro VI等）",
+        ],
+    },
     {
         "version": "3.16.1",
         "date": "2026-05-29",
         "changes": [
             "改进：链式跑商数据时效警告列出具体商品名和status值（替代笼统的"部分数据较旧"）",
             "改进：进货/清仓路线当最省钱路线与最短距离路线一致时，明确提示用户",
-            "改进：Pyro/Nyx等UEX数据覆盖有限的系统站点，选择时给出数据不足警告",
         ],
     },
     {

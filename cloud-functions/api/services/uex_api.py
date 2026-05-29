@@ -102,8 +102,30 @@ def clear_caches():
     invalidate_all()
 
 
+# Star systems that are currently available in Star Citizen live build.
+# The default terminals endpoint only returns Stanton; we must query
+# each available system separately to get complete coverage.
+_AVAILABLE_STAR_SYSTEMS = [68, 64, 55]  # Stanton, Pyro, Nyx
+
+
+def _fetch_commodity_terminals_for_system(system_id: int) -> List[Dict]:
+    """Fetch commodity terminals for a specific star system."""
+    try:
+        data = api_get("terminals", params={"id_star_system": system_id})
+        terminals = data.get("data", [])
+        return [t for t in terminals
+                if t.get("type") == "commodity"
+                and "platinum" not in t.get("name", "").lower()]
+    except Exception:
+        return []
+
+
 def load_terminals(refresh: bool = False) -> List[Dict]:
-    """Load all commodity terminals with TTL caching.
+    """Load all commodity terminals across all available star systems with TTL caching.
+
+    The default UEX terminals endpoint only returns Stanton (id_star_system=68).
+    To include Pyro and Nyx terminals, we query each available system separately
+    and merge the results.
 
     Filters out PLATINUM BAY terminals because they have zero price data
     in the UEX API. Each PB location has a corresponding ADMIN terminal
@@ -117,20 +139,28 @@ def load_terminals(refresh: bool = False) -> List[Dict]:
         if cached is not None:
             return cached
 
+    # Primary: fetch from each available star system separately
+    all_terminals = []
+    for sid in _AVAILABLE_STAR_SYSTEMS:
+        sys_terminals = _fetch_commodity_terminals_for_system(sid)
+        all_terminals.extend(sys_terminals)
+
+    if all_terminals:
+        # Deduplicate by terminal id (in case of overlap)
+        seen_ids = set()
+        unique = []
+        for t in all_terminals:
+            tid = t.get("id")
+            if tid and tid not in seen_ids:
+                seen_ids.add(tid)
+                unique.append(t)
+        terminal_cache.set(unique)
+        return unique
+
+    # Fallback: try default endpoint (Stanton only)
     try:
         data = api_get("terminals", path_params={"type": "commodity"})
         terminals = data.get("data", [])
-        if terminals:
-            filtered = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
-            terminal_cache.set(filtered)
-            return filtered
-    except Exception:
-        pass
-
-    # Fallback: try without type filter, filter locally
-    try:
-        data = api_get("terminals")
-        terminals = [t for t in data.get("data", []) if t.get("type") == "commodity"]
         if terminals:
             filtered = [t for t in terminals if "platinum" not in t.get("name", "").lower()]
             terminal_cache.set(filtered)

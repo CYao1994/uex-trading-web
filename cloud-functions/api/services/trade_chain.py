@@ -49,16 +49,6 @@ def plan_trade_chain(
     if not current_terminal_ids:
         return _empty_response(warnings, "无法解析出发地，请检查出发地选择")
 
-    # Step 2.5: Check for low-data-coverage systems
-    _LOW_COVERAGE_SYSTEMS = {"Pyro", "Nyx"}
-    if current_terminal_ids:
-        origin_td = resolve_terminal(current_terminal_ids[0])
-        origin_system = origin_td.get("star_system_name") or ""
-        if origin_system in _LOW_COVERAGE_SYSTEMS:
-            from services.data_mapper import SYSTEM_ZH
-            system_zh = SYSTEM_ZH.get(origin_system, origin_system)
-            warnings.append(f"⚠️ {system_zh}({origin_system})系统的站点在UEX数据库中覆盖有限，部分商品可能无价格数据")
-
     # Step 3: Bulk load all price data
     all_prices = get_all_prices()
 
