@@ -15,7 +15,26 @@ html, body, #root {
 body {
   background: #020810;
   color: #e0e6ed;
-  font-family: 'Rajdhani', 'Noto Sans SC', sans-serif;
+  font-family: 'Rajdhani', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* Font fallback stack — ensure text renders immediately with system fonts */
+@font-face {
+  font-family: 'Orbitron';
+  font-display: swap;
+  src: local('Orbitron');
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  font-display: swap;
+  src: local('Rajdhani');
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-display: swap;
+  src: local('Noto Sans SC');
 }
 
 /* === Custom scrollbar - HUD style === */

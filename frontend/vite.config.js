@@ -8,6 +8,26 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, '../dist'),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        // Vite 8 / Rolldown requires manualChunks as a function
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom') || id.includes('/react/')) {
+              return 'vendor';
+            }
+            if (id.includes('@mui')) {
+              return 'mui';
+            }
+            if (id.includes('@emotion')) {
+              return 'emotion';
+            }
+            // All other node_modules
+            return 'lib';
+          }
+        },
+      },
+    },
   },
   server: {
     port: 5173,

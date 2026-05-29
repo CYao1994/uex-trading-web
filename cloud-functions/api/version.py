@@ -4,10 +4,23 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.15.0"
+VERSION = "3.16.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.16.0",
+        "date": "2026-05-29",
+        "changes": [
+            "性能优化：React.lazy 代码分割，非首屏组件按需加载（首屏JS减少~50KB）",
+            "性能优化：字体预加载 + font-display:swap + 系统字体fallback，消除字体阻塞",
+            "性能优化：新增骨架屏组件(AppSkeleton)，消除白屏等待感知",
+            "性能优化：星空背景DOM节点减少57%（280→120）+ GPU加速",
+            "性能优化：BackendStatus乐观渲染，首屏不再等待/health请求",
+            "性能优化：Vite manualChunks分包（vendor/mui/emotion/lib独立chunk）",
+            "修复：Rajdhani字体预加载URL返回404（v15→v17），Orbitron版本更新（v31→v35）",
+        ],
+    },
     {
         "version": "3.15.0",
         "date": "2025-05-28",

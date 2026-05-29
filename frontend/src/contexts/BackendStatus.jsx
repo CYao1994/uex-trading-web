@@ -14,7 +14,7 @@ function isMaintenanceTime() {
 }
 
 export function BackendStatusProvider({ children }) {
-  const [isBackendUp, setIsBackendUp] = useState(null); // null = checking, true = up, false = down
+  const [isBackendUp, setIsBackendUp] = useState(true); // true = optimistic render, don't block FCP
   const [isMaintenance, setIsMaintenance] = useState(isMaintenanceTime());
   // Use ref for lastChecked to avoid re-renders on every check
   const lastCheckedRef = useRef(null);
@@ -74,6 +74,7 @@ export function BackendStatusProvider({ children }) {
 
   const showMaintenance = showOverlay && isBackendUp === false && isMaintenance;
   const showBackendError = showOverlay && isBackendUp === false && !isMaintenance;
+  const isChecking = false; // No longer block on initial check — optimistic render
 
   return (
     <BackendStatusContext.Provider value={{
@@ -81,6 +82,7 @@ export function BackendStatusProvider({ children }) {
       showMaintenance,
       showBackendError,
       isMaintenance,
+      isChecking,
       lastChecked: lastCheckedRef.current,
       retryCheck: checkBackend,
     }}>

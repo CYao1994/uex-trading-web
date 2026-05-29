@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import { SwapHoriz, ShoppingCart, MilitaryTech, Link } from '@mui/icons-material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import api from '../api/client';
-import ChangelogDialog from './ChangelogDialog';
+
+// Lazy-load ChangelogDialog — rarely used dialog, no need in initial bundle
+const ChangelogDialog = lazy(() => import('./ChangelogDialog'));
 
 function Navbar({ activeTab, onTabChange }) {
   const [version, setVersion] = useState('');
@@ -248,7 +250,9 @@ function Navbar({ activeTab, onTabChange }) {
         )}
       </Box>
 
-      <ChangelogDialog open={changelogOpen} onClose={() => setChangelogOpen(false)} />
+      <Suspense fallback={null}>
+        <ChangelogDialog open={changelogOpen} onClose={() => setChangelogOpen(false)} />
+      </Suspense>
     </Box>
   );
 }

@@ -1,7 +1,7 @@
 import { useMemo, memo } from 'react';
 import { Box } from '@mui/material';
 
-const STAR_COUNT = 280;
+const STAR_COUNT = 120;
 
 function StarBackground() {
   const stars = useMemo(() => {
@@ -26,6 +26,8 @@ function StarBackground() {
         height: '100%',
         zIndex: -1,
         overflow: 'hidden',
+        willChange: 'transform',
+        transform: 'translateZ(0)',
         // Deep space base with nebula coloring
         background: `
           radial-gradient(ellipse at 15% 20%, rgba(0, 40, 80, 0.4) 0%, transparent 50%),
