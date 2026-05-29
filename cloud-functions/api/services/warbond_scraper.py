@@ -2,12 +2,16 @@
 Warbond Scraper Service
 Fetches current warbond items from starnotifier.com and RSI store API.
 Uses centralized TTL cache from cache.py.
+
+HTTP requests use Python's built-in urllib.request instead of subprocess+curl,
+because EdgeOne Cloud Functions may not have the curl binary available.
 """
 
-import subprocess
 import json
 import re
+import ssl
 import time
+import urllib.request
 from datetime import datetime, timezone
 
 from services.cache import warbond_cache
@@ -662,13 +666,20 @@ def _get_image_url(name: str) -> str:
     return ""
 
 
-def _curl_get(url: str, timeout: int = 15) -> str:
-    """HTTP GET via curl with TLS 1.2 fallback."""
-    result = subprocess.run(
-        ["curl", "-s", "-k", "--tlsv1.2", url],
-        capture_output=True, text=True, timeout=timeout
-    )
-    return result.stdout
+def _http_get(url: str, timeout: int = 15) -> str:
+    """HTTP GET using urllib.request (no curl dependency).
+    Equivalent to curl -s -k --tlsv1.2.
+    """
+    _ssl_ctx = ssl.create_default_context()
+    _ssl_ctx.check_hostname = False
+    _ssl_ctx.verify_mode = ssl.CERT_NONE
+
+    req = urllib.request.Request(url, headers={
+        "Accept": "text/html,application/json",
+        "User-Agent": "UEX-Trade-Navigator/3.18.0",
+    })
+    with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
+        return resp.read().decode("utf-8")
 
 
 def _parse_starnotifier(html: str) -> dict:
@@ -799,7 +810,7 @@ def fetch_warbonds(refresh: bool = False) -> dict:
             return cached
 
     try:
-        html = _curl_get("https://starnotifier.com/daily-warbonds")
+        html = _http_get("https://starnotifier.com/daily-warbonds")
         if not html:
             raise Exception("Empty response from starnotifier")
 

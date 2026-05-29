@@ -1,12 +1,16 @@
 """
 UEX API Client - Handles TLS compatibility, authentication and caching.
 Uses centralized TTL cache from cache.py.
+
+HTTP requests use Python's built-in urllib.request instead of subprocess+curl,
+because EdgeOne Cloud Functions may not have the curl binary available.
 """
 import json
 import os
-import subprocess
+import ssl
 import time
 import urllib.parse
+import urllib.request
 from typing import Dict, List, Optional, Tuple
 
 from services.cache import (
@@ -17,6 +21,12 @@ from services.cache import (
 
 BASE_URL = "https://api.uexcorp.uk/2.0"
 
+# SSL context: skip verification (equivalent to curl -k)
+# EdgeOne Cloud Functions may have outdated CA bundles
+_ssl_ctx = ssl.create_default_context()
+_ssl_ctx.check_hostname = False
+_ssl_ctx.verify_mode = ssl.CERT_NONE
+
 
 def _get_api_key() -> str:
     """Read UEX API Key from environment (lazy, so .env is loaded first)."""
@@ -24,7 +34,7 @@ def _get_api_key() -> str:
 
 
 def api_get(endpoint: str, params: dict = None, path_params: dict = None) -> dict:
-    """GET request using curl with TLS fallback chain.
+    """GET request using urllib.request (no curl dependency).
     Includes Authorization header when UEX_API_KEY is set.
 
     Args:
@@ -47,52 +57,49 @@ def api_get(endpoint: str, params: dict = None, path_params: dict = None) -> dic
         )
         url += "?" + qs
 
-    # Build curl headers — lazy read so .env is loaded first
+    # Build headers — lazy read so .env is loaded first
     api_key = _get_api_key()
-    header_args = []
+    headers = {
+        "Accept": "application/json",
+        "User-Agent": "UEX-Trade-Navigator/3.18.0",
+    }
     if api_key:
-        header_args += ["-H", f"Authorization: Bearer {api_key}"]
+        headers["Authorization"] = f"Bearer {api_key}"
 
-    tls_options = [
-        ["--tlsv1.2"],
-        ["--tlsv1.3"],
-        [],
-    ]
-
+    max_attempts = 2
     last_error = None
-    for tls_args in tls_options:
-        for attempt in range(2):
-            try:
-                cmd = ["curl", "-k", "-s"] + tls_args + ["--max-time", "90"] + header_args + [url]
-                result = subprocess.run(
-                    cmd, capture_output=True, text=True, timeout=120
-                )
-                if result.returncode != 0:
-                    last_error = f"curl({result.returncode}): {result.stderr[:100]}"
-                    if attempt < 1:
-                        time.sleep(1)
-                        continue
-                    break
-                data = json.loads(result.stdout)
+
+    for attempt in range(max_attempts):
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=90, context=_ssl_ctx) as resp:
+                body = resp.read().decode("utf-8")
+                data = json.loads(body)
                 return data
-            except json.JSONDecodeError:
-                last_error = "JSON parse failed"
-                if attempt < 1:
-                    time.sleep(1)
-                    continue
-                break
-            except subprocess.TimeoutExpired:
-                last_error = "timeout"
-                if attempt < 1:
-                    time.sleep(2)
-                    continue
-                break
-            except Exception as e:
-                last_error = str(e)
-                if attempt < 1:
-                    time.sleep(1)
-                    continue
-                break
+        except json.JSONDecodeError:
+            last_error = "JSON parse failed"
+            if attempt < max_attempts - 1:
+                time.sleep(1)
+                continue
+            break
+        except urllib.error.HTTPError as e:
+            last_error = f"HTTP {e.code}: {e.reason}"
+            if attempt < max_attempts - 1:
+                time.sleep(1)
+                continue
+            break
+        except urllib.error.URLError as e:
+            last_error = f"URL error: {e.reason}"
+            if attempt < max_attempts - 1:
+                time.sleep(2)
+                continue
+            break
+        except Exception as e:
+            last_error = str(e)
+            if attempt < max_attempts - 1:
+                time.sleep(1)
+                continue
+            break
 
     raise RuntimeError(f"API error for {endpoint}: {last_error}")
 

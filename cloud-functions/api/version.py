@@ -4,10 +4,20 @@ Single source of truth for the application version.
 Update this when making changes to the application.
 """
 
-VERSION = "3.17.0"
+VERSION = "3.18.0"
 
 # Changelog (displayed in app):
 CHANGELOG = [
+    {
+        "version": "3.18.0",
+        "date": "2026-05-29",
+        "changes": [
+            "关键修复：替换 subprocess+curl 为 Python urllib.request 发送 HTTP 请求",
+            "根因：EdgeOne Cloud Functions 环境可能不提供 curl 二进制，导致后端完全无法启动",
+            "影响：修复后端全部 API 返回 404 的问题（/api/health、/api/warbonds 等）",
+            "影响：修复战争债券模块 Request failed with status code 404",
+        ],
+    },
     {
         "version": "3.17.0",
         "date": "2026-05-29",
@@ -24,7 +34,7 @@ CHANGELOG = [
         "version": "3.16.1",
         "date": "2026-05-29",
         "changes": [
-            "改进：链式跑商数据时效警告列出具体商品名和status值（替代笼统的"部分数据较旧"）",
+            "改进：链式跑商数据时效警告列出具体商品名和status值（替代笼统的'部分数据较旧'）",
             "改进：进货/清仓路线当最省钱路线与最短距离路线一致时，明确提示用户",
         ],
     },
