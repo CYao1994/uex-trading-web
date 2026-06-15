@@ -122,32 +122,26 @@ class ParaTranzService:
             if orig.replace(' ', '').replace('-', '') == name_no_space:
                 return trans
 
-        # 3. Substring match - longest match first with filtering rules
-        matches = []
+        # 3. Longest substring match (single replacement only, no chaining)
+        best_orig = None
+        best_trans = None
+        best_len = 0
         for orig, trans in self._translations.items():
-            # Filter: skip orig length <= 2
             if len(orig) <= 2:
                 continue
-            # Filter: skip same translation (e.g., "-" -> "-")
             if trans == orig:
                 continue
-            # Filter: skip pure punctuation/number translations
             if all(c in ' -._0123456789' for c in orig):
                 continue
-            if name_lower in orig or orig in name_lower:
-                matches.append((orig, trans))
+            if len(orig) > best_len and (orig in name_lower or name_lower in orig):
+                best_orig = orig
+                best_trans = trans
+                best_len = len(orig)
 
-        if not matches:
+        if best_orig is None:
             return None
 
-        # Sort by length descending, longest match first
-        matches.sort(key=lambda x: len(x[0]), reverse=True)
-
-        result = name
-        for orig, trans in matches:
-            result = result.replace(orig, trans)
-
-        return result
+        return name.replace(best_orig, best_trans)
 
     def translate_by_key(self, key: str) -> Optional[str]:
         if not key or not self._loaded:
