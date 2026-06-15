@@ -780,6 +780,55 @@ def _http_post_json(url, data, timeout=20):
         return json_mod.loads(resp.read().decode("utf-8"))
 
 
+def _fetch_from_starnotifier() -> list:
+    """Fetch warbond items from starnotifier.com as fallback."""
+    html = _http_get("https://starnotifier.com/daily-warbonds")
+    if not html:
+        raise Exception("Empty response from starnotifier")
+
+    items = []
+
+    # Parse CCU items
+    ccu_section = re.search(r"<h2>Today's CCU Warbonds</h2>(.*?)<h2>", html, re.DOTALL)
+    if ccu_section:
+        ccu_html = ccu_section.group(1)
+        ccu_items = re.findall(r'<li><b>(.*?)</b>.*?\$(\d+).*?\$(\d+)', ccu_html)
+        for name, warbond_price, standard_price in ccu_items:
+            items.append({
+                "name": name.strip(),
+                "name_zh": _get_name_zh(name.strip()),
+                "category": "Ship Upgrades",
+                "category_id": 76,
+                "warbond_price": int(warbond_price) * 100,
+                "standard_price": int(standard_price) * 100,
+                "url": "https://robertsspaceindustries.com/store/pledge/browse/extras/ship-upgrades",
+                "image_url": _get_image_url(name.strip(), ""),
+                "is_limited": False,
+                "label": "Warbond",
+            })
+
+    # Parse Standalone Ships items
+    standalone_section = re.search(r"<h2>Today's Standalone Warbonds</h2>(.*?)<h2>", html, re.DOTALL)
+    if standalone_section:
+        standalone_html = standalone_section.group(1)
+        standalone_items = re.findall(r'<li><b>(.*?)</b>.*?\$(\d+).*?\$(\d+)', standalone_html)
+        for name, warbond_price, standard_price in standalone_items:
+            items.append({
+                "name": name.strip(),
+                "name_zh": _get_name_zh(name.strip()),
+                "category": "Standalone Ships",
+                "category_id": 72,
+                "warbond_price": int(warbond_price) * 100,
+                "standard_price": int(standard_price) * 100,
+                "url": "https://robertsspaceindustries.com/store/pledge/browse/extras/standalone-ships",
+                "image_url": _get_image_url(name.strip(), ""),
+                "is_limited": False,
+                "label": "Warbond",
+            })
+
+    return items
+
+
 def _parse_starnotifier(html: str) -> dict:
     """Parse starnotifier.com/daily-warbonds HTML page."""
     result = {
@@ -900,40 +949,63 @@ def _add_to_category(result: dict, item: dict):
 
 
 def fetch_warbonds(refresh: bool = False) -> dict:
-    """Fetch current warbond items from RSI GraphQL API. Uses centralized TTL cache."""
+    """Fetch current warbond items. Uses centralized TTL cache."""
     if not refresh:
         cached = warbond_cache.get()
         if cached is not None:
             return cached
+
     try:
         all_items = []
-        for category_id, category_name in RSI_CATEGORIES.items():
-            page = 1
-            while True:
-                query = _build_query(category_id, page=page, limit=50)
-                resp_data = _http_post_json(RSI_GRAPHQL_URL, query)
-                store_data = resp_data[0]["data"]["store"]["search"]
-                resources = store_data["resources"]
-                total = store_data["totalCount"]
-                for item in resources:
-                    if item.get("isWarbond"):
-                        native = item.get("nativePrice") or {}
-                        price = item.get("price") or {}
-                        all_items.append({
-                            "name": item["name"],
-                            "name_zh": _get_name_zh(item["name"]),
-                            "category": category_name,
-                            "category_id": category_id,
-                            "warbond_price": native.get("amount") or price.get("amount"),
-                            "standard_price": price.get("amount"),
-                            "url": f"https://robertsspaceindustries.com{item['url']}" if item.get("url") else "",
-                            "image_url": _get_image_url(item["name"], item.get("slug", "")),
-                            "is_limited": item.get("isVip", False),
-                            "label": item.get("label", ""),
-                        })
-                if page * 50 >= total:
-                    break
-                page += 1
+
+        # 1. Try RSI GraphQL API
+        rsi_success = False
+        try:
+            for category_id, category_name in RSI_CATEGORIES.items():
+                page = 1
+                while True:
+                    query = _build_query(category_id, page=page, limit=50)
+                    resp_data = _http_post_json(RSI_GRAPHQL_URL, query)
+                    store_data = resp_data[0]["data"]["store"]["search"]
+                    resources = store_data["resources"]
+                    total = store_data["totalCount"]
+                    for item in resources:
+                        if item.get("isWarbond"):
+                            native = item.get("nativePrice") or {}
+                            price = item.get("price") or {}
+                            all_items.append({
+                                "name": item["name"],
+                                "name_zh": _get_name_zh(item["name"]),
+                                "category": category_name,
+                                "category_id": category_id,
+                                "warbond_price": native.get("amount") or price.get("amount"),
+                                "standard_price": price.get("amount"),
+                                "url": f"https://robertsspaceindustries.com{item['url']}" if item.get("url") else "",
+                                "image_url": _get_image_url(item["name"], item.get("slug", "")),
+                                "is_limited": item.get("isVip", False),
+                                "label": item.get("label", ""),
+                            })
+                    if page * 50 >= total:
+                        break
+                    page += 1
+            rsi_success = True
+        except Exception as e:
+            print(f"RSI GraphQL API failed: {e}")
+
+        # 2. Fallback to starnotifier.com if RSI failed or returned no CCU items
+        has_ccu = any(i["category"] == "Ship Upgrades" for i in all_items)
+        if not rsi_success or not has_ccu:
+            try:
+                starnotifier_items = _fetch_from_starnotifier()
+                existing_names = {item["name"] for item in all_items}
+                for item in starnotifier_items:
+                    if item["name"] not in existing_names:
+                        all_items.append(item)
+                        existing_names.add(item["name"])
+            except Exception as e:
+                print(f"starnotifier.com fallback failed: {e}")
+
+        # 3. Build result
         result = {
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "rsi_store_url": "https://robertsspaceindustries.com/store/pledge/browse",

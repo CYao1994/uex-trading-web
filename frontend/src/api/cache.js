@@ -23,7 +23,7 @@ function buildCacheKey(endpoint, params = {}) {
 }
 
 /**
- * 获取缓存
+ * 获取缓存（未过期才返回）
  */
 export function get(key) {
   try {
@@ -33,13 +33,30 @@ export function get(key) {
     const entry = JSON.parse(raw);
     const now = Date.now();
 
-    // 检查是否过期
     if (now - entry.timestamp > entry.ttl) {
-      localStorage.removeItem(key);
       return null;
     }
 
     return entry.data;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 获取缓存（即使过期也返回，用于SWR stale-while-revalidate）
+ * Returns { data, expired } so caller knows if refresh is needed.
+ */
+export function getStale(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+
+    const entry = JSON.parse(raw);
+    const now = Date.now();
+    const expired = now - entry.timestamp > entry.ttl;
+
+    return { data: entry.data, expired };
   } catch {
     return null;
   }
@@ -153,4 +170,4 @@ function evictExpired() {
 
 export { buildCacheKey };
 
-export default { get, set, clear, getStats, buildCacheKey, CACHE_TTL };
+export default { get, getStale, set, clear, getStats, buildCacheKey, CACHE_TTL };

@@ -1,6 +1,6 @@
 // client.js - ??:??10? + ??1???? + localStorage????
 import axios from 'axios';
-import { get, set, buildCacheKey, CACHE_TTL } from './cache';
+import { getStale, set, buildCacheKey, CACHE_TTL } from './cache';
 
 // EdgeOne Pages ????:???????,API ??? /api
 // ?????,Vite proxy ?? /api -> localhost:8000
@@ -64,32 +64,49 @@ function getTTLForEndpoint(endpoint) {
 }
 
 /**
- * ????GET??
- * @param {string} endpoint - API??
- * @param {object} params - ????
- * @param {boolean} refresh - ??????
- * @param {number|null} timeoutOverride - ???????(??)
- * @returns {Promise} axios??
+ * SWR pattern GET request: return cached data immediately, refresh in background.
+ * @param {string} endpoint - API endpoint path
+ * @param {object} params - query params
+ * @param {boolean} refresh - force bypass cache and revalidate
+ * @param {number|null} timeoutOverride - request timeout (ms)
  */
 async function cachedGet(endpoint, params = {}, refresh = false, timeoutOverride = null) {
-  // refresh=true ?????
+  const cacheKey = buildCacheKey(endpoint, params);
+
   if (!refresh) {
-    const cacheKey = buildCacheKey(endpoint, params);
-    const cachedData = get(cacheKey);
-    if (cachedData !== null) {
-      // ???axios?????????
-      return { data: cachedData, __fromCache: true };
+    const stale = getStale(cacheKey);
+    if (stale !== null) {
+      // Return stale/valid cache immediately
+      if (!stale.expired) {
+        // Cache is fresh — fire background refresh (fire-and-forget)
+        _bgRefresh(endpoint, params, cacheKey, timeoutOverride);
+        return { data: stale.data, __fromCache: true };
+      }
+      // Cache exists but is stale — return stale data + fetch fresh in background
+      _bgRefresh(endpoint, params, cacheKey, timeoutOverride);
+      return { data: stale.data, __fromCache: true, __stale: true };
     }
   }
 
+  // No cache or forced refresh — fetch synchronously
   const response = await api.get(endpoint, { params, ...(timeoutOverride ? { timeout: timeoutOverride } : {}) });
-
-  // ????(?????GET??)
-  const cacheKey = buildCacheKey(endpoint, params);
   const ttl = getTTLForEndpoint(endpoint);
   set(cacheKey, response.data, ttl);
-
   return response;
+}
+
+/**
+ * Background refresh: fetch data and update cache silently.
+ * Errors are swallowed — user already has stale data.
+ */
+async function _bgRefresh(endpoint, params, cacheKey, timeoutOverride) {
+  try {
+    const response = await api.get(endpoint, { params, ...(timeoutOverride ? { timeout: timeoutOverride } : {}) });
+    const ttl = getTTLForEndpoint(endpoint);
+    set(cacheKey, response.data, ttl);
+  } catch {
+    // Background refresh failed — stale data still served, silent fail
+  }
 }
 
 // === ???API?? ===

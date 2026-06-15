@@ -112,20 +112,42 @@ class ParaTranzService:
         name = english_name.strip()
         name_lower = name.lower()
 
+        # 1. Exact match
         if name_lower in self._translations:
             return self._translations[name_lower]
 
+        # 2. Space/hyphen normalized match
         name_no_space = name_lower.replace(' ', '').replace('-', '')
         for orig, trans in self._translations.items():
             if orig.replace(' ', '').replace('-', '') == name_no_space:
                 return trans
 
+        # 3. Substring match - longest match first with filtering rules
+        matches = []
         for orig, trans in self._translations.items():
+            # Filter: skip orig length <= 2
+            if len(orig) <= 2:
+                continue
+            # Filter: skip same translation (e.g., "-" -> "-")
+            if trans == orig:
+                continue
+            # Filter: skip pure punctuation/number translations
+            if all(c in ' -._0123456789' for c in orig):
+                continue
             if name_lower in orig or orig in name_lower:
-                if len(name_lower) >= 4:
-                    return trans
+                matches.append((orig, trans))
 
-        return None
+        if not matches:
+            return None
+
+        # Sort by length descending, longest match first
+        matches.sort(key=lambda x: len(x[0]), reverse=True)
+
+        result = name
+        for orig, trans in matches:
+            result = result.replace(orig, trans)
+
+        return result
 
     def translate_by_key(self, key: str) -> Optional[str]:
         if not key or not self._loaded:
