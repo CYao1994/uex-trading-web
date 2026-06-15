@@ -24,7 +24,8 @@ from version import VERSION
 async def lifespan(app: FastAPI):
     try:
         from services.paratranz_service import paratranz
-        paratranz.load_translations()
+        import threading
+        threading.Thread(target=paratranz.load_translations, daemon=True).start()
     except Exception as e:
         logging.warning(f"ParaTranz preload failed (falling back to local dict): {e}")
     yield
