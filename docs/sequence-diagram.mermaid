@@ -1,0 +1,43 @@
+sequenceDiagram
+    actor User
+    participant Frontend as ChainPanel
+    participant API as /api/trade-chain
+    participant Planner as TradeChainPlanner
+    participant UEX as UexApiService
+    participant Cache as TTL Cache
+
+    User->>Frontend: 选择飞船 + 出发地 + 输入本金
+    Frontend->>API: POST /api/trade-chain<br/>{vehicle_id, origin_location_id, capital, max_legs}
+
+    API->>Planner: plan_trade_chain(request)
+
+    Note over Planner: 初始化: current_location = origin, current_capital = capital
+
+    loop 每一段 (1..max_legs)
+        Planner->>UEX: load_terminals() → 获取 current_location 下所有 terminal_ids
+        UEX->>Cache: 检查 terminals 缓存
+        Cache-->>UEX: 返回缓存/拉取新数据
+
+        Planner->>UEX: 获取所有 terminal_ids 的商品价格
+        Note over Planner,UEX: 遍历每个 terminal 的可购买商品:<br/>status_buy ≤ 2, price_buy > 0, scu_buy > 0
+
+        loop 对每种可购买商品 × 每个目的地 terminal
+            Planner->>UEX: get_commodity_prices(commodity_id)
+            UEX->>Cache: 检查 price 缓存
+            Cache-->>UEX: 返回缓存/拉取新数据
+
+            Note over Planner: 计算利润:<br/>可购买量 = min(scu_buy, floor(capital/price_buy), ship_scu)<br/>实际成交量 = min(可购买量, 目的地scu_sell_stock)<br/>利润 = 成交量 × (price_sell - price_buy)
+        end
+
+        alt 最高利润 > 0
+            Note over Planner: 选利润最高(并列取成交量最大者)<br/>更新: 位置=目的地, capital+=利润, 货仓清空
+            Planner-->>Planner: 记录本段 ChainLeg
+        else 最高利润 ≤ 0
+            Note over Planner: 提前终止, early_stop_reason="第N段无盈利路线"
+            Planner-->>Planner: break loop
+        end
+    end
+
+    Planner-->>API: TradeChainResponse
+    API-->>Frontend: JSON response
+    Frontend-->>User: 渲染链式结果卡片

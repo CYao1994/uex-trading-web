@@ -1,0 +1,715 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: #020810;
+  color: #e0e6ed;
+  font-family: 'Rajdhani', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* Font fallback stack - ensure text renders immediately with system fonts */
+@font-face {
+  font-family: 'Orbitron';
+  font-display: swap;
+  src: local('Orbitron');
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  font-display: swap;
+  src: local('Rajdhani');
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-display: swap;
+  src: local('Noto Sans SC');
+}
+
+/* === Custom scrollbar - HUD style === */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 10, 20, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(201, 162, 39, 0.3), rgba(154, 122, 26, 0.2));
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(201, 162, 39, 0.5), rgba(154, 122, 26, 0.4));
+}
+
+/* === Glow effects === */
+.glow-blue {
+  box-shadow: 0 0 8px rgba(201, 162, 39, 0.25);
+}
+.glow-text {
+  text-shadow: 0 0 6px rgba(201, 162, 39, 0.4);
+}
+
+/* === HUD Panel base styles === */
+.hud-panel {
+  background: linear-gradient(135deg, rgba(5, 15, 30, 0.85) 0%, rgba(2, 10, 20, 0.9) 100%);
+  border: 1px solid rgba(201, 162, 39, 0.12);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.4) 50%, transparent 100%);
+}
+
+/* === HUD Button styles === */
+.hud-btn {
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.hud-btn:hover::after {
+  left: 100%;
+}
+
+/* === Animations (global - never redefine in sx/@keyframes) === */
+@keyframes quantumJump {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Star twinkle - uses transform:scale */
+@keyframes starTwinkle {
+  0%, 100% { transform: scale(0.6); }
+  50% { transform: scale(1); }
+}
+
+/* Scan sweep line */
+@keyframes scanSweep {
+  0% { top: -3px; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* HUD corner brackets */
+@keyframes hudBracketPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* Data stream animation for loading */
+@keyframes dataStream {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+/* HUD flicker */
+@keyframes hudFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+/* Overlay fade-in */
+@keyframes overlayFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Warning bar slide-down */
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* Maintenance pulse */
+@keyframes maintPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Quantum pulse (loading overlay) */
+@keyframes quantumPulse {
+  0% { transform: scale(0.85) rotate(0deg); opacity: 0.4; }
+  50% { transform: scale(1.05) rotate(30deg); opacity: 1; }
+  100% { transform: scale(0.85) rotate(60deg); opacity: 0.4; }
+}
+
+/* Quantum flicker (loading overlay center icon) */
+@keyframes quantumFlicker {
+  0%, 100% { opacity: 0.7; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.3); }
+  75% { opacity: 0.85; filter: brightness(0.9); }
+}
+
+/* Loading particles */
+@keyframes particle0 {
+  0% { transform: rotate(0deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(360deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle1 {
+  0% { transform: rotate(45deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(405deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle2 {
+  0% { transform: rotate(90deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(450deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle3 {
+  0% { transform: rotate(135deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(495deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle4 {
+  0% { transform: rotate(180deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(540deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle5 {
+  0% { transform: rotate(225deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(585deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle6 {
+  0% { transform: rotate(270deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(630deg) translateX(65px); opacity: 0; }
+}
+@keyframes particle7 {
+  0% { transform: rotate(315deg) translateX(25px); opacity: 0.8; }
+  100% { transform: rotate(675deg) translateX(65px); opacity: 0; }
+}
+
+/* ============ ?? NEW - Whimsy & Delight Animations ============ */
+
+/* === Content fade-in (tab transitions) === */
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content-fade-enter {
+  animation: contentFadeIn 0.35s ease-out both;
+}
+
+/* === Dropdown stagger items === */
+@keyframes staggerItemIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-item {
+  animation: staggerItemIn 0.22s ease-out both;
+}
+
+/* === Toast slide-in === */
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* === Chip pop-in (for commodity chips) === */
+@keyframes chipPopIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.chip-pop-in {
+  animation: chipPopIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* === Chip pop-out === */
+@keyframes chipPopOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.4); }
+}
+
+.chip-pop-out {
+  animation: chipPopOut 0.18s ease-in forwards;
+}
+
+/* === Konami Easter Egg: Rainbow warp mode === */
+@keyframes rainbowShift {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.rainbow-mode {
+  animation: rainbowShift 4s ease-in-out;
+}
+.rainbow-mode * {
+  animation: rainbowShift 4s ease-in-out !important;
+}
+/* Overlay flash for rainbow activation */
+.rainbow-flash {
+  position: fixed; inset: 0; z-index: 99999;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+  animation: rainbowFlash 1s ease-out forwards;
+}
+@keyframes rainbowFlash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* === HUD Ship float animation === */
+@keyframes hudShipFloat {
+  0%, 100% { transform: scale(var(--ship-scale, 1)) rotate(var(--ship-rotate, 0deg)) translateY(0); }
+  50% { transform: scale(var(--ship-scale, 1)) rotate(var(--ship-rotate, 0deg)) translateY(-8px); }
+}
+
+/* === Particle trail float === */
+@keyframes trailFloat {
+  0% { opacity: 0; transform: translateX(-20px) rotate(var(--trail-rotate, 0deg)); }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(20px) rotate(var(--trail-rotate, 0deg)); }
+}
+
+/* === Number highlight flash (on completion) === */
+@keyframes numberHighlight {
+  0% { filter: brightness(1); }
+  35% { filter: brightness(1.6) drop-shadow(0 0 6px currentColor); }
+  100% { filter: brightness(1); }
+}
+
+.number-flash {
+  animation: numberHighlight 0.7s ease-out;
+}
+
+/* === Celebration glow pulse === */
+@keyframes celebrateGlow {
+  0% { box-shadow: 0 0 0 rgba(0, 255, 136, 0); }
+  30% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.25), 0 0 60px rgba(0, 255, 136, 0.1); }
+  100% { box-shadow: 0 0 0 rgba(0, 255, 136, 0); }
+}
+
+.celebrate-glow {
+  animation: celebrateGlow 1.5s ease-out;
+}
+
+/* === Panel accent glow pulse === */
+@keyframes panelGlowPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.panel-glow-pulse::before {
+  animation: panelGlowPulse 3s ease-in-out infinite !important;
+}
+
+/* === Tab indicator slide (Navbar) === */
+@keyframes tabIndicatorSlide {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.tab-active-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform-origin: left center;
+  animation: tabIndicatorSlide 0.3s ease-out;
+}
+
+/* === Warbond card stagger entrance === */
+@keyframes cardStaggerIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-stagger {
+  animation: cardStaggerIn 0.4s ease-out both;
+}
+
+/* === Hyperspace zoom (used by Konami easter egg) === */
+@keyframes hyperspaceZoom {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.95; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.hyperspace-zoom {
+  animation: hyperspaceZoom 2s ease-in-out;
+}
+
+/* === Button press ripple === */
+@keyframes btnRipple {
+  0% { transform: scale(0.98); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.btn-press {
+  animation: btnRipple 0.2s ease-out;
+}
+
+/* ============ MUI Overrides for HUD style ============ */
+
+/* TextField input */
+.MuiTextField-root .MuiOutlinedInput-root {
+  background: rgba(0, 15, 30, 0.4) !important;
+  border-radius: 2px !important;
+  transition: all 0.3s !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(201, 162, 39, 0.15) !important;
+  border-radius: 2px !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(201, 162, 39, 0.3) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(201, 162, 39, 0.5) !important;
+  box-shadow: 0 0 8px rgba(201, 162, 39, 0.15), inset 0 0 4px rgba(201, 162, 39, 0.05) !important;
+}
+
+/* Tabs */
+.MuiTabs-root {
+  min-height: 44px !important;
+}
+
+/* Table */
+.MuiTableHead-root .MuiTableCell-head {
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* Alert override */
+.MuiAlert-root {
+  border-radius: 2px !important;
+  border: 1px solid !important;
+}
+
+.MuiAlert-standardError {
+  background: rgba(255, 51, 102, 0.08) !important;
+  border-color: rgba(255, 51, 102, 0.25) !important;
+}
+
+.MuiAlert-standardWarning {
+  background: rgba(255, 170, 0, 0.08) !important;
+  border-color: rgba(255, 170, 0, 0.25) !important;
+}
+
+/* ============ Fleet Formation Animations ============ */
+
+/* 舰队编队浮动动画 */
+@keyframes fleetFloat {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(var(--fleet-scale, 1)) rotate(180deg) translateY(0);
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(var(--fleet-scale, 1)) rotate(180deg) translateY(-5px) translateX(3px);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(var(--fleet-scale, 1)) rotate(180deg) translateY(-8px);
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(var(--fleet-scale, 1)) rotate(180deg) translateY(-5px) translateX(-3px);
+  }
+}
+
+/* 引擎粒子浮动动画 */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: var(--particle-opacity, 0.3);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.2);
+    opacity: calc(var(--particle-opacity, 0.3) * 1.5);
+  }
+}
+
+/* 飞船尾迹动画 */
+@keyframes trailFly {
+  0% {
+    transform: translateX(-100%) rotate(var(--trail-rotate, 0deg));
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) rotate(var(--trail-rotate, 0deg));
+    opacity: 0;
+  }
+}
+
+/* 引擎喷射脉冲 */
+@keyframes enginePulse {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 3px rgba(255, 170, 0, 0.3));
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 170, 0, 0.6));
+  }
+}
+
+/* 编队线动画 */
+@keyframes formationLine {
+  0%, 100% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+  50% {
+    stroke-dashoffset: 20;
+    opacity: 0.6;
+  }
+}
+
+/* ============ Page Transition Animations ============ */
+
+/* 页面淡入动画 */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 骨架屏脉冲动画 */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 162, 39, 0.05) 25%,
+    rgba(201, 162, 39, 0.1) 50%,
+    rgba(201, 162, 39, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* 加载旋转动画 */
+@keyframes loadingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  animation: loadingSpin 1s linear infinite;
+}
+
+/* 进度条动画 */
+@keyframes progressBar {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* 卡片交错入场动画 */
+@keyframes cardStaggerIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-stagger {
+  animation: cardStaggerIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+/* 状态指示器脉冲 */
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
+  }
+}
+
+/* ============ Enhanced Animations ============ */
+
+/* 淡入上升动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 淡入缩放动画 */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 光效脉冲 */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(201, 162, 39, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(201, 162, 39, 0.4);
+  }
+}
+
+/* 边框光效 */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(201, 162, 39, 0.1);
+  }
+  50% {
+    border-color: rgba(201, 162, 39, 0.3);
+  }
+}
+
+/* 浮动动画 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* 旋转动画 */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 光标闪烁 */
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* 文字打字机效果 */
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* 滑入动画 */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

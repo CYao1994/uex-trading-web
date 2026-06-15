@@ -1,0 +1,8 @@
+{
+  "mainlandRegions": ["ap-guangzhou"],
+  "overseasRegions": ["ap-singapore"],
+  "cloudFunctions": {
+    "directory": "cloud-functions/backend",
+    "pythonRuntime": "python3.9"
+  }
+}

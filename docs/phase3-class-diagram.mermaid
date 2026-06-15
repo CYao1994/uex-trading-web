@@ -1,0 +1,94 @@
+classDiagram
+    direction LR
+
+    class ChainCommodity {
+        +int commodity_id
+        +str commodity_name
+        +str commodity_name_zh
+        +float price_buy
+        +float price_sell
+        +int volume_scu
+        +float total_cost
+        +float total_revenue
+        +float profit
+        +bool is_primary
+    }
+
+    class ChainLeg {
+        +int leg_index
+        +str origin_name
+        +str origin_name_zh
+        +str commodity_name
+        +str commodity_name_zh
+        +float price_buy
+        +float price_sell
+        +int volume_scu
+        +float total_cost
+        +float total_revenue
+        +float profit
+        +str destination_name
+        +str destination_name_zh
+        +str destination_system
+        +str destination_system_zh
+        +str destination_planet
+        +str destination_planet_zh
+        +List~ChainCommodity~ commodities
+    }
+
+    class TradeChainResponse {
+        +List~ChainLeg~ legs
+        +float total_profit
+        +float final_capital
+        +int total_legs
+        +str early_stop_reason
+        +List~str~ warnings
+    }
+
+    class CommodityOption {
+        +int id
+        +str name
+        +str name_zh
+        +str category
+    }
+
+    class VehicleOption {
+        +int id
+        +str name
+        +str name_zh
+        +int scu
+    }
+
+    class TerminalOption {
+        +int id
+        +str name
+        +str name_zh
+        +str system
+        +str system_zh
+        +str planet
+        +str planet_zh
+    }
+
+    class PriceEntry {
+        +int terminal_id
+        +str terminal_name
+        +str terminal_name_zh
+        +str system
+        +str system_zh
+        +str planet
+        +str planet_zh
+        +int buy_price
+        +int sell_price
+        +int price_star
+    }
+
+    class CommodityPricesResponse {
+        +int commodity_id
+        +str commodity_name
+        +str commodity_name_zh
+        +List~PriceEntry~ buy_prices
+        +List~PriceEntry~ sell_prices
+    }
+
+    TradeChainResponse "1" *-- "0..*" ChainLeg : legs
+    ChainLeg "1" o-- "0..*" ChainCommodity : commodities
+    CommodityPricesResponse "1" *-- "0..*" PriceEntry : buy_prices/sell_prices

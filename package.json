@@ -1,0 +1,18 @@
+{
+  "name": "uex-trading-web",
+  "private": true,
+  "version": "3.22.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "prepare": "husky"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7"
+  }
+}

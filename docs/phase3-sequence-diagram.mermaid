@@ -1,0 +1,44 @@
+sequenceDiagram
+    participant Client as ?? (ChainPanel)
+    participant API as /trade-chain
+    participant TC as trade_chain.py
+    participant FBL as _find_best_leg
+    participant FSC as _find_supplement_commodities
+    participant MLD as _make_leg_dict
+
+    Client->>API: POST /trade-chain {vehicle_id, capital, ...}
+    API->>TC: plan_trade_chain(...)
+    TC->>TC: _resolve_scu() + _resolve_origin_terminals()
+    TC->>TC: get_all_prices() ? terminal_prices
+    TC->>TC: _build_destination_lookup()
+
+    loop ?? (1..max_legs)
+        TC->>TC: _scan_buyable() ? buyable[]
+        TC->>FBL: _find_best_leg(buyable, dest_lookup, ...)
+        FBL-->>TC: primary_leg {commodity_id, dest_terminal_id, profit, ...}
+
+        Note over TC: ????? ? 0 ? ????
+
+        TC->>FSC: _find_supplement_commodities(primary_leg, buyable, dest_lookup, ...)
+        FSC->>FSC: 1. ???? SCU = ship_scu - primary.volume_scu
+        FSC->>FSC: 2. ?????? = capital - primary.total_cost
+        FSC->>FSC: 3. ???????????
+        FSC->>FSC: 4. ? commodity ? terminal ??????
+        FSC->>FSC: 5. ???????,??????4?
+        FSC-->>TC: supplements [{commodity_id, volume_scu, profit, ...}, ...]
+
+        TC->>MLD: _make_leg_dict(leg_idx, origin_td, dest_td, primary, supplements)
+        MLD-->>TC: ChainLeg {???? + commodities: [primary_obj, ...supplement_objs]}
+
+        TC->>TC: capital += sum(???? profit)
+        TC->>TC: ??? origin = ??? location
+    end
+
+    TC-->>API: TradeChainResponse {legs, total_profit, ...}
+    API-->>Client: JSON response
+
+    Note over Client: ChainResult ???????
+    Client->>Client: ?? leg.commodities[]
+    Client->>Client: ???: ??"??"??
+    Client->>Client: ????: ??"??"?? (??)
+    Client->>Client: ???: ?SCU/???/???/???

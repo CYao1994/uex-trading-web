@@ -1,0 +1,81 @@
+classDiagram
+    direction LR
+
+    class TradeChainRequest {
+        +int vehicle_id
+        +int scu_override
+        +int origin_location_id
+        +str origin_location_name
+        +int capital
+        +int max_legs
+        +validate()
+    }
+
+    class TradeChainResponse {
+        +List~ChainLeg~ legs
+        +int total_profit
+        +int final_capital
+        +int total_legs
+        +str early_stop_reason
+        +List~str~ warnings
+    }
+
+    class ChainLeg {
+        +int leg_index
+        +str origin_name
+        +str origin_name_zh
+        +str commodity_name
+        +str commodity_name_zh
+        +int price_buy
+        +int price_sell
+        +int volume_scu
+        +int total_cost
+        +int total_revenue
+        +int profit
+        +str destination_name
+        +str destination_name_zh
+        +str destination_system
+        +str destination_system_zh
+        +str destination_planet
+        +str destination_planet_zh
+    }
+
+    class LocationOption {
+        +int location_id
+        +str location_name
+        +str location_name_zh
+        +str type
+        +str system
+        +str system_zh
+        +str planet
+        +str planet_zh
+        +List~int~ terminal_ids
+    }
+
+    class VehicleOption {
+        +int id
+        +str name
+        +str name_zh
+        +int scu
+    }
+
+    class TradeChainPlanner {
+        +plan_trade_chain(request: TradeChainRequest) TradeChainResponse
+        -_scan_buyable_commodities(terminal_ids, capital, scu) List~dict~
+        -_find_best_leg(buyable_items, scu) dict
+        -_resolve_location(location_id, location_name) List~int~
+    }
+
+    class UexApiService {
+        +load_vehicles(refresh: bool) List~dict~
+        +get_locations(refresh: bool) List~LocationOption~
+        +load_terminals(refresh: bool) List~dict~
+        +get_commodity_prices(commodity_id: int, refresh: bool) List~dict~
+    }
+
+    TradeChainRequest --> TradeChainResponse : produces via TradeChainPlanner
+    TradeChainResponse *-- ChainLeg : contains
+    TradeChainPlanner --> UexApiService : uses
+    TradeChainPlanner --> TradeChainRequest : reads
+    UexApiService ..> LocationOption : returns
+    UexApiService ..> VehicleOption : returns

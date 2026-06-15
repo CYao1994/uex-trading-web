@@ -1,0 +1,21 @@
+{
+  "name": "Astral Lance 星槊 - 星际公民交易工具",
+  "short_name": "星槊交易",
+  "description": "星际公民交易路线规划工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020810",
+  "theme_color": "#c9a227",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "utilities"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}
