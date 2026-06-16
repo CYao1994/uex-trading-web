@@ -93,7 +93,6 @@ def _build_query(category_id: int, page: int = 1, limit: int = 50) -> list:
                         url
                         price { amount discounted }
                         nativePrice { amount discounted discountDescription }
-                        media { ... on TyMedia { url } }
                         ... on TySku { isWarbond isPackage label }
                         ... on TyBundle { isVip }
                     }
