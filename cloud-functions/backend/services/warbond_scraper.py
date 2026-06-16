@@ -497,8 +497,8 @@ SHIP_MEDIA_SLUG = {
     "Idris-M": "59wd4xwt2qms4",
     "Idris-P": "yfj9hnf0hrali",
     "Intrepid": "3vk6dnvwcm0rk",
-    "Ironclad": "aq9hg8ma2o9xp",
-    "Ironclad Assault": "m2w78ghl9c6aa",
+    "Ironclad Assault": "",
+    "Ironclad": "",
     "Javelin": "oc89p5ksizcla",
     "Khartu-Al": "zd5doe8h0xemz",
     "Kraken": "nnpwaac1eqp4p",
@@ -713,11 +713,11 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
 
     Args:
         name: Ship/item name for fallback lookups.
-        rsi_slug: GraphQL slug from RSI store, used as priority CDN slug.
+        rsi_slug: GraphQL slug from RSI store (NOT a media slug, ignored).
     """
-    # 0. Prioritize GraphQL rsi_slug if provided
-    if rsi_slug:
-        return f"https://media.robertsspaceindustries.com/{rsi_slug}/heap_infobox.jpg"
+    # NOTE: rsi_slug from GraphQL is a store slug, NOT a media slug.
+    # Store slugs don't work on media.robertsspaceindustries.com (404).
+    # We only use SHIP_MEDIA_SLUG dictionary for correct media slugs.
 
     # 1. Direct lookup in SHIP_MEDIA_SLUG
     slug = SHIP_MEDIA_SLUG.get(name)
