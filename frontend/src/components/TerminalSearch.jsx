@@ -1,11 +1,10 @@
-// TerminalSearch.jsx - 终端搜索（含历史记录）
-import { useState, useRef, useEffect } from 'react';
+// TerminalSearch.jsx - 终端搜索（含历史记录�?import { useState, useRef, useEffect } from 'react';
 import { TextField, Box, Typography, Paper, CircularProgress, IconButton } from '@mui/material';
 import { LocationOn, History, Close, DeleteSweep } from '@mui/icons-material';
 import { loadAllTerminals } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
-function TerminalSearch({ value, onChange, label = '出发地' }) {
+function TerminalSearch({ value, onChange, label = '出发�? }) {
   const [query, setQuery] = useState(value || '');
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -60,7 +59,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
         }).slice(0, 20) : allTerminals.slice(0, 20);
         setOptions(filtered);
         if (filtered.length === 0) {
-          setError('未找到匹配终端');
+          setError('未找到匹配终�?);
         }
         setShowDropdown(true);
       } catch (e) {
@@ -73,8 +72,8 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
           msg = '搜索超时，请稍后重试';
         } else if (e.response) {
           const status = e.response.status;
-          if (status >= 500) msg = `服务暂时不可用 (${status})，请稍后重试`;
-          else if (status === 404) msg = '搜索服务异常，请联系开发者';
+          if (status >= 500) msg = `服务暂时不可�?(${status})，请稍后重试`;
+          else if (status === 404) msg = '搜索服务异常，请联系开发�?;
           else if (status >= 400) msg = `请求错误 (${status})`;
         }
         setError(msg);
@@ -90,8 +89,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
     setShowDropdown(false);
     setShowHistory(false);
     setError('');
-    // 添加到历史记录
-    addToHistory({
+    // 添加到历史记�?    addToHistory({
       id: option.id,
       name: option.name,
       name_zh: option.name_zh,
@@ -129,23 +127,22 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
         inputRef={inputRef}
         fullWidth
         label={label}
-        placeholder="搜索终端名称（中英文均可）"
+        placeholder="搜索终端名称（中英文均可�?
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
         onFocus={handleFocus}
         InputProps={{
-          startAdornment: <LocationOn sx={{ color: 'primary.main', mr: 1, fontSize: 20 }} />,
+          startAdornment: <LocationOn sx={{ color: 'rgba(201, 162, 39, 0.3)', mr: 1, fontSize: 18 }} />,
           endAdornment: loading ? <CircularProgress size={16} /> : null,
         }}
         sx={{
-          '& .MuiInputLabel-root': { color: 'text.secondary' },
-          '& .MuiInputBase-input': { color: 'text.primary' },
-          '& .MuiOutlinedInput-root': {
+          '& .MuiInputLabel-root': { color: 'rgba(201, 162, 39, 0.5)' },
+          '& .MuiInputBase-input': { color: '#c9a227', fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif', fontSize: '0.85rem' },
+          '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(201, 162, 39, 0.15)' }, '&:hover fieldset': { borderColor: 'rgba(201, 162, 39, 0.3)' },
             '&.Mui-focused': {
               boxShadow: '0 0 8px rgba(201, 162, 39, 0.3)',
             },
-            '&.Mui-focused fieldset': {
-              borderColor: 'rgba(201, 162, 39, 0.6)',
+            '&.Mui-focused fieldset': { borderColor: 'rgba(201, 162, 39, 0.5)',
             },
           },
         }}
@@ -180,10 +177,10 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
                 transition: 'background 0.15s',
               }}
             >
-              <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600 }}>
+              <Typography variant="body2" sx={{ color: '#c9a227', fontWeight: 600 }}>
                 {opt.name_zh}
               </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              <Typography variant="caption" sx={{ color: 'rgba(201, 162, 39, 0.5)' }}>
                 {opt.name} · {opt.system_zh}
               </Typography>
             </Box>
@@ -218,8 +215,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
               letterSpacing: '0.05em',
             }}>
               <History sx={{ fontSize: 12, mr: 0.5, verticalAlign: 'middle' }} />
-              最近搜索
-            </Typography>
+              最近搜�?            </Typography>
             <IconButton 
               size="small" 
               onClick={(e) => { e.stopPropagation(); clearHistory(); setShowHistory(false); }}
@@ -265,7 +261,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
         </Paper>
       )}
 
-      {/* 空搜索结果 */}
+      {/* 空搜索结�?*/}
       {showDropdown && options.length === 0 && !loading && query.trim() && (
         <Paper
           ref={dropdownRef}
@@ -278,11 +274,9 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
           }}
         >
           <Typography sx={{ color: 'rgba(201, 162, 39, 0.4)', fontSize: '0.8rem', mb: 0.5 }}>
-            星图中未找到匹配的终端
-          </Typography>
+            星图中未找到匹配的终�?          </Typography>
           <Typography sx={{ color: 'rgba(201, 162, 39, 0.2)', fontSize: '0.65rem' }}>
-            试试换一个关键词？
-          </Typography>
+            试试换一个关键词�?          </Typography>
         </Paper>
       )}
 
