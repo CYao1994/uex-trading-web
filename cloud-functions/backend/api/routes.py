@@ -289,13 +289,15 @@ async def health_check():
     # If critical caches are empty, trigger background warmup
     if term_count == 0 or comm_count == 0 or prices_count == 0:
         async def _warmup():
+            import functools
+            loop = asyncio.get_event_loop()
             try:
                 if term_count == 0:
-                    load_terminals()
+                    await loop.run_in_executor(None, load_terminals)
                 if comm_count == 0:
-                    load_commodities()
+                    await loop.run_in_executor(None, load_commodities)
                 if prices_count == 0:
-                    load_all_item_prices()
+                    await loop.run_in_executor(None, load_all_item_prices)
             except Exception:
                 pass  # Warmup failure is non-critical
         asyncio.create_task(_warmup())
@@ -782,24 +784,26 @@ async def warmup():
     )
 
     async def _warm():
+        import asyncio
+        loop = asyncio.get_event_loop()
         try:
-            load_terminals()
+            await loop.run_in_executor(None, load_terminals)
         except Exception:
             pass
         try:
-            load_commodities()
+            await loop.run_in_executor(None, load_commodities)
         except Exception:
             pass
         try:
-            get_all_prices()
+            await loop.run_in_executor(None, get_all_prices)
         except Exception:
             pass
         try:
-            load_vehicles()
+            await loop.run_in_executor(None, load_vehicles)
         except Exception:
             pass
         try:
-            load_all_item_prices()
+            await loop.run_in_executor(None, load_all_item_prices)
         except Exception:
             pass
 
