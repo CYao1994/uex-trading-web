@@ -796,6 +796,10 @@ async def warmup():
             load_vehicles()
         except Exception:
             pass
+        try:
+            load_all_item_prices()
+        except Exception:
+            pass
 
     asyncio.create_task(_warm())
     return {"status": "ok", "message": "Cache warmup triggered"}
