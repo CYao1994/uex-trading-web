@@ -803,7 +803,7 @@ def _fetch_from_starnotifier() -> list:
     ccu_section = re.search(r"<h2>Today's CCU Warbonds</h2>(.*?)<h2>", html, re.DOTALL)
     if ccu_section:
         ccu_html = ccu_section.group(1)
-        ccu_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', ccu_html)
+        ccu_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', ccu_html, re.DOTALL)
         for name, warbond_price, standard_price in ccu_items:
             items.append({
                 "name": name.strip(),
@@ -822,7 +822,7 @@ def _fetch_from_starnotifier() -> list:
     standalone_section = re.search(r"<h2>Today's (?:Extra \(standalone ships\) )?Warbonds</h2>(.*?)$", html, re.DOTALL)
     if standalone_section:
         standalone_html = standalone_section.group(1)
-        standalone_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', standalone_html)
+        standalone_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', standalone_html, re.DOTALL)
         for name, warbond_price, standard_price in standalone_items:
             items.append({
                 "name": name.strip(),
