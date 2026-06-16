@@ -122,10 +122,8 @@ class ParaTranzService:
             if orig.replace(' ', '').replace('-', '') == name_no_space:
                 return trans
 
-        # 3. Longest substring match (single replacement only, no chaining)
-        best_orig = None
-        best_trans = None
-        best_len = 0
+        # 3. Non-overlapping longest-first substring replacement
+        matches = []
         for orig, trans in self._translations.items():
             if len(orig) <= 2:
                 continue
@@ -133,15 +131,30 @@ class ParaTranzService:
                 continue
             if all(c in ' -._0123456789' for c in orig):
                 continue
-            if len(orig) > best_len and (orig in name_lower or name_lower in orig):
-                best_orig = orig
-                best_trans = trans
-                best_len = len(orig)
+            if orig in name_lower:
+                matches.append((orig, trans))
 
-        if best_orig is None:
+        if not matches:
             return None
 
-        return name.replace(best_orig, best_trans)
+        matches.sort(key=lambda x: len(x[0]), reverse=True)
+
+        # Greedy non-overlapping replacement
+        occupied = set()
+        result_chars = list(name)
+        for orig, trans in matches:
+            start = name_lower.find(orig)
+            if start == -1:
+                continue
+            end = start + len(orig)
+            if any(i in occupied for i in range(start, end)):
+                continue
+            occupied.update(range(start, end))
+            for i in range(start, end):
+                result_chars[i] = None
+            result_chars[start] = trans
+
+        return ''.join(c for c in result_chars if c is not None)
 
     def translate_by_key(self, key: str) -> Optional[str]:
         if not key or not self._loaded:
