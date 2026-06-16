@@ -733,7 +733,7 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
 
     # 3. Prefix match in SHIP_MEDIA_SLUG (handles suffixes like " Warbond Edition")
     for key, slug_val in sorted(SHIP_MEDIA_SLUG.items(), key=lambda x: -len(x[0])):
-        if name.startswith(key):
+        if slug_val and name.startswith(key):
             return f"https://media.robertsspaceindustries.com/{slug_val}/heap_infobox.jpg"
 
     # 4. Strip manufacturer prefix and try again
@@ -746,7 +746,7 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
                 return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
             # Prefix match on base name
             for key, slug_val in sorted(SHIP_MEDIA_SLUG.items(), key=lambda x: -len(x[0])):
-                if base.startswith(key):
+                if slug_val and base.startswith(key):
                     return f"https://media.robertsspaceindustries.com/{slug_val}/heap_infobox.jpg"
             # Alias on base name
             alias = _SHIP_NAME_ALIASES.get(base)
