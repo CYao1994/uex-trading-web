@@ -287,13 +287,15 @@ async def health_check():
     prices_count = len(all_item_prices_cache.data) if all_item_prices_cache.data else 0
 
     # If critical caches are empty, trigger background warmup
-    if term_count == 0 or comm_count == 0:
+    if term_count == 0 or comm_count == 0 or prices_count == 0:
         async def _warmup():
             try:
                 if term_count == 0:
                     load_terminals()
                 if comm_count == 0:
                     load_commodities()
+                if prices_count == 0:
+                    load_all_item_prices()
             except Exception:
                 pass  # Warmup failure is non-critical
         asyncio.create_task(_warmup())
