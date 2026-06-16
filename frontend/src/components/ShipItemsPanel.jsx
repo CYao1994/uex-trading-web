@@ -125,14 +125,13 @@ function ShipItemsPanel({ categories, itemTypeLabel, accentColor, filterConfig }
     dialogItemIdRef.current = item.id;
     const attrs = getItemAttrs(item.id);
     setDialogAttrs(attrs);
-    const prices = await getItemPrices(item.id);
-    if (prices.length > 0) {
+    if (batchReady) {
+      const prices = await getItemPrices(item.id);
       setDialogPrices(prices);
-      setDialogPricesLoading(false);
     } else {
       setDialogPrices([]);
-      setDialogPricesLoading(true);
     }
+    setDialogPricesLoading(false);
   };
 
   useEffect(() => {
