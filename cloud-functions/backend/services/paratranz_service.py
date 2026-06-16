@@ -123,6 +123,8 @@ class ParaTranzService:
                 return trans
 
         # 3. Non-overlapping longest-first substring replacement
+        # Only replace if the best match covers >= 50% of input to avoid
+        # partial word corruption in compound names
         matches = []
         for orig, trans in self._translations.items():
             if len(orig) <= 2:
@@ -138,6 +140,10 @@ class ParaTranzService:
             return None
 
         matches.sort(key=lambda x: len(x[0]), reverse=True)
+
+        best_orig, best_trans = matches[0]
+        if len(best_orig) < len(name) * 0.5:
+            return None
 
         # Greedy non-overlapping replacement
         occupied = set()
