@@ -644,6 +644,13 @@ async def items_prices_all(id_category: int = Query(..., description="UEX catego
     """Get all item prices for a specific category. Uses bulk loading instead of per-item API calls.
     Optimized: filters by id_category from price data directly (no need to load item list).
     """
+    # Check processed result cache first
+    from services.cache import items_prices_all_result_cache
+    if not refresh:
+        cached = items_prices_all_result_cache.get(id_category)
+        if cached is not None:
+            return cached
+
     all_prices = load_all_item_prices(refresh=refresh)
     
     # Load ALL terminals (including shops) for full location data
@@ -659,10 +666,8 @@ async def items_prices_all(id_category: int = Query(..., description="UEX catego
         if not tid:
             continue
         
-        # Get terminal info with full location data
         t_info = terminal_map.get(tid, {})
         
-        # Get location from terminal data, with FK-based fallback
         sys_name = t_info.get("star_system_name") or p.get("star_system_name") or ""
         planet_name = t_info.get("planet_name") or p.get("planet_name") or ""
         term_name = t_info.get("name") or p.get("terminal_name") or f"Terminal-{tid}"
@@ -691,11 +696,15 @@ async def items_prices_all(id_category: int = Query(..., description="UEX catego
             durability=p.get("durability"),
         ))
 
-    return ItemsPricesAllResponse(
+    result = ItemsPricesAllResponse(
         id_category=id_category,
         category_name_zh=ITEM_CATEGORY_ZH.get(id_category, ""),
         prices=filtered_prices,
     )
+    
+    # Cache the processed result
+    items_prices_all_result_cache.set(id_category, result)
+    return result
 
 
 @router.get("/items-attributes", response_model=ItemsAttributesBatchResponse)

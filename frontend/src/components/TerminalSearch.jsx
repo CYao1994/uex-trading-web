@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { TextField, Box, Typography, Paper, CircularProgress, IconButton } from '@mui/material';
 import { LocationOn, History, Close, DeleteSweep } from '@mui/icons-material';
-import { searchTerminals } from '../api/client';
+import { loadAllTerminals } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
 function TerminalSearch({ value, onChange, label = '出发地' }) {
@@ -49,9 +49,17 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await searchTerminals(val);
-        setOptions(res.data);
-        if (res.data.length === 0) {
+        const allTerminals = await loadAllTerminals();
+        const q = val.toLowerCase().trim();
+        const filtered = q ? allTerminals.filter(t => {
+          const name = (t.name || '').toLowerCase();
+          const zh = (t.name_zh || '').toLowerCase();
+          const sys = (t.system || '').toLowerCase();
+          const sysZh = (t.system_zh || '').toLowerCase();
+          return name.includes(q) || zh.includes(q) || sys.includes(q) || sysZh.includes(q);
+        }).slice(0, 20) : allTerminals.slice(0, 20);
+        setOptions(filtered);
+        if (filtered.length === 0) {
           setError('未找到匹配终端');
         }
         setShowDropdown(true);

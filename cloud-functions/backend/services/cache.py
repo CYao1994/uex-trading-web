@@ -226,6 +226,7 @@ item_cache = PriceCache(TTL_ITEMS)
 item_price_cache = PriceCache(TTL_ITEM_PRICES)
 item_attr_cache = PriceCache(TTL_ITEM_ATTRS)
 all_item_prices_cache = TTLCache(TTL_ALL_ITEM_PRICES, "all_item_prices")
+items_prices_all_result_cache = PriceCache(TTL_ALL_ITEM_PRICES)  # processed results by id_category
 categories_attr_cache = PriceCache(TTL_CATEGORIES_ATTRS)  # keyed by id_category
 all_terminal_cache = TTLCache(TTL_TERMINALS, "all_terminals")
 space_station_cache = TTLCache(TTL_LOCATIONS, "space_stations")

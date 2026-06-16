@@ -123,6 +123,28 @@ export const searchTerminals = (q, refresh = false) =>
 export const searchCommodities = (q, refresh = false) =>
   cachedGet('/commodities', { q }, refresh, 30000);
 
+// Load all commodities once, then filter locally
+let _allCommoditiesCache = null;
+let _allCommoditiesPromise = null;
+
+export async function loadAllCommodities() {
+  if (_allCommoditiesCache) return _allCommoditiesCache;
+  if (_allCommoditiesPromise) return _allCommoditiesPromise;
+
+  _allCommoditiesPromise = cachedGet('/commodities', { q: '' }, false, 30000)
+    .then(res => {
+      _allCommoditiesCache = res.data || [];
+      _allCommoditiesPromise = null;
+      return _allCommoditiesCache;
+    })
+    .catch(() => {
+      _allCommoditiesPromise = null;
+      return [];
+    });
+
+  return _allCommoditiesPromise;
+}
+
 export const getWarbonds = (refresh = false) =>
   cachedGet('/warbonds', {}, refresh, 60000);
 
@@ -134,6 +156,28 @@ export const clearCache = () =>
 
 export const searchLocations = (q, refresh = false) =>
   cachedGet('/locations', { q }, refresh);
+
+// Load all terminals once, then filter locally (avoids per-keystroke API calls)
+let _allTerminalsCache = null;
+let _allTerminalsPromise = null;
+
+export async function loadAllTerminals() {
+  if (_allTerminalsCache) return _allTerminalsCache;
+  if (_allTerminalsPromise) return _allTerminalsPromise;
+
+  _allTerminalsPromise = cachedGet('/terminals', { q: '' }, false, 30000)
+    .then(res => {
+      _allTerminalsCache = res.data || [];
+      _allTerminalsPromise = null;
+      return _allTerminalsCache;
+    })
+    .catch(() => {
+      _allTerminalsPromise = null;
+      return [];
+    });
+
+  return _allTerminalsPromise;
+}
 
 export const searchVehicles = (q, refresh = false) =>
   cachedGet('/vehicles', { q }, refresh);

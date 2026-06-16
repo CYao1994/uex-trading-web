@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { TextField, Box, Typography, Paper, Chip, CircularProgress, IconButton, Button } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Close as CloseIcon, Inventory2, Check as CheckIcon, DeleteSweep, History } from '@mui/icons-material';
-import { searchCommodities } from '../api/client';
+import { loadAllCommodities } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
 function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
@@ -300,9 +300,15 @@ function CommodityInput({ items, onItemsChange }) {
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await searchCommodities(val);
-        setOptions(res.data);
-        if (res.data.length === 0) {
+        const allCommodities = await loadAllCommodities();
+        const q = val.toLowerCase().trim();
+        const filtered = q ? allCommodities.filter(c => {
+          const name = (c.name || '').toLowerCase();
+          const zh = (c.name_zh || '').toLowerCase();
+          return name.includes(q) || zh.includes(q);
+        }).slice(0, 30) : allCommodities.slice(0, 30);
+        setOptions(filtered);
+        if (filtered.length === 0) {
           setError('未找到匹配商品');
         }
         setShowDropdown(true);

@@ -276,10 +276,20 @@ function ChainPanel({ onResult }) {
           inputValue={locationInput}
           onInputChange={(_, val) => handleLocationSearch(val)}
           onChange={(_, val) => setOrigin(val)}
+          renderOption={(props, opt) => (
+            <Box {...props} sx={{ ...props.sx, px: 2, py: 1 }}>
+              <Typography variant="body2" sx={{ color: '#c9a227', fontWeight: 600, fontSize: '0.85rem' }}>
+                {opt.location_name_zh || opt.location_name}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'rgba(201, 162, 39, 0.4)', fontSize: '0.7rem' }}>
+                {opt.location_name} · {opt.system_zh || opt.system}
+              </Typography>
+            </Box>
+          )}
           renderInput={(params) => (
             <TextField
               {...params}
-              placeholder="搜索地点..."
+              placeholder="搜索地点（中英文均可）"
               sx={{
                 '& .MuiOutlinedInput-root': {
                   color: '#c9a227',
@@ -297,12 +307,12 @@ function ChainPanel({ onResult }) {
             '& .MuiAutocomplete-popupIndicator': { color: 'rgba(201, 162, 39, 0.3)' },
             '& .MuiAutocomplete-clearIndicator': { color: 'rgba(201, 162, 39, 0.3)' },
             '& .MuiAutocomplete-paper': {
-              background: 'rgba(3, 12, 25, 0.97)',
-              border: '1px solid rgba(201, 162, 39, 0.15)',
+              background: 'rgba(13, 19, 33, 0.98)',
+              border: '1px solid rgba(201, 162, 39, 0.2)',
+              backdropFilter: 'blur(10px)',
             },
             '& .MuiAutocomplete-option': {
-              color: '#c9a227',
-              fontSize: '0.8rem',
+              padding: 0,
               '&:hover': { background: 'rgba(201, 162, 39, 0.08)' },
               '&.Mui-focused': { background: 'rgba(201, 162, 39, 0.12)' },
             },
