@@ -24,18 +24,16 @@ def plan_trade_chain(
     capital: int,
     max_legs: int = 5,
 ) -> dict:
-    """Plan a chain of trade routes maximizing profit at each step.
+    """Plan a chain of trade routes maximizing total profit across all legs.
 
-    Algorithm:
-    1. Resolve SCU from vehicle or override
-    2. Resolve origin location -> terminal_ids
-    3. For each leg (up to max_legs):
-       a. Scan all buyable commodities at current location terminals
-       b. For each commodity x destination, calculate profit
-       c. Pick the highest profit combination
-       d. If profit <= 0, stop early
-       e. Update: location = destination, capital += profit
-    4. Return chain with legs + summary
+    Algorithm (cargo-carrying):
+    1. At each location, first SELL any carried cargo at best available prices.
+    2. Then BUY new cargo with remaining SCU and capital.
+    3. Travel to the destination that maximizes total profit.
+    4. Unsold cargo carries forward to the next leg.
+    5. Last leg: MUST choose a destination where all remaining cargo can be sold.
+
+    This ensures the entire route is optimized as a whole, not just per-leg.
     """
     warnings: List[str] = []
 
@@ -52,96 +50,476 @@ def plan_trade_chain(
     # Step 3: Bulk load all price data
     all_prices = get_all_prices()
 
-    # Build terminal_id -> prices lookup
     terminal_prices: Dict[int, List[dict]] = {}
     for p in all_prices:
         tid = p.get("id_terminal", 0)
         if tid:
             terminal_prices.setdefault(tid, []).append(p)
 
-    # Load terminals for name resolution
     terminals = load_terminals()
     terminal_map: Dict[int, dict] = {t.get("id"): t for t in terminals}
 
-    # Build destination lookup: {commodity_id: [dest_records]}
     dest_lookup = _build_destination_lookup(terminal_prices, terminal_map)
+    loc_index = _build_location_index()
 
-    # Step 4: Iterative chain planning
+    # Step 4: Iterative chain planning with cargo carrying
     legs: List[dict] = []
     current_capital = float(capital)
+    carried_cargo: List[dict] = []
     stale_warned = False
 
     for leg_idx in range(1, max_legs + 1):
-        buyable = _scan_buyable(
-            current_terminal_ids, terminal_prices, terminal_map,
-            current_capital, ship_scu
-        )
+        is_last_leg = (leg_idx == max_legs)
 
-        if not buyable:
-            return _build_response(
-                legs, capital, current_capital,
-                f"第 {leg_idx} 段无可用购买数据，链式规划提前结束",
-                warnings
+        # 4a: Sell carried cargo at current location
+        sold_revenue = 0.0
+        sold_cost = 0.0
+        unsold_cargo: List[dict] = []
+
+        if carried_cargo:
+            sold_revenue, sold_cost, unsold_cargo = _sell_cargo_at_location(
+                carried_cargo, current_terminal_ids, terminal_prices, terminal_map
+            )
+            current_capital += sold_revenue - sold_cost
+
+        carried_scu_after_sell = sum(c["volume_scu"] for c in unsold_cargo)
+
+        # 4b: Buy new cargo
+        remaining_scu = ship_scu - carried_scu_after_sell
+        remaining_budget = current_capital
+
+        buyable = []
+        if remaining_scu > 0 and remaining_budget > 0:
+            buyable = _scan_buyable(
+                current_terminal_ids, terminal_prices, terminal_map,
+                remaining_budget, remaining_scu
             )
 
-        # Check for stale data and add warning with specific commodity names
-        # status 4-5: slightly stale, still reliable
-        # status 6-7: stale, prices may be inaccurate but better than no data
-        if not stale_warned:
-            from services.data_mapper import get_commodity_zh
-            very_stale_items = []
-            slightly_stale_items = []
-            for p in buyable:
-                s = p.get("status_buy", 99)
-                cname = p.get("commodity_name", "")
-                cname_zh = get_commodity_zh(cname)
-                label = f"{cname_zh}({cname}) status={s}"
-                if s > 5:
-                    very_stale_items.append(label)
-                elif s > 3:
-                    slightly_stale_items.append(label)
-            if very_stale_items:
-                items_str = "、".join(very_stale_items[:5])
-                suffix = f"等{len(very_stale_items)}种商品" if len(very_stale_items) > 5 else ""
-                warnings.append(f"以下商品数据较旧，价格可能不准确：{items_str}{suffix}，建议在游戏中核实")
-                stale_warned = True
-            elif slightly_stale_items:
-                items_str = "、".join(slightly_stale_items[:5])
-                suffix = f"等{len(slightly_stale_items)}种商品" if len(slightly_stale_items) > 5 else ""
-                warnings.append(f"以下商品数据略旧，价格可能不完全准确：{items_str}{suffix}")
-                stale_warned = True
-
-        best = _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, current_capital)
-
-        if best is None or best["profit"] <= 0:
-            return _build_response(
-                legs, capital, current_capital,
-                f"第 {leg_idx} 段无盈利路线，链式规划提前结束",
-                warnings
+        # 4c: Find best leg
+        if is_last_leg:
+            best = _find_best_last_leg(
+                buyable, unsold_cargo, dest_lookup, terminal_map,
+                ship_scu, current_capital, current_terminal_ids
+            )
+        else:
+            best = _find_best_leg(
+                buyable, dest_lookup, terminal_map, remaining_scu, remaining_budget,
+                carried_cargo=unsold_cargo, origin_terminal_ids=current_terminal_ids
             )
 
-        # Find supplementary commodities to fill remaining SCU and budget
-        supplements = _find_supplement_commodities(
-            buyable, best, dest_lookup, terminal_map, ship_scu, current_capital
-        )
+        if best is None or best.get("profit", 0) <= 0:
+            if unsold_cargo:
+                warnings.append(f"第 {leg_idx} 段无盈利路线，携带 {carried_scu_after_sell} SCU 货物结束")
+            else:
+                return _build_response(
+                    legs, capital, current_capital,
+                    f"第 {leg_idx} 段无盈利路线，链式规划提前结束",
+                    warnings
+                )
+            break
 
-        # Build leg record
+        # 4d: Find supplementary commodities
+        if not is_last_leg and remaining_scu > 0:
+            supplements = _find_supplement_commodities(
+                buyable, best, dest_lookup, terminal_map, remaining_scu, remaining_budget
+            )
+        else:
+            supplements = []
+
+        # 4e: Build leg record
         dest_td = terminal_map.get(best["dest_terminal_id"], {})
         origin_td = terminal_map.get(best["origin_terminal_id"], {})
-
         leg = _make_leg_dict(leg_idx, origin_td, dest_td, best, supplements)
+
+        # Add carried-cargo info
+        if sold_revenue > 0:
+            leg["carried_sold_revenue"] = round(sold_revenue, 2)
+            leg["carried_sold_cost"] = round(sold_cost, 2)
+            leg["carried_profit"] = round(sold_revenue - sold_cost, 2)
+            leg["profit"] = round(leg["profit"] + sold_revenue - sold_cost, 2)
+            leg["total_revenue"] = round(leg["total_revenue"] + sold_revenue, 2)
+
         legs.append(leg)
 
-        # Update capital with total profit from all commodities (primary + supplements)
-        total_leg_profit = leg["profit"]
-        current_capital += total_leg_profit
+        # 4f: Update capital for next leg
+        new_cost = sum(ac["volume_scu"] * ac["price_buy"] for ac in best.get("_all_commodities", []))
+        new_revenue = sum(ac["volume_scu"] * ac["price_sell"] for ac in best.get("_all_commodities", []))
+        supp_cost = sum(s["volume_scu"] * s["price_buy"] for s in supplements)
+        supp_revenue = sum(s["volume_scu"] * s["price_sell"] for s in supplements)
+        current_capital += (new_revenue - new_cost) + (supp_revenue - supp_cost)
+
+        # 4g: Build carried cargo for next leg
+        new_purchases = []
+        for ac in best.get("_all_commodities", []):
+            new_purchases.append({
+                "commodity_id": ac["commodity_id"],
+                "commodity_name": ac["commodity_name"],
+                "volume_scu": ac["volume_scu"],
+                "price_buy": ac["price_buy"],
+            })
+        for s in supplements:
+            new_purchases.append({
+                "commodity_id": s["commodity_id"],
+                "commodity_name": s["commodity_name"],
+                "volume_scu": s["volume_scu"],
+                "price_buy": s["price_buy"],
+            })
+
+        carried_cargo = [] if is_last_leg else (unsold_cargo + new_purchases)
 
         # Next origin = destination's location
         dest_location_key = _get_location_key(dest_td)
-        loc_index = _build_location_index()
         current_terminal_ids = loc_index.get(dest_location_key, [best["dest_terminal_id"]])
 
+    # Step 5: Auto-append liquidation leg if cargo remains
+    if carried_cargo:
+        liquidation_leg = _build_liquidation_leg(
+            len(legs) + 1, carried_cargo, current_terminal_ids,
+            terminal_prices, terminal_map, dest_lookup, ship_scu
+        )
+        if liquidation_leg:
+            legs.append(liquidation_leg)
+            # Update capital from liquidation
+            current_capital += liquidation_leg.get("profit", 0)
+
     return _build_response(legs, capital, current_capital, None, warnings)
+
+
+def _build_liquidation_leg(
+    leg_idx: int,
+    carried_cargo: List[dict],
+    current_terminal_ids: List[int],
+    terminal_prices: Dict[int, List[dict]],
+    terminal_map: Dict[int, dict],
+    dest_lookup: Dict[int, List[dict]],
+    ship_scu: int,
+) -> Optional[dict]:
+    """Build a liquidation leg: sell all carried cargo at the best destination.
+
+    No new purchases. Only sells existing cargo to clear the hold.
+    """
+    # Find best destination for carried cargo
+    best_dest_loc = None
+    best_profit = 0
+    best_assigned = []
+
+    # Group carried cargo by commodity
+    cargo_by_cid: Dict[int, dict] = {}
+    for c in carried_cargo:
+        cid = c["commodity_id"]
+        if cid in cargo_by_cid:
+            cargo_by_cid[cid]["volume_scu"] += c["volume_scu"]
+        else:
+            cargo_by_cid[cid] = dict(c)
+
+    # Find destinations that can sell carried cargo
+    dest_options: Dict[str, dict] = {}
+    for cid, cargo in cargo_by_cid.items():
+        destinations = dest_lookup.get(cid, [])
+        for dest in destinations:
+            dest_tid = dest["dest_terminal_id"]
+            if dest_tid in current_terminal_ids:
+                continue
+            dest_loc = dest.get("dest_location_key", "")
+            price_sell = dest["price_sell"]
+            if price_sell <= cargo["price_buy"]:
+                continue
+            dest_stock = dest.get("scu_sell_stock", 0)
+            sellable = cargo["volume_scu"] if dest_stock == 0 else min(cargo["volume_scu"], dest_stock)
+            if sellable <= 0:
+                continue
+
+            if dest_loc not in dest_options:
+                dest_options[dest_loc] = {
+                    "dest_terminal_id": dest_tid,
+                    "dest_location_key": dest_loc,
+                    "assigned": [],
+                    "total_profit": 0,
+                }
+            do = dest_options[dest_loc]
+            profit = sellable * (price_sell - cargo["price_buy"])
+            do["assigned"].append({
+                "origin_terminal_id": current_terminal_ids[0] if current_terminal_ids else 0,
+                "dest_terminal_id": dest_tid,
+                "dest_location_key": dest_loc,
+                "commodity_id": cid,
+                "commodity_name": cargo["commodity_name"],
+                "price_buy": cargo["price_buy"],
+                "price_sell": price_sell,
+                "volume_scu": sellable,
+                "profit": profit,
+                "status_buy": 0,
+            })
+            do["total_profit"] += profit
+
+    if not dest_options:
+        return None
+
+    # Pick destination with highest total profit
+    for dest_loc, do in dest_options.items():
+        if do["total_profit"] > best_profit:
+            best_profit = do["total_profit"]
+            best_dest_loc = dest_loc
+            best_assigned = do["assigned"]
+
+    if not best_assigned:
+        return None
+
+    best_assigned.sort(key=lambda a: a["profit"], reverse=True)
+    primary = best_assigned[0]
+    dest_td = terminal_map.get(primary["dest_terminal_id"], {})
+
+    agg_volume = sum(a["volume_scu"] for a in best_assigned)
+    agg_cost = sum(a["volume_scu"] * a["price_buy"] for a in best_assigned)
+    agg_revenue = sum(a["volume_scu"] * a["price_sell"] for a in best_assigned)
+    agg_profit = sum(a["profit"] for a in best_assigned)
+
+    commodities = []
+    for a in best_assigned:
+        commodities.append({
+            "commodity_id": a["commodity_id"],
+            "commodity_name": a["commodity_name"],
+            "commodity_name_zh": get_commodity_zh(a["commodity_name"]),
+            "is_primary": a["commodity_id"] == primary["commodity_id"],
+            "price_buy": a["price_buy"],
+            "price_sell": a["price_sell"],
+            "volume_scu": a["volume_scu"],
+            "total_cost": a["volume_scu"] * a["price_buy"],
+            "total_revenue": a["volume_scu"] * a["price_sell"],
+            "profit": a["profit"],
+        })
+
+    def _zh(td: dict) -> str:
+        return get_terminal_zh(
+            td.get("name", ""), td.get("nickname", ""),
+            td.get("space_station_name", ""),
+            td.get("planet_name", ""), td.get("star_system_name", "")
+        )
+
+    return {
+        "leg_index": leg_idx,
+        "origin_name": "",
+        "origin_name_zh": "清仓路线",
+        "commodity_name": primary["commodity_name"],
+        "commodity_name_zh": get_commodity_zh(primary["commodity_name"]),
+        "price_buy": primary["price_buy"],
+        "price_sell": primary["price_sell"],
+        "volume_scu": agg_volume,
+        "total_cost": agg_cost,
+        "total_revenue": agg_revenue,
+        "profit": agg_profit,
+        "destination_name": dest_td.get("name", ""),
+        "destination_name_zh": _zh(dest_td),
+        "destination_system": dest_td.get("star_system_name", "") or "",
+        "destination_system_zh": SYSTEM_ZH.get(dest_td.get("star_system_name", "") or "", dest_td.get("star_system_name", "") or ""),
+        "destination_planet": dest_td.get("planet_name", "") or "",
+        "destination_planet_zh": PLANET_ZH.get(dest_td.get("planet_name", "") or "", dest_td.get("planet_name", "") or ""),
+        "commodities": commodities,
+        "is_liquidation": True,
+    }
+
+
+def _sell_cargo_at_location(
+    carried_cargo: List[dict],
+    terminal_ids: List[int],
+    terminal_prices: Dict[int, List[dict]],
+    terminal_map: Dict[int, dict],
+) -> tuple:
+    """Sell carried cargo at the current location terminals.
+
+    Returns (total_revenue, total_cost, unsold_cargo).
+    """
+    sold_revenue = 0.0
+    sold_cost = 0.0
+    unsold_cargo: List[dict] = []
+
+    for cargo in carried_cargo:
+        cid = cargo["commodity_id"]
+        vol = cargo["volume_scu"]
+        buy_price = cargo["price_buy"]
+        best_sell_price = 0
+
+        for tid in terminal_ids:
+            prices = terminal_prices.get(tid, [])
+            for p in prices:
+                if p.get("id_commodity") == cid:
+                    sp = p.get("price_sell", 0)
+                    stock = p.get("scu_sell_stock", 0)
+                    status = p.get("status_sell", 99)
+                    if sp > 0 and status <= 7:
+                        if sp > best_sell_price:
+                            best_sell_price = sp
+
+        if best_sell_price > buy_price:
+            sold_revenue += vol * best_sell_price
+            sold_cost += vol * buy_price
+        else:
+            unsold_cargo.append(cargo)
+
+    return sold_revenue, sold_cost, unsold_cargo
+
+
+def _find_best_last_leg(
+    buyable: List[dict],
+    carried_cargo: List[dict],
+    dest_lookup: Dict[int, List[dict]],
+    terminal_map: Dict[int, dict],
+    ship_scu: int,
+    capital: float,
+    origin_terminal_ids: List[int],
+) -> Optional[dict]:
+    """Find the best last-leg destination that can sell ALL carried cargo + new purchases."""
+    if not carried_cargo and not buyable:
+        return None
+
+    carried_cids = {c["commodity_id"] for c in carried_cargo}
+    carried_scu = sum(c["volume_scu"] for c in carried_cargo)
+
+    # Find destinations that can sell carried cargo
+    dest_carry_capacity: Dict[str, dict] = {}
+    for cargo in carried_cargo:
+        cid = cargo["commodity_id"]
+        vol = cargo["volume_scu"]
+        destinations = dest_lookup.get(cid, [])
+        for dest in destinations:
+            dest_tid = dest["dest_terminal_id"]
+            if dest_tid in origin_terminal_ids:
+                continue
+            dest_loc = dest.get("dest_location_key", "")
+            price_sell = dest["price_sell"]
+            if price_sell <= 0:
+                continue
+
+            if dest_loc not in dest_carry_capacity:
+                dest_carry_capacity[dest_loc] = {
+                    "dest_terminal_id": dest_tid,
+                    "dest_location_key": dest_loc,
+                    "carry_profit": 0,
+                    "carry_scu_sold": 0,
+                }
+            dc = dest_carry_capacity[dest_loc]
+            dest_stock = dest.get("scu_sell_stock", 0)
+            sellable = vol if dest_stock == 0 else min(vol, dest_stock)
+            profit = sellable * (price_sell - cargo["price_buy"])
+            dc["carry_profit"] += profit
+            dc["carry_scu_sold"] += sellable
+
+    if not dest_carry_capacity:
+        if buyable:
+            return _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, capital)
+        return None
+
+    # For each destination that can sell carried cargo, also try buying new cargo
+    best_dest = None
+    best_total_profit = 0
+    best_assigned = []
+
+    for dest_loc, dc_info in dest_carry_capacity.items():
+        dest_tid = dc_info["dest_terminal_id"]
+
+        remaining_scu = ship_scu - carried_scu
+        remaining_budget = capital
+
+        dest_candidates = []
+        for item in buyable:
+            cid = item["commodity_id"]
+            if cid in carried_cids:
+                continue
+            price_buy = item["price_buy"]
+            if price_buy <= 0 or remaining_budget < price_buy:
+                continue
+
+            destinations = dest_lookup.get(cid, [])
+            for dest in destinations:
+                if dest.get("dest_location_key") != dest_loc:
+                    continue
+                if dest["dest_terminal_id"] in origin_terminal_ids:
+                    continue
+                price_sell = dest["price_sell"]
+                if price_sell <= price_buy:
+                    continue
+                dest_stock = dest.get("scu_sell_stock", 0)
+                unit_profit = price_sell - price_buy
+                max_by_budget = math.floor(remaining_budget / price_buy) if price_buy > 0 else 0
+                vol = min(item["scu_buy"], max_by_budget, remaining_scu,
+                          dest_stock if dest_stock > 0 else remaining_scu)
+                if vol > 0:
+                    dest_candidates.append({
+                        "commodity_id": cid,
+                        "commodity_name": item["commodity_name"],
+                        "price_buy": price_buy,
+                        "price_sell": price_sell,
+                        "volume_scu": vol,
+                        "profit": vol * unit_profit,
+                        "origin_terminal_id": item["origin_terminal_id"],
+                        "dest_terminal_id": dest_tid,
+                        "dest_location_key": dest_loc,
+                    })
+                    break
+
+        dest_candidates.sort(key=lambda c: c["profit"] / c["volume_scu"] if c["volume_scu"] > 0 else 0, reverse=True)
+
+        r_scu = remaining_scu
+        r_budget = remaining_budget
+        new_assigned = []
+        total_new_profit = 0
+        for c in dest_candidates:
+            if r_scu <= 0 or r_budget <= 0:
+                break
+            vol = min(c["volume_scu"], math.floor(r_budget / c["price_buy"]) if c["price_buy"] > 0 else 0, r_scu)
+            if vol <= 0:
+                continue
+            c["volume_scu"] = vol
+            c["profit"] = vol * (c["price_sell"] - c["price_buy"])
+            new_assigned.append(c)
+            total_new_profit += c["profit"]
+            r_scu -= vol
+            r_budget -= vol * c["price_buy"]
+
+        total_profit = dc_info["carry_profit"] + total_new_profit
+
+        if total_profit > best_total_profit:
+            best_total_profit = total_profit
+            best_dest = dest_loc
+            carry_assigned = []
+            for cargo in carried_cargo:
+                cid = cargo["commodity_id"]
+                for d in dest_lookup.get(cid, []):
+                    if d.get("dest_location_key") == dest_loc and d["dest_terminal_id"] not in origin_terminal_ids:
+                        sellable = cargo["volume_scu"] if d["scu_sell_stock"] == 0 else min(cargo["volume_scu"], d["scu_sell_stock"])
+                        carry_assigned.append({
+                            "origin_terminal_id": origin_terminal_ids[0] if origin_terminal_ids else 0,
+                            "dest_terminal_id": d["dest_terminal_id"],
+                            "dest_location_key": dest_loc,
+                            "commodity_id": cid,
+                            "commodity_name": cargo["commodity_name"],
+                            "price_buy": cargo["price_buy"],
+                            "price_sell": d["price_sell"],
+                            "volume_scu": sellable,
+                            "profit": sellable * (d["price_sell"] - cargo["price_buy"]),
+                            "status_buy": 0,
+                        })
+                        break
+            best_assigned = carry_assigned + new_assigned
+
+    if best_dest is None or not best_assigned:
+        return None
+
+    best_assigned.sort(key=lambda a: a["profit"], reverse=True)
+    primary = best_assigned[0]
+
+    return {
+        "origin_terminal_id": primary["origin_terminal_id"],
+        "dest_terminal_id": primary["dest_terminal_id"],
+        "dest_location_key": best_dest,
+        "commodity_id": primary["commodity_id"],
+        "commodity_name": primary["commodity_name"],
+        "price_buy": primary["price_buy"],
+        "price_sell": primary["price_sell"],
+        "volume_scu": primary["volume_scu"],
+        "profit": primary["profit"],
+        "_all_commodities": best_assigned,
+    }
 
 
 def _resolve_scu(vehicle_id: Optional[int], scu_override: Optional[int], warnings: List[str]) -> int:
@@ -279,19 +657,13 @@ def _find_best_leg(
     terminal_map: Dict[int, dict],
     ship_scu: int,
     capital: float,
+    carried_cargo: List[dict] = None,
+    origin_terminal_ids: List[int] = None,
 ) -> Optional[dict]:
     """Find the best leg by aggregating multi-commodity combos per destination location.
 
-    Algorithm:
-    1. Build candidate list: for each buyable commodity, compute max quantity
-       and pair with each profitable destination.
-    2. Group candidates by destination LOCATION (not terminal).
-    3. For each destination location, deduplicate commodities (keep best price),
-       then greedily assign cargo space by unit profit.
-    4. Pick the location with highest total profit.
-
-    Returns a dict with the best destination and all commodities assigned to it,
-    plus an _all_commodities field for the supplement finder.
+    When carried_cargo is provided, the destination selection also considers
+    profit from selling carried cargo at each destination.
     """
     # Step 1: Build candidate pairs (commodity x destination)
     # Group by dest_location_key to aggregate commodities sold at different
@@ -406,10 +778,24 @@ def _find_best_leg(
             total_effective += effective_profit
             total_real_profit += real_profit
 
-        if total_effective > best_total_effective or (
-            total_effective == best_total_effective and total_real_profit > best_total_real_profit
+        # Add profit from selling carried cargo at this destination
+        carried_profit = 0
+        if carried_cargo and origin_terminal_ids:
+            for cargo in carried_cargo:
+                cid = cargo["commodity_id"]
+                for d in dest_lookup.get(cid, []):
+                    if d.get("dest_location_key") == dest_loc and d["dest_terminal_id"] not in origin_terminal_ids:
+                        sp = d["price_sell"]
+                        if sp > cargo["price_buy"]:
+                            dest_stock = d.get("scu_sell_stock", 0)
+                            sellable = cargo["volume_scu"] if dest_stock == 0 else min(cargo["volume_scu"], dest_stock)
+                            carried_profit += sellable * (sp - cargo["price_buy"])
+                        break
+
+        if total_effective + carried_profit > best_total_effective or (
+            total_effective + carried_profit == best_total_effective and total_real_profit > best_total_real_profit
         ):
-            best_total_effective = total_effective
+            best_total_effective = total_effective + carried_profit
             best_total_real_profit = total_real_profit
             best_dest_loc = dest_loc
             best_assigned = dest_assigned

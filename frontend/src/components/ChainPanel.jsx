@@ -358,7 +358,7 @@ function ChainPanel({ onResult }) {
             const val = Number(e.target.value);
             if (val >= 1 && val <= 10) setMaxLegs(val);
           }}
-          helperText="          有效范围:1 - 10"
+          helperText="          有效范围:1 - 10（自动附加一段清仓路线）"
           InputProps={{
             startAdornment: <InputAdornment position="start" sx={{ color: 'rgba(201, 162, 39, 0.3)' }}><Link sx={{ fontSize: 16 }} /></InputAdornment>,
           }}
@@ -490,6 +490,11 @@ function ChainPanel({ onResult }) {
           <Refresh sx={{ fontSize: 18 }} />
         </Button>
       </Box>
+
+      {/* Tip */}
+      <Typography variant="caption" sx={{ color: 'rgba(201, 162, 39, 0.3)', fontSize: '0.65rem', display: 'block', textAlign: 'center', mt: -1, lineHeight: 1.4 }}>
+        路线支持货物跨段携带 | 末尾自动附加清仓段
+      </Typography>
     </Box>
   );
 }
