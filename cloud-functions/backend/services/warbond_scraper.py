@@ -765,7 +765,7 @@ def _http_get(url: str, timeout: int = 15) -> str:
         return resp.read().decode("utf-8")
 
 
-def _http_post_json(url, data, timeout=20):
+def _http_post_json(url, data, timeout=30):
     import json as json_mod
     _ssl_ctx = ssl.create_default_context()
     _ssl_ctx.check_hostname = False

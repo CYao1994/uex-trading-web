@@ -124,7 +124,7 @@ export const searchCommodities = (q, refresh = false) =>
   cachedGet('/commodities', { q }, refresh, 20000);
 
 export const getWarbonds = (refresh = false) =>
-  cachedGet('/warbonds', {}, refresh);
+  cachedGet('/warbonds', {}, refresh, 60000);
 
 export const getCacheStats = () =>
   api.get('/cache/stats');
