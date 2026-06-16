@@ -577,10 +577,10 @@ def _find_supplement_commodities(
 def _make_leg_dict(leg_idx: int, origin_td: dict, dest_td: dict, best: dict, supplements: List[dict] = None) -> dict:
     """Build a ChainLeg-compatible dict.
 
-    When supplements are provided, builds a commodities list with primary + supplements,
-    and aggregates total_cost/total_revenue/profit/volume_scu across all commodities.
-    The top-level commodity_name / price_buy / price_sell remain from the primary
-    for backward compatibility.
+    Builds a commodities list from _all_commodities (multi-commodity aggregation)
+    combined with supplements. Aggregates total_cost/total_revenue/profit/volume_scu
+    across all commodities. The top-level commodity_name / price_buy / price_sell
+    remain from the primary for backward compatibility.
     """
     def _zh(td: dict) -> str:
         return get_terminal_zh(
@@ -592,44 +592,62 @@ def _make_leg_dict(leg_idx: int, origin_td: dict, dest_td: dict, best: dict, sup
     dest_system = dest_td.get("star_system_name", "") or ""
     dest_planet = dest_td.get("planet_name", "") or ""
 
-    # Build commodities list if supplements exist
+    # Build commodities list from _all_commodities (aggregated by _find_best_leg)
+    all_commodities = best.get("_all_commodities", [])
     commodities = None
-    if supplements:
-        # Primary commodity entry
-        primary_entry = {
-            "commodity_id": best["commodity_id"],
-            "commodity_name": best["commodity_name"],
-            "commodity_name_zh": get_commodity_zh(best["commodity_name"]),
-            "is_primary": True,
-            "price_buy": best["price_buy"],
-            "price_sell": best["price_sell"],
-            "volume_scu": best["volume_scu"],
-            "total_cost": best["volume_scu"] * best["price_buy"],
-            "total_revenue": best["volume_scu"] * best["price_sell"],
-            "profit": best["volume_scu"] * (best["price_sell"] - best["price_buy"]),
-        }
-        # Supplement entries
-        supplement_entries = []
-        for s in supplements:
-            supplement_entries.append({
-                "commodity_id": s["commodity_id"],
-                "commodity_name": s["commodity_name"],
-                "commodity_name_zh": get_commodity_zh(s["commodity_name"]),
-                "is_primary": False,
-                "price_buy": s["price_buy"],
-                "price_sell": s["price_sell"],
-                "volume_scu": s["volume_scu"],
-                "total_cost": s["total_cost"],
-                "total_revenue": s["total_revenue"],
-                "profit": s["profit"],
+
+    if all_commodities or supplements:
+        entries = []
+        seen_ids = set()
+
+        # Add all commodities from _find_best_leg aggregation
+        for ac in all_commodities:
+            cid = ac["commodity_id"]
+            if cid in seen_ids:
+                continue
+            seen_ids.add(cid)
+            unit_profit = ac.get("price_sell", 0) - ac.get("price_buy", 0)
+            entries.append({
+                "commodity_id": cid,
+                "commodity_name": ac["commodity_name"],
+                "commodity_name_zh": get_commodity_zh(ac["commodity_name"]),
+                "is_primary": cid == best["commodity_id"],
+                "price_buy": ac["price_buy"],
+                "price_sell": ac["price_sell"],
+                "volume_scu": ac["volume_scu"],
+                "total_cost": ac["volume_scu"] * ac["price_buy"],
+                "total_revenue": ac["volume_scu"] * ac["price_sell"],
+                "profit": ac.get("profit", ac["volume_scu"] * unit_profit),
             })
-        commodities = [primary_entry] + supplement_entries
+
+        # Add supplement entries (skip if already in all_commodities)
+        if supplements:
+            for s in supplements:
+                if s["commodity_id"] in seen_ids:
+                    continue
+                seen_ids.add(s["commodity_id"])
+                entries.append({
+                    "commodity_id": s["commodity_id"],
+                    "commodity_name": s["commodity_name"],
+                    "commodity_name_zh": get_commodity_zh(s["commodity_name"]),
+                    "is_primary": False,
+                    "price_buy": s["price_buy"],
+                    "price_sell": s["price_sell"],
+                    "volume_scu": s["volume_scu"],
+                    "total_cost": s["total_cost"],
+                    "total_revenue": s["total_revenue"],
+                    "profit": s["profit"],
+                })
+
+        # Sort: primary first, then by profit descending
+        entries.sort(key=lambda e: (not e["is_primary"], -e["profit"]))
+        commodities = entries if entries else None
 
         # Aggregate totals across all commodities
-        agg_volume = sum(c["volume_scu"] for c in commodities)
-        agg_cost = sum(c["total_cost"] for c in commodities)
-        agg_revenue = sum(c["total_revenue"] for c in commodities)
-        agg_profit = sum(c["profit"] for c in commodities)
+        agg_volume = sum(c["volume_scu"] for c in (commodities or []))
+        agg_cost = sum(c["total_cost"] for c in (commodities or []))
+        agg_revenue = sum(c["total_revenue"] for c in (commodities or []))
+        agg_profit = sum(c["profit"] for c in (commodities or []))
     else:
         agg_volume = best["volume_scu"]
         agg_cost = best["volume_scu"] * best["price_buy"]
