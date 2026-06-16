@@ -1,4 +1,5 @@
-﻿// CommodityInput.jsx - 鍟嗗搧鎼滅储锛堝惈鍘嗗彶璁板綍锛?import { useState, useRef, useEffect } from 'react';
+// CommodityInput.jsx - 商品搜索（含历史记录）
+import { useState, useRef, useEffect } from 'react';
 import { TextField, Box, Typography, Paper, Chip, CircularProgress, IconButton, Button } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Close as CloseIcon, Inventory2, Check as CheckIcon, DeleteSweep, History } from '@mui/icons-material';
 import { loadAllCommodities } from '../api/client';
@@ -57,7 +58,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
     return (
       <Chip
         icon={<Inventory2 sx={{ fontSize: 16 }} />}
-        label={`${item.name_zh} 脳 ${item.quantity} SCU`}
+        label={`${item.name_zh} × ${item.quantity} SCU`}
         className="chip-pop-out"
         sx={{
           background: 'rgba(255, 51, 102, 0.08)',
@@ -94,7 +95,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
           {item.name_zh}
         </Typography>
         <Typography sx={{ color: 'rgba(201, 162, 39, 0.5)', fontSize: '0.75rem', mx: 0.2 }}>
-          脳
+          ×
         </Typography>
         <input
           ref={inputRef}
@@ -140,7 +141,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
     );
   }
 
-  // 姝ｅ父鏄剧ず妯″紡锛氬悕绉?脳 SCU [-][+][脳]
+  // 正常显示模式：名称 × SCU [-][+][×]
   return (
     <Box
       className="chip-pop-in"
@@ -174,7 +175,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
         {item.name_zh}
       </Typography>
       <Typography sx={{ color: 'rgba(201, 162, 39, 0.5)', fontSize: '0.75rem', mx: 0.2 }}>
-        脳
+        ×
       </Typography>
       <Typography sx={{
         color: '#c9a227',
@@ -187,7 +188,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
       <Typography sx={{ color: 'rgba(201, 162, 39, 0.5)', fontSize: '0.7rem', mr: 0.3 }}>
         SCU
       </Typography>
-      {/* - 鎸夐挳 */}
+      {/* - 按钮 */}
       <IconButton
         size="small"
         onClick={handleDecrement}
@@ -213,7 +214,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
       >
         <RemoveIcon sx={{ fontSize: 12 }} />
       </IconButton>
-      {/* + 鎸夐挳 */}
+      {/* + 按钮 */}
       <IconButton
         size="small"
         onClick={handleIncrement}
@@ -234,7 +235,7 @@ function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
       >
         <AddIcon sx={{ fontSize: 12 }} />
       </IconButton>
-      {/* 脳 鍒犻櫎鎸夐挳 */}
+      {/* × 删除按钮 */}
       <IconButton
         size="small"
         onClick={(e) => { e.stopPropagation(); handleRemove(); }}
@@ -308,22 +309,22 @@ function CommodityInput({ items, onItemsChange }) {
         }).slice(0, 30) : allCommodities.slice(0, 30);
         setOptions(filtered);
         if (filtered.length === 0) {
-          setError('鏈壘鍒板尮閰嶅晢鍝?);
+          setError('未找到匹配商品');
         }
         setShowDropdown(true);
       } catch (e) {
         setOptions([]);
-        let msg = '鎼滅储澶辫触锛岃绋嶅悗閲嶈瘯';
+        let msg = '搜索失败，请稍后重试';
         if (e.code === 'ERR_NETWORK' || e.code === 'ERR_CONNECTION_REFUSED') {
           const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-          msg = isLocal ? '鍚庣鏈嶅姟鏈惎鍔紝璇峰厛杩愯鍚庣' : '缃戠粶杩炴帴澶辫触锛岃妫€鏌ョ綉缁滃悗閲嶈瘯';
+          msg = isLocal ? '后端服务未启动，请先运行后端' : '网络连接失败，请检查网络后重试';
         } else if (e.code === 'ECONNABORTED' || (e.message && e.message.includes('timeout'))) {
-          msg = '鎼滅储瓒呮椂锛岃绋嶅悗閲嶈瘯';
+          msg = '搜索超时，请稍后重试';
         } else if (e.response) {
           const status = e.response.status;
-          if (status >= 500) msg = `鏈嶅姟鏆傛椂涓嶅彲鐢?(${status})锛岃绋嶅悗閲嶈瘯`;
-          else if (status === 404) msg = '鎼滅储鏈嶅姟寮傚父锛岃鑱旂郴寮€鍙戣€?;
-          else if (status >= 400) msg = `璇锋眰閿欒 (${status})`;
+          if (status >= 500) msg = `服务暂时不可用 (${status})，请稍后重试`;
+          else if (status === 404) msg = '搜索服务异常，请联系开发者';
+          else if (status >= 400) msg = `请求错误 (${status})`;
         }
         setError(msg);
         setShowDropdown(false);
@@ -347,7 +348,8 @@ function CommodityInput({ items, onItemsChange }) {
         quantity: qty,
       }]);
     }
-    // 娣诲姞鍒板巻鍙茶褰?    addToHistory({
+    // 添加到历史记录
+    addToHistory({
       id: commodity.id,
       name: commodity.name,
       name_zh: commodity.name_zh,
@@ -397,7 +399,7 @@ function CommodityInput({ items, onItemsChange }) {
           fontFamily: '"Noto Sans SC", sans-serif',
           letterSpacing: '0.02em',
         }}>
-          馃挕 鐐瑰嚮璐х墿鍚嶇О鍙紪杈慡CU鏁伴噺 路 鐐瑰嚮 +/- 璋冩暣鏁伴噺
+          💡 点击货物名称可编辑SCU数量 · 点击 +/- 调整数量
         </Typography>
       )}
 
@@ -439,7 +441,7 @@ function CommodityInput({ items, onItemsChange }) {
           }}
           variant="outlined"
         >
-          娓呯┖娓呭崟
+          清空清单
         </Button>
       )}
 
@@ -448,7 +450,7 @@ function CommodityInput({ items, onItemsChange }) {
         <TextField
           inputRef={inputRef}
           size="small"
-          placeholder="鎼滅储鍟嗗搧锛堜腑鑻辨枃鍧囧彲锛??
+          placeholder="搜索商品（中英文均可）"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={handleFocus}
@@ -456,7 +458,7 @@ function CommodityInput({ items, onItemsChange }) {
             startAdornment: <Inventory2 sx={{ color: 'primary.main', mr: 1, fontSize: 18 }} />,
             endAdornment: loading ? <CircularProgress size={14} /> : null,
           }}
-          sx={{ flex: 1, '& .MuiOutlinedInput-root': { color: '#c9a227', fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif', fontSize: '0.85rem', '& fieldset': { borderColor: 'rgba(201, 162, 39, 0.15)' }, '&:hover fieldset': { borderColor: 'rgba(201, 162, 39, 0.3)' }, '&.Mui-focused fieldset': { borderColor: 'rgba(201, 162, 39, 0.5)' }, '&.Mui-focused': { boxShadow: '0 0 8px rgba(201, 162, 39, 0.3)' } }, '& .MuiInputLabel-root': { color: 'rgba(201, 162, 39, 0.5)' } }}
+          sx={{ flex: 1 }}
         />
         <Button
           variant="outlined"
@@ -490,7 +492,7 @@ function CommodityInput({ items, onItemsChange }) {
           inputProps={{ min: 1, style: { textAlign: 'center' } }}
         />
 
-        {/* 鍘嗗彶璁板綍涓嬫媺 */}
+        {/* 历史记录下拉 */}
         {showHistory && history.length > 0 && !query.trim() && (
           <Paper
             ref={dropdownRef}
@@ -516,7 +518,8 @@ function CommodityInput({ items, onItemsChange }) {
                 letterSpacing: '0.05em',
               }}>
                 <History sx={{ fontSize: 11, mr: 0.5, verticalAlign: 'middle' }} />
-                鏈€杩戞悳绱?              </Typography>
+                最近搜索
+              </Typography>
               <IconButton 
                 size="small" 
                 onClick={(e) => { e.stopPropagation(); clearHistory(); setShowHistory(false); }}
@@ -583,10 +586,10 @@ function CommodityInput({ items, onItemsChange }) {
                   onClick={() => handleAdd(opt)}
                   sx={{ flex: 1, cursor: 'pointer' }}
                 >
-                  <Typography variant="body2" sx={{ color: '#c9a227', fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600 }}>
                     {opt.name_zh}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: 'rgba(201, 162, 39, 0.5)' }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                     {opt.name}
                   </Typography>
                 </Box>
@@ -620,7 +623,7 @@ function CommodityInput({ items, onItemsChange }) {
             }}
           >
             <Typography sx={{ color: 'rgba(201, 162, 39, 0.4)', fontSize: '0.75rem' }}>
-              馃摝 璐ц埍閲屾病鎵惧埌杩欎釜鍟嗗搧
+              📦 货舱里没找到这个商品
             </Typography>
           </Paper>
         )}
@@ -636,4 +639,3 @@ function CommodityInput({ items, onItemsChange }) {
 }
 
 export default CommodityInput;
-

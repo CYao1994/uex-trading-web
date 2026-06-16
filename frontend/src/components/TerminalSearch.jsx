@@ -1,10 +1,11 @@
-﻿// TerminalSearch.jsx - 缁堢鎼滅储锛堝惈鍘嗗彶璁板綍锛?import { useState, useRef, useEffect } from 'react';
+// TerminalSearch.jsx - 终端搜索（含历史记录）
+import { useState, useRef, useEffect } from 'react';
 import { TextField, Box, Typography, Paper, CircularProgress, IconButton } from '@mui/material';
 import { LocationOn, History, Close, DeleteSweep } from '@mui/icons-material';
 import { loadAllTerminals } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
-function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
+function TerminalSearch({ value, onChange, label = '出发地' }) {
   const [query, setQuery] = useState(value || '');
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -59,22 +60,22 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
         }).slice(0, 20) : allTerminals.slice(0, 20);
         setOptions(filtered);
         if (filtered.length === 0) {
-          setError('鏈壘鍒板尮閰嶇粓绔?);
+          setError('未找到匹配终端');
         }
         setShowDropdown(true);
       } catch (e) {
         setOptions([]);
-        let msg = '鎼滅储澶辫触锛岃绋嶅悗閲嶈瘯';
+        let msg = '搜索失败，请稍后重试';
         if (e.code === 'ERR_NETWORK' || e.code === 'ERR_CONNECTION_REFUSED') {
           const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-          msg = isLocal ? '鍚庣鏈嶅姟鏈惎鍔紝璇峰厛杩愯鍚庣' : '缃戠粶杩炴帴澶辫触锛岃妫€鏌ョ綉缁滃悗閲嶈瘯';
+          msg = isLocal ? '后端服务未启动，请先运行后端' : '网络连接失败，请检查网络后重试';
         } else if (e.code === 'ECONNABORTED' || (e.message && e.message.includes('timeout'))) {
-          msg = '鎼滅储瓒呮椂锛岃绋嶅悗閲嶈瘯';
+          msg = '搜索超时，请稍后重试';
         } else if (e.response) {
           const status = e.response.status;
-          if (status >= 500) msg = `鏈嶅姟鏆傛椂涓嶅彲鐢?(${status})锛岃绋嶅悗閲嶈瘯`;
-          else if (status === 404) msg = '鎼滅储鏈嶅姟寮傚父锛岃鑱旂郴寮€鍙戣€?;
-          else if (status >= 400) msg = `璇锋眰閿欒 (${status})`;
+          if (status >= 500) msg = `服务暂时不可用 (${status})，请稍后重试`;
+          else if (status === 404) msg = '搜索服务异常，请联系开发者';
+          else if (status >= 400) msg = `请求错误 (${status})`;
         }
         setError(msg);
         setShowDropdown(false);
@@ -89,7 +90,8 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
     setShowDropdown(false);
     setShowHistory(false);
     setError('');
-    // 娣诲姞鍒板巻鍙茶褰?    addToHistory({
+    // 添加到历史记录
+    addToHistory({
       id: option.id,
       name: option.name,
       name_zh: option.name_zh,
@@ -102,7 +104,7 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
     setQuery(item.name_zh);
     setShowHistory(false);
     setShowDropdown(false);
-    // 妯℃嫙閫夋嫨
+    // 模拟选择
     onChange({
       id: item.id,
       name: item.name,
@@ -127,28 +129,29 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
         inputRef={inputRef}
         fullWidth
         label={label}
-        placeholder="鎼滅储缁堢鍚嶇О锛堜腑鑻辨枃鍧囧彲锛?
+        placeholder="搜索终端名称（中英文均可）"
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
         onFocus={handleFocus}
         InputProps={{
-          startAdornment: <LocationOn sx={{ color: 'rgba(201, 162, 39, 0.3)', mr: 1, fontSize: 18 }} />,
+          startAdornment: <LocationOn sx={{ color: 'primary.main', mr: 1, fontSize: 20 }} />,
           endAdornment: loading ? <CircularProgress size={16} /> : null,
         }}
         sx={{
-          '& .MuiInputLabel-root': { color: 'rgba(201, 162, 39, 0.5)' },
-          '& .MuiInputBase-input': { color: '#c9a227', fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif', fontSize: '0.85rem' },
-          '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(201, 162, 39, 0.15)' }, '&:hover fieldset': { borderColor: 'rgba(201, 162, 39, 0.3)' },
+          '& .MuiInputLabel-root': { color: 'text.secondary' },
+          '& .MuiInputBase-input': { color: 'text.primary' },
+          '& .MuiOutlinedInput-root': {
             '&.Mui-focused': {
               boxShadow: '0 0 8px rgba(201, 162, 39, 0.3)',
             },
-            '&.Mui-focused fieldset': { borderColor: 'rgba(201, 162, 39, 0.5)',
+            '&.Mui-focused fieldset': {
+              borderColor: 'rgba(201, 162, 39, 0.6)',
             },
           },
         }}
       />
 
-      {/* 鎼滅储缁撴灉涓嬫媺 */}
+      {/* 搜索结果下拉 */}
       {showDropdown && options.length > 0 && (
         <Paper
           ref={dropdownRef}
@@ -177,18 +180,18 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
                 transition: 'background 0.15s',
               }}
             >
-              <Typography variant="body2" sx={{ color: '#c9a227', fontWeight: 600 }}>
+              <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 600 }}>
                 {opt.name_zh}
               </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(201, 162, 39, 0.5)' }}>
-                {opt.name} 路 {opt.system_zh}
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                {opt.name} · {opt.system_zh}
               </Typography>
             </Box>
           ))}
         </Paper>
       )}
 
-      {/* 鍘嗗彶璁板綍涓嬫媺 */}
+      {/* 历史记录下拉 */}
       {showHistory && history.length > 0 && !query.trim() && (
         <Paper
           ref={dropdownRef}
@@ -215,7 +218,8 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
               letterSpacing: '0.05em',
             }}>
               <History sx={{ fontSize: 12, mr: 0.5, verticalAlign: 'middle' }} />
-              鏈€杩戞悳绱?            </Typography>
+              最近搜索
+            </Typography>
             <IconButton 
               size="small" 
               onClick={(e) => { e.stopPropagation(); clearHistory(); setShowHistory(false); }}
@@ -261,7 +265,7 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
         </Paper>
       )}
 
-      {/* 绌烘悳绱㈢粨鏋?*/}
+      {/* 空搜索结果 */}
       {showDropdown && options.length === 0 && !loading && query.trim() && (
         <Paper
           ref={dropdownRef}
@@ -274,9 +278,11 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
           }}
         >
           <Typography sx={{ color: 'rgba(201, 162, 39, 0.4)', fontSize: '0.8rem', mb: 0.5 }}>
-            鏄熷浘涓湭鎵惧埌鍖归厤鐨勭粓绔?          </Typography>
+            星图中未找到匹配的终端
+          </Typography>
           <Typography sx={{ color: 'rgba(201, 162, 39, 0.2)', fontSize: '0.65rem' }}>
-            璇曡瘯鎹竴涓叧閿瘝锛?          </Typography>
+            试试换一个关键词？
+          </Typography>
         </Paper>
       )}
 
@@ -290,4 +296,3 @@ function TerminalSearch({ value, onChange, label = '鍑哄彂鍦? }) {
 }
 
 export default TerminalSearch;
-
