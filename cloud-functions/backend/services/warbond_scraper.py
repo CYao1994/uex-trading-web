@@ -958,10 +958,9 @@ def fetch_warbonds(refresh: bool = False) -> dict:
     try:
         all_items = []
 
-        # 1. Try RSI GraphQL API
-        rsi_success = False
-        try:
-            for category_id, category_name in RSI_CATEGORIES.items():
+        # 1. Try RSI GraphQL API (per-category, so one failure doesn't kill all)
+        for category_id, category_name in RSI_CATEGORIES.items():
+            try:
                 page = 1
                 while True:
                     query = _build_query(category_id, page=page, limit=50)
@@ -988,13 +987,12 @@ def fetch_warbonds(refresh: bool = False) -> dict:
                     if page * 50 >= total:
                         break
                     page += 1
-            rsi_success = True
-        except Exception as e:
-            print(f"RSI GraphQL API failed: {e}")
+            except Exception as e:
+                print(f"RSI GraphQL API failed for category {category_name} ({category_id}): {e}")
 
-        # 2. Fallback to starnotifier.com if RSI failed or returned no CCU items
+        # 2. Fallback to starnotifier.com if no CCU items found
         has_ccu = any(i["category"] == "Ship Upgrades" for i in all_items)
-        if not rsi_success or not has_ccu:
+        if not has_ccu:
             try:
                 starnotifier_items = _fetch_from_starnotifier()
                 existing_names = {item["name"] for item in all_items}
