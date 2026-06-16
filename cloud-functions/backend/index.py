@@ -22,12 +22,21 @@ from version import VERSION
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        from services.paratranz_service import paratranz
-        import threading
-        threading.Thread(target=paratranz.load_translations, daemon=True).start()
-    except Exception as e:
-        logging.warning(f"ParaTranz preload failed (falling back to local dict): {e}")
+    def _preload_paratranz():
+        try:
+            from services.paratranz_service import paratranz
+            paratranz.load_translations()
+            # Invalidate caches that depend on translations
+            from services.cache import terminal_cache, commodity_cache, vehicle_cache
+            terminal_cache.invalidate()
+            commodity_cache.invalidate()
+            vehicle_cache.invalidate()
+            logging.info("ParaTranz loaded, caches invalidated for re-translation")
+        except Exception as e:
+            logging.warning(f"ParaTranz preload failed (falling back to local dict): {e}")
+
+    import threading
+    threading.Thread(target=_preload_paratranz, daemon=True).start()
     yield
 
 app = FastAPI(
