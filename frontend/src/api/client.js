@@ -118,10 +118,10 @@ export const buyRoute = (origin, items, refresh = false, originId = null) =>
   api.post('/buy-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {} });
 
 export const searchTerminals = (q, refresh = false) =>
-  cachedGet('/terminals', { q }, refresh, 20000);
+  cachedGet('/terminals', { q }, refresh, 30000);
 
 export const searchCommodities = (q, refresh = false) =>
-  cachedGet('/commodities', { q }, refresh, 20000);
+  cachedGet('/commodities', { q }, refresh, 30000);
 
 export const getWarbonds = (refresh = false) =>
   cachedGet('/warbonds', {}, refresh, 60000);

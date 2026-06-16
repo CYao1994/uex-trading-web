@@ -24,6 +24,13 @@ _ssl_ctx = ssl.create_default_context()
 _ssl_ctx.check_hostname = False
 _ssl_ctx.verify_mode = ssl.CERT_NONE
 
+# Known manufacturer English names for prefix matching
+_MANUFACTURER_EN = [
+    "Anvil", "Aegis", "Argo", "Banu", "Consolidated Outland", "Crusader",
+    "Drake", "Esperia", "Greycat", "Kruger", "MISC", "Origin", "RSI",
+    "Tumbril", "Xi'an", "Gatac", "Vanduul",
+]
+
 
 class ParaTranzService:
     """ParaTranz translation service for Star Citizen Chinese localization."""
@@ -72,7 +79,11 @@ class ParaTranzService:
 
                             if not original or not translation:
                                 continue
-                            if stage and stage < 1:
+                            if stage is not None and stage < 1:
+                                continue
+                            if translation == original:
+                                continue
+                            if len(original) <= 2:
                                 continue
 
                             original_lower = original.lower().strip()
@@ -114,13 +125,26 @@ class ParaTranzService:
 
         # 1. Exact match
         if name_lower in self._translations:
-            return self._translations[name_lower]
+            trans = self._translations[name_lower]
+            if self._is_valid_translation(trans, name):
+                # Also try finding a longer match with manufacturer prefix
+                # e.g. "C8 Pisces" -> try "Anvil C8 Pisces" which gives "铁砧 C8 双鱼座"
+                best = trans
+                for prefix in _MANUFACTURER_EN:
+                    full_key = (prefix + " " + name_lower).lower()
+                    if full_key in self._translations:
+                        full_trans = self._translations[full_key]
+                        if self._is_valid_translation(full_trans, name):
+                            if len(full_trans) >= len(best):
+                                best = full_trans
+                return best
 
         # 2. Space/hyphen normalized match
         name_no_space = name_lower.replace(' ', '').replace('-', '')
         for orig, trans in self._translations.items():
             if orig.replace(' ', '').replace('-', '') == name_no_space:
-                return trans
+                if self._is_valid_translation(trans, name):
+                    return trans
 
         # 3. Non-overlapping longest-first substring replacement
         # Only replace if the best match covers >= 50% of input to avoid
@@ -161,6 +185,17 @@ class ParaTranzService:
             result_chars[start] = trans
 
         return ''.join(c for c in result_chars if c is not None)
+
+    @staticmethod
+    def _is_valid_translation(trans: str, orig: str) -> bool:
+        if not trans:
+            return False
+        if len(trans) > len(orig) * 4:
+            return False
+        has_chinese = any('\u4e00' <= c <= '\u9fff' for c in trans)
+        if not has_chinese:
+            return False
+        return True
 
     def translate_by_key(self, key: str) -> Optional[str]:
         if not key or not self._loaded:

@@ -156,7 +156,7 @@ SHIP_NAME_ZH = {
     # ========== Anvil (安维尔) ==========
     "Arrow": "安维尔 箭矢",
     "Ballista": "安维尔 弩炮",
-    "Ballista Dunestalker": "未知 未知 未知",
+    "Ballista Dunestalker": "安维尔 弩炮 沙丘猎手",
     "Ballista Snowblind": "安维尔 弩炮 雪盲",
     "C8 Pisces": "安维尔 C8 双鱼座",
     "C8X Pisces Expedition": "安维尔 C8X 双鱼座 远征型",
@@ -660,28 +660,39 @@ _SHIP_NAME_ALIASES = {
 
 
 def _get_name_zh(name: str) -> str:
-    """Get Chinese name for a ship/item. Returns original name if no mapping.
+    """Get Chinese name for a ship/item. ParaTranz first, then hardcoded fallback.
 
     Matching priority:
-    1. Exact match in SHIP_NAME_ZH
-    2. Prefix match (e.g., "Cutlass Black Warbond" ? "未知 未知" + " Warbond")
-    3. Strip known manufacturer prefix and match base name
-       (e.g., "Aegis Gladius" ? strip "Aegis " ? match "Gladius" ? "未知 未知")
+    1. ParaTranz translate() (single authoritative source)
+    2. Exact match in SHIP_NAME_ZH
+    3. Prefix match
+    4. Strip manufacturer prefix and match base name
     """
-    # 1. Exact match
+    from services.paratranz_service import paratranz
+
+    # 1. ParaTranz (single source of truth)
+    ptz = paratranz.translate(name)
+    if ptz:
+        return ptz
+
+    # 2. Exact match
     if name in SHIP_NAME_ZH:
         return SHIP_NAME_ZH[name]
 
-    # 2. Prefix match (handles suffixes like " Warbond Edition", etc.)
+    # 3. Prefix match (handles suffixes like " Warbond Edition", etc.)
     for eng, zh in sorted(SHIP_NAME_ZH.items(), key=lambda x: -len(x[0])):
         if name.startswith(eng):
             return zh + name[len(eng):]
 
-    # 3. Strip manufacturer prefix and try matching base name
+    # 4. Strip manufacturer prefix and try matching base name
     for mfr_en, mfr_zh in MANUFACTURER_ZH.items():
         prefix = mfr_en + " "
         if name.startswith(prefix):
             base = name[len(prefix):]
+            # Try ParaTranz on base name
+            ptz_base = paratranz.translate(base)
+            if ptz_base:
+                return ptz_base
             # Exact match on base name
             if base in SHIP_NAME_ZH:
                 return SHIP_NAME_ZH[base]
@@ -689,8 +700,8 @@ def _get_name_zh(name: str) -> str:
             for eng, zh in sorted(SHIP_NAME_ZH.items(), key=lambda x: -len(x[0])):
                 if base.startswith(eng):
                     return zh + base[len(eng):]
-            # No match on base, return manufacturer + original base
-            return mfr_zh + " " + base
+            # No match on base, return original name
+            return name
 
     return name
 
@@ -792,7 +803,7 @@ def _fetch_from_starnotifier() -> list:
     ccu_section = re.search(r"<h2>Today's CCU Warbonds</h2>(.*?)<h2>", html, re.DOTALL)
     if ccu_section:
         ccu_html = ccu_section.group(1)
-        ccu_items = re.findall(r'<li><b>(.*?)</b>.*?\$(\d+).*?\$(\d+)', ccu_html)
+        ccu_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', ccu_html)
         for name, warbond_price, standard_price in ccu_items:
             items.append({
                 "name": name.strip(),
@@ -808,10 +819,10 @@ def _fetch_from_starnotifier() -> list:
             })
 
     # Parse Standalone Ships items
-    standalone_section = re.search(r"<h2>Today's Standalone Warbonds</h2>(.*?)<h2>", html, re.DOTALL)
+    standalone_section = re.search(r"<h2>Today's (?:Extra \(standalone ships\) )?Warbonds</h2>(.*?)$", html, re.DOTALL)
     if standalone_section:
         standalone_html = standalone_section.group(1)
-        standalone_items = re.findall(r'<li><b>(.*?)</b>.*?\$(\d+).*?\$(\d+)', standalone_html)
+        standalone_items = re.findall(r'<li><b>(.*?)</b>.*?(\d+)\$.*?(\d+)\$', standalone_html)
         for name, warbond_price, standard_price in standalone_items:
             items.append({
                 "name": name.strip(),
@@ -920,13 +931,12 @@ def _parse_starnotifier(html: str) -> dict:
 
 
 def _classify_item(name: str, is_ccu: bool, is_standalone: bool) -> tuple:
-    """Classify an item into a category. Only CCU and standalone_ship are kept."""
+    """Classify an item into a category."""
     if is_ccu:
-        return "ccu", "未知"
+        return "ccu", CATEGORY_ZH.get("Ship Upgrades", "CCU")
     if is_standalone:
-        return "standalone_ship", "未知"
-    # Items that are not CCU or standalone ships are ignored
-    return "other", "未知"
+        return "standalone_ship", CATEGORY_ZH.get("Standalone Ships", "独立飞船")
+    return "other", "其他"
 
 
 def _add_to_category(result: dict, item: dict):
@@ -1015,7 +1025,9 @@ def fetch_warbonds(refresh: bool = False) -> dict:
             cat_items = [i for i in all_items if i["category"] == cat_name]
             if cat_items:
                 result["categories"][cat_name] = cat_items
-        warbond_cache.set(result)
+
+        if all_items:
+            warbond_cache.set(result)
         return result
     except Exception as e:
         if warbond_cache.data is not None:

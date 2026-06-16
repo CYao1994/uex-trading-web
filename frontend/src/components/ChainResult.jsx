@@ -372,6 +372,11 @@ function ChainResult({ data, onRefresh }) {
                   }}>
                     <Typography sx={{ color: '#c9a227', fontSize: '0.8rem', fontWeight: 600, fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif' }}>
                       {leg.origin_name_zh}
+                      {leg.origin_name && leg.origin_name !== leg.origin_name_zh && (
+                        <Typography component="span" sx={{ fontSize: '0.65rem', color: 'rgba(201, 162, 39, 0.4)', fontWeight: 400, ml: 0.5 }}>
+                          {leg.origin_name}
+                        </Typography>
+                      )}
                     </Typography>
                   </Box>
 
@@ -393,6 +398,11 @@ function ChainResult({ data, onRefresh }) {
                   }}>
                     <Typography sx={{ color: '#c9a227', fontSize: '0.8rem', fontWeight: 600, fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif' }}>
                       {leg.destination_name_zh}
+                      {leg.destination_name && leg.destination_name !== leg.destination_name_zh && (
+                        <Typography component="span" sx={{ fontSize: '0.65rem', color: 'rgba(201, 162, 39, 0.4)', fontWeight: 400, ml: 0.5 }}>
+                          {leg.destination_name}
+                        </Typography>
+                      )}
                     </Typography>
                   </Box>
 
