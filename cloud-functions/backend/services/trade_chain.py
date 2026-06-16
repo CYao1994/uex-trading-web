@@ -191,6 +191,7 @@ def _build_destination_lookup(
         td = terminal_map.get(tid, {})
         if not _is_valid_commodity_terminal(td.get("name", "")):
             continue
+        dest_loc_key = _get_location_key(td)
         for p in prices:
             cid = p.get("id_commodity", 0)
             if not cid:
@@ -198,11 +199,11 @@ def _build_destination_lookup(
             price_sell = p.get("price_sell")
             scu_sell_stock = p.get("scu_sell_stock", 0)
             status_sell = p.get("status_sell", 99)
-            # Same threshold alignment as _scan_buyable: accept status up to 7
             if not price_sell or price_sell <= 0 or status_sell > 7:
                 continue
             lookup.setdefault(cid, []).append({
                 "dest_terminal_id": tid,
+                "dest_location_key": dest_loc_key,
                 "price_sell": price_sell,
                 "scu_sell_stock": scu_sell_stock or 0,
             })
@@ -279,21 +280,23 @@ def _find_best_leg(
     ship_scu: int,
     capital: float,
 ) -> Optional[dict]:
-    """Find the best leg by aggregating multi-commodity combos per destination.
+    """Find the best leg by aggregating multi-commodity combos per destination location.
 
     Algorithm:
     1. Build candidate list: for each buyable commodity, compute max quantity
        and pair with each profitable destination.
-    2. Group candidates by destination terminal.
-    3. For each destination, greedily assign cargo space by unit profit
-       (respecting SCU, budget, and destination stock constraints).
-    4. Pick the destination with highest total profit.
+    2. Group candidates by destination LOCATION (not terminal).
+    3. For each destination location, deduplicate commodities (keep best price),
+       then greedily assign cargo space by unit profit.
+    4. Pick the location with highest total profit.
 
     Returns a dict with the best destination and all commodities assigned to it,
     plus an _all_commodities field for the supplement finder.
     """
     # Step 1: Build candidate pairs (commodity x destination)
-    candidates_by_dest: Dict[int, List[dict]] = {}
+    # Group by dest_location_key to aggregate commodities sold at different
+    # terminals within the same destination location
+    candidates_by_dest: Dict[str, List[dict]] = {}
 
     for item in buyable:
         cid = item["commodity_id"]
@@ -306,20 +309,10 @@ def _find_best_leg(
         if max_buy <= 0:
             continue
 
-        unit_profit_margin = 0
         destinations = dest_lookup.get(cid, [])
-        for dest in destinations:
-            dest_tid = dest["dest_terminal_id"]
-            if dest_tid == origin_tid:
-                continue
-            price_sell = dest["price_sell"]
-            if price_sell <= price_buy:
-                continue
-            unit_profit_margin = price_sell - price_buy
-            break
-        if unit_profit_margin <= 0:
-            continue
 
+        # For each destination, find the terminal with best sell price
+        best_per_dest: Dict[str, dict] = {}
         for dest in destinations:
             dest_tid = dest["dest_terminal_id"]
             if dest_tid == origin_tid:
@@ -327,20 +320,34 @@ def _find_best_leg(
             price_sell = dest["price_sell"]
             if price_sell <= price_buy:
                 continue
-            scu_sell_stock = dest["scu_sell_stock"]
+            dest_loc = dest["dest_location_key"]
+            # Keep best sell price per destination location
+            if dest_loc not in best_per_dest or price_sell > best_per_dest[dest_loc]["price_sell"]:
+                best_per_dest[dest_loc] = {
+                    "dest_terminal_id": dest_tid,
+                    "dest_location_key": dest_loc,
+                    "price_sell": price_sell,
+                    "scu_sell_stock": dest.get("scu_sell_stock", 0),
+                }
+
+        for dest_loc, dest_info in best_per_dest.items():
+            unit_profit = dest_info["price_sell"] - price_buy
+            if unit_profit <= 0:
+                continue
 
             effective_factor = 0.9 if status_buy > 5 else 1.0
 
-            candidates_by_dest.setdefault(dest_tid, []).append({
+            candidates_by_dest.setdefault(dest_loc, []).append({
                 "origin_terminal_id": origin_tid,
-                "dest_terminal_id": dest_tid,
+                "dest_terminal_id": dest_info["dest_terminal_id"],
+                "dest_location_key": dest_loc,
                 "commodity_id": cid,
                 "commodity_name": item["commodity_name"],
                 "price_buy": price_buy,
-                "price_sell": price_sell,
+                "price_sell": dest_info["price_sell"],
                 "max_buyable": max_buy,
-                "scu_sell_stock": scu_sell_stock,
-                "unit_profit": price_sell - price_buy,
+                "scu_sell_stock": dest_info["scu_sell_stock"],
+                "unit_profit": unit_profit,
                 "effective_factor": effective_factor,
                 "status_buy": status_buy,
             })
@@ -348,12 +355,12 @@ def _find_best_leg(
     if not candidates_by_dest:
         return None
 
-    # Step 2 & 3: For each destination, greedily assign cargo
-    best_dest = None
+    # Step 2 & 3: For each destination location, greedily assign cargo
+    best_dest_loc = None
     best_total_effective = 0
     best_total_real_profit = 0
 
-    for dest_tid, cands in candidates_by_dest.items():
+    for dest_loc, cands in candidates_by_dest.items():
         cands.sort(key=lambda c: c["unit_profit"], reverse=True)
 
         remaining_scu = ship_scu
@@ -361,10 +368,15 @@ def _find_best_leg(
         dest_assigned = []
         total_effective = 0
         total_real_profit = 0
+        seen_cids: set = set()
 
         for c in cands:
             if remaining_scu <= 0 or remaining_budget <= 0:
                 break
+            # Deduplicate: same commodity at same destination location
+            if c["commodity_id"] in seen_cids:
+                continue
+            seen_cids.add(c["commodity_id"])
 
             dest_stock = c["scu_sell_stock"]
             max_by_budget = math.floor(remaining_budget / c["price_buy"]) if c["price_buy"] > 0 else 0
@@ -378,7 +390,8 @@ def _find_best_leg(
 
             dest_assigned.append({
                 "origin_terminal_id": c["origin_terminal_id"],
-                "dest_terminal_id": dest_tid,
+                "dest_terminal_id": c["dest_terminal_id"],
+                "dest_location_key": dest_loc,
                 "commodity_id": c["commodity_id"],
                 "commodity_name": c["commodity_name"],
                 "price_buy": c["price_buy"],
@@ -398,10 +411,10 @@ def _find_best_leg(
         ):
             best_total_effective = total_effective
             best_total_real_profit = total_real_profit
-            best_dest = dest_tid
+            best_dest_loc = dest_loc
             best_assigned = dest_assigned
 
-    if best_dest is None or not best_assigned:
+    if best_dest_loc is None or not best_assigned:
         return None
 
     # Build result: primary is the highest unit-profit commodity
@@ -410,7 +423,8 @@ def _find_best_leg(
 
     return {
         "origin_terminal_id": primary["origin_terminal_id"],
-        "dest_terminal_id": best_dest,
+        "dest_terminal_id": primary["dest_terminal_id"],
+        "dest_location_key": best_dest_loc,
         "commodity_id": primary["commodity_id"],
         "commodity_name": primary["commodity_name"],
         "price_buy": primary["price_buy"],
@@ -476,6 +490,7 @@ def _find_supplement_commodities(
         return []
 
     origin_tid = best["origin_terminal_id"]
+    dest_loc_key = best.get("dest_location_key", "")
     dest_tid = best["dest_terminal_id"]
 
     candidates: List[dict] = []
@@ -483,8 +498,6 @@ def _find_supplement_commodities(
     for item in buyable:
         cid = item["commodity_id"]
         if cid in assigned_cids:
-            continue
-        if item["origin_terminal_id"] != origin_tid:
             continue
         if item["price_buy"] <= 0:
             continue
@@ -494,9 +507,9 @@ def _find_supplement_commodities(
         destinations = dest_lookup.get(cid, [])
         matching_dest = None
         for dest in destinations:
-            if dest["dest_terminal_id"] == dest_tid:
-                matching_dest = dest
-                break
+            if dest.get("dest_location_key") == dest_loc_key:
+                if matching_dest is None or dest["price_sell"] > matching_dest["price_sell"]:
+                    matching_dest = dest
 
         if matching_dest is None:
             continue
@@ -529,7 +542,7 @@ def _find_supplement_commodities(
     for cand in candidates:
         if remaining_scu <= 0 or remaining_budget <= 0:
             break
-        if len(supplements) >= 4:
+        if len(supplements) >= 10:
             break
 
         max_by_budget = math.floor(remaining_budget / cand["price_buy"]) if cand["price_buy"] > 0 else 0
