@@ -762,6 +762,40 @@ async def refresh_translations():
         return {"status": "error", "message": str(e)}
 
 
+@router.get("/debug/terminal-fields")
+async def debug_terminal_fields():
+    """Debug: dump all fields from a sample terminal record."""
+    from services.uex_api import load_terminals, load_space_stations, load_cities, load_outposts
+    terminals = load_terminals()
+    stations = load_space_stations()
+    cities = load_cities()
+    outposts = load_outposts()
+    
+    # Find Seraphim (id=259) and Everus (id=25)
+    sample_terminal = None
+    for t in terminals:
+        if t.get("id") == 259:
+            sample_terminal = t
+            break
+    
+    # Get station details
+    station_detail = None
+    for sid, s in stations.items():
+        if "Seraphim" in (s.get("name") or ""):
+            station_detail = s
+            break
+    
+    return {
+        "terminal_fields": list(sample_terminal.keys()) if sample_terminal else [],
+        "sample_terminal": sample_terminal,
+        "station_fields": list(station_detail.keys()) if station_detail else [],
+        "sample_station": station_detail,
+        "stations_count": len(stations),
+        "cities_count": len(cities),
+        "outposts_count": len(outposts),
+    }
+
+
 @router.get("/warmup")
 async def warmup():
     """Pre-warm critical caches in background to reduce cold-start latency."""
