@@ -55,6 +55,13 @@ if (existsSync(cfTarget)) rmSync(cfTarget, { recursive: true });
 cpSync(cfSource, cfTarget, { recursive: true });
 console.log('[build] Copied cloud-functions/');
 
+// ?? edge-functions
+const efSource = join(ROOT, 'edge-functions');
+const efTarget = join(DIST, 'edge-functions');
+if (existsSync(efTarget)) rmSync(efTarget, { recursive: true });
+cpSync(efSource, efTarget, { recursive: true });
+console.log('[build] Copied edge-functions/');
+
 // ?? edgeone.json
 copyFileSync(join(ROOT, 'edgeone.json'), join(DIST, 'edgeone.json'));
 console.log('[build] Copied edgeone.json');
