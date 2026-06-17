@@ -1,16 +1,18 @@
 """
 UEX Trade Navigator - Cloudflare Workers Python Entry Point
-Uses native Cloudflare Workers Python API (no ASGI/Starlette dependency).
+Uses native Cloudflare Workers Python API with ASGI bridge via asgiref.
 """
 import json
 import sys
 import os
+import traceback
 
-# Add backend to path
-BACKEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'cloud-functions', 'backend')
-sys.path.insert(0, BACKEND_DIR)
+# Add backend to Python path
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+BACKEND_DIR = os.path.join(CURRENT_DIR, '..', '..', 'cloud-functions', 'backend')
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
 
-# Lazy import FastAPI app
 _app = None
 
 def _get_app():
@@ -22,78 +24,83 @@ def _get_app():
 
 
 async def on_fetch(request, env, ctx):
-    """Handle all /api/* requests using Cloudflare Workers native Python API."""
+    """Handle all /api/* requests."""
     from js import Response
 
     try:
         app = _get_app()
     except Exception as e:
         return Response.new(
-            json.dumps({"error": "Backend import failed", "detail": str(e)}),
+            json.dumps({"error": "Backend init failed", "detail": str(e)}),
             status=500,
             headers={"Content-Type": "application/json"}
         )
 
-    # Parse request
-    method = request.method
-    url = request.url
-    # Extract path after /api/
-    path = url.split("/api/", 1)[-1] if "/api/" in url else url.split("://", 1)[-1].split("/", 1)[-1]
-    path = "/" + path
-    query = url.split("?")[1] if "?" in url else ""
-
-    # Read request body
     try:
-        body = await request.arrayBuffer()
-    except:
+        method = request.method
+        url = request.url
+
+        # Extract path after /api/
+        if "/api/" in url:
+            path = "/" + url.split("/api/", 1)[-1].split("?")[0]
+        else:
+            path = "/" + url.split("://", 1)[-1].split("/", 1)[-1].split("?")[0]
+
+        query = url.split("?", 1)[1] if "?" in url else ""
+
+        # Read body
         body = b""
+        try:
+            body = bytes(await request.arrayBuffer())
+        except Exception:
+            pass
 
-    # Build ASGI scope manually for Starlette
-    headers_list = []
-    for k, v in request.headers.items():
-        headers_list.append((k.lower().encode("utf-8"), v.encode("utf-8")))
+        # Build ASGI scope
+        headers = []
+        for k in request.headers.keys():
+            v = request.headers.get(k)
+            headers.append((k.lower().encode("utf-8"), v.encode("utf-8")))
 
-    scope = {
-        "type": "http",
-        "method": method,
-        "path": path,
-        "query_string": query.encode("utf-8") if query else b"",
-        "headers": headers_list,
-        "server": ("localhost", 443),
-    }
+        scope = {
+            "type": "http",
+            "method": method,
+            "path": path,
+            "query_string": query.encode("utf-8") if query else b"",
+            "headers": headers,
+            "server": ("localhost", 443),
+        }
 
-    # ASGI send callback
-    response_body = b""
-    response_status = 200
-    response_headers = []
+        # ASGI transport
+        _response_body = bytearray()
+        _response_status = 200
+        _response_headers = []
 
-    async def send(message):
-        nonlocal response_body, response_status, response_headers
-        if message["type"] == "http.response.start":
-            response_status = message.get("status", 200)
-            response_headers = message.get("headers", [])
-        elif message["type"] == "http.response.body":
-            response_body += message.get("body", b"")
+        async def send(msg):
+            nonlocal _response_body, _response_status, _response_headers
+            if msg["type"] == "http.response.start":
+                _response_status = msg.get("status", 200)
+                _response_headers = msg.get("headers", [])
+            elif msg["type"] == "http.response.body":
+                _response_body.extend(msg.get("body", b""))
 
-    async def receive():
-        return {"type": "http.request", "body": body, "more_body": False}
+        async def receive():
+            return {"type": "http.request", "body": body, "more_body": False}
 
-    try:
         await app(scope, receive, send)
 
-        # Convert headers
-        headers_dict = {}
-        for k, v in response_headers:
-            hk = k.decode() if isinstance(k, bytes) else k
-            hv = v.decode() if isinstance(v, bytes) else v
-            headers_dict[hk] = hv
+        # Build response headers
+        resp_headers = {}
+        for k, v in _response_headers:
+            rk = k.decode() if isinstance(k, bytes) else str(k)
+            rv = v.decode() if isinstance(v, bytes) else str(v)
+            resp_headers[rk] = rv
 
-        return Response.new(response_body, status=response_status, headers=headers_dict)
+        return Response.new(bytes(_response_body), status=_response_status, headers=resp_headers)
 
     except Exception as e:
-        import traceback
+        tb = traceback.format_exc()
         return Response.new(
-            json.dumps({"error": "Internal server error", "detail": str(e), "traceback": traceback.format_exc()}),
+            json.dumps({"error": "Worker error", "detail": str(e), "tb": tb}),
             status=500,
             headers={"Content-Type": "application/json"}
         )
