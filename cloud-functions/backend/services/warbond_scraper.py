@@ -1003,11 +1003,16 @@ def fetch_warbonds(refresh: bool = False) -> dict:
         # RSI GraphQL may not return all warbond items, so we merge from both sources
         try:
             starnotifier_items = _fetch_from_starnotifier()
-            existing_names = {item["name"] for item in all_items}
+            # CCU items: always add (same ship can be both CCU and Standalone)
+            # Other items: skip if name already exists in same category
+            existing_by_cat = {}
+            for item in all_items:
+                existing_by_cat.setdefault(item["category"], set()).add(item["name"])
             for item in starnotifier_items:
-                if item["name"] not in existing_names:
+                cat_names = existing_by_cat.get(item["category"], set())
+                if item["name"] not in cat_names:
                     all_items.append(item)
-                    existing_names.add(item["name"])
+                    cat_names.add(item["name"])
             print(f"Merged {len(starnotifier_items)} items from starnotifier, total now: {len(all_items)}")
         except Exception as e:
             print(f"starnotifier.com merge failed: {e}")

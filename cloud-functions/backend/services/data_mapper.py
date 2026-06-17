@@ -614,9 +614,16 @@ COMMODITY_ZH_MAP = {
 }
 
 
+_terminal_zh_cache: Dict[str, str] = {}
+
 def get_terminal_zh(en_name: str, en_nickname: str = "", en_station: str = "",
                     en_planet: str = "", en_system: str = "") -> str:
-    """Translate terminal name to Chinese. ParaTranz first, fallback to hardcoded."""
+    """Translate terminal name to Chinese. ParaTranz first, fallback to hardcoded.
+    Uses in-memory cache to avoid repeated ParaTranz lookups."""
+    cache_key = f"{en_name}|{en_nickname}|{en_station}"
+    if cache_key in _terminal_zh_cache:
+        return _terminal_zh_cache[cache_key]
+
     from services.paratranz_service import paratranz
 
     # 1. ParaTranz match
@@ -624,12 +631,15 @@ def get_terminal_zh(en_name: str, en_nickname: str = "", en_station: str = "",
         if candidate:
             ptz = paratranz.translate(candidate)
             if ptz:
+                _terminal_zh_cache[cache_key] = ptz
                 return ptz
 
     # 2. Hardcoded fallback
     if en_name in TERMINAL_ZH_MAP:
+        _terminal_zh_cache[cache_key] = TERMINAL_ZH_MAP[en_name]
         return TERMINAL_ZH_MAP[en_name]
     if en_nickname and en_nickname in TERMINAL_ZH_MAP:
+        _terminal_zh_cache[cache_key] = TERMINAL_ZH_MAP[en_nickname]
         return TERMINAL_ZH_MAP[en_nickname]
     candidates = [en_name, en_nickname, en_station]
     for cand in candidates:
@@ -637,7 +647,9 @@ def get_terminal_zh(en_name: str, en_nickname: str = "", en_station: str = "",
             continue
         for key in sorted(TERMINAL_ZH_MAP.keys(), key=len, reverse=True):
             if key.lower() in cand.lower():
+                _terminal_zh_cache[cache_key] = TERMINAL_ZH_MAP[key]
                 return TERMINAL_ZH_MAP[key]
+    _terminal_zh_cache[cache_key] = en_name
     return en_name
 
 
