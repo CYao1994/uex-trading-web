@@ -1,12 +1,13 @@
-// client.js - ??:??10? + ??1???? + localStorage????
+// client.js - Vercel后端API调用
 import axios from 'axios';
 import { getStale, set, buildCacheKey, CACHE_TTL } from './cache';
 
-// EdgeOne Pages ????:???????,API ??? /api
-// ?????,Vite proxy ?? /api -> localhost:8000
+// Vercel后端地址（前后端分离部署）
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://uex-trading-web-4zbx-six.vercel.app';
+
 const api = axios.create({
-  baseURL: '/api',
-  timeout: 10000, // 10? - ????,??????
+  baseURL: API_BASE + '/api',
+  timeout: 10000,
 });
 
 // === ????? ===

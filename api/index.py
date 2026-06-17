@@ -1,5 +1,5 @@
 """
-Vercel Serverless Function - FastAPI to WSGI adapter
+Vercel Serverless Function - Python API Entry Point
 Handles all /api/* requests and routes to FastAPI backend.
 """
 import sys
@@ -23,60 +23,69 @@ def _get_app():
     return _app
 
 
-def handler(request):
-    """Vercel Python WSGI handler."""
-    from asgiref.wsgi import WsgiToAsgi
+def handler(request, response):
+    """Vercel Python handler."""
+    try:
+        app = _get_app()
 
-    app = _get_app()
-    asgi_app = WsgiToAsgi(app)
+        # Extract path from request URL
+        path = request.url.split('?')[0]
+        if '/api/' in path:
+            path = '/' + path.split('/api/', 1)[-1]
+        else:
+            path = '/'
 
-    # Convert WSGI request to ASGI
-    path = request.get('PATH_INFO', '/')
-    method = request.get('REQUEST_METHOD', 'GET')
-    query_string = request.get('QUERY_STRING', '')
-    body = request.get('wsgi.input', b'').read() if hasattr(request.get('wsgi.input', b''), 'read') else b''
-    headers = [(k.lower(), v) for k, v in request.get('HTTP_', {}).items()]
+        query = request.url.split('?')[1] if '?' in request.url else ''
 
-    scope = {
-        'type': 'http',
-        'method': method,
-        'path': path,
-        'query_string': query_string.encode(),
-        'headers': [(k.encode(), v.encode()) for k, v in headers],
-        'server': ('localhost', 443),
-    }
+        # Build ASGI scope
+        headers = []
+        for k, v in request.headers.items():
+            headers.append((k.lower().encode('utf-8'), v.encode('utf-8')))
 
-    # ASGI transport
-    response_body = b''
-    response_status = 200
-    response_headers = []
+        scope = {
+            'type': 'http',
+            'method': request.method,
+            'path': path,
+            'query_string': query.encode('utf-8') if query else b'',
+            'headers': headers,
+            'server': ('localhost', 443),
+        }
 
-    async def send(msg):
-        nonlocal response_body, response_status, response_headers
-        if msg['type'] == 'http.response.start':
-            response_status = msg.get('status', 200)
-            response_headers = msg.get('headers', [])
-        elif msg['type'] == 'http.response.body':
-            response_body += msg.get('body', b'')
+        # ASGI transport
+        _response_body = bytearray()
+        _response_status = 200
+        _response_headers = []
 
-    async def receive():
-        return {'type': 'http.request', 'body': body, 'more_body': False}
+        async def send(msg):
+            nonlocal _response_body, _response_status, _response_headers
+            if msg['type'] == 'http.response.start':
+                _response_status = msg.get('status', 200)
+                _response_headers = msg.get('headers', [])
+            elif msg['type'] == 'http.response.body':
+                _response_body.extend(msg.get('body', b''))
 
-    import asyncio
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(asgi_app(scope, receive, send))
-    loop.close()
+        async def receive():
+            body = request.body if hasattr(request, 'body') else b''
+            return {'type': 'http.request', 'body': body, 'more_body': False}
 
-    # Build WSGI response
-    status_line = f'HTTP/1.1 {response_status} OK'
-    response_headers_dict = {}
-    for k, v in response_headers:
-        rk = k.decode() if isinstance(k, bytes) else str(k)
-        rv = v.decode() if isinstance(v, bytes) else str(v)
-        response_headers_dict[rk] = rv
+        import asyncio
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(app(scope, receive, send))
+        loop.close()
 
-    return {
-        'status': response_status,
-        'headers': response_headers_dict,
-        'body': response_body,
-    }
+        # Build response
+        response.status_code = _response_status
+        for k, v in _response_headers:
+            rk = k.decode() if isinstance(k, bytes) else str(k)
+            rv = v.decode() if isinstance(v, bytes) else str(v)
+            response.headers[rk] = rv
+        response.body = bytes(_response_body)
+
+        return response
+
+    except Exception as e:
+        import traceback
+        response.status_code = 500
+        response.headers['Content-Type'] = 'application/json'
+        response.body = json.dumps({'error': 'Worker error', 'detail': str(e), 'tb': traceback.format_exc()})
+        return response
