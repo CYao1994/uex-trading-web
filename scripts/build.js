@@ -55,12 +55,6 @@ if (existsSync(cfTarget)) rmSync(cfTarget, { recursive: true });
 cpSync(cfSource, cfTarget, { recursive: true });
 console.log('[build] Copied cloud-functions/');
 
-// NOTE: edge-functions/ is NOT copied to dist/.
-// EdgeOne Pages scans edge-functions/ from the project root directory before build,
-// not from the outputDirectory (dist/). Copying it into dist/ creates an unprocessed
-// duplicate that lacks the required meta file, causing "Edge functions exist but meta
-// file is missing or empty" warning and all /api/* routes returning 404.
-
 // ?? edgeone.json
 copyFileSync(join(ROOT, 'edgeone.json'), join(DIST, 'edgeone.json'));
 console.log('[build] Copied edgeone.json');
