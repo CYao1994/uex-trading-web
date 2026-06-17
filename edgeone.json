@@ -4,8 +4,5 @@
   "cloudFunctions": {
     "directory": "cloud-functions/backend",
     "pythonRuntime": "python3.9"
-  },
-  "edgeFunctions": {
-    "directory": "edge-functions"
   }
 }
