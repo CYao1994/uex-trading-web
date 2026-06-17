@@ -1,0 +1,17 @@
+name = "uex-trading-api"
+main = "functions/api/[[path]].py"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["python_workers"]
+
+# KV namespace bindings
+[[kv_namespaces]]
+binding = "UEX_CACHE_STATIC"
+id = ""  # Fill in from Cloudflare dashboard
+
+[[kv_namespaces]]
+binding = "UEX_CACHE_PRICE"
+id = ""  # Fill in from Cloudflare dashboard
+
+# Environment variables
+[vars]
+UEX_API_KEY = ""  # Fill in from EdgeOne or set in dashboard
