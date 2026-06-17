@@ -2,6 +2,7 @@
   "cloudFunctions": {
     "mainlandRegions": ["ap-guangzhou"],
     "overseasRegions": ["ap-singapore"],
+    "directory": "cloud-functions/backend",
     "python": {
       "maxDuration": 60
     }

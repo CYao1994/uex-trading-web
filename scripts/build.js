@@ -55,6 +55,11 @@ if (existsSync(cfTarget)) rmSync(cfTarget, { recursive: true });
 cpSync(cfSource, cfTarget, { recursive: true });
 console.log('[build] Copied cloud-functions/');
 
+// ?? edge-functions (NOT copied to dist - EdgeOne scans from project root)
+// NOTE: Do NOT copy edge-functions/ to dist/. EdgeOne Pages builds them separately
+// from the project root edge-functions/ directory. Copying to dist/ creates an
+// unprocessed duplicate without meta file, causing "meta file missing" errors.
+
 // ?? edgeone.json
 copyFileSync(join(ROOT, 'edgeone.json'), join(DIST, 'edgeone.json'));
 console.log('[build] Copied edgeone.json');
