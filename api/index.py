@@ -1,6 +1,6 @@
 """
-Vercel Serverless Function - Python API Entry Point
-Handles all /api/* requests and routes to FastAPI backend.
+Vercel Serverless Function - API Entry Point
+All /api/* routes handled here.
 """
 import sys
 import os
@@ -28,7 +28,6 @@ def handler(request, response):
     try:
         app = _get_app()
 
-        # Extract path from request URL
         path = request.url.split('?')[0]
         if '/api/' in path:
             path = '/' + path.split('/api/', 1)[-1]
@@ -37,7 +36,6 @@ def handler(request, response):
 
         query = request.url.split('?')[1] if '?' in request.url else ''
 
-        # Build ASGI scope
         headers = []
         for k, v in request.headers.items():
             headers.append((k.lower().encode('utf-8'), v.encode('utf-8')))
@@ -51,7 +49,6 @@ def handler(request, response):
             'server': ('localhost', 443),
         }
 
-        # ASGI transport
         _response_body = bytearray()
         _response_status = 200
         _response_headers = []
@@ -73,7 +70,6 @@ def handler(request, response):
         loop.run_until_complete(app(scope, receive, send))
         loop.close()
 
-        # Build response
         response.status_code = _response_status
         for k, v in _response_headers:
             rk = k.decode() if isinstance(k, bytes) else str(k)
