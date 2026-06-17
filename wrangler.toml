@@ -6,12 +6,12 @@ compatibility_flags = ["python_workers"]
 # KV namespace bindings
 [[kv_namespaces]]
 binding = "UEX_CACHE_STATIC"
-id = ""  # Fill in from Cloudflare dashboard
+id = "37a7c3f0280b4a4e8ad9a2d883eaf444"
 
 [[kv_namespaces]]
 binding = "UEX_CACHE_PRICE"
-id = ""  # Fill in from Cloudflare dashboard
+id = "886fa3330a5d4794a2eb6b2f1fac4b88"
 
 # Environment variables
 [vars]
-UEX_API_KEY = ""  # Fill in from EdgeOne or set in dashboard
+UEX_API_KEY = "d95a19310543bac9399a6e9b2479e63c64c4c906"
