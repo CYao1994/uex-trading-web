@@ -1,68 +1,99 @@
 """
 UEX Trade Navigator - Cloudflare Workers Python Entry Point
-Handles all /api/* routes and forwards to FastAPI backend.
+Uses native Cloudflare Workers Python API (no ASGI/Starlette dependency).
 """
 import json
 import sys
 import os
 
-# Add the backend directory to Python path
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-BACKEND_DIR = os.path.join(os.path.dirname(CURRENT_DIR), '..', 'cloud-functions', 'backend')
+# Add backend to path
+BACKEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'cloud-functions', 'backend')
 sys.path.insert(0, BACKEND_DIR)
 
-async def on_fetch(request, env, ctx):
-    """Handle all requests to /api/* routes."""
-    try:
+# Lazy import FastAPI app
+_app = None
+
+def _get_app():
+    global _app
+    if _app is None:
         from index import app
-    except Exception as e:
-        return Response(json.dumps({"error": "Backend import failed", "detail": str(e)}),
-                       status=500, content_type="application/json")
+        _app = app
+    return _app
+
+
+async def on_fetch(request, env, ctx):
+    """Handle all /api/* requests using Cloudflare Workers native Python API."""
+    from js import Response
 
     try:
-        from starlette.requests import Request as StarletteRequest
-        from starlette.responses import Response as StarletteResponse
+        app = _get_app()
+    except Exception as e:
+        return Response.new(
+            json.dumps({"error": "Backend import failed", "detail": str(e)}),
+            status=500,
+            headers={"Content-Type": "application/json"}
+        )
 
-        # Build ASGI scope from Cloudflare request
-        url = request.url
-        path = url.split("://", 1)[-1].split("/", 1)[-1] if "/" in url else "/"
-        query = url.split("?")[1] if "?" in url else ""
+    # Parse request
+    method = request.method
+    url = request.url
+    # Extract path after /api/
+    path = url.split("/api/", 1)[-1] if "/api/" in url else url.split("://", 1)[-1].split("/", 1)[-1]
+    path = "/" + path
+    query = url.split("?")[1] if "?" in url else ""
 
-        scope = {
-            "type": "http",
-            "method": request.method,
-            "path": "/" + path,
-            "query_string": query.encode() if query else b"",
-            "headers": [(k.lower().encode(), v.encode()) for k, v in request.headers.items()],
-            "server": ("localhost", 443),
-        }
-
+    # Read request body
+    try:
         body = await request.arrayBuffer()
+    except:
+        body = b""
 
-        async def receive():
-            return {"type": "http.request", "body": bytes(body), "more_body": False}
+    # Build ASGI scope manually for Starlette
+    headers_list = []
+    for k, v in request.headers.items():
+        headers_list.append((k.lower().encode("utf-8"), v.encode("utf-8")))
 
-        response_body = b""
-        response_status = 200
-        response_headers = []
+    scope = {
+        "type": "http",
+        "method": method,
+        "path": path,
+        "query_string": query.encode("utf-8") if query else b"",
+        "headers": headers_list,
+        "server": ("localhost", 443),
+    }
 
-        async def send(message):
-            nonlocal response_body, response_status, response_headers
-            if message["type"] == "http.response.start":
-                response_status = message["status"]
-                response_headers = message.get("headers", [])
-            elif message["type"] == "http.response.body":
-                response_body += message.get("body", b"")
+    # ASGI send callback
+    response_body = b""
+    response_status = 200
+    response_headers = []
 
+    async def send(message):
+        nonlocal response_body, response_status, response_headers
+        if message["type"] == "http.response.start":
+            response_status = message.get("status", 200)
+            response_headers = message.get("headers", [])
+        elif message["type"] == "http.response.body":
+            response_body += message.get("body", b"")
+
+    async def receive():
+        return {"type": "http.request", "body": body, "more_body": False}
+
+    try:
         await app(scope, receive, send)
 
+        # Convert headers
         headers_dict = {}
         for k, v in response_headers:
-            headers_dict[k.decode() if isinstance(k, bytes) else k] = v.decode() if isinstance(v, bytes) else v
+            hk = k.decode() if isinstance(k, bytes) else k
+            hv = v.decode() if isinstance(v, bytes) else v
+            headers_dict[hk] = hv
 
-        return Response(response_body, status=response_status, headers=headers_dict)
+        return Response.new(response_body, status=response_status, headers=headers_dict)
 
     except Exception as e:
         import traceback
-        return Response(json.dumps({"error": "Internal server error", "detail": str(e), "trace": traceback.format_exc()}),
-                       status=500, content_type="application/json")
+        return Response.new(
+            json.dumps({"error": "Internal server error", "detail": str(e), "traceback": traceback.format_exc()}),
+            status=500,
+            headers={"Content-Type": "application/json"}
+        )
