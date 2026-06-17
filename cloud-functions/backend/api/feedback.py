@@ -1,11 +1,11 @@
-﻿"""
+"""
 Feedback Router - 飞书反馈 Webhook 转发
 POST /feedback 接收前端反馈数据，转发到飞书 Webhook
 """
 import os
 import logging
 from fastapi import APIRouter, HTTPException
-from .schemas import FeedbackRequest
+from api.schemas import FeedbackRequest
 
 logger = logging.getLogger(__name__)
 
