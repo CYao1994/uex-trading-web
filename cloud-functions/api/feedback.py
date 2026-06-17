@@ -5,7 +5,7 @@ POST /feedback 接收前端反馈数据，转发到飞书 Webhook
 import os
 import logging
 from fastapi import APIRouter, HTTPException
-from .schemas import FeedbackRequest
+from schemas import FeedbackRequest
 
 logger = logging.getLogger(__name__)
 

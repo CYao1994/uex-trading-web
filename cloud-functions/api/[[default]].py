@@ -13,7 +13,7 @@ import os
 import logging
 
 # Ensure the directory containing this file is in sys.path
-# so local modules (app/, services/, version.py) can be imported
+# so local modules (routes.py, schemas.py, services/, version.py) can be imported
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import FastAPI
@@ -70,7 +70,7 @@ async def root():
 
 # === Now load the full route module (after app is defined) ===
 try:
-    from app.routes import router
+    from routes import router
     app.include_router(router)
     logging.info("All routes loaded successfully")
 except Exception as e:

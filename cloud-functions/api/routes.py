@@ -2,7 +2,7 @@
 API Routes - FastAPI route handlers
 """
 from fastapi import APIRouter, Query
-from .schemas import (
+from schemas import (
     SellRouteRequest, SellRouteResponse, TerminalOption, CommodityOption,
     PriceEntry, CommodityPricesResponse, WarbondResponse,
     LocationOption, VehicleOption, TradeChainRequest, TradeChainResponse, ChainLeg,
@@ -12,7 +12,7 @@ from .schemas import (
     ItemWithAttributes, ItemsAttributesBatchResponse,
     ItemsPricesAllResponse
 )
-from .feedback import feedback_router
+from feedback import feedback_router
 from services.uex_api import (
     load_terminals, load_commodities, get_commodity_prices, resolve_terminal,
     clear_caches, load_vehicles, get_locations, get_all_prices,
