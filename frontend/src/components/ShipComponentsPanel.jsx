@@ -26,6 +26,9 @@ const COMPONENT_CATEGORIES = [
   { id: 31, label: '跳跃模块', color: '#bbaacc' },
   // Propulsion
   { id: 86, label: '量子驱动器', color: '#bb88ff' },
+  // Fabrication & Storage
+  { id: 109, label: '制造机', color: '#ffaa00' },
+  { id: 64, label: '容器', color: '#88aacc' },
 ];
 
 const COMPONENT_FILTER_CONFIG = {

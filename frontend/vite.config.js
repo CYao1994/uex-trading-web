@@ -1,13 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import compression from 'vite-plugin-compression'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    compression({ algorithm: 'brotliCompress', threshold: 10240 }),
+    compression({ algorithm: 'gzip', threshold: 10240 }),
+  ],
   build: {
     outDir: path.resolve(__dirname, '../dist'),
     emptyOutDir: true,

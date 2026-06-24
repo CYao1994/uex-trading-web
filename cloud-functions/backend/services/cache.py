@@ -8,6 +8,8 @@ Cache durations based on data volatility:
 - Warbond data: 4 hours (warbonds change ~1-2 times/day)
 """
 
+import json
+import os
 import time
 from typing import Any, Dict, Optional, Tuple
 
@@ -159,16 +161,68 @@ class PriceCache:
 
 
 class DistanceCache:
-    """TTL cache for route distances.
+    """TTL cache for route distances with persistent file backup.
+
     Preserves the (origin_tid, dest_tid) -> distance mapping pattern
-    used by route_planner.py, but adds TTL.
+    used by route_planner.py. Adds TTL + disk persistence so distances
+    survive server restarts and don't need re-fetching.
     """
+
+    _PERSIST_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'distance_cache.json')
 
     def __init__(self, ttl: int = TTL_DISTANCES):
         self._ttl = ttl
         self._distances: Dict[Tuple[int, int], int] = {}
-        self._queried: set = set()  # terminal IDs that have been fully queried
-        self._query_timestamps: Dict[int, float] = {}  # tid -> when it was queried
+        self._queried: set = set()
+        self._query_timestamps: Dict[int, float] = {}
+        self._load_persisted()
+
+    def _load_persisted(self) -> None:
+        """Load cached distances from disk on startup."""
+        try:
+            if os.path.exists(self._PERSIST_PATH):
+                with open(self._PERSIST_PATH, 'r') as f:
+                    data = json.load(f)
+                now = time.time()
+                loaded = 0
+                for key, entry in data.get('distances', {}).items():
+                    ts = entry.get('ts', 0)
+                    if (now - ts) < self._ttl:
+                        parts = key.split(':')
+                        if len(parts) == 2:
+                            self._distances[(int(parts[0]), int(parts[1]))] = entry['d']
+                            loaded += 1
+                for tid, ts in data.get('queried', {}).items():
+                    if (now - ts) < self._ttl:
+                        self._queried.add(int(tid))
+                        self._query_timestamps[int(tid)] = ts
+                print(f"[DistanceCache] Loaded {loaded} distances from disk cache")
+        except Exception as e:
+            print(f"[DistanceCache] Failed to load disk cache: {e}")
+
+    def _persist(self) -> None:
+        """Save current cache state to disk."""
+        try:
+            os.makedirs(os.path.dirname(self._PERSIST_PATH), exist_ok=True)
+            now = time.time()
+            distances = {}
+            for (o, d), dist in self._distances.items():
+                key = f"{o}:{d}"
+                distances[key] = {'d': dist, 'ts': now}
+            queried = {str(tid): ts for tid, ts in self._query_timestamps.items()
+                       if (now - ts) < self._ttl}
+            with open(self._PERSIST_PATH, 'w') as f:
+                json.dump({'distances': distances, 'queried': queried}, f)
+        except Exception:
+            pass
+
+    def _maybe_persist(self) -> None:
+        """Persist to disk at most once every 5 minutes."""
+        now = time.time()
+        last = getattr(self, '_last_persist_time', 0)
+        if (now - last) > 300:
+            self._last_persist_time = now
+            self._persist()
 
     def is_queried(self, tid: int) -> bool:
         """Check if a terminal's routes were queried and cache is still valid."""
@@ -181,6 +235,7 @@ class DistanceCache:
         """Mark a terminal as queried."""
         self._queried.add(tid)
         self._query_timestamps[tid] = time.time()
+        self._persist()
 
     def get_distance(self, origin: int, dest: int) -> Optional[int]:
         """Get cached distance."""
@@ -195,6 +250,7 @@ class DistanceCache:
     def set_distance(self, origin: int, dest: int, distance: int) -> None:
         """Store distance."""
         self._distances[(origin, dest)] = distance
+        self._maybe_persist()
 
     def get_routes_from(self, tid: int) -> Dict[int, int]:
         """Get all cached routes from a terminal."""

@@ -45,7 +45,7 @@ export function BackendStatusProvider({ children }) {
       applyBackoff();
       lastCheckedRef.current = new Date();
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Apply exponential backoff on failure
   const applyBackoff = useCallback(() => {

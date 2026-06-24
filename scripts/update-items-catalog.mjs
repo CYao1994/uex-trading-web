@@ -649,10 +649,10 @@ Object.assign(COMPANY_TO_MFR, {
   'associated sciences and development': 'ASAD',
   'knightbridge arms': 'KBAR',
   'kroneg': 'KRON',
-  'hurston dynamics': 'TRAS',  // HRST for components, TRAS for weapons
-  'apocalypse arms': 'APAR',  // global.ini uses APAR for Apocalypse weapons
-  'amon & reese co.': 'AMRS',  // Amon & Reese is NOT in global.ini; fallback to AMRS won't help but prevents wrong match
-  'amon and reese co.': 'AMRS',
+  'hurston dynamics': 'HRST',
+  'apocalypse arms': 'APAR',
+  'amon & reese co.': 'APAR',  // global.ini uses APAR for Amon & Reese weapons
+  'amon and reese co.': 'APAR',
   'gorgon defender industries': 'GODI',
   'ascension astro': 'ASAS',
   'basilisk': 'BASL',
@@ -664,41 +664,55 @@ Object.assign(COMPANY_TO_MFR, {
   'nova pyrotechnica': 'NOVP',
   'accelerated mass design': 'ACAS',
   'julian aerospace industries': 'JUST',
-  'racer dynamics': 'RACO',
-  'wei-tek': 'WETK',
-  'wen-cassel propulsion': 'WENC',
-  'j-span': 'JSPN',
-  'sakura sun': 'SWKS',
-  'lightning power ltd.': 'LPLT',
-  'aegis dynamics': 'AEGS',
-  'anvil aerospace': 'ANVL',
-  'argo astronautics': 'ARGO',
-  'aopoa': 'XNAA',
   'arccorp': 'ARCC',
-  'banu souli': 'BANU',
-  'broad & rabiee': 'BANU',
-  'drake interplanetary': 'DRAK',
-  'esperia incorporation': 'ESPR',
-  'flashfire systems': 'FSKI',
-  "grey's market": 'GATS',
-  "grey&apos;s market": 'GATS',
-  'greycat industrial': 'GRIN',
-  'juno starwerk': 'JSWR',
-  'ke group': 'KEGR',
-  'musashi industrial and starflight concern': 'MISC',
-  'origin jumpworks': 'ORIG',
-  'ramp corporation': 'RAMP',
-  'roberts space industries': 'RSI',
-  'shubin interstellar': 'SHBN',
-  'stor-all': 'SALL',
+  'arc corp': 'ARCC',
+  'arcorp': 'ARCC',
+  'wei-tek': 'WETK',
+  'wei tek': 'WETK',
   'tarsus': 'TARS',
-  'tyler design & tech': 'TYLR',
-  'vanduul clans': 'VNCL',
-  'nav-e7 gadgets': 'NVSE',
-  'willsop': 'WLOP',
+  'origin jumpworks': 'ORIG',
+  'origin': 'ORIG',
+  'consolidated outland': 'CNOU',
+  'crusader': 'CRSD',
+  'drake': 'DRAK',
+  'drake interplanetary': 'DRAK',
+  'anvil aerospace': 'ANVL',
+  'anvil': 'ANVL',
+  'aegis dynamics': 'AEGS',
+  'aegis': 'AEGS',
+  'argo astronautics': 'ARGO',
+  'argo': 'ARGO',
+  'banu souli': 'BANU',
+  'banu': 'BANU',
+  'esperia incorporation': 'ESPR',
+  'esperia': 'ESPR',
+  'greycat industrial': 'GRIN',
+  'greycat': 'GRIN',
+  'shubin interstellar': 'Shubin',
+  'shubin': 'Shubin',
+  'misc': 'MISC',
+  'musashi industrial and starflight concern': 'MISC',
+  'rsi': 'RSI',
+  'roberts space industries': 'RSI',
+  'tumbril': 'TMBL',
+  'xian': 'XIAN',
+  'gatac': 'GATC',
+  'vanduul': 'VAND',
+  'mirai': 'MRS',
+  'stor-all': 'STOR',
+  'stor all': 'STOR',
+  'willsop': 'WLSO',
   'chimera communications': 'CHMR',
-  'blue triangle inc.': 'BLTR',
+  'blue triangle inc': 'BLTR',
   'groupe nouveau paradigme': 'GNPM',
+  'nav-e7 gadgets': 'NVE7',
+  'lightning power ltd': 'LPLT',
+  'wend cassel propulsion': 'WCPR',
+  'wen-cassel propulsion': 'WCPR',
+  'wen cassel propulsion': 'WCPR',
+  'acom': 'ACOM',
+  'acoms': 'ACOM',
+  'sakura sun': 'SASN',
 });
 
 // ============================================================
@@ -707,7 +721,7 @@ Object.assign(COMPANY_TO_MFR, {
 
 function fetchJSON(url) {
   return new Promise((resolve, reject) => {
-    const req = https.get(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'UEX-Trade-Navigator/3.24.0' } }, (res) => {
+    const req = https.get(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'UEX-Trade-Navigator/3.24.0' }, rejectUnauthorized: false }, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
@@ -731,7 +745,9 @@ function fetchJSON(url) {
 function fetchText(url) {
   return new Promise((resolve, reject) => {
     const mod = url.startsWith('https') ? https : http;
-    const req = mod.get(url, { headers: { 'User-Agent': 'UEX-Trade-Navigator/3.24.0' } }, (res) => {
+    const options = { headers: { 'User-Agent': 'UEX-Trade-Navigator/3.24.0' } };
+    if (url.startsWith('https')) options.rejectUnauthorized = false;
+    const req = mod.get(url, options, (res) => {
       // Follow redirects
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         return fetchText(res.headers.location).then(resolve, reject);
@@ -816,7 +832,7 @@ function buildItemNameIndex(iniData) {
   ]);
 
   for (const [key, value] of Object.entries(iniData)) {
-    if (!key.startsWith('item_Name')) continue;
+    if (!key.toLowerCase().startsWith('item_name')) continue;
     if (!value) continue;  // Include even non-Chinese values for matching
     // Only include entries with Chinese chars for final name, but keep model-number-only for matching
     const hasChinese = /[\u4e00-\u9fff]/.test(value);
@@ -1057,12 +1073,106 @@ function structuredKeyLookup(itemName, companyName, itemType, size, category, in
   // === 4. Quantum Drives ===
   if (category === 'Quantum Drives') {
     const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
-    // Try: item_NameQDRV_{MFR}_S{size}_{Model} and item_NameQDRV_{MFR}_S{size}_{Model}_SCItem
-    const prefix = `item_NameQDRV_${mfrCode}_${sizeStrComponents}_`;
+    // Try multiple key formats: item_NameQDRV_, item_Name_QDRV_, item_nameQDRV_, item_name_QDRV_
+    const prefixes = [
+      `item_NameQDRV_${mfrCode}_${sizeStrComponents}_`,
+      `item_Name_QDRV_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameQDRV_${mfrCode}_${sizeStrComponents}_`,
+      `item_name_QDRV_${mfrCode}_${sizeStrComponents}_`,
+    ];
     for (const [key, val] of Object.entries(iniData)) {
-      if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
-        const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
-        if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
+      }
+    }
+  }
+
+  // === 5. Coolers ===
+  if (category === 'Coolers') {
+    const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
+    const prefixes = [
+      `item_NameCOOL_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameCOOL_${mfrCode}_${sizeStrComponents}_`,
+    ];
+    for (const [key, val] of Object.entries(iniData)) {
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
+      }
+    }
+  }
+
+  // === 6. Power Plants ===
+  if (category === 'Power Plants') {
+    const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
+    const prefixes = [
+      `item_NamePOWR_${mfrCode}_${sizeStrComponents}_`,
+      `item_namePOWR_${mfrCode}_${sizeStrComponents}_`,
+    ];
+    for (const [key, val] of Object.entries(iniData)) {
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
+      }
+    }
+  }
+
+  // === 7. Mining Laser Heads ===
+  if (category === 'Mining Laser Heads') {
+    const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
+    const prefixes = [
+      `item_NameMINL_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameMINL_${mfrCode}_${sizeStrComponents}_`,
+      `item_NameMINE_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameMINE_${mfrCode}_${sizeStrComponents}_`,
+    ];
+    for (const [key, val] of Object.entries(iniData)) {
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
+      }
+    }
+  }
+
+  // === 8. Radar ===
+  if (category === 'Radar') {
+    const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
+    const prefixes = [
+      `item_NameRAWR_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameRAWR_${mfrCode}_${sizeStrComponents}_`,
+    ];
+    for (const [key, val] of Object.entries(iniData)) {
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
+      }
+    }
+  }
+
+  // === 9. Mining Modules ===
+  if (category === 'Mining Modules') {
+    const normalizedName = itemName.replace(/[^a-zA-Z0-9]/g, '');
+    const prefixes = [
+      `item_NameMODU_${mfrCode}_${sizeStrComponents}_`,
+      `item_nameMODU_${mfrCode}_${sizeStrComponents}_`,
+    ];
+    for (const [key, val] of Object.entries(iniData)) {
+      for (const prefix of prefixes) {
+        if (key.startsWith(prefix) && /[\u4e00-\u9fff]/.test(val)) {
+          const keyModel = key.substring(prefix.length).replace(/_SCItem$/, '').replace(/[^a-zA-Z0-9]/g, '');
+          if (keyModel.toLowerCase() === normalizedName.toLowerCase()) return val;
+        }
       }
     }
   }
@@ -1071,7 +1181,7 @@ function structuredKeyLookup(itemName, companyName, itemType, size, category, in
 }
 
 /**
- * Resolve UEX company_name ? global.ini manufacturer code
+ * Resolve UEX company_name → global.ini manufacturer code
  */
 function resolveMfrCode(companyName) {
   if (!companyName) return '';
@@ -1129,38 +1239,163 @@ function extractShieldModel(itemName) {
 }
 
 /**
+ * Mapping from English weapon model name prefixes to Chinese name prefixes.
+ * Used to validate that a structured key lookup doesn't cross-match different models.
+ * e.g., "Attrition" should map to "磨损", not "主宰" (which is "Reign")
+ */
+const WEAPON_MODEL_ZH_PREFIX = {
+  'Attrition': '磨损',
+  'Reign': '主宰',
+  'Dominance': '统治',
+  'Omnisky': '全能',
+  'Vigilance': '警戒',
+  'Predator': '掠食者',
+  'Behring': '贝林',
+  'CF': 'C F',
+};
+
+/**
+ * Manual weapon name mappings for items not in global.ini.
+ * Key: normalized item name (lowercase, no special chars)
+ * Value: Chinese name
+ */
+const MANUAL_WEAPON_ZH = {
+  // HRST weapons
+  'reign3repeater': '主宰-3 速射炮',
+  'reign1repeater': '主宰-1 速射炮',
+  'reign2repeater': '主宰-2 速射炮',
+  'reign4repeater': '主宰-4 速射炮',
+  'reign5repeater': '主宰-5 速射炮',
+  'reign6repeater': '主宰-6 速射炮',
+  'slayercannon': '杀手加农炮',
+  'ardor1salvagedrepeater': '热情-1 回收速射炮',
+  'ardor2salvagedrepeater': '热情-2 回收速射炮',
+  'ardor3salvagedrepeater': '热情-3 回收速射炮',
+  // Other weapons
+  'jericho': '杰里科',
+  'jerichox': '杰里科 X',
+  'jerichoxl': '杰里科 XL',
+  'exodus10laserbeam': '出埃及记 激光射线炮',
+};
+
+/**
  * Check if a Chinese name match is likely valid by comparing model identifiers.
  * Rejects matches where the zh name contains an alphanumeric model ID (like "AD4B",
  * "T-19P", "GT-215") that doesn't appear anywhere in the English item name.
+ * Also validates that weapon model name prefixes match between English and Chinese.
  */
 function isValidNameMatch(enName, zhName) {
   if (!zhName || !enName) return true; // Empty is not "wrong"
   const enUpper = enName.toUpperCase();
   // Find all model-like identifiers in the zh name.
-  // Extended pattern to capture complex model IDs like:
-  //   Simple: AD4B, M5A, SF7B
-  //   Complex: SW16BR2, GT-215, T-19P, EX-T10-CS
-  // Pattern: one or more letters, optional digit-letter alternations/hyphens, must contain at least one digit
   const zhModels = zhName.match(/\b[A-Z][A-Z0-9]*\d[A-Z0-9]*(?:-[A-Z0-9]+)*\b/g) || [];
   for (const model of zhModels) {
     if (!enUpper.includes(model.toUpperCase())) {
       return false; // zh name contains a foreign model ID
     }
   }
+  // Validate weapon model name prefix mapping
+  // e.g., "Attrition-3" should match "磨损-3", not "主宰-3"
+  for (const [enPrefix, zhPrefix] of Object.entries(WEAPON_MODEL_ZH_PREFIX)) {
+    if (enUpper.startsWith(enPrefix.toUpperCase()) && !zhName.startsWith(zhPrefix)) {
+      return false; // English prefix doesn't match Chinese prefix
+    }
+  }
   return true;
+}
+
+/**
+ * Match item name from ParaTranz cache
+ * Strategy 1: Exact match
+ * Strategy 2: Strip platform suffix and match
+ * Strategy 3: Substring match (longest match wins)
+ */
+function matchFromParaTranz(itemName, cache) {
+  if (!itemName || !cache) return '';
+  
+  const name = itemName.trim();
+  const nameLower = name.toLowerCase();
+  
+  // Helper to get translation from cache entry (array format: [original, translation])
+  const getTranslation = (entry) => {
+    if (!entry) return '';
+    if (Array.isArray(entry)) return entry[1] || '';
+    if (entry.translation) return entry.translation;
+    return '';
+  };
+  
+  // Strategy 1: Exact match
+  if (cache[nameLower]) {
+    return getTranslation(cache[nameLower]);
+  }
+  
+  // Strategy 2: Strip platform suffix
+  const stripped = name.replace(/\s*\((?:ATLS|Idris|Javelin|Wikelo|Point Defense (?:Turret|Cannon))\)\s*$/i, '').trim();
+  if (stripped !== name) {
+    const strippedLower = stripped.toLowerCase();
+    if (cache[strippedLower]) {
+      return getTranslation(cache[strippedLower]);
+    }
+  }
+  
+  // Strategy 3: Normalize and match (remove quotes, hyphens, spaces)
+  const normalized = nameLower.replace(/[''"'\u201c\u201d]/g, '').replace(/[-\s]/g, '').trim();
+  for (const [key, val] of Object.entries(cache)) {
+    const keyNormalized = key.replace(/[''"'\u201c\u201d]/g, '').replace(/[-\s]/g, '').trim();
+    if (normalized === keyNormalized) {
+      return getTranslation(val);
+    }
+  }
+  
+  // Strategy 4: Substring match - cache key is substring of item name
+  // Only match short translations (names), reject description-like entries
+  let bestMatch = null;
+  let bestLength = 0;
+  for (const [key, val] of Object.entries(cache)) {
+    const translation = Array.isArray(val) ? val[1] : (val.translation || '');
+    // Skip description-like entries (contain newlines, too long, or start with common description prefixes)
+    if (translation.includes('\n') || translation.length > 35) continue;
+    if (/^(物品类型|制造商|类型|等级|尺寸)/.test(translation)) continue;
+    // Skip translations that contain [original name] pattern (ParaTranz format issue)
+    if (/\[.+\]/.test(translation)) continue;
+    // Skip very short translations (likely type labels, not item names)
+    if (translation.length < 2) continue;
+    if (key.length >= 4 && key.length > bestLength && nameLower.includes(key)) {
+      bestMatch = val;
+      bestLength = key.length;
+    }
+  }
+  if (bestMatch && bestLength >= 4) {
+    return getTranslation(bestMatch);
+  }
+  
+  return '';
 }
 
 /**
  * Match a UEX item name to its Chinese name from global.ini
  */
-function matchItemNameZh(itemName, company, slug, itemIndex, iniData, itemType, size, category) {
-  if (!itemName || !itemIndex) return '';
+function matchItemNameZh(itemName, company, slug, itemIndex, iniData, itemType, size, category, paratranzCache) {
+  if (!itemName) return '';
 
-  // === Strategy 0: Structured key lookup (highest priority) ===
-  // For ship weapons, missiles, shields, QDs - use company+type+size for direct key lookup
-  // Always try this first as it's more accurate than fuzzy matching
+  // === Strategy 0a: ParaTranz cache lookup (highest priority) ===
+  if (paratranzCache) {
+    const zhFromParaTranz = matchFromParaTranz(itemName, paratranzCache);
+    if (zhFromParaTranz) return zhFromParaTranz;
+  }
+
+  // === Strategy 0b: Manual mapping ===
+  const normalizedForManual = itemName.toLowerCase().replace(/[''"'\u201c\u201d`]/g, '').replace(/[^a-z0-9]/g, '');
+  if (MANUAL_WEAPON_ZH[normalizedForManual]) {
+    return MANUAL_WEAPON_ZH[normalizedForManual];
+  }
+
+  // === Strategy 0c: Structured key lookup ===
   const structuredResult = structuredKeyLookup(itemName, company, itemType, size, category, iniData);
   if (structuredResult) return structuredResult;
+
+  // Remaining strategies require global.ini data (itemIndex)
+  if (!itemIndex) return '';
 
   const { baseNameIndex, itemNameEntries } = itemIndex;
 
@@ -1262,12 +1497,22 @@ function matchItemNameZh(itemName, company, slug, itemIndex, iniData, itemType, 
       score = 100; // Perfect match
     } else if (normBase.length >= 4 && normalizedItem.includes(normBase)) {
       score = 80; // Item name contains base name
+      // Length penalty: prevent "flash" matching "flashfreeze"
+      const lenDiff = normalizedItem.length - normBase.length;
+      if (lenDiff > 8) score -= (lenDiff - 8) * 4;
     } else if (normBase.length >= 4 && normBase.includes(normalizedItem)) {
       score = 70; // Base name contains item name
+      // Length penalty: prevent "flash" matching "flashfreeze"
+      const lenDiff = normBase.length - normalizedItem.length;
+      if (lenDiff > 8) score -= (lenDiff - 8) * 6;
     } else if (normalizedSlug && normBase.length >= 4 && normalizedSlug.includes(normBase)) {
       score = 75; // Slug contains base name
+      const lenDiff = normalizedSlug.length - normBase.length;
+      if (lenDiff > 8) score -= (lenDiff - 8) * 4;
     } else if (normalizedSlug && normBase.length >= 4 && normBase.includes(normalizedSlug)) {
       score = 65; // Base name contains slug
+      const lenDiff = normBase.length - normalizedSlug.length;
+      if (lenDiff > 8) score -= (lenDiff - 8) * 6;
     } else {
       // Try matching each significant part
       const itemParts = normalizedItem.replace(/[^a-z0-9]/g, '').split(/(?=[0-9])|(?<=[0-9])/);
@@ -1360,19 +1605,23 @@ async function main() {
   console.log(`   Base URL: ${BASE_URL}`);
   console.log(`   Chinese localization: ${skipL10n ? 'SKIP' : 'ENABLED'}`);
 
-  // Step 0: Download global.ini for Chinese item names
+  // Step 0: Load ParaTranz cache + global.ini for Chinese item names
   let iniData = null;
   let itemIndex = null;
-  if (!skipL10n) {
-    console.log('\n?? Downloading Chinese localization data...');
-    const iniText = await downloadGlobalIni();
-    if (iniText) {
-      console.log('   Parsing global.ini...');
-      iniData = parseGlobalIni(iniText);
-      console.log(`   Parsed: ${Object.keys(iniData).length.toLocaleString()} entries`);
-      itemIndex = buildItemNameIndex(iniData);
-      console.log(`   item_Name* entries: ${Object.keys(itemIndex.itemNameEntries).length}`);
-    }
+  let paratranzCache = null;
+  
+  // Load ParaTranz cache (primary translation source)
+  const paratranzCachePath = path.join(__dirname, '..', 'frontend', 'public', 'data', 'paratranz-cache.json');
+  if (fs.existsSync(paratranzCachePath)) {
+    console.log('\n?? Loading ParaTranz cache...');
+    const ptData = JSON.parse(fs.readFileSync(paratranzCachePath, 'utf-8'));
+    // Cache format: {englishName: [original, translation], ...} (flat object)
+    paratranzCache = ptData;
+    console.log(`   Loaded ${Object.keys(paratranzCache).length} item translations`);
+    console.log(`   Sample: coffee = ${paratranzCache['coffee'] ? paratranzCache['coffee'][1] : 'not found'}`);
+    console.log(`   Sample: bendix = ${paratranzCache['bendix'] ? paratranzCache['bendix'][1] : 'not found'}`);
+  } else {
+    console.log('\n?? No ParaTranz cache found. Run fetch-paratranz-cache.mjs first.');
   }
 
   // Step 1: Fetch all item categories
@@ -1511,6 +1760,7 @@ async function main() {
       let itemClass = '';
       let itemClassZh = '';
       let grade = '';
+      let attrSize = ''; // Size from attributes (more reliable than UEX API size)
 
       for (const a of attrs) {
         if (a.attribute_name === 'Item Type') {
@@ -1525,6 +1775,9 @@ async function main() {
         if (a.attribute_name === 'Grade') {
           grade = String(a.value || '');
         }
+        if (a.attribute_name === 'Size') {
+          attrSize = String(a.value || '');
+        }
       }
 
       // If item_type is blank (UEX API gap), infer it from the item name
@@ -1538,18 +1791,22 @@ async function main() {
         }
       }
 
-      // Match Chinese item name from global.ini
+      // Match Chinese item name from ParaTranz cache or global.ini
       let nameZh = '';
-      if (itemIndex) {
-        nameZhTotal++;
-        nameZh = matchItemNameZh(item.name, item.company_name, item.slug, itemIndex, iniData, itemType, item.size, cat.name);
-        // Reject clearly wrong matches (e.g. NV57 ? "AD4B ?????")
-        if (nameZh && !isValidNameMatch(item.name, nameZh)) {
-          nameZhRejected++;
-          nameZh = '';
-        }
-        if (nameZh) nameZhMatched++;
+      let fromParaTranz = false;
+      nameZhTotal++;
+      nameZh = matchItemNameZh(item.name, item.company_name, item.slug, itemIndex, iniData, itemType, item.size, cat.name, paratranzCache);
+      // Check if match came from ParaTranz (skip validation for ParaTranz matches)
+      if (nameZh && paratranzCache) {
+        const nl = item.name.toLowerCase().trim();
+        fromParaTranz = !!paratranzCache[nl];
       }
+      // Reject clearly wrong matches only for global.ini matches (not ParaTranz)
+      if (nameZh && !fromParaTranz && !isValidNameMatch(item.name, nameZh)) {
+        nameZhRejected++;
+        nameZh = '';
+      }
+      if (nameZh) nameZhMatched++;
 
       // Buy availability info with Chinese translations
       const buyInfo = itemBuyInfo[item.id];
@@ -1569,7 +1826,7 @@ async function main() {
         category_zh: CATEGORY_ZH[item.id_category] || item.category,
         company_name: item.company_name || '',
         company_name_zh: MFR_ZH_MAP[item.company_name] || '',
-        size: extractGunSizeFromName(item.name, item.size || ''),
+        size: extractGunSizeFromName(item.name, attrSize || item.size || ''),
         // Item type (e.g. "Laser Cannon" ? "?????")
         item_type: itemType,
         item_type_zh: itemTypeZh,
@@ -1630,6 +1887,28 @@ async function main() {
       is_lower_better: d.is_lower_better || false,
       description: d.description || '',
     }));
+  }
+
+  // Step 5.5: Disambiguate remaining duplicate name_zh within same category
+  let disambigCount = 0;
+  for (const [catId, items] of Object.entries(catalog.items)) {
+    const zhGroups = {};
+    for (const item of items) {
+      const zh = item.name_zh;
+      if (!zh) continue;
+      if (!zhGroups[zh]) zhGroups[zh] = [];
+      zhGroups[zh].push(item);
+    }
+    for (const [zh, group] of Object.entries(zhGroups)) {
+      if (group.length <= 1) continue;
+      disambigCount += group.length;
+      for (const item of group) {
+        item.name_zh = `${zh} [${item.name}]`;
+      }
+    }
+  }
+  if (disambigCount > 0) {
+    console.log(`   Disambiguated ${disambigCount} items with duplicate Chinese names`);
   }
 
   // Step 6: Write to file

@@ -1,0 +1,86 @@
+{
+  "_comment": "Blueprint translation dictionaries for update-blueprints-translations.mjs",
+  "MFR_ZH": {
+    "behr": "贝林", "aegs": "圣盾", "aegis": "圣盾", "anvl": "铁砧", "anvil": "铁砧",
+    "argo": "南船座", "banu": "巴奴", "cnou": "联合边疆", "crsd": "十字军", "crusader": "十字军",
+    "drak": "德雷克", "drake": "德雷克", "espr": "埃斯佩里亚", "esperia": "埃斯佩里亚",
+    "grin": "灰猫", "greycat": "灰猫", "krt": "克鲁格", "kruger": "克鲁格",
+    "misc": "MISC", "orig": "起源", "origin": "起源", "rsi": "RSI",
+    "tmbl": "坦布里尔", "tumbril": "坦布里尔", "xnaa": "希安", "xian": "希安",
+    "gatc": "加塔克", "gatac": "加塔克", "vand": "范杜尔", "vanduul": "范杜尔",
+    "mrs": "未来", "mirai": "未来", "tavs": "塔维沙", "radd": "RSI",
+    "ksar": "克萨尔"
+  },
+  "WEAPON_TYPE_ZH": {
+    "rifle": "步枪", "pistol": "手枪", "smg": "冲锋枪", "sniper": "狙击枪",
+    "shotgun": "霰弹枪", "lmg": "轻机枪", "launcher": "发射器", "knife": "匕首",
+    "knife_01": "匕首", "knife_02": "匕首",
+    "cannon": "加农炮", "repeater": "连射炮", "gatling": "加特林",
+    "scattergun": "散射炮", "missile": "导弹", "torpedo": "鱼雷",
+    "rocket": "火箭", "turret": "炮塔", "mining": "采矿",
+    "salvage": "打捞", "tractor": "牵引"
+  },
+  "VARIANT_ZH": {
+    "ballistic": "弹道", "laser": "激光", "distortion": "扭曲",
+    "neutron": "中子", "plasma": "等离子", "tachyon": "超光速",
+    "massdriver": "质量驱动", "energy": "能量", "attrition": "磨损"
+  },
+  "PART_ZH": {
+    "mag": "弹匣", "magazine": "弹匣", "barrel": "枪管", "grip": "握把",
+    "scope": "瞄准镜", "optic": "光学", "stock": "枪托", "muzzle": "枪口",
+    "underbarrel": "下挂", "laser": "激光器",
+    "frame": "框架", "body": "机体", "core": "核心", "motor": "电机",
+    "tank": "罐体", "nozzle": "喷嘴", "lens": "透镜", "crystal": "水晶"
+  },
+  "GRADE_ZH": {
+    "civilian": "民用", "military": "军用", "industrial": "工业",
+    "competition": "竞赛", "stealth": "隐形"
+  },
+  "SLOT_ZH": {
+    "MAGAZINE": "弹匣", "CORE": "核心", "BARREL": "枪管", "FRAME": "框架",
+    "GRIP": "握把", "SCOPE": "瞄准镜", "STOCK": "枪托", "MUZZLE": "枪口",
+    "BODY": "机体", "MOTOR": "电机", "TANK": "罐体", "NOZZLE": "喷嘴",
+    "LENS": "透镜", "CRYSTAL": "水晶", "UNDERBARREL": "下挂",
+    "OPTIC": "光学", "RECEIVER": "机匣", "TRIGGER": "扳机组"
+  },
+  "CATEGORY_ZH": {
+    "ammo": "弹药", "armour": "护甲", "fps_weapons": "FPS武器",
+    "mission_items": "任务物品", "cooler": "冷却器", "mininglaser": "采矿激光",
+    "powerplant": "发电机", "quantumdrive": "量子驱动器", "radar": "雷达",
+    "refuelling": "补给", "salvage": "打捞", "shield": "护盾",
+    "tractorbeam": "牵引光束", "weapons": "武器"
+  },
+  "ACQUISITION_PATH_ZH": {
+    "blueprintmissionpools": "蓝图任务池",
+    "bountyhuntersguild": "赏金猎人公会",
+    "citizensforprosperity": "繁荣公民",
+    "destroyitems": "摧毁物品",
+    "eliminatespecific": "定点清除",
+    "delivery": "配送", "combat": "战斗", "mining": "采矿",
+    "exploration": "探索", "investigation": "调查",
+    "paf": "前哨行动"
+  },
+  "SC_WORD_ZH": {
+    "ammo": "弹药", "round": "发", "rounds": "发",
+    "light": "轻型", "heavy": "重型", "medium": "中型",
+    "compact": "紧凑", "extended": "扩展", "standard": "标准",
+    "assault": "突击", "tactical": "战术", "combat": "作战",
+    "advanced": "高级", "prototype": "原型", "experimental": "实验",
+    "mark": "型号", "mk": "Mk",
+    "helmet": "头盔", "chest": "胸甲", "arms": "臂甲", "legs": "腿甲",
+    "backpack": "背包", "core": "核心", "utility": "工具",
+    "undersuit": "内衬服", "torso": "躯干", "gauntlets": "护手",
+    "leggings": "护腿", "boots": "靴子", "shoulders": "护肩",
+    "cooler": "冷却器", "powerplant": "发电机", "quantumdrive": "量子驱动器",
+    "shield": "护盾", "radar": "雷达", "quantumfuel": "量子燃料",
+    "mininglaser": "采矿激光器", "tractorbeam": "牵引光束",
+    "salvage": "打捞光束", "coolant": "冷却液",
+    "sniper": "狙击枪", "shotgun": "霰弹枪",
+    "arclight": "弧光", "devastator": "毁灭者", "p6lr": "P6LR",
+    "p4ar": "P4AR", "p8sc": "P8SC", "s71": "S71",
+    "c54": "C54", "fs9": "FS9", "lh86": "LH86",
+    "r97": "R97", "gp33": "GP33", "atls": "ATLS",
+    "multi": "多功能", "tool": "工具",
+    "quality": "品质", "grade": "等级"
+  }
+}

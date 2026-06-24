@@ -36,7 +36,7 @@ function SellPanel({ onResult }) {
         origin.id
       );
       sfx('route_found');
-      onResult(res.data);
+      if (res?.data) onResult(res.data); else setError('服务器返回数据异常');
     } catch (e) {
       setError(e.response?.data?.detail || e.message || '查询失败，请重试');
     } finally {
@@ -120,7 +120,7 @@ function SellPanel({ onResult }) {
         mb: 2,
         textAlign: 'center',
       }}>
-        DATA FROM UEXCORP.SPACE
+        数据来源: UEXCORP.SPACE
       </Typography>
 
       {/* Error with retry button */}
@@ -148,7 +148,7 @@ function SellPanel({ onResult }) {
             borderRadius: '2px',
           }}
         >
-          查询出错，请检查输入后重试
+          {error || '查询出错，请检查输入后重试'}
         </Alert>
       )}
 

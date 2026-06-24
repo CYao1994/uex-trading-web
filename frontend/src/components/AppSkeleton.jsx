@@ -46,7 +46,7 @@ function AppSkeleton() {
         color: 'rgba(201, 162, 39, 0.5)',
         letterSpacing: '0.1em',
       }}>
-        LOADING
+        加载中
       </Typography>
 
       {/* 进度条 */}

@@ -22,6 +22,9 @@ const ChainResult = lazy(() => import('./components/ChainResult'));
 const RouteResult = lazy(() => import('./components/RouteResult'));
 const ShipComponentsPanel = lazy(() => import('./components/ShipComponentsPanel'));
 const ShipWeaponsPanel = lazy(() => import('./components/ShipWeaponsPanel'));
+const BlueprintPanel = lazy(() => import('./components/BlueprintPanel'));
+const ShipPanel = lazy(() => import('./components/ShipPanel'));
+const MiningGuidePanel = lazy(() => import('./components/MiningGuidePanel'));
 const HomePage = lazy(() => import('./components/HomePage'));
 
 
@@ -29,6 +32,11 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState('home');
   const [result, setResult] = useState(null);
   const { showToast } = useToast();
+
+  // Track which tabs have been visited — only mount a tab's component
+  // after the user first navigates to it (lazy mounting).
+  // Once visited, the tab stays mounted (hidden via CSS) to preserve state.
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set(['home']));
 
   // Per-tab result storage
   const resultsRef = useRef({});
@@ -43,6 +51,12 @@ function AppContent() {
 
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
+    setVisitedTabs(prev => {
+      if (prev.has(tab)) return prev;
+      const next = new Set(prev);
+      next.add(tab);
+      return next;
+    });
     // Restore previous result for this tab (if any)
     setResult(resultsRef.current[tab] || null);
   }, []);
@@ -83,6 +97,9 @@ function AppContent() {
   const isWarbond = activeTab === 'warbond';
   const isShipComponents = activeTab === 'ship_components';
   const isShipWeapons = activeTab === 'ship_weapons';
+  const isBlueprint = activeTab === 'blueprint';
+  const isShips = activeTab === 'ships';
+  const isMiningGuide = activeTab === 'mining_guide';
 
   const hide = { display: 'none' };
 
@@ -95,26 +112,56 @@ function AppContent() {
         <ErrorBoundary>
         <Suspense fallback={<AppSkeleton />}>
           {/* Home */}
+          <ErrorBoundary>
           <Box key="home" sx={isHome ? {} : hide} className={isHome ? 'content-fade-enter' : ''}>
-            <HomePage onTabChange={handleTabChange} />
+            {visitedTabs.has('home') && <HomePage onTabChange={handleTabChange} />}
           </Box>
+          </ErrorBoundary>
 
           {/* Warbond */}
+          <ErrorBoundary>
           <Box key="warbond" sx={isWarbond ? {} : hide} className={isWarbond ? 'content-fade-enter' : ''}>
-            <WarbondPanel />
+            {visitedTabs.has('warbond') && <WarbondPanel />}
           </Box>
+          </ErrorBoundary>
 
           {/* Ship Components */}
+          <ErrorBoundary>
           <Box key="ship_components" sx={isShipComponents ? {} : hide} className={isShipComponents ? 'content-fade-enter' : ''}>
-            <ShipComponentsPanel />
+            {visitedTabs.has('ship_components') && <ShipComponentsPanel />}
           </Box>
+          </ErrorBoundary>
 
           {/* Ship Weapons */}
+          <ErrorBoundary>
           <Box key="ship_weapons" sx={isShipWeapons ? {} : hide} className={isShipWeapons ? 'content-fade-enter' : ''}>
-            <ShipWeaponsPanel />
+            {visitedTabs.has('ship_weapons') && <ShipWeaponsPanel />}
           </Box>
+          </ErrorBoundary>
+
+          {/* Blueprint */}
+          <ErrorBoundary>
+          <Box key="blueprint" sx={isBlueprint ? {} : hide} className={isBlueprint ? 'content-fade-enter' : ''}>
+            {visitedTabs.has('blueprint') && <BlueprintPanel onTabChange={handleTabChange} />}
+          </Box>
+          </ErrorBoundary>
+
+          {/* Ships */}
+          <ErrorBoundary>
+          <Box key="ships" sx={isShips ? {} : hide} className={isShips ? 'content-fade-enter' : ''}>
+            {visitedTabs.has('ships') && <ShipPanel />}
+          </Box>
+          </ErrorBoundary>
+
+          {/* Mining Guide */}
+          <ErrorBoundary>
+          <Box key="mining_guide" sx={isMiningGuide ? {} : hide} className={isMiningGuide ? 'content-fade-enter' : ''}>
+            {visitedTabs.has('mining_guide') && <MiningGuidePanel />}
+          </Box>
+          </ErrorBoundary>
 
           {/* Sell / Buy / Chain */}
+          <ErrorBoundary>
           <Box
             key="routes"
             sx={{
@@ -128,12 +175,14 @@ function AppContent() {
           >
             {/* Left panel */}
             <Box sx={{ width: { xs: '100%', md: 380, lg: 420, xl: 480 }, flexShrink: 0, maxWidth: 480 }}>
-              {isChain ? (
-                <ChainPanel onResult={handleResult} />
-              ) : isBuy ? (
-                <BuyPanel onResult={handleResult} />
-              ) : (
-                <SellPanel onResult={handleResult} />
+              {(isSell || isBuy || isChain) && (
+                isChain ? (
+                  <ChainPanel onResult={handleResult} />
+                ) : isBuy ? (
+                  <BuyPanel onResult={handleResult} />
+                ) : (
+                  <SellPanel onResult={handleResult} />
+                )
               )}
             </Box>
 
@@ -219,6 +268,7 @@ function AppContent() {
               )}
             </Box>
           </Box>
+          </ErrorBoundary>
         </Suspense>
         </ErrorBoundary>
       </Layout>

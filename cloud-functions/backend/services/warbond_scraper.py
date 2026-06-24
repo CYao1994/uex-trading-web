@@ -349,21 +349,33 @@ SHIP_NAME_ZH = {
     "Shiv Slasher Bodykit": "希夫 斩击者车身套件",
     "Shiv Lunatic Bodykit": "希夫 狂人车身套件",
     "Xy'kara": "希卡拉",
-    "Xy'kara Bundle": "希卡拉 捆绑包",
+    "Xy'kara Bundle": "赛卡拉组合包",
+    "Xy'kara - Bundle": "赛卡拉组合包",
     "Pitbull Duo Pack": "斗牛犬 双人包",
-    "Ironclad Assault Carrier Pack": "德雷克 铁甲 突击航母包",
+    "Ironclad Assault Carrier Pack": "铁壁突袭航母包",
+    "Ironclad Assault Carrier Pack - Warbond": "铁壁突袭航母包 - 战争债券",
     "Ironclad": "德雷克 铁甲",
     "Ironclad Assault": "德雷克 铁甲 突击",
     "Tiburon": "锥鲨",
     "Pitbull": "斗牛犬",
     "Starlite": "星光",
     "M80": "M80",
+    "Tyilui": "泰鲁伊",
+    "Tyilui Carrier Pack": "泰鲁伊航母包",
+    "Tyilui Carrier Pack - Warbond": "泰鲁伊航母包 - 战争债券",
+    "Outsider": "局外人",
+    "Outsider 'Alien Week' Starter Pack": "局外人 外星周入门包",
+    "Outsider 'Alien Week' Starter Pack - Warbond": "局外人 外星周入门包 - 战争债券",
+    "Xi'an Hauler Duo Pack": "希安运输双人包",
+    "Xi'an Hauler Duo Pack - Warbond": "希安运输双人包 - 战争债券",
 }
 
 # RSI media CDN image URL pattern
-# Correct format: https://media.robertsspaceindustries.com/{media_slug}/heap_infobox.jpg
+# Format: https://media.robertsspaceindustries.com/{media_slug}/heap_infobox.jpg
 # The media_slug is a RSI-internal ID (e.g. "asbrpwjjho1z0" for Gladius), NOT the ship name.
 # Mapping sourced from RSI Ship Matrix API (https://robertsspaceindustries.com/ship-matrix/index)
+# NOTE: heap_infobox.jpg was deprecated by RSI CDN (returns 404).
+#        heap_infobox.jpg is the current working format (verified 2026-06).
 SHIP_MEDIA_SLUG = {
     "100i": "ofxowq9rhbyvc",
     "125a": "e0a0pfimgv34k",
@@ -497,8 +509,8 @@ SHIP_MEDIA_SLUG = {
     "Idris-M": "59wd4xwt2qms4",
     "Idris-P": "yfj9hnf0hrali",
     "Intrepid": "3vk6dnvwcm0rk",
-    "Ironclad Assault": "",
-    "Ironclad": "",
+    "Ironclad Assault": "b1ahi2h8tnmsa",
+    "Ironclad": "gtz4uouxebp3u",
     "Javelin": "oc89p5ksizcla",
     "Khartu-Al": "zd5doe8h0xemz",
     "Kraken": "nnpwaac1eqp4p",
@@ -555,7 +567,8 @@ SHIP_MEDIA_SLUG = {
     "RAFT": "x4b15hx3vui08",
     "ROC": "kuw6hsllahest",
     "ROC-DS": "9ozbp8j2455mw",
-    "Railen": "i3aybjtr4j7fq",
+    "Railen": "sxcm8cb4jnunw",
+    "Tyilui": "dz22kd2d0t2wo",
     "Ranger CV": "1pe4mpq4m650v",
     "Ranger RC": "86p4ac1l3rmra",
     "Ranger TR": "eehhr9ql9y04w",
@@ -615,6 +628,20 @@ SHIP_MEDIA_SLUG = {
     "Zeus Mk II CL": "bkvyglm2hgmzd",
     "Zeus Mk II ES": "dzqbjbxnpfjha",
     "Zeus Mk II MR": "pj51owg973q4h",
+}
+
+# Map combo/bundle items to their parent ship for image lookup
+ITEM_TO_SHIP_MAPPING = {
+    "Xy'kara Bundle": "Syulen",
+    "Xy'kara - Bundle": "Syulen",
+    "Xi'an Hauler Duo Pack": "Railen",
+    "Xi'an Hauler Duo Pack - Warbond": "Railen",
+    "Outsider 'Alien Week' Starter Pack": "Syulen",
+    "Outsider 'Alien Week' Starter Pack - Warbond": "Syulen",
+    "Ironclad Assault Carrier Pack": "Ironclad Assault",
+    "Ironclad Assault Carrier Pack - Warbond": "Ironclad Assault",
+    "Tyilui Carrier Pack": "Tyilui",
+    "Tyilui Carrier Pack - Warbond": "Tyilui",
 }
 
 # Also map common alias names used in warbond data to their canonical RSI ship matrix names
@@ -715,9 +742,10 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
         name: Ship/item name for fallback lookups.
         rsi_slug: GraphQL slug from RSI store (NOT a media slug, ignored).
     """
-    # NOTE: rsi_slug from GraphQL is a store slug, NOT a media slug.
-    # Store slugs don't work on media.robertsspaceindustries.com (404).
-    # We only use SHIP_MEDIA_SLUG dictionary for correct media slugs.
+    # 0. Check combo/bundle → parent ship mapping first
+    mapped_ship = ITEM_TO_SHIP_MAPPING.get(name)
+    if mapped_ship and mapped_ship in SHIP_MEDIA_SLUG and SHIP_MEDIA_SLUG[mapped_ship]:
+        return f"https://media.robertsspaceindustries.com/{SHIP_MEDIA_SLUG[mapped_ship]}/heap_infobox.jpg"
 
     # 1. Direct lookup in SHIP_MEDIA_SLUG
     slug = SHIP_MEDIA_SLUG.get(name)
@@ -751,9 +779,9 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
             # Alias on base name
             alias = _SHIP_NAME_ALIASES.get(base)
             if alias:
-                slug = SHIP_MEDIA_SLUG.get(alias)
-                if slug:
-                    return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
+                    slug = SHIP_MEDIA_SLUG.get(alias)
+                    if slug:
+                        return f"https://media.robertsspaceindustries.com/{slug}/heap_infobox.jpg"
 
     # 5. No match found - return empty string (frontend will show fallback icon)
     return ""
@@ -1017,7 +1045,51 @@ def fetch_warbonds(refresh: bool = False) -> dict:
         except Exception as e:
             print(f"starnotifier.com merge failed: {e}")
 
-        # 3. Build result
+        # 3. Supplement images from Upgrade API
+        try:
+            img_query = [{
+                "operationName": "filters",
+                "variables": {},
+                "query": """query filters {
+                    ships {
+                        name
+                        skus {
+                            title
+                            medias { storeThumbSkuDetail }
+                        }
+                    }
+                }"""
+            }]
+            img_data = _http_post_json(RSI_GRAPHQL_URL, img_query, timeout=30)
+            ships = img_data[0]["data"]["ships"]
+            img_map = {}
+            for ship in ships:
+                ship_name = ship.get("name", "")
+                for sku in ship.get("skus", []):
+                    media = (sku.get("medias") or [{}])[0] if sku.get("medias") else {}
+                    url = media.get("storeThumbSkuDetail", "") if media else ""
+                    if url and ship_name not in img_map:
+                        img_map[ship_name] = url
+            img_keys = sorted(img_map.keys(), key=lambda k: -len(k))
+            filled = 0
+            for item in all_items:
+                if item.get("image_url"):
+                    continue
+                name = item["name"]
+                if name in img_map:
+                    item["image_url"] = img_map[name]
+                    filled += 1
+                else:
+                    for key in img_keys:
+                        if name.startswith(key + " ") or name.startswith(key + "-") or name.startswith(key + " ("):
+                            item["image_url"] = img_map[key]
+                            filled += 1
+                            break
+            print(f"Upgrade API: {len(img_map)} images, filled {filled} missing")
+        except Exception as e:
+            print(f"Upgrade API image fetch failed: {e}")
+
+        # 4. Build result
         result = {
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "rsi_store_url": "https://robertsspaceindustries.com/store/pledge/browse",

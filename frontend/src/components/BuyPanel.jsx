@@ -1,5 +1,5 @@
 // BuyPanel.jsx - 进货+路线规划功能
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Typography, Button, Divider, Alert, CircularProgress } from '@mui/material';
 import { ShoppingCart, RocketLaunch, Refresh, Replay } from '@mui/icons-material';
 import TerminalSearch from './TerminalSearch';
@@ -13,6 +13,65 @@ function BuyPanel({ onResult }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const sfx = useSfx();
+
+  // Listen for blueprint material additions
+  const handleBlueprintMaterials = useCallback(async (e) => {
+    const { materials } = e.detail;
+    if (!materials || !Array.isArray(materials)) return;
+
+    let commodities = [];
+    try {
+      const res = await fetch('/data/items-catalog.json');
+      const catalog = await res.json();
+      const itemsBySlug = {};
+      for (const cat of (catalog.categories || [])) {
+        for (const item of (cat.items || [])) {
+          const slug = (item.slug || item.name || '').toLowerCase().replace(/[\s_]+/g, '');
+          itemsBySlug[slug] = item;
+          if (item.name) itemsBySlug[item.name.toLowerCase().replace(/[\s_]+/g, '')] = item;
+          if (item.name_zh) itemsBySlug[item.name_zh] = item;
+        }
+      }
+      commodities = itemsBySlug;
+    } catch {
+      // catalog fetch is optional; ignore errors
+    }
+
+    setItems(prev => {
+      const existing = new Map(prev.map(i => [i.name, i]));
+      materials.forEach(mat => {
+        const rawName = mat.slot || mat.resource_id || 'Unknown Material';
+        const name = mat.resource_id || mat.slot || rawName;
+        const qty = Math.ceil(mat.quantity_scu || 1);
+
+        let name_zh = mat.name_zh || '';
+        if (!name_zh && commodities) {
+          const slug = rawName.toLowerCase().replace(/[\s_]+/g, '');
+          const found = commodities[slug] || commodities[rawName.toLowerCase()];
+          if (found) name_zh = found.name_zh || found.name || '';
+        }
+        if (!name_zh) name_zh = rawName;
+
+        if (existing.has(name)) {
+          const item = existing.get(name);
+          existing.set(name, { ...item, quantity: item.quantity + qty });
+        } else {
+          existing.set(name, {
+            name,
+            name_zh,
+            quantity: qty,
+          });
+        }
+      });
+      return [...existing.values()];
+    });
+    sfx('click');
+  }, [sfx]);
+
+  useEffect(() => {
+    window.addEventListener('blueprint-add-materials', handleBlueprintMaterials);
+    return () => window.removeEventListener('blueprint-add-materials', handleBlueprintMaterials);
+  }, [handleBlueprintMaterials]);
 
   const handleSearch = async (refresh = false) => {
     if (!origin) {
@@ -36,7 +95,7 @@ function BuyPanel({ onResult }) {
         origin.id
       );
       sfx('route_found');
-      onResult(res.data);
+      if (res?.data) onResult(res.data); else setError('服务器返回数据异常');
     } catch (e) {
       setError(e.response?.data?.detail || e.message || '查询失败，请重试');
     } finally {
@@ -119,7 +178,7 @@ function BuyPanel({ onResult }) {
         mb: 2,
         textAlign: 'center',
       }}>
-        DATA FROM UEXCORP.SPACE
+        数据来源: UEXCORP.SPACE
       </Typography>
 
       {/* Error with retry button */}
@@ -147,7 +206,7 @@ function BuyPanel({ onResult }) {
             borderRadius: '2px',
           }}
         >
-          查询出错，请检查输入后重试
+          {error || '查询出错，请检查输入后重试'}
         </Alert>
       )}
 

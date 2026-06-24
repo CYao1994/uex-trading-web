@@ -83,6 +83,7 @@ function WarbondCard({ item, accentColor = '#c9a227', index }) {
             alt={item.name_zh || item.name}
             onError={() => setImgFailed(true)}
             loading="lazy"
+            referrerPolicy="no-referrer"
             style={{
               width: '100%', height: '100%',
               objectFit: 'contain', padding: '8px 16px',
@@ -188,7 +189,7 @@ function WarbondPanel() {
           fontSize: '0.75rem',
           letterSpacing: '0.1em',
         }}>
-          LOADING WARBOND DATA
+          正在加载战争债券数据...
         </Typography>
       </Box>
     );
@@ -361,7 +362,7 @@ function WarbondPanel() {
           color: 'rgba(255, 170, 0, 0.2)', fontSize: '0.6rem',
           fontFamily: '"Orbitron", sans-serif', letterSpacing: '0.05em',
         }}>
-          DATA FROM STARNOTIFIER.COM + RSI
+          数据来源: STARNOTIFIER.COM + RSI
         </Typography>
       </Box>
     </Box>

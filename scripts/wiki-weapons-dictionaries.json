@@ -1,0 +1,53 @@
+{
+  "_comment": "Chinese translation dictionaries for wiki weapon data",
+  "manufacturers": {
+    "KnightBridge Arms": "",
+    "Preacher Armament": "",
+    "Behring Applied Technology": "",
+    "Hurston Dynamics": "",
+    "Kruger Intergalactic": "",
+    "Grey's Market": "",
+    "Klaus & Werner": "",
+    "Banu Souli": "",
+    "Esperia": "",
+    "Apocalypse Arms": "",
+    "Associated Sciences & Development": "",
+    "Roberts Space Industries": "",
+    "Kroneg": "",
+    "FireStorm Kinetics": "",
+    "Thermyte Concern": "",
+    "Gallenson Tactical Systems": "",
+    "MaxOx": "",
+    "Amon & Reese Co.": "",
+    "Anvil Aerospace": "",
+    "Joker Engineering": "",
+    "Greycat Industrial": "",
+    "Aopoa": "",
+    "Unknown": "",
+    "Vanduul Clans": "",
+    "Aegis Dynamics": "",
+    "Crusader Industries": "",
+    "Argo Astronautics": "",
+    "Drake Interplanetary": "",
+    "Gatac Manufacture": "",
+    "Tumbril Land Systems": "",
+    "Mirai": "",
+    "Musashi Industrial and Starflight Concern": "",
+    "Origin Jumpworks": "",
+    "Consolidated Outland": "",
+    "Flashfire Systems": "",
+    "Talon Weapons Systems": "",
+    "Nova Pyrotechnica": ""
+  },
+  "types": {
+    "WeaponGun": "",
+    "MissileLauncher": "",
+    "Turret": "",
+    "Bomb": "",
+    "Missile": ""
+  },
+  "grades": {
+    "A": ""
+  },
+  "classes": {}
+}

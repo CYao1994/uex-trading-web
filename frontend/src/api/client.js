@@ -1,17 +1,18 @@
-// client.js - ??:??10? + ??1???? + localStorage????
+// client.js - API调用
 import axios from 'axios';
 import { getStale, set, buildCacheKey, CACHE_TTL } from './cache';
 
-// EdgeOne Pages ????:???????,API ??? /api
-// ?????,Vite proxy ?? /api -> localhost:8000
+// 后端地址（前后端分离部署）
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://astrallance.com';
+
 const api = axios.create({
-  baseURL: '/api',
-  timeout: 10000, // 10? - ????,??????
+  baseURL: API_BASE + '/api',
+  timeout: 10000,
 });
 
-// === ????? ===
-// ??????(GET/HEAD/OPTIONS)??,??POST/PUT/DELETE??
-// ???????????????????
+// === 自动重试拦截器 ===
+// 仅对幂等方法(GET/HEAD/OPTIONS)重试，POST/PUT/DELETE不重试
+// 仅在网络错误或5xx响应时重试，最多重试1次
 const IDEMPOTENT_METHODS = ['get', 'head', 'options'];
 
 api.interceptors.response.use(undefined, async (error) => {
@@ -47,19 +48,19 @@ api.interceptors.response.use(
   undefined // error interceptor is above
 );
 
-// === ???? ===
+// === 缓存策略 ===
 
 /**
- * ??API?????TTL
- * @param {string} endpoint - API????
- * @returns {number} TTL???
+ * 根据API端点返回对应的TTL
+ * @param {string} endpoint - API端点路径
+ * @returns {number} TTL秒数
  */
 function getTTLForEndpoint(endpoint) {
-  // ????:15??TTL
+  // 价格数据：15分钟TTL
   if (endpoint.includes('commodity-prices') || endpoint.includes('prices')) {
     return CACHE_TTL.PRICE;
   }
-  // ????(????????????????):24??TTL
+  // 静态数据(终端/商品/飞船等不常变化的数据)：24小时TTL
   return CACHE_TTL.STATIC;
 }
 
@@ -109,13 +110,13 @@ async function _bgRefresh(endpoint, params, cacheKey, timeoutOverride) {
   }
 }
 
-// === ???API?? ===
+// === 业务API接口 ===
 
 export const sellRoute = (origin, items, refresh = false, originId = null) =>
-  api.post('/sell-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {} });
+  api.post('/sell-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {}, timeout: 30000 });
 
 export const buyRoute = (origin, items, refresh = false, originId = null) =>
-  api.post('/buy-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {} });
+  api.post('/buy-route', { origin, items, ...(originId != null ? { origin_id: originId } : {}) }, { params: refresh ? { refresh: true } : {}, timeout: 30000 });
 
 export const searchTerminals = (q, refresh = false) =>
   cachedGet('/terminals', { q }, refresh, 30000);
@@ -181,6 +182,28 @@ export async function loadAllTerminals() {
 
 export const searchVehicles = (q, refresh = false) =>
   cachedGet('/vehicles', { q }, refresh);
+
+// Load all vehicles in a single request (backend returns all when q is empty)
+let _allVehiclesCache = null;
+let _allVehiclesPromise = null;
+
+export async function loadAllVehicles() {
+  if (_allVehiclesCache) return _allVehiclesCache;
+  if (_allVehiclesPromise) return _allVehiclesPromise;
+
+  _allVehiclesPromise = cachedGet('/vehicles', { q: '' }, false, 30000)
+    .then(res => {
+      _allVehiclesCache = (res.data || []).filter(v => (v.scu || 0) > 0);
+      _allVehiclesPromise = null;
+      return _allVehiclesCache;
+    })
+    .catch(() => {
+      _allVehiclesPromise = null;
+      return [];
+    });
+
+  return _allVehiclesPromise;
+}
 
 export const tradeChain = (params, refresh = false) =>
   api.post('/trade-chain', params, {

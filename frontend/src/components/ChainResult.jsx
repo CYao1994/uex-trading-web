@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Alert, Button } from '@mui/material';
-import { TrendingUp, AccountBalance, Link, ArrowDownward, Refresh } from '@mui/icons-material';
+import { TrendingUp, AccountBalance, Link, ArrowDownward, Refresh, Navigation } from '@mui/icons-material';
 import AnimatedNumber from './AnimatedNumber';
 
 /**
@@ -77,7 +77,7 @@ function CommodityRow({ item }) {
             买
           </Typography>
           <Typography sx={{ color: '#ff8844', fontWeight: 600, fontSize: '0.8rem', fontFamily: '"Rajdhani", sans-serif' }}>
-            {Number(item.price_buy).toLocaleString()}
+            {Number(item.price_buy || 0).toLocaleString()}
           </Typography>
         </Box>
         <Box>
@@ -85,7 +85,7 @@ function CommodityRow({ item }) {
             卖
           </Typography>
           <Typography sx={{ color: '#00ff88', fontWeight: 600, fontSize: '0.8rem', fontFamily: '"Rajdhani", sans-serif' }}>
-            {Number(item.price_sell).toLocaleString()}
+            {Number(item.price_sell || 0).toLocaleString()}
           </Typography>
         </Box>
         <Box>
@@ -98,7 +98,7 @@ function CommodityRow({ item }) {
             fontSize: '0.8rem',
             fontFamily: '"Rajdhani", sans-serif',
           }}>
-            {item.profit > 0 ? '+' : ''}{Number(item.profit).toLocaleString()}
+            {item.profit > 0 ? '+' : ''}{Number(item.profit || 0).toLocaleString()}
           </Typography>
         </Box>
       </Box>
@@ -117,6 +117,8 @@ function ChainResult({ data, onRefresh }) {
     early_stop_reason,
     warnings,
   } = data;
+
+  const totalDistance = legs ? legs.reduce((sum, leg) => sum + (leg.distance || 0), 0) : 0;
 
   if (!legs || legs.length === 0) {
     return (
@@ -187,7 +189,7 @@ function ChainResult({ data, onRefresh }) {
 
   const isProfitPositive = total_profit > 0;
   const profitColor = isProfitPositive ? '#00ff88' : '#ff4455';
-  const initialCapital = final_capital - total_profit;
+  const initialCapital = Math.round((final_capital || 0) - (total_profit || 0));
 
   /**
    * Check if a leg has multi-commodity data.
@@ -296,6 +298,26 @@ function ChainResult({ data, onRefresh }) {
               <AnimatedNumber target={total_legs} duration={400} formatter={(v) => Math.round(v).toString()} />
             </Typography>
           </Box>
+
+          {/* Total Distance */}
+          {totalDistance > 0 && (
+            <Box sx={{ flex: '0 0 auto' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                <Navigation sx={{ color: 'rgba(201, 162, 39, 0.5)', fontSize: 20 }} />
+                <Typography variant="subtitle2" sx={{ color: 'rgba(201, 162, 39, 0.5)', fontWeight: 700, fontFamily: '"Orbitron", sans-serif', fontSize: '0.75rem' }}>
+                  总距离
+                </Typography>
+              </Box>
+              <Typography variant="h4" sx={{
+                color: 'rgba(201, 162, 39, 0.7)',
+                fontWeight: 700,
+                fontFamily: '"Rajdhani", sans-serif',
+                lineHeight: 1.2,
+              }}>
+                {totalDistance} <Typography component="span" sx={{ fontSize: '0.7rem', color: 'rgba(201, 162, 39, 0.4)' }}>AU</Typography>
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
 
@@ -411,6 +433,11 @@ function ChainResult({ data, onRefresh }) {
                       {leg.destination_planet_zh && `${leg.destination_planet_zh} · `}{leg.destination_system_zh}
                     </Typography>
                   )}
+                  {leg.distance != null && leg.distance > 0 && (
+                    <Typography sx={{ fontSize: '0.6rem', color: 'rgba(201, 162, 39, 0.2)', fontFamily: '"Orbitron", sans-serif', mt: 0.3 }}>
+                      {leg.distance} AU
+                    </Typography>
+                  )}
                 </Box>
 
                 {/* Multi-commodity detail list */}
@@ -433,7 +460,7 @@ function ChainResult({ data, onRefresh }) {
                           总成本
                         </Typography>
                         <Typography sx={{ color: 'rgba(201, 162, 39, 0.7)', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                          {Number(leg.total_cost).toLocaleString()}
+                          {Number(leg.total_cost || 0).toLocaleString()}
                         </Typography>
                       </Box>
                       <Box sx={{ textAlign: 'right' }}>
@@ -441,7 +468,7 @@ function ChainResult({ data, onRefresh }) {
                           总收入
                         </Typography>
                         <Typography sx={{ color: 'rgba(201, 162, 39, 0.7)', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                          {Number(leg.total_revenue).toLocaleString()}
+                          {Number(leg.total_revenue || 0).toLocaleString()}
                         </Typography>
                       </Box>
                     </Box>
@@ -454,7 +481,7 @@ function ChainResult({ data, onRefresh }) {
                         买入价
                       </Typography>
                       <Typography sx={{ color: '#ff8844', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                        {Number(leg.price_buy).toLocaleString()} /SCU
+                        {Number(leg.price_buy || 0).toLocaleString()} /SCU
                       </Typography>
                     </Box>
                     <Box>
@@ -462,7 +489,7 @@ function ChainResult({ data, onRefresh }) {
                         卖出价
                       </Typography>
                       <Typography sx={{ color: '#00ff88', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                        {Number(leg.price_sell).toLocaleString()} /SCU
+                        {Number(leg.price_sell || 0).toLocaleString()} /SCU
                       </Typography>
                     </Box>
                     <Box>
@@ -470,7 +497,7 @@ function ChainResult({ data, onRefresh }) {
                         成本
                       </Typography>
                       <Typography sx={{ color: 'rgba(201, 162, 39, 0.7)', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                        {Number(leg.total_cost).toLocaleString()}
+                        {Number(leg.total_cost || 0).toLocaleString()}
                       </Typography>
                     </Box>
                     <Box>
@@ -478,7 +505,7 @@ function ChainResult({ data, onRefresh }) {
                         收入
                       </Typography>
                       <Typography sx={{ color: 'rgba(201, 162, 39, 0.7)', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Rajdhani", sans-serif' }}>
-                        {Number(leg.total_revenue).toLocaleString()}
+                        {Number(leg.total_revenue || 0).toLocaleString()}
                       </Typography>
                     </Box>
                   </Box>
@@ -523,7 +550,7 @@ function ChainResult({ data, onRefresh }) {
           fontFamily: '"Orbitron", sans-serif',
           letterSpacing: '0.05em',
         }}>
-          DATA FROM UEXCORP.SPACE
+          数据来源: UEXCORP.SPACE
         </Typography>
       </Box>
 

@@ -7,6 +7,10 @@ import { getItemsPricesAll } from '../api/client';
 let _catalogPromise = null;
 let _catalogData = null;
 
+// Singleton: 缓存 shop 数据
+let _shopPromise = null;
+let _shopData = null;
+
 function loadCatalog() {
   if (_catalogData) return Promise.resolve(_catalogData);
   if (_catalogPromise) return _catalogPromise;
@@ -40,6 +44,7 @@ export default function useShipItemsData(activeCategory) {
   const [pricesMap, setPricesMap] = useState(new Map());    // itemId -> ItemPriceEntry[]
   const [attrsMap, setAttrsMap] = useState(new Map());      // itemId -> ItemAttributeEntry[]
   const [attributeDefs, setAttributeDefs] = useState([]);   // CategoryAttributeDef[]
+  const [shopMap, setShopMap] = useState({});                // uuid -> [{shop, location, buy_price}]
   const [batchReady, setBatchReady] = useState(false);
   const [sizeFilter, setSizeFilter] = useState('');
   const [weaponTypeFilter, setWeaponTypeFilter] = useState('');
@@ -47,6 +52,16 @@ export default function useShipItemsData(activeCategory) {
   const [catalogReady, setCatalogReady] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   const cancelledRef = useRef(false);
+
+  function loadShopMap() {
+    if (_shopData) return Promise.resolve(_shopData);
+    if (_shopPromise) return _shopPromise;
+    _shopPromise = fetch('/data/item-shop-map.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { _shopData = data?.item_shops || {}; _shopPromise = null; return _shopData; })
+      .catch(() => { _shopPromise = null; return {}; });
+    return _shopPromise;
+  }
 
   // 加载 catalog + 物品属性数据
   useEffect(() => {
@@ -91,6 +106,10 @@ export default function useShipItemsData(activeCategory) {
         // 从 catalog 提取属性定义（含 is_lower_better）
         const catDefs = catalog.category_attribute_defs[activeCategory.id] || [];
         if (!cancelled) setAttributeDefs(catDefs);
+
+        // Load shop data (item uuid -> shop locations + prices)
+        const shopData = await loadShopMap();
+        if (!cancelled) setShopMap(shopData);
       } catch {
         if (!cancelled) setError('数据加载失败，请刷新重试');
       } finally {
@@ -195,5 +214,6 @@ export default function useShipItemsData(activeCategory) {
     setSearchQuery,
     getItemPrices,
     getItemAttrs,
+    shopMap,
   };
 }

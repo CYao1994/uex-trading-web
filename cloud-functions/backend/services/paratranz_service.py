@@ -6,6 +6,7 @@ if ParaTranz is unavailable.
 """
 
 import json
+import os
 import ssl
 import zipfile
 import io
@@ -18,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 PARATRANZ_API_BASE = "https://paratranz.cn/api"
 PARATRANZ_PROJECT_ID = 8340
-PARATRANZ_TOKEN = "84147631b3b588cdcc23ecf36c8a8c8d"
+# Token 从环境变量读取，避免硬编码泄露
+# 在 EdgeOne Pages 控制台设置环境变量 PARATRANZ_TOKEN
+PARATRANZ_TOKEN = os.environ.get("PARATRANZ_TOKEN", "")
 
 _ssl_ctx = ssl.create_default_context()
 _ssl_ctx.check_hostname = False
@@ -41,7 +44,11 @@ class ParaTranzService:
         self._loaded = False
         self._last_update = 0
 
-    def _api_get(self, endpoint: str, token: str = PARATRANZ_TOKEN) -> bytes:
+    def _api_get(self, endpoint: str, token: str = None) -> bytes:
+        if token is None:
+            token = PARATRANZ_TOKEN
+        if not token:
+            raise RuntimeError("PARATRANZ_TOKEN environment variable is not set")
         url = f"{PARATRANZ_API_BASE}{endpoint}"
         req = urllib.request.Request(url, headers={
             "Authorization": f"Bearer {token}",

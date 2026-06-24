@@ -105,7 +105,34 @@ function Layout({ children, activeTab, onTabChange }) {
           fontFamily: '"Orbitron", sans-serif',
           letterSpacing: '0.1em',
         }}>
-          ASTRAL LANCE · DATA FROM UEXCORP · MADE BY CYao1994
+          星槊 · 数据来源: UEXCORP · 作者: CYao1994
+        </Typography>
+      </Box>
+
+      {/* Data source disclaimer */}
+      <Box sx={{
+        py: 0.6,
+        px: 3,
+        textAlign: 'center',
+        background: 'rgba(2, 6, 12, 0.95)',
+      }}>
+        <Typography variant="caption" sx={{
+          color: 'rgba(201, 162, 39, 0.18)',
+          fontSize: '0.55rem',
+          fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+          letterSpacing: '0.02em',
+          lineHeight: 1.5,
+          display: 'block',
+        }}>
+          数据来源: Star Citizen Wiki · UEXCorp · 舰船图片 © Cloud Imperium Games
+        </Typography>
+        <Typography variant="caption" sx={{
+          color: 'rgba(201, 162, 39, 0.13)',
+          fontSize: '0.5rem',
+          fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif',
+          letterSpacing: '0.02em',
+        }}>
+          ASTRAL LANCE — 社区工具 · 非商业用途 · 数据仅供参考
         </Typography>
       </Box>
 

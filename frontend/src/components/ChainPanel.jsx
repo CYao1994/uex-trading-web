@@ -1,8 +1,8 @@
 // ChainPanel.jsx - 功能：链式跑商规划(loading状态+路线结果展示)+ 输入框focus管理
-import { useState, useCallback } from 'react';
-import { Box, Typography, Button, Divider, Alert, Autocomplete, TextField, InputAdornment, CircularProgress } from '@mui/material';
+import { useState, useCallback, useEffect } from 'react';
+import { Box, Typography, Button, Divider, Alert, Autocomplete, TextField, InputAdornment, CircularProgress, Chip } from '@mui/material';
 import { Link, RocketLaunch, Refresh, DirectionsCar, Replay } from '@mui/icons-material';
-import { searchLocations, searchVehicles, tradeChain } from '../api/client';
+import { searchLocations, tradeChain, loadAllVehicles } from '../api/client';
 import { useSfx } from '../hooks/useSfx';
 
 function ChainPanel({ onResult }) {
@@ -15,14 +15,30 @@ function ChainPanel({ onResult }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const sfx = useSfx();
+  const [systemFilter, setSystemFilter] = useState('');
+  const [excludeContraband, setExcludeContraband] = useState(false);
 
   // Location search
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationInput, setLocationInput] = useState('');
 
-  // Vehicle search
-  const [vehicleOptions, setVehicleOptions] = useState([]);
+  // Vehicle search - load all on mount, filter locally
+  const [allVehicles, setAllVehicles] = useState([]);
   const [vehicleInput, setVehicleInput] = useState('');
+
+  useEffect(() => {
+    loadAllVehicles().then(vehicles => {
+      setAllVehicles(vehicles);
+    }).catch(() => {});
+  }, []);
+
+  const vehicleOptions = vehicleInput
+    ? allVehicles.filter(v => {
+        const q = vehicleInput.toLowerCase();
+        return (v.name || '').toLowerCase().includes(q)
+          || (v.name_zh || '').toLowerCase().includes(q);
+      })
+    : allVehicles;
 
   const handleLocationSearch = useCallback(async (query) => {
     setLocationInput(query);
@@ -35,20 +51,6 @@ function ChainPanel({ onResult }) {
       setLocationOptions(res.data || []);
     } catch {
       setLocationOptions([]);
-    }
-  }, []);
-
-  const handleVehicleSearch = useCallback(async (query) => {
-    setVehicleInput(query);
-    if (!query || query.length < 1) {
-      setVehicleOptions([]);
-      return;
-    }
-    try {
-      const res = await searchVehicles(query);
-      setVehicleOptions(res.data || []);
-    } catch {
-      setVehicleOptions([]);
     }
   }, []);
 
@@ -79,6 +81,8 @@ function ChainPanel({ onResult }) {
       } else if (vehicle) {
         params.vehicle_id = vehicle.id;
       }
+      if (systemFilter) params.system_filter = systemFilter;
+      if (excludeContraband) params.exclude_contraband = true;
 
       const res = await tradeChain(params, refresh);
       sfx('route_found');
@@ -145,16 +149,26 @@ function ChainPanel({ onResult }) {
         <Autocomplete
           size="small"
           options={vehicleOptions}
-          getOptionLabel={(opt) => `${opt.name} (${opt.name_zh}) - ${opt.scu} SCU`}
-          isOptionEqualToValue={(opt, val) => opt.id === val.id}
+          getOptionLabel={(opt) => `${opt?.name || ''} (${opt?.name_zh || ''}) - ${opt?.scu || 0} SCU`}
+          isOptionEqualToValue={(opt, val) => opt?.id === val?.id}
           inputValue={vehicleInput}
-          onInputChange={(_, val) => handleVehicleSearch(val)}
-          onChange={(_, val) => {
-            setVehicle(val);
-            if (val && !useCustomScu) {
-              // Show selected vehicle's SCU in custom field as reference
-            }
-          }}
+          onInputChange={(_, val) => setVehicleInput(val)}
+          onChange={(_, val) => setVehicle(val)}
+          renderOption={(props, opt) => (
+            <Box {...props} sx={{ ...props.sx, px: 2, py: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box>
+                <Typography sx={{ color: '#c9a227', fontWeight: 600, fontSize: '0.85rem', fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif' }}>
+                  {opt?.name_zh || opt?.name || ''}
+                </Typography>
+                <Typography sx={{ color: 'rgba(201, 162, 39, 0.4)', fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif' }}>
+                  {opt?.name || ''}{opt?.manufacturer ? ` · ${opt.manufacturer}` : ''}
+                </Typography>
+              </Box>
+              <Typography sx={{ color: 'rgba(201, 162, 39, 0.5)', fontSize: '0.7rem', fontFamily: '"Orbitron", sans-serif', whiteSpace: 'nowrap' }}>
+                {opt?.scu || 0} SCU
+              </Typography>
+            </Box>
+          )}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -187,12 +201,21 @@ function ChainPanel({ onResult }) {
             '& .MuiAutocomplete-paper': {
               background: 'rgba(3, 12, 25, 0.97)',
               border: '1px solid rgba(201, 162, 39, 0.15)',
+              maxHeight: 320,
+              overflow: 'auto',
+            },
+            '& .MuiAutocomplete-listbox': {
+              maxHeight: 300,
+              '& .MuiAutocomplete-option': {
+                padding: 0,
+                minHeight: 'auto',
+              },
             },
             '& .MuiAutocomplete-option': {
-              color: '#c9a227',
-              fontSize: '0.8rem',
+              padding: 0,
               '&:hover': { background: 'rgba(201, 162, 39, 0.08)' },
               '&.Mui-focused': { background: 'rgba(201, 162, 39, 0.12)' },
+              '&[aria-selected="true"]': { background: 'rgba(201, 162, 39, 0.15)' },
             },
           }}
         />
@@ -401,11 +424,70 @@ function ChainPanel({ onResult }) {
         fontSize: '0.6rem',
         fontFamily: '"Orbitron", sans-serif',
         letterSpacing: '0.05em',
-        mb: 2,
+        mb: 1,
         textAlign: 'center',
       }}>
-        DATA FROM UEXCORP.SPACE
+        数据来源: UEXCORP.SPACE
       </Typography>
+
+      {/* System filter */}
+      <Box sx={{ mb: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5 }}>
+          <Typography sx={{ fontSize: '0.7rem', color: 'rgba(201,162,39,0.5)', fontFamily: '"Orbitron",sans-serif', fontWeight: 600, letterSpacing: '0.05em' }}>
+            星系筛选
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+          <Chip label="全部星系" size="small" onClick={() => setSystemFilter('')}
+            sx={{
+              background: !systemFilter ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${!systemFilter ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
+              color: !systemFilter ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+              fontSize: '0.65rem',
+            }} />
+          {['Stanton', 'Pyro', 'Nyx'].map(sys => (
+            <Chip key={sys} label={sys} size="small"
+              onClick={() => setSystemFilter(systemFilter === sys ? '' : sys)}
+              sx={{
+                background: systemFilter === sys ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
+                border: `1px solid ${systemFilter === sys ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                color: systemFilter === sys ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+                fontSize: '0.65rem',
+              }} />
+          ))}
+        </Box>
+      </Box>
+
+      {/* Contraband exclusion toggle */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+        <Box
+          onClick={() => setExcludeContraband(!excludeContraband)}
+          sx={{
+            width: 16, height: 16,
+            border: `1px solid ${excludeContraband ? '#ff6644' : 'rgba(255,102,68,0.3)'}`,
+            borderRadius: '2px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer',
+            background: excludeContraband ? 'rgba(255,102,68,0.15)' : 'transparent',
+            transition: 'all 0.2s',
+          }}
+        >
+          {excludeContraband && (
+            <Box sx={{ width: 8, height: 8, background: '#ff6644', borderRadius: '1px' }} />
+          )}
+        </Box>
+        <Typography
+          onClick={() => setExcludeContraband(!excludeContraband)}
+          sx={{
+            color: excludeContraband ? '#ff6644' : 'rgba(255,102,68,0.5)',
+            fontSize: '0.75rem',
+            cursor: 'pointer',
+            fontFamily: '"Rajdhani", "Noto Sans SC", sans-serif',
+          }}
+        >
+          排除违禁品路线
+        </Typography>
+      </Box>
 
       {/* Error with retry button */}
       {error && (

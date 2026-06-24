@@ -4,6 +4,7 @@ Synced from:
   1. 星际公民汉化组 global.ini (Gitee: StarCitizen_CN/sc_l10n_zh_s)
   2. ParaTranz project 8340 (https://paratranz.cn/projects/8340)
 """
+from typing import Dict
 
 SYSTEM_ZH = {
     "Nyx": "尼克斯",
@@ -969,12 +970,15 @@ VEHICLE_ZH_MAP = {
 
 
 def get_vehicle_zh(en_name: str) -> str:
-    """Translate vehicle name to Chinese. ParaTranz first, fallback to hardcoded."""
+    """Translate vehicle name to Chinese. Hardcoded map first, then ParaTranz fallback."""
+    hardcoded = VEHICLE_ZH_MAP.get(en_name)
+    if hardcoded:
+        return hardcoded
     from services.paratranz_service import paratranz
     ptz = paratranz.translate(en_name)
     if ptz:
         return ptz
-    return VEHICLE_ZH_MAP.get(en_name, en_name)
+    return en_name
 
 
 def format_location_zh(name: str, nickname: str, station: str,

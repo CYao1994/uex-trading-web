@@ -13,7 +13,7 @@ const DESIGN_CYCLE_MS = DESIGN_CYCLE_MIN * 60 * 1000;
 const CYCLE_DURATION = DESIGN_CYCLE_MS + CYCLE_DRIFT_MS;
 const OPEN_DURATION = Math.round(CYCLE_DURATION * DESIGN_ONLINE_MS / DESIGN_CYCLE_MS);
 const CLOSE_DURATION = CYCLE_DURATION - OPEN_DURATION;
-const INITIAL_OPEN_TIME = new Date('2026-06-12T21:58:00.833-04:00');
+const INITIAL_OPEN_TIME = new Date('2026-06-18T20:11:10.025-04:00');
 
 // Reference URL for calibration
 const REFERENCE_URL = 'https://exec.xyxyll.com/';
@@ -205,7 +205,7 @@ function HangarTimer() {
             color: '#c9a227',
             letterSpacing: '0.05em',
           }}>
-            Executive Hangar
+            行政机库
           </Typography>
           <Typography sx={{
             fontFamily: '"Noto Sans SC", sans-serif',
@@ -216,7 +216,7 @@ function HangarTimer() {
           </Typography>
         </Box>
         <Chip
-          label={status === 'ONLINE' ? 'OPEN' : 'CLOSED'}
+          label={status === 'ONLINE' ? '开放中' : '已关闭'}
           size="small"
           sx={{
             ml: 'auto',
@@ -253,7 +253,7 @@ function HangarTimer() {
           color: 'rgba(201, 162, 39, 0.5)',
           mt: 0.5,
         }}>
-          {status === 'ONLINE' ? 'Until closing' : 'Until opening'}
+          {status === 'ONLINE' ? '距离关闭' : '距离开启'}
         </Typography>
       </Box>
 
@@ -285,7 +285,7 @@ function HangarTimer() {
           mb: 1,
           letterSpacing: '0.05em',
         }}>
-          UPCOMING
+          即将到来
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
           {upcomingSchedule.map((event, i) => (
@@ -314,7 +314,7 @@ function HangarTimer() {
                   fontSize: '0.7rem',
                   color: 'rgba(255,255,255,0.7)',
                 }}>
-                  {event.type === 'OPEN' ? 'Open' : 'Closed'}
+                  {event.type === 'OPEN' ? '开启' : '关闭'}
                 </Typography>
               </Box>
               <Typography sx={{
@@ -343,7 +343,7 @@ function HangarTimer() {
           fontSize: '0.55rem',
           color: 'rgba(201, 162, 39, 0.25)',
         }}>
-          Algorithm: Xyxyll's Executive Hangar Tracker
+          算法来源: Xyxyll's Executive Hangar Tracker
         </Typography>
         <Box
           component="a"
@@ -364,7 +364,7 @@ function HangarTimer() {
             },
           }}
         >
-          Source
+          来源
           <OpenInNew sx={{ fontSize: 10 }} />
         </Box>
       </Box>

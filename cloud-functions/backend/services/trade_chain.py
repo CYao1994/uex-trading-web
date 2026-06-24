@@ -7,7 +7,8 @@ from typing import Dict, List, Optional
 
 from services.uex_api import (
     load_terminals, load_vehicles, get_locations,
-    get_all_prices, resolve_terminal, _get_location_key, _build_location_index
+    get_all_prices, resolve_terminal, _get_location_key, _build_location_index,
+    get_distance, is_systems_connected, get_jump_point,
 )
 from services.data_mapper import (
     get_terminal_zh, get_commodity_zh, get_vehicle_zh,
@@ -212,6 +213,12 @@ def _build_liquidation_leg(
         else:
             cargo_by_cid[cid] = dict(c)
 
+    # Resolve origin system for connectivity check
+    origin_system = ""
+    if current_terminal_ids:
+        origin_td = terminal_map.get(current_terminal_ids[0], {})
+        origin_system = (origin_td.get("star_system_name") or "").lower().strip()
+
     # Find destinations that can sell carried cargo
     dest_options: Dict[str, dict] = {}
     for cid, cargo in cargo_by_cid.items():
@@ -228,6 +235,13 @@ def _build_liquidation_leg(
             sellable = cargo["volume_scu"] if dest_stock == 0 else min(cargo["volume_scu"], dest_stock)
             if sellable <= 0:
                 continue
+
+            # Skip unreachable systems
+            dest_td = terminal_map.get(dest_tid, {})
+            dest_system = (dest_td.get("star_system_name") or "").lower().strip()
+            if origin_system and dest_system and origin_system != dest_system:
+                if not is_systems_connected(origin_system, dest_system):
+                    continue
 
             if dest_loc not in dest_options:
                 dest_options[dest_loc] = {
@@ -375,6 +389,12 @@ def _find_best_last_leg(
     carried_cids = {c["commodity_id"] for c in carried_cargo}
     carried_scu = sum(c["volume_scu"] for c in carried_cargo)
 
+    # Resolve origin system for connectivity check
+    origin_system = ""
+    if origin_terminal_ids:
+        origin_td = terminal_map.get(origin_terminal_ids[0], {})
+        origin_system = (origin_td.get("star_system_name") or "").lower().strip()
+
     # Find destinations that can sell carried cargo
     dest_carry_capacity: Dict[str, dict] = {}
     for cargo in carried_cargo:
@@ -389,6 +409,13 @@ def _find_best_last_leg(
             price_sell = dest["price_sell"]
             if price_sell <= 0:
                 continue
+
+            # Skip unreachable systems
+            dest_td = terminal_map.get(dest_tid, {})
+            dest_system = (dest_td.get("star_system_name") or "").lower().strip()
+            if origin_system and dest_system and origin_system != dest_system:
+                if not is_systems_connected(origin_system, dest_system):
+                    continue
 
             if dest_loc not in dest_carry_capacity:
                 dest_carry_capacity[dest_loc] = {
@@ -406,7 +433,8 @@ def _find_best_last_leg(
 
     if not dest_carry_capacity:
         if buyable:
-            return _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, capital)
+            return _find_best_leg(buyable, dest_lookup, terminal_map, ship_scu, capital,
+                                  origin_terminal_ids=origin_terminal_ids)
         return None
 
     # For each destination that can sell carried cargo, also try buying new cargo
@@ -727,12 +755,29 @@ def _find_best_leg(
     if not candidates_by_dest:
         return None
 
+    # Resolve origin system for jump point connectivity check
+    origin_system = ""
+    if origin_terminal_ids:
+        origin_td = terminal_map.get(origin_terminal_ids[0], {})
+        origin_system = (origin_td.get("star_system_name") or "").lower().strip()
+
     # Step 2 & 3: For each destination location, greedily assign cargo
     best_dest_loc = None
-    best_total_effective = 0
+    best_score = -1
     best_total_real_profit = 0
+    best_total_distance = 99999
+
+    # Profit proximity threshold: destinations within 15% of best profit
+    # are considered "similar profit" — distance breaks the tie
+    PROXIMITY_RATIO = 0.85
 
     for dest_loc, cands in candidates_by_dest.items():
+        # Skip destinations in unreachable systems (no jump point connection)
+        first_dest_td = terminal_map.get(cands[0]["dest_terminal_id"], {})
+        dest_system = (first_dest_td.get("star_system_name") or "").lower().strip()
+        if origin_system and dest_system and origin_system != dest_system:
+            if not is_systems_connected(origin_system, dest_system):
+                continue
         cands.sort(key=lambda c: c["unit_profit"], reverse=True)
 
         remaining_scu = ship_scu
@@ -792,11 +837,39 @@ def _find_best_leg(
                             carried_profit += sellable * (sp - cargo["price_buy"])
                         break
 
-        if total_effective + carried_profit > best_total_effective or (
-            total_effective + carried_profit == best_total_effective and total_real_profit > best_total_real_profit
+        total_effective_with_carry = total_effective + carried_profit
+
+        # Distance-aware scoring: get distance from origin to destination
+        origin_tid = origin_terminal_ids[0] if origin_terminal_ids else 0
+        dest_tid_for_dist = dest_assigned[0]["dest_terminal_id"] if dest_assigned else 0
+        dist = get_distance(origin_tid, dest_tid_for_dist)
+        if dist is None:
+            dist = 60  # fallback
+
+        # Add jump point travel penalty for cross-system travel
+        if origin_system and dest_system and origin_system != dest_system:
+            jp = get_jump_point(origin_system, dest_system)
+            if jp:
+                fuel_penalty = int((jp.get("fuel_cost", 0) or 0) * 100)
+                dist += fuel_penalty
+
+        # Score = effective profit, with distance penalty for similar-profit destinations
+        score = total_effective_with_carry
+        if total_effective_with_carry > 0 and best_score > 0:
+            # If this destination's profit is within PROXIMITY_RATIO of best,
+            # apply distance-based tiebreaker
+            if total_effective_with_carry >= best_score * PROXIMITY_RATIO:
+                # Prefer closer destination: reduce score slightly for distance
+                # Normalize: every 20 AU costs 1% of profit as penalty
+                distance_penalty = dist * 0.005
+                score = total_effective_with_carry * (1 - distance_penalty)
+
+        if score > best_score or (
+            score == best_score and total_real_profit > best_total_real_profit
         ):
-            best_total_effective = total_effective + carried_profit
+            best_score = score
             best_total_real_profit = total_real_profit
+            best_total_distance = dist
             best_dest_loc = dest_loc
             best_assigned = dest_assigned
 
@@ -978,6 +1051,11 @@ def _make_leg_dict(leg_idx: int, origin_td: dict, dest_td: dict, best: dict, sup
     dest_system = dest_td.get("star_system_name", "") or ""
     dest_planet = dest_td.get("planet_name", "") or ""
 
+    # Get distance between origin and destination
+    origin_tid = best.get("origin_terminal_id", 0)
+    dest_tid = best.get("dest_terminal_id", 0)
+    distance = get_distance(origin_tid, dest_tid)
+
     # Build commodities list from _all_commodities (aggregated by _find_best_leg)
     all_commodities = best.get("_all_commodities", [])
     commodities = None
@@ -1058,6 +1136,7 @@ def _make_leg_dict(leg_idx: int, origin_td: dict, dest_td: dict, best: dict, sup
         "destination_system_zh": SYSTEM_ZH.get(dest_system, dest_system),
         "destination_planet": dest_planet,
         "destination_planet_zh": PLANET_ZH.get(dest_planet, dest_planet),
+        "distance": distance,
         "commodities": commodities,
     }
 
@@ -1069,6 +1148,7 @@ def _empty_response(warnings: List[str], early_stop_reason: str) -> dict:
         "total_profit": 0,
         "final_capital": 0,
         "total_legs": 0,
+        "total_distance": 0,
         "early_stop_reason": early_stop_reason,
         "warnings": warnings,
     }
@@ -1083,11 +1163,13 @@ def _build_response(
 ) -> dict:
     """Build the final trade chain response."""
     total_profit = current_capital - float(initial_capital)
+    total_distance = sum(leg.get("distance_km", 0) for leg in legs)
     return {
         "legs": legs,
         "total_profit": round(total_profit, 2),
         "final_capital": round(current_capital, 2),
         "total_legs": len(legs),
+        "total_distance": round(total_distance, 0),
         "early_stop_reason": early_stop_reason,
         "warnings": warnings,
     }

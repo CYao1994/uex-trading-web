@@ -1,9 +1,10 @@
 // CommodityInput.jsx - 商品搜索（含历史记录）
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { TextField, Box, Typography, Paper, Chip, CircularProgress, IconButton, Button } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon, Close as CloseIcon, Inventory2, Check as CheckIcon, DeleteSweep, History } from '@mui/icons-material';
 import { loadAllCommodities } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
+import { useSfx } from '../hooks/useSfx';
 
 function EditableScuChip({ item, onQuantityChange, onRemove, index }) {
   const [editing, setEditing] = useState(false);
@@ -273,6 +274,7 @@ function CommodityInput({ items, onItemsChange }) {
   const debounceRef = useRef(null);
 
   const { history, addToHistory, removeFromHistory, clearHistory } = useSearchHistory('commodity_search_history');
+  const sfx = useSfx();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -289,6 +291,7 @@ function CommodityInput({ items, onItemsChange }) {
     setQuery(val);
     setError('');
     setShowHistory(false);
+    if (val.trim()) sfx('search_type');
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     if (!val.trim()) {
@@ -360,17 +363,18 @@ function CommodityInput({ items, onItemsChange }) {
     setError('');
   };
 
-  const handleRemove = (name) => {
+  const handleRemove = useCallback((name) => {
     onItemsChange(items.filter(i => i.name !== name));
-  };
+  }, [items, onItemsChange]);
 
-  const handleQuantityChange = (name, newQty) => {
+  const handleQuantityChange = useCallback((name, newQty) => {
     onItemsChange(items.map(i =>
       i.name === name ? { ...i, quantity: newQty } : i
     ));
-  };
+  }, [items, onItemsChange]);
 
   const handleClearAll = () => {
+    sfx('search_clear');
     onItemsChange([]);
   };
 
@@ -379,6 +383,7 @@ function CommodityInput({ items, onItemsChange }) {
   };
 
   const handleFocus = () => {
+    sfx('search_focus');
     if (query.trim()) {
       if (options.length > 0) {
         setShowDropdown(true);

@@ -1,7 +1,8 @@
 """
 API Routes - FastAPI route handlers
 """
-from fastapi import APIRouter, Query
+import os
+from fastapi import APIRouter, Query, Header, HTTPException
 from api.schemas import (
     SellRouteRequest, SellRouteResponse, TerminalOption, CommodityOption,
     PriceEntry, CommodityPricesResponse, WarbondResponse,
@@ -25,7 +26,7 @@ from services.route_planner import plan_sell_route, plan_buy_route, _is_valid_co
 from services.trade_chain import plan_trade_chain
 from services.warbond_scraper import fetch_warbonds
 from services.cache import get_all_stats, invalidate_all
-from version import VERSION, CHANGELOG
+from version import VERSION
 import logging
 import traceback
 
@@ -97,7 +98,7 @@ async def search_terminals(q: str = Query("", max_length=100), refresh: bool = Q
     query = q.lower().strip()
 
     if not query:
-        results = terminals[:50]
+        results = terminals
     else:
         results = []
         for t in terminals:
@@ -319,8 +320,11 @@ async def cache_stats():
 
 
 @router.post("/cache/clear")
-async def clear_cache():
-    """Clear all cached data - forces fresh data on next request."""
+async def clear_cache(x_admin_key: str = Header(default="")):
+    """Clear all cached data - forces fresh data on next request. Requires admin key."""
+    admin_key = os.environ.get("ADMIN_SECRET", "")
+    if admin_key and x_admin_key != admin_key:
+        raise HTTPException(status_code=403, detail="Invalid admin key")
     invalidate_all()
     return {"status": "ok", "message": "All caches cleared"}
 
@@ -361,8 +365,8 @@ async def search_vehicles(q: str = Query("", max_length=100), refresh: bool = Qu
             if len(results) >= 20:
                 break
     else:
-        # Default: sort by SCU ascending, return up to 50
-        results = sorted(vehicles, key=lambda v: v.get("scu", 0))[:50]
+        # No query: return all vehicles sorted by SCU descending
+        results = sorted(vehicles, key=lambda v: v.get("scu", 0), reverse=True)
 
     return [
         VehicleOption(
@@ -764,8 +768,11 @@ async def categories_attributes(id_category: int = Query(..., description="UEX c
 
 
 @router.post("/admin/refresh-translations")
-async def refresh_translations():
-    """Manually refresh ParaTranz translation cache."""
+async def refresh_translations(x_admin_key: str = Header(default="")):
+    """Manually refresh ParaTranz translation cache. Requires admin key."""
+    admin_key = os.environ.get("ADMIN_SECRET", "")
+    if admin_key and x_admin_key != admin_key:
+        raise HTTPException(status_code=403, detail="Invalid admin key")
     try:
         from services.paratranz_service import paratranz
         paratranz.load_translations(force=True)

@@ -1,4 +1,4 @@
-// ErrorBoundary.jsx - React Error Boundary ????????????
+// ErrorBoundary.jsx - React Error Boundary 组件
 import { Component } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { Refresh, BugReport } from '@mui/icons-material';
@@ -53,7 +53,7 @@ class ErrorBoundary extends Component {
             mb: 1,
             letterSpacing: '0.05em',
           }}>
-            ??????
+            系统异常
           </Typography>
           <Typography sx={{
             color: 'rgba(200, 220, 255, 0.5)',
@@ -61,7 +61,7 @@ class ErrorBoundary extends Component {
             mb: 3,
             fontFamily: '"Noto Sans SC", sans-serif',
           }}>
-            ????????????,?????
+            页面渲染出现异常，请点击刷新重试
           </Typography>
           <Button
             onClick={this.handleReload}
@@ -79,7 +79,7 @@ class ErrorBoundary extends Component {
             }}
             variant="outlined"
           >
-            ??
+            刷新
           </Button>
         </Box>
       );

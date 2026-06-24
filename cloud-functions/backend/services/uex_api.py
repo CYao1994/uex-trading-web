@@ -22,6 +22,80 @@ from services.cache import (
     invalidate_all,
 )
 
+
+# ---------------------------------------------------------------------------
+# Jump point connectivity data
+# ---------------------------------------------------------------------------
+_JUMP_POINTS_PATH = os.path.join(
+    os.path.dirname(__file__), '..', '..', '..', 'frontend', 'public', 'data', 'starmap-positions.json'
+)
+_jump_point_cache: Optional[List[Dict]] = None
+
+
+def _load_jump_points() -> List[Dict]:
+    """Load jump point connections from starmap-positions.json (cached)."""
+    global _jump_point_cache
+    if _jump_point_cache is not None:
+        return _jump_point_cache
+    try:
+        with open(_JUMP_POINTS_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        connections = data.get("connections", [])
+        _jump_point_cache = connections
+        return connections
+    except Exception:
+        _jump_point_cache = []
+        return []
+
+
+def is_systems_connected(sys1: str, sys2: str) -> bool:
+    """Check if two star systems are connected via a direct jump point."""
+    if not sys1 or not sys2:
+        return False
+    if sys1 == sys2:
+        return True
+    s1 = sys1.lower().strip()
+    s2 = sys2.lower().strip()
+    connections = _load_jump_points()
+    for jp in connections:
+        entry = (jp.get("entry_system") or "").lower().strip()
+        exit_ = (jp.get("exit_system") or "").lower().strip()
+        if (entry == s1 and exit_ == s2) or (entry == s2 and exit_ == s1):
+            return True
+    return False
+
+
+def get_jump_point(sys1: str, sys2: str) -> Optional[Dict]:
+    """Get jump point info between two systems. Returns dict with fuel_cost or None."""
+    if not sys1 or not sys2 or sys1 == sys2:
+        return None
+    s1 = sys1.lower().strip()
+    s2 = sys2.lower().strip()
+    connections = _load_jump_points()
+    for jp in connections:
+        entry = (jp.get("entry_system") or "").lower().strip()
+        exit_ = (jp.get("exit_system") or "").lower().strip()
+        if (entry == s1 and exit_ == s2) or (entry == s2 and exit_ == s1):
+            return jp
+    return None
+
+
+def get_connected_systems(system: str) -> List[str]:
+    """Get all systems directly connected to the given system via jump points."""
+    if not system:
+        return []
+    s = system.lower().strip()
+    connected = set()
+    connections = _load_jump_points()
+    for jp in connections:
+        entry = (jp.get("entry_system") or "").lower().strip()
+        exit_ = (jp.get("exit_system") or "").lower().strip()
+        if entry == s:
+            connected.add(exit_)
+        elif exit_ == s:
+            connected.add(entry)
+    return list(connected)
+
 BASE_URL = "https://api.uexcorp.space/2.0"
 
 # SSL context: skip verification (equivalent to curl -k)
@@ -164,6 +238,7 @@ def _refresh_terminals():
         fresh = _fetch_terminals_fresh()
         if fresh:
             terminal_cache.set(fresh)
+            _save_static_to_disk('terminals', fresh)
     except Exception:
         pass
     finally:
@@ -181,6 +256,8 @@ def load_terminals(refresh: bool = False) -> List[Dict]:
     in the UEX API. Each PB location has a corresponding ADMIN terminal
     that has actual buy/sell prices.
 
+    Uses disk persistence for cold-start recovery.
+
     Args:
         refresh: If True, bypass cache and fetch fresh data.
     """
@@ -192,10 +269,20 @@ def load_terminals(refresh: bool = False) -> List[Dict]:
                 threading.Thread(target=_refresh_terminals, daemon=True).start()
             return data
 
+    # Cold start: try disk cache
+    if terminal_cache.data is None:
+        disk_data = _load_static_from_disk('terminals')
+        if disk_data:
+            terminal_cache.set(disk_data)
+            terminal_cache._refreshing = True
+            threading.Thread(target=_refresh_terminals, daemon=True).start()
+            return disk_data
+
     # Synchronous fresh fetch
     fresh = _fetch_terminals_fresh()
     if fresh:
         terminal_cache.set(fresh)
+        _save_static_to_disk('terminals', fresh)
         return fresh
 
     # Return stale cache if available, else empty
@@ -310,7 +397,7 @@ def resolve_terminal_location(t_info: Dict) -> Dict[str, str]:
 
 
 def load_commodities(refresh: bool = False) -> List[Dict]:
-    """Load all commodities with TTL caching.
+    """Load all commodities with TTL caching + disk persistence.
 
     Args:
         refresh: If True, bypass cache and fetch fresh data.
@@ -320,11 +407,19 @@ def load_commodities(refresh: bool = False) -> List[Dict]:
         if cached is not None:
             return cached
 
+    # Cold start: try disk cache
+    if commodity_cache.data is None:
+        disk_data = _load_static_from_disk('commodities')
+        if disk_data:
+            commodity_cache.set(disk_data)
+            return disk_data
+
     try:
         data = api_get("commodities")
         commodities = data.get("data", [])
         if commodities:
             commodity_cache.set(commodities)
+            _save_static_to_disk('commodities', commodities)
             return commodities
     except Exception:
         pass
@@ -772,6 +867,7 @@ def _refresh_all_prices():
         fresh = _fetch_all_prices_fresh()
         if fresh:
             all_prices_cache.set(fresh)
+            _save_prices_to_disk(fresh)
     except Exception:
         pass
     finally:
@@ -779,11 +875,14 @@ def _refresh_all_prices():
 
 
 def get_all_prices(refresh: bool = False) -> List[Dict]:
-    """Get all commodity prices across all terminals with SWR caching.
+    """Get all commodity prices across all terminals with SWR caching + disk persistence.
 
     Uses parallel per-commodity fetching since UEX API 2.0 requires
     id_commodity as a mandatory path parameter for commodities_prices.
     Leverages existing get_commodity_prices() with per-commodity caching.
+
+    On first call (cold start), loads from disk cache instantly,
+    then refreshes from UEX API in background.
 
     Args:
         refresh: If True, bypass cache and fetch fresh data.
@@ -800,10 +899,21 @@ def get_all_prices(refresh: bool = False) -> List[Dict]:
                 threading.Thread(target=_refresh_all_prices, daemon=True).start()
             return data
 
+    # Cold start: try loading from disk cache first
+    if all_prices_cache.data is None:
+        disk_data = _load_prices_from_disk()
+        if disk_data:
+            all_prices_cache.set(disk_data)
+            # Still refresh from API in background
+            all_prices_cache._refreshing = True
+            threading.Thread(target=_refresh_all_prices, daemon=True).start()
+            return disk_data
+
     try:
         normalized = _fetch_all_prices_fresh(refresh=refresh)
         if normalized:
             all_prices_cache.set(normalized)
+            _save_prices_to_disk(normalized)
             return normalized
     except Exception:
         pass
@@ -812,6 +922,75 @@ def get_all_prices(refresh: bool = False) -> List[Dict]:
     if all_prices_cache.data is not None:
         return all_prices_cache.data
     return []
+
+
+_PRICES_DISK_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'prices_snapshot.json')
+_PRICES_MAX_AGE = 24 * 3600  # 24 hours
+_STATIC_MAX_AGE = 24 * 3600  # 24 hours for terminals/commodities
+
+
+def _save_prices_to_disk(prices: list) -> None:
+    """Persist prices to disk for cold-start recovery."""
+    try:
+        os.makedirs(os.path.dirname(_PRICES_DISK_PATH), exist_ok=True)
+        with open(_PRICES_DISK_PATH, 'w') as f:
+            json.dump({'ts': time.time(), 'prices': prices}, f)
+    except Exception:
+        pass
+
+
+def _load_prices_from_disk() -> Optional[list]:
+    """Load prices from disk if not too old."""
+    try:
+        if not os.path.exists(_PRICES_DISK_PATH):
+            return None
+        with open(_PRICES_DISK_PATH, 'r') as f:
+            data = json.load(f)
+        ts = data.get('ts', 0)
+        if (time.time() - ts) > _PRICES_MAX_AGE:
+            return None  # Too old, don't use
+        prices = data.get('prices', [])
+        if prices:
+            print(f"[PricesCache] Loaded {len(prices)} prices from disk ({int((time.time()-ts)/60)}min old)")
+            return prices
+    except Exception:
+        pass
+    return None
+
+
+def _static_disk_path(name: str) -> str:
+    return os.path.join(os.path.dirname(__file__), '..', 'data', f'{name}_snapshot.json')
+
+
+def _save_static_to_disk(name: str, data) -> None:
+    """Persist static data (terminals, commodities) to disk."""
+    try:
+        path = _static_disk_path(name)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w') as f:
+            json.dump({'ts': time.time(), 'data': data}, f)
+    except Exception:
+        pass
+
+
+def _load_static_from_disk(name: str):
+    """Load static data from disk if not too old."""
+    try:
+        path = _static_disk_path(name)
+        if not os.path.exists(path):
+            return None
+        with open(path, 'r') as f:
+            data = json.load(f)
+        ts = data.get('ts', 0)
+        if (time.time() - ts) > _STATIC_MAX_AGE:
+            return None
+        result = data.get('data')
+        if result:
+            print(f"[{name}Cache] Loaded from disk ({int((time.time()-ts)/60)}min old)")
+            return result
+    except Exception:
+        pass
+    return None
 
 
 def load_items(id_category: int = None, refresh: bool = False) -> List[Dict]:

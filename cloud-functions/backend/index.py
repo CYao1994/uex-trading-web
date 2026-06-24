@@ -17,6 +17,7 @@ _api_key = os.environ.get("UEX_API_KEY", "")
 logging.info(f"[Config] UEX API Key configured: {bool(_api_key)}")
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,6 +43,13 @@ app = FastAPI(
     description="Star Citizen Trading Route Planner API",
     version="3.28.1",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/health")

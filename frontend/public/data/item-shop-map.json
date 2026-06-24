@@ -1,0 +1,3335 @@
+{
+  "generated_at": "2026-06-21T05:32:25.830Z",
+  "total_items": 163,
+  "item_shops": {
+    "d195eb47-24b8-45c0-a4d0-1771d60dc1a8": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 2604,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 2604,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 2340,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 2604,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 2604,
+        "sell_price": 0
+      }
+    ],
+    "70a98c94-9252-4fd3-a673-5a584339e273": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 4657,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 4657,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 4185,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 4657,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 4657,
+        "sell_price": 0
+      }
+    ],
+    "e09590d1-13a0-4d25-ad89-3dfc18a61c4a": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 10065,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 10065,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 10065,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 10064,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 10065,
+        "sell_price": 0
+      }
+    ],
+    "00ab31a0-7de2-44f7-a567-7ff88fdbad49": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 2336,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 2336,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 2336,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 2336,
+        "sell_price": 0
+      }
+    ],
+    "80ab18bb-9bc2-4e4f-a407-06c28e69bea7": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3100,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3100,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3100,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3100,
+        "sell_price": 0
+      }
+    ],
+    "e350773c-9131-4974-b624-e6b9e7c7200d": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 1676,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 1676,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 1676,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 1676,
+        "sell_price": 0
+      }
+    ],
+    "34bc9924-3f20-4bc9-a6cf-81335a0608fe": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 1452,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 1452,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 1452,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 1452,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 1452,
+        "sell_price": 0
+      }
+    ],
+    "a5ade53b-9c40-477a-aaf8-78b6ef485283": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3005,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3005,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3005,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3004,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3005,
+        "sell_price": 0
+      }
+    ],
+    "76706adf-4687-4a7a-aaf1-c44af0a5d2ca": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 11937,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 11937,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 11937,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 11929,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 11937,
+        "sell_price": 0
+      }
+    ],
+    "2e0a3446-23e2-447b-8f1c-2b01516ca396": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 22257,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 22257,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 22257,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 22242,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 22257,
+        "sell_price": 0
+      }
+    ],
+    "b86bd2f2-1f5e-4731-a286-74faa8cde646": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 22,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 22,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 22,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 22,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 22,
+        "sell_price": 0
+      }
+    ],
+    "1754a3d4-4aa9-469d-8fb7-d8611bd3e9a1": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 36,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 36,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 37,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 36,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 36,
+        "sell_price": 0
+      }
+    ],
+    "dee6efca-71ef-438c-b762-624f9ce649f3": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 55,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 55,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 55,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 55,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 55,
+        "sell_price": 0
+      },
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 59,
+        "sell_price": 0
+      }
+    ],
+    "9a741b0a-200d-4f1a-92a8-f917510804e1": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 67,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 67,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 67,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 67,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 67,
+        "sell_price": 0
+      },
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 71,
+        "sell_price": 0
+      }
+    ],
+    "e5aa84b6-9b14-4eb3-949f-10e1cc8cd6cf": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 85,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 85,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 85,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 85,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 85,
+        "sell_price": 0
+      }
+    ],
+    "d4408421-e939-4e34-9902-0644fa6934be": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 76,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 76,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 78,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 76,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 76,
+        "sell_price": 0
+      }
+    ],
+    "bc9adaf0-90a2-45e8-ba1d-5e0b56a76c92": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 137,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 137,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 137,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 137,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 137,
+        "sell_price": 0
+      }
+    ],
+    "99e0ea17-45fc-4700-8607-ab879d05a284": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 7725,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 7725,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 7955,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 7725,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 7719,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 7724,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 7725,
+        "sell_price": 0
+      },
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 7955,
+        "sell_price": 0
+      },
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 8052,
+        "sell_price": 0
+      }
+    ],
+    "a117d541-aa61-49fd-ae53-469b0fdf7ccd": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 10839,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 10839,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 10839,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 10839,
+        "sell_price": 0
+      }
+    ],
+    "13880fbe-7295-4f55-886d-251ad01e2677": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 10207,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 10207,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 10207,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 10207,
+        "sell_price": 0
+      }
+    ],
+    "4a4a2a9c-040f-4f36-befe-7101b230fa53": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 8513,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 8513,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 7650,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 8513,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 8511,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 8513,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 7984,
+        "sell_price": 0
+      }
+    ],
+    "cebbf547-717e-478e-8d52-81f786477295": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 7962,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 7962,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 7155,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 7962,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 7961,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 7962,
+        "sell_price": 0
+      }
+    ],
+    "fda65886-0ccb-4a80-a5ee-528b186d4584": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 30589,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 30589,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 30589,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 30691,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 30586,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 30589,
+        "sell_price": 0
+      }
+    ],
+    "202db33c-6b87-4210-9392-6d5368bc3436": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 122638,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 122638,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 122638,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 122638,
+        "sell_price": 0
+      }
+    ],
+    "1dee7b69-d26e-4c02-98cd-f2f5d129134a": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 48273,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 48273,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 48273,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 48273,
+        "sell_price": 0
+      }
+    ],
+    "c933bab5-5eec-42fe-ae83-b2c5ff91502f": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 7475,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 7475,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 7475,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 7474,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 7475,
+        "sell_price": 0
+      }
+    ],
+    "e11f94ed-6a41-4960-b895-4a604ec98e97": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3714,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3714,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3980,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3714,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 3715,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3715,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3714,
+        "sell_price": 0
+      }
+    ],
+    "b64ab3f3-4b44-418c-a438-57a04a1cf1b2": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 5074,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 5074,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 5074,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 5074,
+        "sell_price": 0
+      }
+    ],
+    "d0669062-2e64-41d4-beb2-d510588ca593": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 6018,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 6018,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 6018,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 6018,
+        "sell_price": 0
+      }
+    ],
+    "37ae6971-46d1-4021-bb9f-353813df8e9f": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 25779,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 25779,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 25779,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 25781,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 25779,
+        "sell_price": 0
+      }
+    ],
+    "3a2e37f0-dc95-4082-b74d-fe968ed64eb3": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 88369,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 88369,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 94694,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 88369,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 88378,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 88369,
+        "sell_price": 0
+      }
+    ],
+    "ffede9a8-3c50-4b9e-be0f-9d93e5a26f29": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3352,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3352,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3446,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3352,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 3349,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3351,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3352,
+        "sell_price": 0
+      }
+    ],
+    "4e256229-5224-40af-8806-72223f753da2": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 23035,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 23035,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 20700,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 23035,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 23031,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 23035,
+        "sell_price": 0
+      }
+    ],
+    "4702547f-fa0f-4f6c-b2ed-9782ee9f518b": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 9936,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 9936,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 9453,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 9936,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 9968,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 9936,
+        "sell_price": 0
+      }
+    ],
+    "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 9214,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 9214,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 8280,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 9214,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 9247,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 9214,
+        "sell_price": 0
+      }
+    ],
+    "74cc0d0b-1bf5-436c-a38c-1baf93962b89": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 25539,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 25539,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 25539,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 25630,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 25534,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 25539,
+        "sell_price": 0
+      }
+    ],
+    "9e3a3bcb-d90a-46c5-912b-079fd15157cc": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 28032,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 28032,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 28823,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 28032,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 28029,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 28032,
+        "sell_price": 0
+      }
+    ],
+    "0ed88703-3183-48c8-95f1-eda2b5b4381a": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 6810,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 6810,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 6120,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 6810,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 6835,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 6809,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 6810,
+        "sell_price": 0
+      }
+    ],
+    "c46f3fb8-12f8-4c85-b4ac-0850b1e0d17d": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3255,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3255,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 2925,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3255,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 3267,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3254,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3255,
+        "sell_price": 0
+      }
+    ],
+    "662e4a88-d893-46fd-9fcc-e33e4b783fae": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 51470,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 51470,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 52855,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 51470,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 51467,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 51470,
+        "sell_price": 0
+      }
+    ],
+    "387da568-31d2-4479-81da-21dd015db668": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 1813,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 1813,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 1813,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 1813,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 1813,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 1813,
+        "sell_price": 0
+      }
+    ],
+    "97bf2cfe-efb8-469b-9d43-6e4a88130417": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 1673,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 1673,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 1716,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 1673,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 1673,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 1673,
+        "sell_price": 0
+      }
+    ],
+    "b4be7e39-8cd9-4d38-af89-61ace9c67796": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 3172,
+        "sell_price": 0
+      }
+    ],
+    "5f474dec-75e8-4626-9c0a-f5a48f841f33": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3333,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3333,
+        "sell_price": 0
+      }
+    ],
+    "bba050c3-1348-45a8-91c6-73e4ecf5082f": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 2954,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 2954,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 2954,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 2965,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 2954,
+        "sell_price": 0
+      }
+    ],
+    "a5107834-61e1-481d-b836-7ed6c08b14d5": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 4457,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 4457,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 4457,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 4473,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 4457,
+        "sell_price": 0
+      }
+    ],
+    "553f7473-1d24-41b5-bd53-baa4190464d0": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 5608,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 5608,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 5040,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 5608,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 5629,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 5608,
+        "sell_price": 0
+      }
+    ],
+    "866c76c0-8c22-44ad-b1dc-167ee5fbe347": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 5008,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 5008,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 5008,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 5026,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 5008,
+        "sell_price": 0
+      }
+    ],
+    "fd9f41c7-f60b-4ac8-95be-cb501fc5dd5d": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 13220,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 13220,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 13220,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 13267,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 13220,
+        "sell_price": 0
+      }
+    ],
+    "59a37716-f4d3-4dcb-a41e-0f2c3064e169": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 5923,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 5923,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 6312,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 5923,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 5924,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 5924,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 5923,
+        "sell_price": 0
+      }
+    ],
+    "ec636cbd-21c6-4b9c-a095-c8ef04f1a9fa": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3445,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3445,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3671,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3445,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 3445,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3445,
+        "sell_price": 0
+      }
+    ],
+    "d8059126-352a-4be5-bfc9-15cf4fb05439": [
+      {
+        "shop": "Aparelli_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "商品",
+        "buy_price": 3505,
+        "sell_price": 0
+      },
+      {
+        "shop": "CenterMass_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "武器",
+        "buy_price": 3505,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3736,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Grimhex",
+        "location": "Grimhex",
+        "shop_category": "组件",
+        "buy_price": 3505,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3506,
+        "sell_price": 0
+      },
+      {
+        "shop": "OmegaPro_NewBabbage",
+        "location": "NewBabbage",
+        "shop_category": "组件",
+        "buy_price": 3505,
+        "sell_price": 0
+      }
+    ],
+    "86630fcf-09c3-4def-a7b4-9385cbc05a42": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 13785,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 13405,
+        "sell_price": 0
+      }
+    ],
+    "596ced46-195e-4f60-826a-7cc5bb2e2f02": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 16082,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 16872,
+        "sell_price": 0
+      }
+    ],
+    "85726664-e16d-4a24-98f8-7cc8f0ba6f00": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 16761,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 16289,
+        "sell_price": 0
+      }
+    ],
+    "c7c36fea-dcf5-48b9-9939-bf2771f9f8f4": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 2559,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 2488,
+        "sell_price": 0
+      }
+    ],
+    "fac5a97f-64bf-450e-a2f2-90e4da5ccf73": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3916,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 3806,
+        "sell_price": 0
+      }
+    ],
+    "082c2ffb-1c54-45e5-90bf-f411d9a06425": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 26,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 25,
+        "sell_price": 0
+      }
+    ],
+    "d358cf84-9c78-4929-a2ad-b9caade81962": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 42,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 39,
+        "sell_price": 0
+      }
+    ],
+    "8acc8f1f-47cb-46e4-bf58-bea2ac5ff52e": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 33,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 40,
+        "sell_price": 0
+      }
+    ],
+    "f68e5fb2-2388-43d1-9aab-bed82da648c8": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 3319,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 3271,
+        "sell_price": 0
+      }
+    ],
+    "94ea5bb5-070c-4c75-b90d-66c26c38bb2a": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 2565,
+        "sell_price": 0
+      }
+    ],
+    "08a5bfdb-1972-421f-83fe-be03b7ac5222": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 7989,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 7769,
+        "sell_price": 0
+      }
+    ],
+    "16ba45f1-bd70-4b58-96d6-0ef822f59803": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 33084,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 34887,
+        "sell_price": 0
+      }
+    ],
+    "6be9c02c-ff32-483f-a6f8-d984dcb97c40": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 8929,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 8683,
+        "sell_price": 0
+      }
+    ],
+    "339bd641-8dfb-4bc1-b273-5ffc5f702fbb": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 13099,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 13872,
+        "sell_price": 0
+      }
+    ],
+    "b66a64ca-9c53-40e7-8618-3b66b10a021c": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 21407,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 22670,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 22589,
+        "sell_price": 0
+      }
+    ],
+    "924e275a-d449-44f5-a8a8-6e0e93a9661e": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 36143,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 38275,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 38138,
+        "sell_price": 0
+      }
+    ],
+    "4f61e805-f5f4-49b2-a834-cfda713f48db": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 10530,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 10990,
+        "sell_price": 0
+      }
+    ],
+    "0a713a9d-7e70-4586-87a6-ce08c337a8ea": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 9778,
+        "sell_price": 0
+      }
+    ],
+    "ad089033-7cfc-479f-b7d4-49a93e1e3bd4": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 9832,
+        "sell_price": 0
+      }
+    ],
+    "9a5c71d4-12c0-4994-a41f-98b6e6018151": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 9135,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 10202,
+        "sell_price": 0
+      }
+    ],
+    "a1108d40-080d-4087-b5e2-5030336ee180": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 8325,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 9297,
+        "sell_price": 0
+      }
+    ],
+    "49d355d9-b5a5-454a-a6e8-dedb4bdffa02": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 8775,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 9800,
+        "sell_price": 0
+      }
+    ],
+    "aa15e2df-d7b1-4e97-9e0d-7623a3a096b0": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 17370,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 19398,
+        "sell_price": 0
+      }
+    ],
+    "96244ab6-8819-47c3-87af-78124661c725": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 59985,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 66990,
+        "sell_price": 0
+      }
+    ],
+    "95a43815-970e-4a70-87df-0658c32495d8": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 13994,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 13599,
+        "sell_price": 0
+      }
+    ],
+    "419bff00-12eb-43f7-b284-f8850519b9c6": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 63651,
+        "sell_price": 0
+      }
+    ],
+    "9d309719-800c-4d42-946e-fa6c240bc2df": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 8929,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 8683,
+        "sell_price": 0
+      }
+    ],
+    "624e6c75-afd8-4606-a10e-45d12cb3c882": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 11109,
+        "sell_price": 0
+      }
+    ],
+    "86bfeaef-e0e2-4373-9dca-47e193c0b203": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 18693,
+        "sell_price": 0
+      }
+    ],
+    "8c2b0c60-881b-4163-9d72-b6b74806735a": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 20886,
+        "sell_price": 0
+      }
+    ],
+    "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 37856,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 36814,
+        "sell_price": 0
+      }
+    ],
+    "e2599be8-160c-4d20-87d0-3c080109842d": [
+      {
+        "shop": "DumpersDepot_Area18",
+        "location": "Area18",
+        "shop_category": "组件",
+        "buy_price": 49410,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 55180,
+        "sell_price": 0
+      }
+    ],
+    "3fc83638-fbe5-4d75-8e18-678736fefbc4": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 8176,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 8150,
+        "sell_price": 0
+      }
+    ],
+    "2a787ee5-d720-4490-8823-65a0f8578f4b": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 6181,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 6158,
+        "sell_price": 0
+      }
+    ],
+    "2ef5eb91-95ec-442c-a856-79a39f84d365": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 1827,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 1828,
+        "sell_price": 0
+      }
+    ],
+    "bad19f5c-7249-4d85-9430-040733eb6e4a": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 21127,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 21140,
+        "sell_price": 0
+      }
+    ],
+    "8e828c4f-b435-4db5-aab4-318dead98403": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 11666,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 11621,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 11085,
+        "sell_price": 0
+      }
+    ],
+    "b5cbef86-f37f-4e05-8aff-e0f61afe166e": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 8068,
+        "sell_price": 0
+      }
+    ],
+    "ecc8d200-548c-4de0-a60e-d1e316515170": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 5734,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 5738,
+        "sell_price": 0
+      }
+    ],
+    "334e6cb2-5e77-4bc8-bd92-d756848f050b": [
+      {
+        "shop": "DumpersDepot_Levski",
+        "location": "Levski",
+        "shop_category": "组件",
+        "buy_price": 11174,
+        "sell_price": 0
+      },
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 11134,
+        "sell_price": 0
+      }
+    ],
+    "816aa854-7615-4add-a2ca-2d39ada7fea7": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 41130,
+        "sell_price": 0
+      }
+    ],
+    "fde9335b-a9b7-4d7d-a4a4-69b1158de320": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 16655,
+        "sell_price": 0
+      }
+    ],
+    "f6ab217a-2506-42ad-b6f2-90bdf939c0af": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3291,
+        "sell_price": 0
+      }
+    ],
+    "30ffee03-ee0a-47c5-9b4c-b24203c148d7": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 3143,
+        "sell_price": 0
+      }
+    ],
+    "e41f4682-381a-453e-802b-521ce84a26b6": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 5967,
+        "sell_price": 0
+      }
+    ],
+    "41a56edf-ce69-4638-9c80-1692c3d345c6": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 19762,
+        "sell_price": 0
+      },
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 18850,
+        "sell_price": 0
+      }
+    ],
+    "50e95028-4764-416c-9380-7d9d52d8d82b": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 14065,
+        "sell_price": 0
+      }
+    ],
+    "688aab9c-bc62-4774-be7d-065dee7e2187": [
+      {
+        "shop": "DumpersDepot_PortOlisar",
+        "location": "PortOlisar",
+        "shop_category": "组件",
+        "buy_price": 11242,
+        "sell_price": 0
+      }
+    ],
+    "f0510922-1ae3-4b30-936b-a8ac7b7fd048": [
+      {
+        "shop": "PlatinumBay_Truckstop",
+        "location": "Truckstop",
+        "shop_category": "商品",
+        "buy_price": 10226,
+        "sell_price": 0
+      }
+    ],
+    "26838ca7-418a-47d2-8429-7339ebbb8993": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2141,
+        "sell_price": 0
+      }
+    ],
+    "1893e596-acaf-49bc-b367-e43e99c2925f": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 3551,
+        "sell_price": 0
+      }
+    ],
+    "95c85f25-ccd9-402e-b02a-522f5a97a654": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 8355,
+        "sell_price": 0
+      }
+    ],
+    "cf57c4df-0fed-40bb-9771-10fc7853d8f9": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 19111,
+        "sell_price": 0
+      }
+    ],
+    "c778d7c0-116a-4597-a32e-2bbf7f6b7c17": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 12636,
+        "sell_price": 0
+      }
+    ],
+    "1901415b-cfbd-49fb-82f8-42eff2c11f01": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 44801,
+        "sell_price": 0
+      }
+    ],
+    "6635dc5f-dfcd-4b72-9d9d-8d3620820352": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 11801,
+        "sell_price": 0
+      }
+    ],
+    "42e2ddb1-7397-4299-88ee-2ddfaa0efc67": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2506,
+        "sell_price": 0
+      }
+    ],
+    "2756f5f1-ef1e-454a-a171-9a5bd40e3a9d": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 3864,
+        "sell_price": 0
+      }
+    ],
+    "f72ca643-b48c-4f6e-abb7-d5bc8eb261aa": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 9869,
+        "sell_price": 0
+      }
+    ],
+    "52c1793e-5610-4daa-aafe-a8cf55e60283": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 24855,
+        "sell_price": 0
+      }
+    ],
+    "b94c54b2-a70e-4f41-bc02-ed76be87e493": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 16605,
+        "sell_price": 0
+      }
+    ],
+    "8bebf292-a9a3-4dc8-a86c-ddfa3b9b79be": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 9303,
+        "sell_price": 0
+      }
+    ],
+    "972c562f-bc9b-441c-a2fb-785293e54eda": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 4826,
+        "sell_price": 0
+      }
+    ],
+    "85fd75f8-6c6c-4d3f-839f-988ae7660617": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 4348,
+        "sell_price": 0
+      }
+    ],
+    "02a7f68a-5bdd-4887-a256-20c985a65bda": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 4348,
+        "sell_price": 0
+      }
+    ],
+    "f03daac4-28e2-405c-b226-c258151cb9f1": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 12244,
+        "sell_price": 0
+      }
+    ],
+    "c657c03c-6ac6-4da6-ab70-bfab52804444": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 9090,
+        "sell_price": 0
+      }
+    ],
+    "cfacea3e-afbc-405c-b220-2d1d3b6e20b1": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 13624,
+        "sell_price": 0
+      }
+    ],
+    "81645f3b-2c01-4fc4-aa9f-ed860b976058": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 8082,
+        "sell_price": 0
+      }
+    ],
+    "7034e330-3d22-4e89-83cb-c01815dbb875": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 9419,
+        "sell_price": 0
+      }
+    ],
+    "b837397c-47b6-45e7-b409-db290a068b47": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 12559,
+        "sell_price": 0
+      }
+    ],
+    "d018aa87-d395-4935-8660-af9bda648b03": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 12147,
+        "sell_price": 0
+      }
+    ],
+    "d20a2952-5908-40f7-a65e-8a5c9df1a0d1": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 17892,
+        "sell_price": 0
+      }
+    ],
+    "631884a6-7e06-4612-986c-1b3e556aecac": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2924,
+        "sell_price": 0
+      }
+    ],
+    "d4ebab35-1d86-4259-82dc-cda6a7167c90": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2506,
+        "sell_price": 0
+      }
+    ],
+    "bbfbb4b5-c26e-4bee-9d41-9679e102e860": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 6005,
+        "sell_price": 0
+      }
+    ],
+    "c9c2bb19-3298-448e-a117-043e082a1c74": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 3870,
+        "sell_price": 0
+      }
+    ],
+    "bd13235d-1261-4b71-b32f-aed1a8beb526": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 8550,
+        "sell_price": 0
+      }
+    ],
+    "1fcc8a40-af4a-4446-8a7a-354d9244b5d1": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 26,
+        "sell_price": 0
+      }
+    ],
+    "7561e67e-bb85-4dbc-a386-0555b67b02cc": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 25,
+        "sell_price": 0
+      }
+    ],
+    "37a5512d-e5c2-4b41-869d-44cd91d80eeb": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 31,
+        "sell_price": 0
+      }
+    ],
+    "9b2c25cb-fc57-42b5-95cd-1ae89a622bd7": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 32,
+        "sell_price": 0
+      }
+    ],
+    "67d6efbd-6b65-49d9-b319-041dc6a2675a": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 39,
+        "sell_price": 0
+      }
+    ],
+    "ce8ef95e-edd9-45d7-8c21-5e644a8ba75e": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 118,
+        "sell_price": 0
+      }
+    ],
+    "e1659bcf-0595-43ad-9376-386e4ca875e0": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 144,
+        "sell_price": 0
+      }
+    ],
+    "77dc28bf-0742-490f-ac49-1d430cb6b48f": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 141,
+        "sell_price": 0
+      }
+    ],
+    "9d2d7b0d-9f54-4fe1-8bff-c6ea2a5af5d3": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 203,
+        "sell_price": 0
+      }
+    ],
+    "918ad61c-ea99-4040-b05a-a42cd5436aed": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 256,
+        "sell_price": 0
+      }
+    ],
+    "b74c05cb-0f60-403a-92cf-663a12268830": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 309,
+        "sell_price": 0
+      }
+    ],
+    "c01675d6-ad02-4c2d-b4a8-53b4a0b145dd": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 926,
+        "sell_price": 0
+      }
+    ],
+    "a53527ab-3c28-460d-bc96-dcfac76f1463": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 1155,
+        "sell_price": 0
+      }
+    ],
+    "e26d0f6d-4ada-4eb0-9843-1b4d03178f90": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 1385,
+        "sell_price": 0
+      }
+    ],
+    "142e6235-9f9d-4e5a-b0c9-0a2338f70901": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 209,
+        "sell_price": 0
+      }
+    ],
+    "9f9eab9c-4038-492d-bdd0-053d60a50307": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 470,
+        "sell_price": 0
+      }
+    ],
+    "50593138-ee3f-4cc8-9654-b25c1bb6a569": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 835,
+        "sell_price": 0
+      }
+    ],
+    "fcf0cee0-94f6-4bfb-aed3-e255d7f1e12c": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 1462,
+        "sell_price": 0
+      }
+    ],
+    "e4bb4aae-8d61-451a-8407-ff48cf8593aa": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 940,
+        "sell_price": 0
+      }
+    ],
+    "3677de9d-b92f-42f1-a34e-0c0fe6cdfcd0": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 1566,
+        "sell_price": 0
+      }
+    ],
+    "0a9fee0b-6ba5-447f-a907-1ab864202c9c": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 3342,
+        "sell_price": 0
+      }
+    ],
+    "42f9b948-8448-4247-a617-2a133ef50f6c": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 1253,
+        "sell_price": 0
+      }
+    ],
+    "6a84479b-bd8e-4330-9ed3-e1169cfc546e": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2089,
+        "sell_price": 0
+      }
+    ],
+    "72b8b47b-d61f-4e07-9298-f20044f9508f": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 4177,
+        "sell_price": 0
+      }
+    ],
+    "c870f6a8-5db9-4999-909a-675aa511ba19": [
+      {
+        "shop": "ShipWeapons_Centermass_Area18",
+        "location": "Centermass Area18",
+        "shop_category": "武器",
+        "buy_price": 2506,
+        "sell_price": 0
+      }
+    ],
+    "ed951ee5-0873-45e8-92b2-586a277f4ba6": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 4140,
+        "sell_price": 0
+      }
+    ],
+    "ea6b4297-83a4-476f-aee0-9d4f87168cf7": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 6750,
+        "sell_price": 0
+      }
+    ],
+    "c526f686-a3da-48fa-b9c3-d58fb8e31dc5": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 12555,
+        "sell_price": 0
+      }
+    ],
+    "2c9b3880-a108-4746-a6cd-7e2b04feee36": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 26370,
+        "sell_price": 0
+      }
+    ],
+    "f02c1934-9ebb-413c-9f3e-cbcb262f25de": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 51075,
+        "sell_price": 0
+      }
+    ],
+    "beabe016-3fb4-4e3f-b464-374076d91f04": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 2295,
+        "sell_price": 0
+      }
+    ],
+    "ac55431a-d662-4d92-bda7-ea44f27ca597": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 2610,
+        "sell_price": 0
+      }
+    ],
+    "5f31f7c2-1383-4d77-892b-24507515ab0b": [
+      {
+        "shop": "ShipWeapon_HDShowcase_Lorville",
+        "location": "HDShowcase Lorville",
+        "shop_category": "武器",
+        "buy_price": 4275,
+        "sell_price": 0
+      }
+    ]
+  }
+}

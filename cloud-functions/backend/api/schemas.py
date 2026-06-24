@@ -231,6 +231,7 @@ class TradeChainResponse(BaseModel):
     total_profit: float
     final_capital: float
     total_legs: int
+    total_distance: Optional[float] = 0
     early_stop_reason: Optional[str] = None
     warnings: List[str]
 

@@ -4,6 +4,7 @@ import { TextField, Box, Typography, Paper, CircularProgress, IconButton } from 
 import { LocationOn, History, Close, DeleteSweep } from '@mui/icons-material';
 import { loadAllTerminals } from '../api/client';
 import { useSearchHistory } from '../hooks/useSearchHistory';
+import { useSfx } from '../hooks/useSfx';
 
 function TerminalSearch({ value, onChange, label = '出发地' }) {
   const [query, setQuery] = useState(value || '');
@@ -17,6 +18,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
   const debounceRef = useRef(null);
 
   const { history, addToHistory, removeFromHistory, clearHistory } = useSearchHistory('terminal_search_history');
+  const sfx = useSfx();
 
   useEffect(() => {
     setQuery(value || '');
@@ -38,6 +40,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
     setQuery(val);
     setError('');
     setShowHistory(false);
+    if (val.trim()) sfx('search_type');
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     if (!val.trim()) {
@@ -56,7 +59,9 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
           const zh = (t.name_zh || '').toLowerCase();
           const sys = (t.system || '').toLowerCase();
           const sysZh = (t.system_zh || '').toLowerCase();
-          return name.includes(q) || zh.includes(q) || sys.includes(q) || sysZh.includes(q);
+          const planet = (t.planet || '').toLowerCase();
+          const planetZh = (t.planet_zh || '').toLowerCase();
+          return name.includes(q) || zh.includes(q) || sys.includes(q) || sysZh.includes(q) || planet.includes(q) || planetZh.includes(q);
         }).slice(0, 20) : allTerminals.slice(0, 20);
         setOptions(filtered);
         if (filtered.length === 0) {
@@ -114,6 +119,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
   };
 
   const handleFocus = () => {
+    sfx('search_focus');
     if (query.trim()) {
       if (options.length > 0) {
         setShowDropdown(true);
@@ -222,7 +228,7 @@ function TerminalSearch({ value, onChange, label = '出发地' }) {
             </Typography>
             <IconButton 
               size="small" 
-              onClick={(e) => { e.stopPropagation(); clearHistory(); setShowHistory(false); }}
+              onClick={(e) => { e.stopPropagation(); sfx('search_clear'); clearHistory(); setShowHistory(false); }}
               sx={{ color: 'rgba(201, 162, 39, 0.4)', '&:hover': { color: '#c9a227' } }}
             >
               <DeleteSweep sx={{ fontSize: 14 }} />

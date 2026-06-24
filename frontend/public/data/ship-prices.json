@@ -1,0 +1,1755 @@
+{
+  "generated_at": "2026-06-21T04:24:22.163Z",
+  "note": "aUEC prices from game shop inventory files (game version dependent)",
+  "total_ships": 128,
+  "ships": {
+    "a852bb00-e395-468f-9adc-78b3df9c82f6": {
+      "name": "Mustang Alpha",
+      "name_full": "C.O. Mustang Alpha",
+      "slug": "cnou-mustang-alpha",
+      "auec_price": 293347,
+      "auec_price_max": 293347,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "973bc147-4422-48a6-99c8-6ff0ead25bdf": {
+      "name": "Mustang Beta",
+      "name_full": "C.O. Mustang Beta",
+      "slug": "cnou-mustang-beta",
+      "auec_price": 465624,
+      "auec_price_max": 465624,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "f8c8fe5c-1aa3-41d7-86b0-6bb54b249541": {
+      "name": "Mustang Delta",
+      "name_full": "C.O. Mustang Delta",
+      "slug": "cnou-mustang-delta",
+      "auec_price": 779703,
+      "auec_price_max": 779703,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "968249b2-ca7c-4b41-8f58-730673fefc8c": {
+      "name": "Mustang Gamma",
+      "name_full": "C.O. Mustang Gamma",
+      "slug": "cnou-mustang-gamma",
+      "auec_price": 694693,
+      "auec_price_max": 694693,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "1164be4d-623e-4ef7-bc3d-4cdb45c22ec5": {
+      "name": "Mustang Omega",
+      "name_full": "C.O. Mustang Omega",
+      "slug": "cnou-mustang-omega",
+      "auec_price": 694693,
+      "auec_price_max": 694693,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "f68ee841-88d1-46f3-a1e2-5dc71d9d5d97": {
+      "name": "Prospector",
+      "name_full": "MISC Prospector",
+      "slug": "misc-prospector",
+      "auec_price": 2006682,
+      "auec_price_max": 2006682,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "c9b3ef78-9c47-4052-bf70-ecf32c55c001": {
+      "name": "Eclipse",
+      "name_full": "Aegis Eclipse",
+      "slug": "aegs-eclipse",
+      "auec_price": 1737071,
+      "auec_price_max": 1737071,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "97648869-5fa5-42da-b804-4d9314289539": {
+      "name": "Avenger Stalker",
+      "name_full": "Aegis Avenger Stalker",
+      "slug": "aegs-avenger-stalker",
+      "auec_price": 1604783,
+      "auec_price_max": 1604783,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "0079c5d5-1678-4f8c-85ba-18ca8f642af6": {
+      "name": "Avenger Titan",
+      "name_full": "Aegis Avenger Titan",
+      "slug": "aegs-avenger-titan",
+      "auec_price": 1719809,
+      "auec_price_max": 1719809,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "d9bc09ce-4c74-4f72-892e-a833c094f4e6": {
+      "name": "Avenger Titan Renegade",
+      "name_full": "Aegis Avenger Titan Renegade",
+      "slug": "aegs-avenger-titan-renegade",
+      "auec_price": 1675104,
+      "auec_price_max": 1675104,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "9474f571-8467-4d83-b1fe-f64103d363f4": {
+      "name": "Avenger Warlock",
+      "name_full": "Aegis Avenger Warlock",
+      "slug": "aegs-avenger-warlock",
+      "auec_price": 1472604,
+      "auec_price_max": 1472604,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "cec2111b-4c71-4968-8035-634de6561cf3": {
+      "name": "Razor",
+      "name_full": "Mirai Razor",
+      "slug": "misc-razor",
+      "auec_price": 1017610,
+      "auec_price_max": 1017610,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "b17ef3ab-9518-40fd-803f-c2468175ccf6": {
+      "name": "Razor EX",
+      "name_full": "Mirai Razor EX",
+      "slug": "misc-razor-ex",
+      "auec_price": 1004115,
+      "auec_price_max": 1004115,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "203cb135-4f12-4a23-bd53-30910134bac8": {
+      "name": "Razor LX",
+      "name_full": "Mirai Razor LX",
+      "slug": "misc-razor-lx",
+      "auec_price": 1031725,
+      "auec_price_max": 1031725,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "17276ad3-7636-40b8-969a-877a2b439b37": {
+      "name": "Sabre",
+      "name_full": "Aegis Sabre",
+      "slug": "aegs-sabre",
+      "auec_price": 1509674,
+      "auec_price_max": 1509674,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "9e4b2b2b-1b5a-4d53-84a2-fe6ed1e43172": {
+      "name": "Sabre Comet",
+      "name_full": "Aegis Sabre Comet",
+      "slug": "aegs-sabre-comet",
+      "auec_price": 1463863,
+      "auec_price_max": 1463863,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "34615358-6b8e-4c27-b29e-f936e254e2a3": {
+      "name": "Sabre Raven",
+      "name_full": "Aegis Sabre Raven",
+      "slug": "aegs-sabre-raven",
+      "auec_price": 1788637,
+      "auec_price_max": 1788637,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "d46f4de1-8dc1-473b-9739-88c9ba7e75a6": {
+      "name": "Hammerhead",
+      "name_full": "Aegis Hammerhead",
+      "slug": "aegs-hammerhead",
+      "auec_price": 23713048,
+      "auec_price_max": 23713048,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "b6b59889-7226-458e-a6b0-1c9392128a3c": {
+      "name": "Gladius",
+      "name_full": "Aegis Gladius",
+      "slug": "aegs-gladius",
+      "auec_price": 1248361,
+      "auec_price_max": 1248361,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "d6cb3db3-b1e0-47a5-8c62-a64285dbb675": {
+      "name": "Gladius Valiant",
+      "name_full": "Aegis Gladius Valiant",
+      "slug": "aegs-gladius-valiant",
+      "auec_price": 1345904,
+      "auec_price_max": 1345904,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "3c9af040-d919-4afc-b768-45821a5b913c": {
+      "name": "Reliant Kore",
+      "name_full": "MISC Reliant Kore",
+      "slug": "misc-reliant",
+      "auec_price": 572150,
+      "auec_price_max": 572150,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "d95fb013-60d5-43ac-ab2d-daa082f45411": {
+      "name": "Constellation Andromeda",
+      "name_full": "RSI Constellation Andromeda",
+      "slug": "constellation-andromeda",
+      "auec_price": 4749430,
+      "auec_price_max": 4749430,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "e7b40f5c-4099-4aa6-b226-b5b08bd68413": {
+      "name": "Constellation Aquila",
+      "name_full": "RSI Constellation Aquila",
+      "slug": "rsi-constellation-aquila",
+      "auec_price": 8405377,
+      "auec_price_max": 8405377,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "ecadf2b2-a404-4776-9289-04af91538d76": {
+      "name": "Constellation Phoenix",
+      "name_full": "RSI Constellation Phoenix",
+      "slug": "rsi-constellation-phoenix",
+      "auec_price": 6488098,
+      "auec_price_max": 6488098,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "daf936a1-689f-4edb-980a-96947e2727c4": {
+      "name": "Constellation Phoenix Emerald",
+      "name_full": "RSI Constellation Phoenix Emerald",
+      "slug": "rsi-constellation-phoenix-emerald",
+      "auec_price": 6488098,
+      "auec_price_max": 6488098,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "13a02a6d-7d67-4d22-8530-d4d2c8443f66": {
+      "name": "Starfarer",
+      "name_full": "MISC Starfarer",
+      "slug": "misc-starfarer",
+      "auec_price": 15047172,
+      "auec_price_max": 15047172,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "c989caf2-84a5-4c01-b99e-5fc9f8d0ce8e": {
+      "name": "Starfarer Gemini",
+      "name_full": "MISC Starfarer Gemini",
+      "slug": "misc-starfarer-gemini",
+      "auec_price": 15157984,
+      "auec_price_max": 15157984,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "7cab9bbc-3d67-4ee7-99ef-fe41991f8a3b": {
+      "name": "Aurora Mk I CL",
+      "name_full": "RSI Aurora Mk I CL",
+      "slug": "aurora-mk-i-cl",
+      "auec_price": 524791,
+      "auec_price_max": 524791,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "42b72b92-7880-446d-8770-b158e4b0fd10": {
+      "name": "Aurora Mk I ES",
+      "name_full": "RSI Aurora Mk I ES",
+      "slug": "aurora-mk-i-es",
+      "auec_price": 227001,
+      "auec_price_max": 227001,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "984283ce-dd5f-4807-a7b0-f6fbf053716c": {
+      "name": "Aurora Mk I LN",
+      "name_full": "RSI Aurora Mk I LN",
+      "slug": "aurora-mk-i-ln",
+      "auec_price": 387967,
+      "auec_price_max": 387967,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "bb8e3cdf-7f35-4bdb-bc2d-a15b8b859359": {
+      "name": "Aurora Mk I LX",
+      "name_full": "RSI Aurora Mk I LX",
+      "slug": "aurora-mk-i-lx",
+      "auec_price": 233393,
+      "auec_price_max": 233393,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "c596f592-1196-4378-8583-18ff13962b85": {
+      "name": "Aurora Mk I MR",
+      "name_full": "RSI Aurora Mk I MR",
+      "slug": "aurora-mk-i-mr",
+      "auec_price": 230752,
+      "auec_price_max": 230752,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "b4791030-9d64-4f98-85cb-ca106f868c5e": {
+      "name": "Freelancer",
+      "name_full": "MISC Freelancer",
+      "slug": "misc-freelancer",
+      "auec_price": 2979534,
+      "auec_price_max": 2979534,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "34821163-e32e-42bf-99df-8f42ba66ef34": {
+      "name": "Freelancer DUR",
+      "name_full": "MISC Freelancer DUR",
+      "slug": "misc-freelancer-dur",
+      "auec_price": 2806500,
+      "auec_price_max": 2806500,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "6c6e9731-3d70-4f1b-84c2-9dbf3c1f97c7": {
+      "name": "Freelancer MAX",
+      "name_full": "MISC Freelancer MAX",
+      "slug": "misc-freelancer-max",
+      "auec_price": 2956500,
+      "auec_price_max": 2956500,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "4b6700e5-38bd-4d8d-9281-ef82996b135f": {
+      "name": "Freelancer MIS",
+      "name_full": "MISC Freelancer MIS",
+      "slug": "misc-freelancer-mis",
+      "auec_price": 3206500,
+      "auec_price_max": 3206500,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "a8208d11-32d4-4a4a-82c4-fd7f498b2ae6": {
+      "name": "Vanguard Warden",
+      "name_full": "Aegis Vanguard Warden",
+      "slug": "aegs-vanguard",
+      "auec_price": 2710232,
+      "auec_price_max": 2710232,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "f80d39f3-50fc-4fca-ada1-76de4c237e3f": {
+      "name": "Vanguard Hoplite",
+      "name_full": "Aegis Vanguard Hoplite",
+      "slug": "aegs-vanguard-hoplite",
+      "auec_price": 2791840,
+      "auec_price_max": 2791840,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "f05b74b2-06cf-44d0-8607-c09487359384": {
+      "name": "Reclaimer",
+      "name_full": "Aegis Reclaimer",
+      "slug": "aegs-reclaimer",
+      "auec_price": 57637172,
+      "auec_price_max": 57637172,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "93e1a434-f4fa-43ee-a40c-71bcae5073bc": {
+      "name": "Retaliator Bomber",
+      "name_full": "Aegis Retaliator Bomber",
+      "slug": "retaliator-bomber",
+      "auec_price": 4401104,
+      "auec_price_max": 4401104,
+      "purchase_locations": [
+        "Area18",
+        "Lorville"
+      ],
+      "purchase_shops": [
+        "AstroArmada_Area18",
+        "NewDeal_Lorville"
+      ],
+      "rental_locations": [
+        "NewBabbage"
+      ],
+      "has_rental": true
+    },
+    "0d4c5000-ffdb-41f5-9de1-d64252dfef21": {
+      "name": "Blade",
+      "name_full": "Esperia Blade",
+      "slug": "vncl-blade",
+      "auec_price": 2408280,
+      "auec_price_max": 2408280,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "e379e38c-459a-4705-be7d-49a5f5d7a928": {
+      "name": "Glaive",
+      "name_full": "Esperia Glaive",
+      "slug": "vncl-glaive",
+      "auec_price": 3766883,
+      "auec_price_max": 3766883,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "28f22bb8-9f1c-4a46-9a39-20bcb1e5000e": {
+      "name": "Scythe",
+      "name_full": "Vanduul Scythe",
+      "slug": "scythe",
+      "auec_price": 3634747,
+      "auec_price_max": 3634747,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "dc39ca6b-1d76-4db5-9346-356f49954978": {
+      "name": "Caterpillar",
+      "name_full": "Drake Caterpillar",
+      "slug": "drak-caterpillar",
+      "auec_price": 9629440,
+      "auec_price_max": 9629440,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "565d8121-50a9-4920-af50-f176caef0431": {
+      "name": "Caterpillar Pirate Edition",
+      "name_full": "Drake Caterpillar Pirate Edition",
+      "slug": "drak-caterpillar-pirate-edition",
+      "auec_price": 8695259,
+      "auec_price_max": 8695259,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "efec4d48-77ab-4cba-9add-a3d96c5be8d8": {
+      "name": "Buccaneer",
+      "name_full": "Drake Buccaneer",
+      "slug": "drak-buccaneer",
+      "auec_price": 1280401,
+      "auec_price_max": 1280401,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "37659ff0-a803-4a4f-97ff-ad59822061ed": {
+      "name": "Dragonfly Black",
+      "name_full": "Drake Dragonfly Black",
+      "slug": "dragonfly-black",
+      "auec_price": 84853,
+      "auec_price_max": 84853,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "533b9b62-33eb-4b34-95eb-d43fe3e020ff": {
+      "name": "Dragonfly Yellowjacket",
+      "name_full": "Drake Dragonfly Yellowjacket",
+      "slug": "drak-dragonfly-yellow",
+      "auec_price": 84853,
+      "auec_price_max": 84853,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "36726a9f-7e14-4942-bc4f-1a398b5bef6a": {
+      "name": "Herald",
+      "name_full": "Drake Herald",
+      "slug": "drak-herald",
+      "auec_price": 1639213,
+      "auec_price_max": 1639213,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "b58f7735-9454-4a0a-b724-2bc8d61961d7": {
+      "name": "Cutlass Black",
+      "name_full": "Drake Cutlass Black",
+      "slug": "drak-cutlass-black",
+      "auec_price": 1760594,
+      "auec_price_max": 1760594,
+      "purchase_locations": [
+        "Levski"
+      ],
+      "purchase_shops": [
+        "TeachsShipShop_Levski"
+      ]
+    },
+    "00000000-0000-0000-000001-782104491522": {
+      "name": "100i",
+      "name_full": "Origin 100i",
+      "slug": "origin-100i",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000002-782104491523": {
+      "name": "135c",
+      "name_full": "Origin 135c",
+      "slug": "origin-135c",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000003-782104491524": {
+      "name": "300i",
+      "name_full": "Origin 300i",
+      "slug": "origin-300i",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000004-782104491525": {
+      "name": "315p",
+      "name_full": "Origin 315p",
+      "slug": "origin-315p",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000005-782104491526": {
+      "name": "350r",
+      "name_full": "Origin 350r",
+      "slug": "origin-350r",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000006-782104491527": {
+      "name": "400i",
+      "name_full": "Origin 400i",
+      "slug": "origin-400i",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000007-782104491528": {
+      "name": "600i Executive Edition",
+      "name_full": "Origin 600i Executive Edition",
+      "slug": "origin-600i-executive-edition",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000008-782104491529": {
+      "name": "600i Explorer",
+      "name_full": "Origin 600i Explorer",
+      "slug": "origin-600i-explorer",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000009-782104491530": {
+      "name": "600i Touring",
+      "name_full": "Origin 600i Touring",
+      "slug": "origin-600i-touring",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000010-782104491531": {
+      "name": "890 Jump",
+      "name_full": "Origin 890 Jump",
+      "slug": "origin-890-jump",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000011-782104491532": {
+      "name": "A2 Hercules Starlifter",
+      "name_full": "Crusader A2 Hercules Starlifter",
+      "slug": "crus-a2-hercules",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000012-782104491533": {
+      "name": "Apollo Medivac",
+      "name_full": "RSI Apollo Medivac",
+      "slug": "rsi-apollo-medivac",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000013-782104491534": {
+      "name": "Apollo Triage",
+      "name_full": "RSI Apollo Triage",
+      "slug": "rsi-apollo-triage",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000014-782104491535": {
+      "name": "Arrastra",
+      "name_full": "RSI Arrastra",
+      "slug": "rsi-arrastra",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000015-782104491536": {
+      "name": "C2 Hercules Starlifter",
+      "name_full": "Crusader C2 Hercules Starlifter",
+      "slug": "crus-c2-hercules",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000016-782104491537": {
+      "name": "C8 Pisces",
+      "name_full": "Anvil C8 Pisces",
+      "slug": "anvl-c8-pisces",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000017-782104491538": {
+      "name": "C8X Pisces Expedition",
+      "name_full": "Anvil C8X Pisces Expedition",
+      "slug": "anvl-c8x-pisces-expedition",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000018-782104491539": {
+      "name": "Carrack",
+      "name_full": "Anvil Carrack",
+      "slug": "anvl-carrack",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000019-782104491540": {
+      "name": "Carrack Expedition",
+      "name_full": "Anvil Carrack Expedition",
+      "slug": "anvl-carrack-expedition",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000020-782104491541": {
+      "name": "Caterpillar Best In Show Edition",
+      "name_full": "Drake Caterpillar Best In Show Edition",
+      "slug": "drak-caterpillar-bis",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000021-782104491542": {
+      "name": "Constellation Taurus",
+      "name_full": "RSI Constellation Taurus",
+      "slug": "rsi-constellation-taurus",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000022-782104491543": {
+      "name": "Corsair",
+      "name_full": "Drake Corsair",
+      "slug": "drak-corsair",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000023-782104491544": {
+      "name": "Crucible",
+      "name_full": "Anvil Crucible",
+      "slug": "anvl-crucible",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000024-782104491545": {
+      "name": "CSV-FM",
+      "name_full": "Greycat CSV-FM",
+      "slug": "grmc-csv-fm",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000025-782104491546": {
+      "name": "CSV-SM",
+      "name_full": "Greycat CSV-SM",
+      "slug": "grmc-csv-sm",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000026-782104491547": {
+      "name": "Cutlass Black Best In Show Edition",
+      "name_full": "Drake Cutlass Black Best In Show Edition",
+      "slug": "drak-cutlass-black-bis",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000027-782104491548": {
+      "name": "Cutlass Blue",
+      "name_full": "Drake Cutlass Blue",
+      "slug": "drak-cutlass-blue",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000028-782104491549": {
+      "name": "Cutlass Red",
+      "name_full": "Drake Cutlass Red",
+      "slug": "drak-cutlass-red",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000029-782104491550": {
+      "name": "Cutter",
+      "name_full": "Drake Cutter",
+      "slug": "drak-cutter",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000030-782104491551": {
+      "name": "Cutter Rambler",
+      "name_full": "Drake Cutter Rambler",
+      "slug": "drak-cutter-rambler",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000031-782104491552": {
+      "name": "Cutter Scout",
+      "name_full": "Drake Cutter Scout",
+      "slug": "drak-cutter-scout",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000032-782104491553": {
+      "name": "Cyclone",
+      "name_full": "Tumbril Cyclone",
+      "slug": "tumbl-cyclone",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000033-782104491554": {
+      "name": "Endeavor",
+      "name_full": "MISC Endeavor",
+      "slug": "misc-endeavor",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000034-782104491555": {
+      "name": "Expanse",
+      "name_full": "MISC Expanse",
+      "slug": "misc-expanse",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000035-782104491556": {
+      "name": "F7C Hornet Mk II",
+      "name_full": "Anvil F7C Hornet Mk II",
+      "slug": "anvl-f7c-hornet-mk2",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000036-782104491557": {
+      "name": "Fortune",
+      "name_full": "MISC Fortune",
+      "slug": "misc-fortune",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000037-782104491558": {
+      "name": "Galaxy",
+      "name_full": "RSI Galaxy",
+      "slug": "rsi-galaxy",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000038-782104491559": {
+      "name": "Golem Ox",
+      "name_full": "Drake Golem Ox",
+      "slug": "drak-golem-ox",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000039-782104491560": {
+      "name": "Hammerhead Best In Show Edition",
+      "name_full": "Aegis Hammerhead Best In Show Edition",
+      "slug": "aegs-hammerhead-bis",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000040-782104491561": {
+      "name": "Hull A",
+      "name_full": "RSI Hull A",
+      "slug": "rsi-hull-a",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000041-782104491562": {
+      "name": "Hull B",
+      "name_full": "RSI Hull B",
+      "slug": "rsi-hull-b",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000042-782104491563": {
+      "name": "Hull C",
+      "name_full": "RSI Hull C",
+      "slug": "rsi-hull-c",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000043-782104491564": {
+      "name": "Hull D",
+      "name_full": "RSI Hull D",
+      "slug": "rsi-hull-d",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000044-782104491565": {
+      "name": "Hull E",
+      "name_full": "RSI Hull E",
+      "slug": "rsi-hull-e",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000045-782104491566": {
+      "name": "Idris-M",
+      "name_full": "RSI Idris-M",
+      "slug": "rsi-idris-m",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000046-782104491567": {
+      "name": "Idris-P",
+      "name_full": "RSI Idris-P",
+      "slug": "rsi-idris-p",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000047-782104491568": {
+      "name": "Kraken Privateer",
+      "name_full": "Drake Kraken Privateer",
+      "slug": "drak-kraken-privateer",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000048-782104491569": {
+      "name": "Liberator",
+      "name_full": "Anvil Liberator",
+      "slug": "anvl-liberator",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000049-782104491570": {
+      "name": "M2 Hercules Starlifter",
+      "name_full": "Crusader M2 Hercules Starlifter",
+      "slug": "crus-m2-hercules",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000050-782104491571": {
+      "name": "Merchantman",
+      "name_full": "Banu Merchantman",
+      "slug": "banu-merchantman",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000051-782104491572": {
+      "name": "Mercury Star Runner",
+      "name_full": "Crusader Mercury Star Runner",
+      "slug": "crus-mercury-star-runner",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000052-782104491573": {
+      "name": "MOLE",
+      "name_full": "Argo MOLE",
+      "slug": "argo-mole",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000053-782104491574": {
+      "name": "MOLE Carbon Edition",
+      "name_full": "Argo MOLE Carbon Edition",
+      "slug": "argo-mole-carbon",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000054-782104491575": {
+      "name": "MOLE Talus Edition",
+      "name_full": "Argo MOLE Talus Edition",
+      "slug": "argo-mole-talus",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000055-782104491576": {
+      "name": "MPUV Cargo",
+      "name_full": "Argo MPUV Cargo",
+      "slug": "argo-mpuv-cargo",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000056-782104491577": {
+      "name": "MPUV Tractor",
+      "name_full": "Argo MPUV Tractor",
+      "slug": "argo-mpuv-tractor",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000057-782104491578": {
+      "name": "Mustang Alpha Vindicator",
+      "name_full": "C.O. Mustang Alpha Vindicator",
+      "slug": "cnou-mustang-alpha-vindicator",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000058-782104491579": {
+      "name": "Odyssey",
+      "name_full": "MISC Odyssey",
+      "slug": "misc-odyssey",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000059-782104491580": {
+      "name": "Perseus",
+      "name_full": "RSI Perseus",
+      "slug": "rsi-perseus",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000060-782104491581": {
+      "name": "Prowler Utility",
+      "name_full": "Esperia Prowler Utility",
+      "slug": "vncl-prowler-utility",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000061-782104491582": {
+      "name": "RAFT",
+      "name_full": "Argo RAFT",
+      "slug": "argo-raft",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000062-782104491583": {
+      "name": "Reclaimer Best In Show Edition",
+      "name_full": "Aegis Reclaimer Best In Show Edition",
+      "slug": "aegs-reclaimer-bis",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000063-782104491584": {
+      "name": "Retaliator Cargo Module - Bow",
+      "name_full": "Aegis Retaliator Cargo Module - Bow",
+      "slug": "aegs-retaliator-cargo-bow",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000064-782104491585": {
+      "name": "Salvation",
+      "name_full": "RSI Salvation",
+      "slug": "rsi-salvation",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000065-782104491586": {
+      "name": "Shiv",
+      "name_full": "Tumbril Shiv",
+      "slug": "tumbl-shiv",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000066-782104491587": {
+      "name": "SRV",
+      "name_full": "Argo SRV",
+      "slug": "argo-srv",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000067-782104491588": {
+      "name": "Starlancer MAX",
+      "name_full": "RSI Starlancer MAX",
+      "slug": "rsi-starlancer-max",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000068-782104491589": {
+      "name": "Syulen",
+      "name_full": "Gatac Syulen",
+      "slug": "gtac-syulen",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000069-782104491590": {
+      "name": "Tiburon",
+      "name_full": "Consolidated Outland Tiburon",
+      "slug": "cnou-tiburon",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000070-782104491591": {
+      "name": "Tyilui",
+      "name_full": "Xi'an Tyilui",
+      "slug": "xiAn-tyilui",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000071-782104491592": {
+      "name": "UTV",
+      "name_full": "Greycat UTV",
+      "slug": "grmc-utv",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000072-782104491593": {
+      "name": "Valkyrie",
+      "name_full": "Anvil Valkyrie",
+      "slug": "anvl-valkyrie",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000073-782104491594": {
+      "name": "Valkyrie Liberator Edition",
+      "name_full": "Anvil Valkyrie Liberator Edition",
+      "slug": "anvl-valkyrie-liberator",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000074-782104491595": {
+      "name": "Vulcan",
+      "name_full": "Aegis Vulcan",
+      "slug": "aegs-vulcan",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000075-782104491596": {
+      "name": "Vulture",
+      "name_full": "Drake Vulture",
+      "slug": "drak-vulture",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000076-782104491597": {
+      "name": "Zeus Mk II CL",
+      "name_full": "RSI Zeus Mk II CL",
+      "slug": "rsi-zeus-mk2-cl",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000077-782104491598": {
+      "name": "Zeus Mk II ES",
+      "name_full": "RSI Zeus Mk II ES",
+      "slug": "rsi-zeus-mk2-es",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    },
+    "00000000-0000-0000-000078-782104491599": {
+      "name": "Zeus Mk II MR",
+      "name_full": "RSI Zeus Mk II MR",
+      "slug": "rsi-zeus-mk2-mr",
+      "auec_price": 0,
+      "auec_price_max": 0,
+      "purchase_locations": [],
+      "purchase_shops": [],
+      "rental_locations": [],
+      "has_rental": false
+    }
+  }
+}

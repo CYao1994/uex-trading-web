@@ -1,4 +1,4 @@
-﻿"""
+"""
 Route Planner - Core trading route optimization algorithms
 
 UEX API 2.0 price semantics (PLAYER perspective):
@@ -19,6 +19,7 @@ from services.uex_api import (
     search_terminal, search_commodity, get_commodity_prices,
     resolve_terminal, build_distance_matrix, get_distance,
     fetch_routes_from_terminal, resolve_terminal as _resolve_terminal_info,
+    is_systems_connected, get_jump_point,
 )
 from services.cache import distance_cache
 from services.data_mapper import get_terminal_zh, get_commodity_zh, format_location_zh, SYSTEM_ZH, PLANET_ZH
@@ -107,39 +108,66 @@ _MAX_SPLITS = 3
 
 # Fallback distance estimates when no route data is available.
 # Based on Star Citizen quantum travel distances.
+# These are approximate AU values used for nearest-neighbor sorting.
+_FALLBACK_SAME_LOCATION = 1        # Same exact station/city/outpost
 _FALLBACK_SAME_PLANET = 5          # Same planet: short atmospheric hop
-_FALLBACK_PLANET_TO_ORBIT = 40     # Planet to orbital station (L-point)
+_FALLBACK_PLANET_ORBIT_LINK = 15   # Planet ↔ its orbital station (same orbit)
+_FALLBACK_PLANET_TO_ORBIT = 40     # Planet to different orbital station
+_FALLBACK_ORBIT_TO_ORBIT = 50      # Two orbital stations around same planet
 _FALLBACK_SAME_SYSTEM = 60         # Different planets in same system
 _FALLBACK_DIFF_SYSTEM = 200        # Different star system
 
 
-def _estimate_fallback_distance(origin_td: dict, dest_td: dict) -> int:
+def _estimate_fallback_distance(origin_td: dict, dest_td: dict) -> Optional[int]:
     """Estimate distance when no UEX route data is available.
 
-    Uses planet/system information for a more accurate fallback than
-    the previous flat 50/100 approach.
+    Uses the full location hierarchy (system > planet > orbit > moon > station)
+    for granular fallback estimates.
     """
     origin_system = origin_td.get("star_system_name") or ""
     dest_system = dest_td.get("star_system_name") or ""
     origin_planet = origin_td.get("planet_name") or ""
     dest_planet = dest_td.get("planet_name") or ""
+    origin_orbit = origin_td.get("orbit_name") or ""
+    dest_orbit = dest_td.get("orbit_name") or ""
+    origin_moon = origin_td.get("moon_name") or ""
+    dest_moon = dest_td.get("moon_name") or ""
     origin_station = origin_td.get("space_station_name") or ""
     dest_station = dest_td.get("space_station_name") or ""
+    origin_city = origin_td.get("city_name") or ""
+    dest_city = dest_td.get("city_name") or ""
+    origin_outpost = origin_td.get("outpost_name") or ""
+    dest_outpost = dest_td.get("outpost_name") or ""
 
-    # Different star system
+    # Different star system - must travel through jump point
     if origin_system != dest_system:
-        return _FALLBACK_DIFF_SYSTEM
+        if is_systems_connected(origin_system, dest_system):
+            jp = get_jump_point(origin_system, dest_system)
+            fuel_penalty = int((jp.get("fuel_cost", 0) or 0) * 100) if jp else 20
+            return _FALLBACK_SAME_SYSTEM + _FALLBACK_SAME_SYSTEM + fuel_penalty
+        # Systems not directly connected - check if reachable via intermediate
+        # For now, check single-hop only (Stanton↔Pyro↔Nyx chains are 2 hops)
+        return None
 
     # Same system
     if origin_planet and dest_planet and origin_planet == dest_planet:
-        # Same planet
+        if origin_orbit and dest_orbit and origin_orbit == dest_orbit:
+            # Same orbit around same planet
+            if origin_moon and dest_moon and origin_moon == dest_moon:
+                return _FALLBACK_SAME_LOCATION
+            return _FALLBACK_ORBIT_TO_ORBIT
         return _FALLBACK_SAME_PLANET
 
+    if origin_planet and dest_planet and origin_planet != dest_planet:
+        # Different planets - check if they share an orbit parent
+        if origin_orbit and dest_orbit and origin_orbit == dest_orbit:
+            return _FALLBACK_PLANET_ORBIT_LINK
+        return _FALLBACK_SAME_SYSTEM
+
+    # One or both have no planet info (likely orbital stations)
     if (not origin_planet and origin_station) or (not dest_planet and dest_station):
-        # One is an orbital station, the other is on a planet
         return _FALLBACK_PLANET_TO_ORBIT
 
-    # Both on different planets, or one has no planet info
     return _FALLBACK_SAME_SYSTEM
 
 
@@ -202,7 +230,7 @@ def _sort_terminals_by_distance(
             if d is None:
                 d = _estimate_fallback_distance(current_td, td)
 
-            if d < best_dist:
+            if d is not None and d < best_dist:
                 best_dist = d
                 best_tid = tid
 
@@ -601,6 +629,10 @@ def plan_buy_route(origin: str, items: List[Dict], refresh: bool = False, origin
                 if d is None:
                     # Use improved fallback based on planet/system
                     d = _estimate_fallback_distance(current_td, tinfo)
+
+                if d is None:
+                    # Unreachable system (no jump point connection)
+                    continue
 
                 # Zero-stock penalty
                 zero_penalty = 500 if has_zero_stock else 0
@@ -1183,6 +1215,10 @@ def plan_sell_route(origin: str, items: List[Dict], refresh: bool = False, origi
                 if d is None:
                     # Use improved fallback based on planet/system
                     d = _estimate_fallback_distance(current_td, tinfo)
+
+                if d is None:
+                    # Unreachable system (no jump point connection)
+                    continue
 
                 # Zero-demand penalty
                 zero_penalty = 500 if has_zero_demand else 0

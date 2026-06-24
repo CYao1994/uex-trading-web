@@ -312,8 +312,11 @@ export async function handleCachedGet(ctx, endpointName, kvNamespace, ttl, backe
     return errorResponse(502, 'Invalid backend response');
   }
 
-  // ?? Write KV cache (fire-and-forget) ??
-  putToKV(env, kvNamespace, cacheKey, data, ttl);
+  // ?? Write KV cache (fire-and-forget) — skip empty/error results ??
+  const hasData1 = Array.isArray(data) ? data.length > 0 : (data && typeof data === 'object' && Object.keys(data).length > 0);
+  if (hasData1) {
+    putToKV(env, kvNamespace, cacheKey, data, ttl);
+  }
 
   return jsonResponse(data, 200, {
     'X-Cache': 'MISS',
@@ -391,8 +394,11 @@ export async function handleCachedDynamicGet(ctx, endpointName, kvNamespace, ttl
     return errorResponse(502, 'Invalid backend response');
   }
 
-  // ?? Write KV cache (fire-and-forget) ??
-  putToKV(env, kvNamespace, cacheKey, data, ttl);
+  // ?? Write KV cache (fire-and-forget) — skip empty/error results ??
+  const hasData2 = Array.isArray(data) ? data.length > 0 : (data && typeof data === 'object' && Object.keys(data).length > 0);
+  if (hasData2) {
+    putToKV(env, kvNamespace, cacheKey, data, ttl);
+  }
 
   return jsonResponse(data, 200, {
     'X-Cache': 'MISS',

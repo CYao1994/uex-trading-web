@@ -39,6 +39,8 @@ function RouteResult({ data, mode = 'sell' }) {
   const revDiffPct = max_profit_route_total_revenue
     ? Math.round((revDiff / max_profit_route_total_revenue) * 100) : 0;
 
+  const items = commodity_summary || [];
+
   return (
     <Box>
       {/* Commodity Summary */}
@@ -49,7 +51,7 @@ function RouteResult({ data, mode = 'sell' }) {
         }}>
           {summaryTitle}
         </Typography>
-        {commodity_summary.map((c, i) => {
+        {items.length > 0 && items.map((c, i) => {
           const scuAvailable = isBuyMode ? c.scu_sell : c.scu_buy;
           const hasStockWarning = scuAvailable > 0 && scuAvailable < c.quantity;
 
@@ -82,7 +84,7 @@ function RouteResult({ data, mode = 'sell' }) {
               </Box>
               <Box sx={{ textAlign: 'right' }}>
                 <Typography variant="body1" sx={{ color: isBuyMode ? '#ff8844' : '#00ff88', fontWeight: 700 }}>
-                  <AnimatedNumber target={c.best_revenue} duration={600} suffix=" aUEC" />
+                  <AnimatedNumber target={c.best_revenue || 0} duration={600} suffix=" aUEC" />
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   {c.best_price.toLocaleString()} / SCU
@@ -198,7 +200,7 @@ function RouteResult({ data, mode = 'sell' }) {
           fontFamily: '"Orbitron", sans-serif',
           letterSpacing: '0.05em',
         }}>
-          DATA FROM UEXCORP.SPACE
+          数据来源: UEXCORP.SPACE
         </Typography>
       </Box>
 

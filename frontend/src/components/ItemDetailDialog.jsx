@@ -1,7 +1,7 @@
 // ItemDetailDialog.jsx — 优化版物品详情弹窗
 // 参照 FSD-item-finder，添加位置树视图和价格渐变
 import { useState, useMemo, useEffect } from 'react';
-import { Box, Typography, Dialog, DialogTitle, DialogContent, IconButton, Chip, CircularProgress, Tabs, Tab } from '@mui/material';
+import { Box, Typography, Dialog, DialogTitle, DialogContent, IconButton, Chip, CircularProgress, Tabs, Tab, Divider } from '@mui/material';
 import { Close, TrendingUp, TrendingDown, AccountTree, List } from '@mui/icons-material';
 import { getPriceColor } from '../utils/format';
 import { useSfx } from '../hooks/useSfx';
@@ -135,7 +135,7 @@ function LocationTree({ prices, accentColor: _accentColor, priceRange }) {
   );
 }
 
-function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, open, onClose, accentColor }) {
+function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, shopData, open, onClose, accentColor, wikiItems = {}, wikiWeapons = [] }) {
   const [tabValue, setTabValue] = useState(0);
   const sfx = useSfx();
 
@@ -144,6 +144,35 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
   }, [open, sfx]);
 
   const displaySize = extractSizeFromAttrs(item, attrs);
+
+  // Find matching wiki item by slug or exact name
+  const wikiItem = useMemo(() => {
+    if (!item) return null;
+    const slug = (item.slug || '').toLowerCase();
+    const name = item.name;
+    // Search wiki items (object keyed by slug)
+    for (const [_key, wi] of Object.entries(wikiItems)) {
+      if (slug && wi.slug && wi.slug.toLowerCase() === slug) return wi;
+    }
+    for (const [_key, wi] of Object.entries(wikiItems)) {
+      if (name && wi.name === name) return wi;
+    }
+    return null;
+  }, [item, wikiItems]);
+
+  // Find matching wiki weapon for weapon items
+  const wikiWeapon = useMemo(() => {
+    if (!item || !wikiWeapons?.length) return null;
+    const slug = (item.slug || '').toLowerCase();
+    const name = item.name;
+    for (const w of wikiWeapons) {
+      if (slug && w.slug && w.slug.toLowerCase() === slug) return w;
+    }
+    for (const w of wikiWeapons) {
+      if (name && w.name === name) return w;
+    }
+    return null;
+  }, [item, wikiWeapons]);
 
   // 构建 attributeDef lookup
   const defMap = useMemo(() => {
@@ -225,7 +254,7 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
             </Typography>
           )}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap', mt: 0.25 }}>
-            <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem' }}>
               {item.category_zh}{item.item_type_zh ? ` · ${item.item_type_zh}` : ''}{displaySize ? ` · S${displaySize}` : ''} · {item.company_name_zh || item.company_name}
             </Typography>
             {item.item_class_zh && (
@@ -253,6 +282,138 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
       </DialogTitle>
 
       <DialogContent sx={{ pt: 2 }}>
+        {/* Wiki 物品图片 */}
+        {(wikiItem?.image_url || wikiWeapon?.image_url) && (
+          <Box sx={{
+            width: '100%', maxHeight: 200, mb: 2,
+            borderRadius: '4px', overflow: 'hidden',
+            border: `1px solid ${accentColor}22`,
+            background: 'rgba(0,0,0,0.3)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Box
+              component="img"
+              src={wikiWeapon?.image_url || wikiItem?.image_url}
+              alt={wikiWeapon?.name || wikiItem?.name}
+              sx={{ maxWidth: '100%', maxHeight: 200, objectFit: 'contain' }}
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          </Box>
+        )}
+
+        {/* Wiki 物品详细数据 */}
+        {wikiItem && (
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ color: accentColor, fontSize: '0.75rem', fontFamily: '"Orbitron","Noto Sans SC",sans-serif', mb: 1, letterSpacing: '0.05em', fontWeight: 600 }}>
+              Wiki 数据
+            </Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0.75 }}>
+              {[
+                { label: '尺寸', value: wikiItem.size ? `S${wikiItem.size}` : '-' },
+                { label: '品级', value: wikiItem.grade ? `${wikiItem.grade}级` : '-' },
+                { label: '分类', value: wikiItem.class || '-' },
+                { label: '厂商', value: wikiItem.manufacturer?.name || '-' },
+                { label: '质量', value: wikiItem.mass ? `${wikiItem.mass} kg` : '-' },
+                { label: '生命值', value: wikiItem.durability?.health || '-' },
+              ].filter(s => s.value !== '-').map((stat) => (
+                <Box key={stat.label} sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5, px: 1, background: 'rgba(0,10,20,0.3)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '2px' }}>
+                  <Typography sx={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Rajdhani","Noto Sans SC",sans-serif' }}>
+                    {stat.label}
+                  </Typography>
+                  <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)', fontFamily: '"Orbitron","Noto Sans SC",sans-serif', fontWeight: 500 }}>
+                    {stat.value}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+
+            {/* 类型特定数据 */}
+            {wikiItem.resource_network?.generation && (() => {
+              const gen = wikiItem.resource_network.generation;
+              const entries = Object.entries(gen).filter(([, v]) => v != null && v > 0);
+              if (entries.length === 0) return null;
+              return (
+                <Box sx={{ mt: 1 }}>
+                  <Typography sx={{ fontSize: '0.65rem', color: `${accentColor}99`, fontFamily: '"Rajdhani",sans-serif', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
+                    生成数据
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                    {entries.map(([res, val]) => (
+                      <Chip key={res} label={`${res === 'power' ? '电力' : res === 'coolant' ? '冷却液' : res}: ${val}`} size="small"
+                        sx={{ fontFamily: '"Rajdhani","Noto Sans SC",sans-serif', fontSize: '0.7rem', background: 'rgba(0,221,170,0.08)', border: '1px solid rgba(0,221,170,0.2)', color: '#00ddaa' }} />
+                    ))}
+                  </Box>
+                </Box>
+              );
+            })()}
+
+            {wikiItem.resource_network?.usage && (() => {
+              const usage = wikiItem.resource_network.usage;
+              const entries = Object.entries(usage).filter(([, v]) => v && (v.min > 0 || v.max > 0));
+              if (entries.length === 0) return null;
+              return (
+                <Box sx={{ mt: 1 }}>
+                  <Typography sx={{ fontSize: '0.65rem', color: `${accentColor}99`, fontFamily: '"Rajdhani",sans-serif', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
+                    消耗数据
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                    {entries.map(([res, v]) => (
+                      <Chip key={res} label={`${res === 'power' ? '电力' : res === 'coolant' ? '冷却液' : res}: ${v.min === v.max ? v.min : `${v.min}~${v.max}`}`} size="small"
+                        sx={{ fontFamily: '"Rajdhani","Noto Sans SC",sans-serif', fontSize: '0.7rem', background: 'rgba(255,170,0,0.08)', border: '1px solid rgba(255,170,0,0.2)', color: '#ffaa00' }} />
+                    ))}
+                  </Box>
+                </Box>
+              );
+            })()}
+
+            {/* Wiki 武器数据 */}
+            {wikiWeapon && (
+              <Box sx={{ mt: 1 }}>
+                <Typography sx={{ fontSize: '0.65rem', color: '#ff6644', fontFamily: '"Rajdhani",sans-serif', textTransform: 'uppercase', letterSpacing: '0.05em', mb: 0.5 }}>
+                  武器数据
+                </Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0.5 }}>
+                  {wikiWeapon.rpm > 0 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.4, px: 0.75, background: 'rgba(255,102,68,0.05)', border: '1px solid rgba(255,102,68,0.1)', borderRadius: '2px' }}>
+                      <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani",sans-serif' }}>RPM</Typography>
+                      <Typography sx={{ fontSize: '0.7rem', color: '#ff6644', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>{wikiWeapon.rpm}</Typography>
+                    </Box>
+                  )}
+                  {wikiWeapon.speed > 0 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.4, px: 0.75, background: 'rgba(255,102,68,0.05)', border: '1px solid rgba(255,102,68,0.1)', borderRadius: '2px' }}>
+                      <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani",sans-serif' }}>弹速</Typography>
+                      <Typography sx={{ fontSize: '0.7rem', color: '#ff6644', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>{wikiWeapon.speed} m/s</Typography>
+                    </Box>
+                  )}
+                  {wikiWeapon.range > 0 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.4, px: 0.75, background: 'rgba(255,102,68,0.05)', border: '1px solid rgba(255,102,68,0.1)', borderRadius: '2px' }}>
+                      <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani",sans-serif' }}>射程</Typography>
+                      <Typography sx={{ fontSize: '0.7rem', color: '#ff6644', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>{wikiWeapon.range} m</Typography>
+                    </Box>
+                  )}
+                  {wikiWeapon.damage?.alpha > 0 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.4, px: 0.75, background: 'rgba(255,102,68,0.05)', border: '1px solid rgba(255,102,68,0.1)', borderRadius: '2px' }}>
+                      <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani",sans-serif' }}>单发伤害</Typography>
+                      <Typography sx={{ fontSize: '0.7rem', color: '#ff6644', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>{wikiWeapon.damage.alpha}</Typography>
+                    </Box>
+                  )}
+                </Box>
+                {/* DPS 分布 */}
+                {wikiWeapon.damage?.dps && (
+                  <Box sx={{ mt: 0.75, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                    {Object.entries(wikiWeapon.damage.dps).filter(([, v]) => v > 0).map(([type, val]) => (
+                      <Chip key={type} size="small" label={`${type === 'physical' ? '物理' : type === 'energy' ? '能量' : type === 'distortion' ? '扭曲' : type}: ${val.toFixed(1)}`}
+                        sx={{ fontSize: '0.6rem', height: 18, fontFamily: '"Rajdhani",sans-serif', background: type === 'physical' ? 'rgba(255,102,68,0.1)' : type === 'energy' ? 'rgba(68,170,255,0.1)' : 'rgba(170,102,255,0.1)', border: `1px solid ${type === 'physical' ? 'rgba(255,102,68,0.25)' : type === 'energy' ? 'rgba(68,170,255,0.25)' : 'rgba(170,102,255,0.25)'}`, color: type === 'physical' ? '#ff6644' : type === 'energy' ? '#44aaff' : '#aa66ff' }} />
+                    ))}
+                  </Box>
+                )}
+              </Box>
+            )}
+
+            <Divider sx={{ borderColor: `${accentColor}15`, mt: 1.5, mb: 0.5 }} />
+          </Box>
+        )}
+
         {/* 属性 */}
         {attrs.length > 0 && (
           <Box sx={{ mb: 2.5 }}>
@@ -299,7 +460,7 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
         {pricesLoading ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 2 }}>
             <CircularProgress size={18} sx={{ color: accentColor }} />
-            <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontStyle: 'italic' }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontStyle: 'italic' }}>
               价格数据加载中...
             </Typography>
           </Box>
@@ -315,7 +476,7 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
                   minHeight: 32,
                   fontSize: '0.75rem',
                   fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'rgba(255,255,255,0.6)',
                   '&.Mui-selected': { color: accentColor },
                 },
                 '& .MuiTabs-indicator': { background: accentColor },
@@ -327,7 +488,7 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
 
             {/* 价格统计 */}
             <Box sx={{ display: 'flex', gap: 2, mb: 1.5 }}>
-              <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif' }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif' }}>
                 共 {sortedPrices.length} 个站点
               </Typography>
               {priceRange.min > 0 && (
@@ -413,9 +574,43 @@ function ItemDetailDialog({ item, prices, pricesLoading, attrs, attributeDefs, o
             )}
           </Box>
         ) : (
-          <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', fontStyle: 'italic' }}>
+          <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', fontStyle: 'italic' }}>
             暂无价格数据
           </Typography>
+        )}
+
+        {/* 解包商店数据（补充来源） */}
+        {shopData && shopData.length > 0 && (
+          <Box sx={{ mt: 2, borderTop: '1px solid rgba(201,162,39,0.08)', pt: 2 }}>
+            <Typography sx={{
+              fontSize: '0.75rem', fontWeight: 600, color: '#00ddaa',
+              fontFamily: '"Orbitron",sans-serif', mb: 1, letterSpacing: '0.05em',
+            }}>
+              游戏商店数据
+              <Typography component="span" sx={{ fontSize: '0.55rem', color: 'rgba(0,221,170,0.4)', ml: 1, fontFamily: '"Rajdhani",sans-serif' }}>
+                来源: 解包文件
+              </Typography>
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+              {[...new Set(shopData.map(s => s.location))].map(location => {
+                const items = shopData.filter(s => s.location === location);
+                const bestBuy = Math.min(...items.map(i => i.buy_price).filter(p => p > 0));
+                return (
+                  <Box key={location} sx={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    py: 0.5, px: 1, background: 'rgba(0,221,170,0.04)', borderRadius: '2px',
+                  }}>
+                    <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', fontFamily: '"Noto Sans SC",sans-serif' }}>
+                      {location}
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.75rem', color: '#00ddaa', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
+                      {bestBuy > 0 ? `${bestBuy.toLocaleString()} aUEC` : '-'}
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
         )}
       </DialogContent>
     </Dialog>
