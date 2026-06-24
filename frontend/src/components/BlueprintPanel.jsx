@@ -3,8 +3,12 @@ import {
   Box, Typography, TextField, InputAdornment, Chip, CircularProgress, Link,
   Dialog, DialogTitle, DialogContent, IconButton, Divider, useMediaQuery, useTheme,
 } from '@mui/material';
-import { Search, Science, Timer, History as HistoryIcon, ArrowForward, Close, OpenInNew } from '@mui/icons-material';
+import { Search, Science, Timer, History as HistoryIcon, Close, OpenInNew } from '@mui/icons-material';
 import { useSearchHistory } from '../hooks/useSearchHistory';
+import BlueprintCard from './BlueprintCard';
+import BlueprintRecipeSection from './BlueprintRecipeSection';
+import BlueprintAcquisitionSection from './BlueprintAcquisitionSection';
+import BlueprintDismantleSection from './BlueprintDismantleSection';
 
 function formatCraftTime(seconds) {
   if (!seconds || seconds <= 0) return '0秒';
@@ -159,230 +163,15 @@ function BlueprintDetailDialog({ open, onClose, blueprint }) {
       </DialogTitle>
 
       <DialogContent sx={{ pt: 2 }}>
-        {/* 蓝图配方 */}
-        <Box sx={{ mb: 2 }}>
-          <Typography sx={{
-            color: '#c9a227', fontSize: '0.8rem',
-            fontFamily: '"Orbitron","Noto Sans SC",sans-serif',
-            fontWeight: 600, mb: 1.5, letterSpacing: '0.05em',
-          }}>
-            制造配方
-          </Typography>
-
-          <Box sx={{
-            display: 'flex', alignItems: 'stretch', gap: 1.5,
-            p: 1.5,
-            background: 'rgba(0, 10, 20, 0.4)',
-            border: '1px solid rgba(201, 162, 39, 0.1)',
-            borderRadius: '4px',
-          }}>
-            {/* 输入材料 */}
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{
-                fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)',
-                fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
-                mb: 1, textTransform: 'uppercase', letterSpacing: '0.05em',
-              }}>
-                所需材料
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                {(blueprint.ingredients || []).map((ing, i) => {
-                  const qty = ing.quantity_scu != null ? `${ing.quantity_scu} SCU` : `x${ing.quantity}`;
-                  const kindColor = ing.kind === 'resource' ? '#ffaa00' : '#44bbff';
-                  const kindLabel = ing.kind === 'resource' ? '矿物' : '组件';
-                  return (
-                    <Box key={i} sx={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      py: 0.5, px: 0.75,
-                      background: 'rgba(201,162,39,0.04)',
-                      border: '1px solid rgba(201,162,39,0.08)',
-                      borderRadius: '3px',
-                    }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <Typography sx={{
-                            fontSize: '0.72rem', color: 'rgba(255,255,255,0.85)',
-                            fontFamily: '"Noto Sans SC","Rajdhani",sans-serif',
-                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          }}>
-                            {ing.name_zh || ing.name}
-                          </Typography>
-                          <Chip
-                            label={kindLabel}
-                            size="small"
-                            sx={{
-                              height: 14, fontSize: '0.5rem',
-                              fontFamily: '"Noto Sans SC",sans-serif',
-                              background: `${kindColor}15`,
-                              border: `1px solid ${kindColor}33`,
-                              color: kindColor,
-                            }}
-                          />
-                        </Box>
-                        {ing.name_zh && ing.name && (
-                          <Typography sx={{
-                            fontSize: '0.55rem', color: 'rgba(255,255,255,0.5)',
-                            fontFamily: '"Rajdhani",sans-serif', mt: 0.1,
-                          }}>
-                            {ing.name}
-                          </Typography>
-                        )}
-                        {ing.slot && (
-                          <Typography sx={{
-                            fontSize: '0.5rem', color: 'rgba(201,162,39,0.4)',
-                            fontFamily: '"Rajdhani",sans-serif', mt: 0.05,
-                          }}>
-                            {ing.slot}
-                          </Typography>
-                        )}
-                      </Box>
-                      <Typography sx={{
-                        fontSize: '0.7rem', color: '#c9a227',
-                        fontFamily: '"Orbitron",sans-serif', fontWeight: 600, flexShrink: 0, ml: 1,
-                      }}>
-                        {qty}
-                      </Typography>
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-
-            {/* 箭头 + 制造时间 */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 60, gap: 0.5 }}>
-              <ArrowForward sx={{ color: '#c9a227', fontSize: 24 }} />
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.2 }}>
-                <Timer sx={{ fontSize: 10, color: '#00ddaa' }} />
-                <Typography sx={{ fontSize: '0.6rem', color: '#00ddaa', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
-                  {blueprint.craft_time_label || formatCraftTime(blueprint.craft_time)}
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* 产出物品 */}
-            <Box sx={{ flex: '0 0 160px', minWidth: 0 }}>
-              <Typography sx={{
-                fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)',
-                fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
-                mb: 1, textTransform: 'uppercase', letterSpacing: '0.05em',
-              }}>
-                产出
-              </Typography>
-              <Box sx={{
-                display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center',
-                py: 2, px: 1.5,
-                background: 'rgba(0,221,170,0.06)',
-                border: '1px solid rgba(0,221,170,0.15)',
-                borderRadius: '4px', minHeight: 80,
-              }}>
-                <Typography sx={{
-                  fontSize: '0.8rem', color: '#00ddaa',
-                  fontFamily: '"Noto Sans SC","Rajdhani",sans-serif',
-                  fontWeight: 600, textAlign: 'center', lineHeight: 1.3,
-                }}>
-                  {blueprint.yield?.name || blueprint.name_zh || blueprint.name}
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5, flexWrap: 'wrap', justifyContent: 'center' }}>
-                  {blueprint.yield?.type && (
-                    <Chip
-                      label={TYPE_LABELS[blueprint.yield.type] || blueprint.yield.type}
-                      size="small"
-                      sx={{
-                        height: 16, fontSize: '0.5rem',
-                        fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
-                        background: `${TYPE_COLORS[blueprint.yield.type] || '#c9a227'}15`,
-                        border: `1px solid ${TYPE_COLORS[blueprint.yield.type] || '#c9a227'}33`,
-                        color: TYPE_COLORS[blueprint.yield.type] || '#c9a227',
-                      }}
-                    />
-                  )}
-                  {blueprint.yield?.grade && (
-                    <Chip
-                      label={`Lv.${blueprint.yield.grade}`}
-                      size="small"
-                      sx={{
-                        height: 16, fontSize: '0.5rem',
-                        fontFamily: '"Orbitron",sans-serif',
-                        background: 'rgba(201,162,39,0.1)',
-                        border: '1px solid rgba(201,162,39,0.2)',
-                        color: '#c9a227',
-                      }}
-                    />
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+        <BlueprintRecipeSection blueprint={blueprint} />
 
         <Divider sx={{ borderColor: 'rgba(201,162,39,0.08)', mb: 2 }} />
 
-        {/* 获取途径 */}
-        <Box sx={{ mb: 2 }}>
-          <Typography sx={{
-            color: '#c9a227', fontSize: '0.75rem',
-            fontFamily: '"Orbitron","Noto Sans SC",sans-serif',
-            fontWeight: 600, mb: 1, letterSpacing: '0.05em',
-          }}>
-            获取途径
-          </Typography>
-          <Typography sx={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
-            {getAcquisitionLabel(blueprint)}
-          </Typography>
-          {blueprint.missions && blueprint.missions.length > 0 && (
-            <Box sx={{ mt: 0.75, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {blueprint.missions.map((m, i) => (
-                <Chip
-                  key={i}
-                  label={`${m.mission_title_zh || m.mission_title}${m.illegal ? ' (非法)' : ''}`}
-                  size="small"
-                  sx={{
-                    fontFamily: '"Noto Sans SC","Rajdhani",sans-serif',
-                    fontSize: '0.65rem', height: 20,
-                    background: m.illegal ? 'rgba(255,68,102,0.1)' : 'rgba(68,187,255,0.1)',
-                    border: `1px solid ${m.illegal ? 'rgba(255,68,102,0.25)' : 'rgba(68,187,255,0.25)'}`,
-                    color: m.illegal ? '#ff4466' : '#44bbff',
-                  }}
-                />
-              ))}
-            </Box>
-          )}
-        </Box>
+        <BlueprintAcquisitionSection blueprint={blueprint} getAcquisitionLabel={getAcquisitionLabel} />
 
         <Divider sx={{ borderColor: 'rgba(201,162,39,0.08)', mb: 2 }} />
 
-        {/* 拆解返还 */}
-        {blueprint.dismantle_returns && blueprint.dismantle_returns.length > 0 && (
-          <Box sx={{ mb: 2 }}>
-            <Typography sx={{
-              color: '#c9a227', fontSize: '0.75rem',
-              fontFamily: '"Orbitron","Noto Sans SC",sans-serif',
-              fontWeight: 600, mb: 1, letterSpacing: '0.05em',
-            }}>
-              拆解返还
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-              {blueprint.dismantle_returns.map((r, i) => (
-                <Box key={i} sx={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  py: 0.5, px: 0.75,
-                  background: 'rgba(0,221,170,0.04)',
-                  border: '1px solid rgba(0,221,170,0.1)',
-                  borderRadius: '3px',
-                }}>
-                  <Typography sx={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
-                    {r.name_zh || r.name}
-                  </Typography>
-                  <Typography sx={{ fontSize: '0.65rem', color: '#00ddaa', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
-                    {r.quantity_scu != null ? `${r.quantity_scu} SCU` : r.quantity != null ? `x${r.quantity}` : '-'}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-            <Divider sx={{ borderColor: 'rgba(201,162,39,0.08)', mt: 2, mb: 2 }} />
-          </Box>
-        )}
+        <BlueprintDismantleSection blueprint={blueprint} />
 
         {/* Wiki 链接 */}
         {blueprint.web_url && (
@@ -655,107 +444,14 @@ export default function BlueprintPanel() {
             </Typography>
           </Box>
         ) : (
-          filteredBlueprints.map(bp => {
-            const typeColor = TYPE_COLORS[bp.type] || '#c9a227';
-            return (
-              <Box
-                key={bp.uuid}
-                onClick={() => handleBlueprintClick(bp)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleBlueprintClick(bp); } }}
-                tabIndex={0}
-                role="button"
-                aria-label={`查看${bp.name_zh || bp.name}蓝图详情`}
-                sx={{
-                  p: 1.5,
-                  minHeight: 130,
-                  boxSizing: 'border-box',
-                  background: 'linear-gradient(135deg, rgba(3, 12, 25, 0.9) 0%, rgba(2, 8, 18, 0.95) 100%)',
-                  border: '1px solid rgba(201, 162, 39, 0.1)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  position: 'relative',
-                  display: 'flex', flexDirection: 'column',
-                  clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0,
-                    height: '1px',
-                    background: `linear-gradient(90deg, transparent 0%, ${typeColor}40 50%, transparent 100%)`,
-                  },
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, rgba(5, 15, 30, 0.95) 0%, rgba(3, 10, 22, 0.98) 100%)',
-                    border: '1px solid rgba(201, 162, 39, 0.25)',
-                  },
-                  '&:focus': {
-                    outline: '2px solid rgba(201, 162, 39, 0.4)',
-                    outlineOffset: '2px',
-                  },
-                }}
-              >
-                {/* 类型标签 */}
-                <Chip
-                  label={TYPE_LABELS[bp.type] || bp.type}
-                  size="small"
-                  sx={{
-                    background: `${typeColor}15`,
-                    border: `1px solid ${typeColor}33`,
-                    color: typeColor,
-                    fontSize: '0.6rem',
-                    fontFamily: '"Noto Sans SC",sans-serif',
-                    height: 18,
-                  }}
-                />
-
-                {/* 蓝图名称 */}
-                <Typography sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: '0.8rem',
-                  fontFamily: '"Noto Sans SC","Rajdhani",sans-serif',
-                  fontWeight: 600, lineHeight: 1.2, mb: 0.3,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}>
-                  {bp.name_zh || bp.name}
-                </Typography>
-
-                {/* 等级 + 制造时间 */}
-                <Box sx={{ display: 'flex', gap: 1, mt: 'auto', alignItems: 'center' }}>
-                  {bp.grade && (
-                    <Chip
-                      label={`Lv.${bp.grade}`}
-                      size="small"
-                      sx={{
-                        fontFamily: '"Orbitron",sans-serif',
-                        fontSize: '0.55rem', height: 16,
-                        background: 'rgba(201,162,39,0.1)',
-                        border: '1px solid rgba(201,162,39,0.2)',
-                        color: '#c9a227',
-                      }}
-                    />
-                  )}
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
-                    <Timer sx={{ fontSize: 12, color: '#00ddaa' }} />
-                    <Typography sx={{
-                      color: '#00ddaa', fontSize: '0.7rem',
-                      fontFamily: '"Orbitron",sans-serif', fontWeight: 600,
-                    }}>
-                      {bp.craft_time_label || formatCraftTime(bp.craft_time)}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* 获取途径 */}
-                <Typography sx={{
-                  color: bp.acquisition === 'default' ? '#00ddaa' : bp.acquisition === 'mission' ? '#c9a227' : 'rgba(255,255,255,0.25)',
-                  fontSize: '0.6rem',
-                  fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
-                  mt: 0.5,
-                }}>
-                  {getAcquisitionLabel(bp)}
-                </Typography>
-              </Box>
-            );
-          })
+          filteredBlueprints.map(bp => (
+            <BlueprintCard
+              key={bp.uuid}
+              blueprint={bp}
+              onClick={handleBlueprintClick}
+              getAcquisitionLabel={getAcquisitionLabel}
+            />
+          ))
         )}
       </Box>
 

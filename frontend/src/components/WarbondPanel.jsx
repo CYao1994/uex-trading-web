@@ -264,7 +264,7 @@ function WarbondPanel() {
             target="_blank" rel="noopener noreferrer"
             sx={{
               display: 'flex', alignItems: 'center', gap: 0.5,
-              px: 1.5, py: 0.5,
+              px: 1.5, py: 1,
               color: 'rgba(201, 162, 39, 0.5)',
               border: '1px solid rgba(201, 162, 39, 0.2)',
               borderRadius: '2px', textDecoration: 'none',
@@ -279,7 +279,7 @@ function WarbondPanel() {
             onClick={() => fetchData(true)}
             sx={{
               display: 'flex', alignItems: 'center', gap: 0.5,
-              px: 1.5, py: 0.5, cursor: 'pointer',
+              px: 1.5, py: 1, cursor: 'pointer',
               color: 'rgba(255, 170, 0, 0.4)',
               border: '1px solid rgba(255, 170, 0, 0.15)',
               borderRadius: '2px',

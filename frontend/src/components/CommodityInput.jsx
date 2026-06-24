@@ -337,7 +337,7 @@ function CommodityInput({ items, onItemsChange }) {
     }, 300);
   };
 
-  const handleAdd = (commodity) => {
+  const handleAdd = useCallback((commodity) => {
     const qty = parseInt(quantity) || 1;
     const existing = items.find(i => i.name === commodity.name);
     if (existing) {
@@ -351,7 +351,6 @@ function CommodityInput({ items, onItemsChange }) {
         quantity: qty,
       }]);
     }
-    // 添加到历史记录
     addToHistory({
       id: commodity.id,
       name: commodity.name,
@@ -361,7 +360,7 @@ function CommodityInput({ items, onItemsChange }) {
     setQuantity('');
     setShowDropdown(false);
     setError('');
-  };
+  }, [quantity, items, onItemsChange, addToHistory]);
 
   const handleRemove = useCallback((name) => {
     onItemsChange(items.filter(i => i.name !== name));

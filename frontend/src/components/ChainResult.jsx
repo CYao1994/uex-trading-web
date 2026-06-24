@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Box, Typography, Alert, Button } from '@mui/material';
 import { TrendingUp, AccountBalance, Link, ArrowDownward, Refresh, Navigation } from '@mui/icons-material';
 import AnimatedNumber from './AnimatedNumber';
@@ -345,7 +345,7 @@ function ChainResult({ data, onRefresh }) {
           const arrowLabel = getArrowLabel(leg);
 
           return (
-            <React.Fragment key={idx}>
+            <Fragment key={idx}>
               <Box sx={{
                 p: 2,
                 mb: 0,
@@ -524,7 +524,7 @@ function ChainResult({ data, onRefresh }) {
                   }} />
                 </Box>
               )}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </Box>

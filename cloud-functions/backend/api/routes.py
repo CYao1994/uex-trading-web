@@ -61,7 +61,6 @@ async def sell_route(request: SellRouteRequest, refresh: bool = Query(False)):
     except Exception as e:
         logging.error(f"Route planning error: {e}")
         logging.error(traceback.format_exc())
-        from fastapi import HTTPException
         raise HTTPException(status_code=500, detail=f"Route planning error: {str(e)}")
 
 
@@ -83,7 +82,6 @@ async def buy_route(request: SellRouteRequest, refresh: bool = Query(False)):
     except Exception as e:
         logging.error(f"Buy route planning error: {e}")
         logging.error(traceback.format_exc())
-        from fastapi import HTTPException
         raise HTTPException(status_code=500, detail=f"Buy route planning error: {str(e)}")
 
 
@@ -187,7 +185,6 @@ async def commodity_prices(commodity_id: int, refresh: bool = Query(False)):
             commodity = c
             break
     if not commodity:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Commodity not found")
 
     # Fetch all prices (with TTL cache)
@@ -397,7 +394,6 @@ async def trade_chain(request: TradeChainRequest, refresh: bool = Query(False)):
         return result
     except Exception as e:
         traceback.print_exc()
-        from fastapi import HTTPException
         raise HTTPException(status_code=500, detail=f"Trade chain planning error: {str(e)}")
 
 
@@ -564,7 +560,6 @@ async def item_prices(item_id: int, refresh: bool = Query(False)):
             item = i
             break
     if not item:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Item not found")
 
     prices_data = load_item_prices(item_id, refresh=refresh)

@@ -694,15 +694,17 @@ def build_distance_matrix(origin_tid: int, candidate_tids: List[int], refresh: b
     return matrix
 
 
+_terminal_id_map = {}
+
 def resolve_terminal(tid: int) -> dict:
-    """Resolve terminal info from cache."""
-    terminals = load_terminals()
-    for t in terminals:
-        if t.get("id") == tid:
-            return t
-    return {"id": tid, "name": f"Terminal-{tid}", "nickname": "",
+    """Resolve terminal info from cache using dict lookup."""
+    global _terminal_id_map
+    if not _terminal_id_map:
+        terminals = load_terminals()
+        _terminal_id_map = {t.get("id"): t for t in terminals if t.get("id")}
+    return _terminal_id_map.get(tid, {"id": tid, "name": f"Terminal-{tid}", "nickname": "",
             "star_system_name": "", "planet_name": "", "space_station_name": "",
-            "city_name": "", "outpost_name": ""}
+            "city_name": "", "outpost_name": ""})
 
 
 def load_vehicles(refresh: bool = False) -> List[Dict]:

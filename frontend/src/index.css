@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root {
+  /* Design tokens - 深空金色主题 */
+  --color-gold: #c9a227;
+  --color-gold-light: #e8c55a;
+  --color-gold-dark: #9a7a1a;
+  --color-crimson: #ff3366;
+  --color-crimson-dark: #8b2500;
+  --color-bg-primary: #060a13;
+  --color-bg-paper: #0d1321;
+  --color-bg-surface: #020810;
+  --color-text-primary: #e0e6ed;
+  --color-text-secondary: #7a8ba0;
+  --color-border: rgba(201, 162, 39, 0.12);
+  --color-border-hover: rgba(201, 162, 39, 0.3);
+  --color-border-focus: rgba(201, 162, 39, 0.5);
+  --color-glow: rgba(201, 162, 39, 0.25);
+  --color-glow-strong: rgba(201, 162, 39, 0.4);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -45,25 +64,25 @@ body {
   background: rgba(0, 10, 20, 0.5);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(201, 162, 39, 0.3), rgba(154, 122, 26, 0.2));
+  background: linear-gradient(180deg, var(--color-gold-dark), var(--color-gold));
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(201, 162, 39, 0.5), rgba(154, 122, 26, 0.4));
+  background: linear-gradient(180deg, var(--color-gold), var(--color-gold-light));
 }
 
 /* === Glow effects === */
 .glow-blue {
-  box-shadow: 0 0 8px rgba(201, 162, 39, 0.25);
+  box-shadow: 0 0 8px var(--color-glow);
 }
 .glow-text {
-  text-shadow: 0 0 6px rgba(201, 162, 39, 0.4);
+  text-shadow: 0 0 6px var(--color-glow-strong);
 }
 
 /* === HUD Panel base styles === */
 .hud-panel {
   background: linear-gradient(135deg, rgba(5, 15, 30, 0.85) 0%, rgba(2, 10, 20, 0.9) 100%);
-  border: 1px solid rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--color-border);
   backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
@@ -76,7 +95,7 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.4) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-glow-strong) 50%, transparent 100%);
 }
 
 /* === HUD Button styles === */
@@ -94,7 +113,7 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
   transition: left 0.5s;
 }
 
@@ -401,22 +420,29 @@ body {
 }
 
 .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(201, 162, 39, 0.15) !important;
+  border-color: var(--color-border) !important;
   border-radius: 2px !important;
 }
 
 .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(201, 162, 39, 0.3) !important;
+  border-color: var(--color-border-hover) !important;
 }
 
 .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(201, 162, 39, 0.5) !important;
-  box-shadow: 0 0 8px rgba(201, 162, 39, 0.15), inset 0 0 4px rgba(201, 162, 39, 0.05) !important;
+  border-color: var(--color-border-focus) !important;
+  box-shadow: 0 0 8px var(--color-glow), inset 0 0 4px rgba(201, 162, 39, 0.05) !important;
 }
 
 /* Tabs */
 .MuiTabs-root {
   min-height: 44px !important;
+}
+
+/* Touch targets - ensure minimum 44x44px for accessibility */
+.MuiIconButton-root,
+.MuiButton-root {
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* Table */
@@ -634,20 +660,20 @@ body {
 /* 光效脉冲 */
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(201, 162, 39, 0.2);
+    box-shadow: 0 0 5px var(--color-glow);
   }
   50% {
-    box-shadow: 0 0 20px rgba(201, 162, 39, 0.4);
+    box-shadow: 0 0 20px var(--color-glow-strong);
   }
 }
 
 /* 边框光效 */
 @keyframes borderGlow {
   0%, 100% {
-    border-color: rgba(201, 162, 39, 0.1);
+    border-color: var(--color-border);
   }
   50% {
-    border-color: rgba(201, 162, 39, 0.3);
+    border-color: var(--color-border-hover);
   }
 }
 
