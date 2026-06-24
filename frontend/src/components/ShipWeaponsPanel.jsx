@@ -29,7 +29,7 @@ export default function ShipWeaponsPanel() {
     fetch('/data/wiki-weapons.json')
       .then(r => r.ok ? r.json() : { weapons: [] })
       .then(data => setWikiWeapons(data.weapons || []))
-      .catch(() => {});
+      .catch(() => console.warn('Failed to load wiki weapons'));
   }, []);
 
   return (

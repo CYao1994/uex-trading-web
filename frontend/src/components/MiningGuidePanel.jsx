@@ -1,10 +1,11 @@
 // MiningGuidePanel.jsx - 采矿矿物数据库面板
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Box, Typography, TextField, InputAdornment, Chip, CircularProgress } from '@mui/material';
-import { Search, Science, ArrowUpward, ArrowDownward, Place, Warning, History as HistoryIcon } from '@mui/icons-material';
+import { Search, Science, ArrowUpward, ArrowDownward, AttachMoney, Place, Warning, History as HistoryIcon } from '@mui/icons-material';
 import { useDataFreshness } from '../hooks/useDataFreshness';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 import MineralDetailDialog from './MineralDetailDialog';
+import { rawNameToLocationKey } from '../utils/mineralKeys';
 
 const FIELD_LABELS = {
   elementInstability: '不稳定性',
@@ -25,78 +26,11 @@ const SORT_OPTIONS = [
   { key: 'elementClusterFactor', label: '聚簇系数' },
 ];
 
-const LOCATION_KEY_MAP = {
-  // Ore_X -> matching Wiki location keys
-  'Ore_Agricium': 'Agricium_Ore',
-  'Ore_Aluminum': 'Aluminum',
-  'Ore_Borase': 'Borase_Ore',
-  'Ore_Copper': 'Copper_Ore',
-  'Ore_Gold': 'Gold_Ore',
-  'Ore_Iron': 'Iron_Ore',
-  'Ore_Lindinium': 'Lindinium',
-  'Ore_Riccite': 'Riccite_Ore',
-  'Ore_Savrilium': 'Savrilium',
-  'Ore_Stileron': 'Stileron',
-  'Ore_Tin': 'Tin_Ore',
-  'Ore_Titanium': 'Titanium_Ore',
-  'Ore_Torite': 'Torite_Ore',
-  'Ore_Tungsten': 'Tungsten_Ore',
-  'Ore_Jaclium': 'Jaclium',
-  'Ore_Saldynium': 'Saldynium',
-  // Aluminium_Ore -> Aluminum
-  'Aluminium_Ore': 'Aluminum',
-  // Ice_Raw -> Raw Ice
-  'Ice_Raw': 'Raw Ice',
-  // Raw_X -> matching keys
-  'RawOuratite': 'Raw Ouratite',
-  'RawSilicon': 'Raw Silicon',
-  'Raw_Aslarite': 'Aslarite_Raw',
-  'Raw_Beryl': 'Beryl_Raw',
-  'Raw_Bexalite': 'Bexalite_Raw',
-  'Raw_Corundum': 'Corundum_Raw',
-  'Raw_Hephaestanite': 'Hephaestanite_Raw',
-  'Raw_Ice': 'Raw Ice',
-  'Raw_Laranite': 'Laranite_Raw',
-  'Raw_Quantainium': 'Quantainium_Raw',
-  'Raw_Quartz': 'Quartz_Raw',
-  'Raw_Taranite': 'Taranite_Raw',
-  // FPS minerals -> matching Wiki keys
-  'MinableElement_FPS_Aphorite': 'MinableElement_FPS_Aphorite',
-  'MinableElement_FPS_Dolivine': 'MinableElement_FPS_Dolivine',
-  'MinableElement_FPS_Hadanite': 'MinableElement_FPS_Hadanite',
-  'MinableElement_FPS_Janalite': 'MinableElement_FPS_Janalite',
-  'MinableElement_FPS_Carinite': 'Carinite',
-  'MinableElement_FPS_CarinitePure': 'CarinitePure',
-  'MinableElement_FPS_Flowstone': 'Flowstone',
-  'MinableElement_FPS_Sadaryx': 'Sadaryx',
-  'MinableElement_FPS_Saldynium': 'Saldynium',
-  'MinableElement_FPS_VLKLimpet': 'Vlk_Limpet',
-  // Ground vehicle minerals
-  'MinableElement_GroundVehicle_Beradom': 'MinableElement_GroundVehicle_Beradom',
-  'MinableElement_GroundVehicle_Feynmaline': 'MinableElement_GroundVehicle_Feynmaline',
-  'MinableElement_GroundVehicle_Glacosite': 'MinableElement_GroundVehicle_Glacosite',
-  'MinableElement_GroundVehicle_Carinite': 'Carinite',
-  // Other minerals
-  'Diamond_Raw': 'Diamond',
-  'Lindinium_Ore': 'Lindinium',
-  'Ouratite_Raw': 'Raw Ouratite',
-  'Riccite_Ore': 'Riccite',
-  'Savrilium_Ore': 'Savrilium',
-  'Sileron_Ore': 'Stileron',
-  'Silicon_Raw': 'Raw Silicon',
-  // Wiki minerals that use different format
-  'Aphorite': 'MinableElement_FPS_Aphorite',
-  'Beradom': 'MinableElement_GroundVehicle_Beradom',
-  'Dolivine': 'MinableElement_FPS_Dolivine',
-  'Feynmaline': 'MinableElement_GroundVehicle_Feynmaline',
-  'Glacosite': 'MinableElement_GroundVehicle_Glacosite',
-  'Hadanite': 'MinableElement_FPS_Hadanite',
-  'Janalite': 'MinableElement_FPS_Janalite',
-};
-
-function rawNameToLocationKey(rawName) {
-  return LOCATION_KEY_MAP[rawName] || rawName;
-}
+const STANTON_MINING_BASES = [
+  'Mining Base #001', 'Mining Base #002', 'Mining Base #003', 'Mining Base #004',
+  'Mining Base #005', 'Mining Base #006', 'Mining Base #007', 'Mining Base #008',
+  'Mining Base #009', 'Mining Base #010', 'Mining Base #011', 'Mining Base #012',
+];
 
 const MINERAL_SYSTEM_MAP = {
   // Ship minerals
@@ -114,6 +48,7 @@ const MINERAL_SYSTEM_MAP = {
   'Ore_Titanium': [' Stanton ', ' Pyro '],
   'Ore_Torite': [' Pyro ', ' Nyx '],
   'Ore_Tungsten': [' Stanton ', ' Pyro ', ' Nyx '],
+  'Ore_Borase': [' Stanton ', ' Pyro ', ' Nyx '],
   'Raw_Aslarite': [' Stanton ', ' Pyro '],
   'Raw_Beryl': [' Stanton '],
   'Raw_Bexalite': [' Stanton ', ' Pyro ', ' Nyx '],
@@ -250,7 +185,7 @@ function MiningGuidePanel() {
     }
     if (systemFilter) {
       result = result.filter(m => {
-        const systems = getMineralSystems(m.name);
+        const systems = getMineralSystems(m.rawName);
         return systems.some(s => s.trim() === systemFilter);
       });
     }
@@ -394,7 +329,7 @@ function MineralCard({ mineral, price, onClick }) {
   const diff = getDifficulty(mineral.elementInstability, mineral.elementResistance);
   const instBar = getInstabilityBar(mineral.elementInstability);
   const explBar = getExplosionBar(mineral.elementExplosionMultiplier);
-          const systems = getMineralSystems(mineral.rawName || mineral.name);
+  const systems = getMineralSystems(mineral.rawName);
 
   return (
     <Box onClick={onClick} sx={{
@@ -446,9 +381,9 @@ function MineralCard({ mineral, price, onClick }) {
               const trimmed = sys.trim();
               return (
                 <Typography key={trimmed} sx={{
-                  fontSize: '0.5rem', color: trimmed === 'Pyro' ? '#ff6644' : trimmed === 'Nyx' ? '#aa66ff' : '#00ddaa',
-                  background: trimmed === 'Pyro' ? 'rgba(255,102,68,0.08)' : trimmed === 'Nyx' ? 'rgba(170,102,255,0.08)' : 'rgba(0,221,170,0.08)',
-                  px: 0.5, borderRadius: '2px', border: `1px solid ${trimmed === 'Pyro' ? 'rgba(255,102,68,0.15)' : trimmed === 'Nyx' ? 'rgba(170,102,255,0.15)' : 'rgba(0,221,170,0.15)'}`,
+                  fontSize: '0.5rem', color: trimmed === 'Pyro' ? '#ff6644' : '#00ddaa',
+                  background: trimmed === 'Pyro' ? 'rgba(255,102,68,0.08)' : 'rgba(0,221,170,0.08)',
+                  px: 0.5, borderRadius: '2px', border: `1px solid ${trimmed === 'Pyro' ? 'rgba(255,102,68,0.15)' : 'rgba(0,221,170,0.15)'}`,
                 }}>
                   {trimmed} 矿区
                 </Typography>

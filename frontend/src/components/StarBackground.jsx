@@ -9,7 +9,7 @@ function StarBackground() {
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      video.play().catch(() => {});
+      video.play().catch(() => console.warn('Video autoplay was prevented'));
     }
   }, []);
 

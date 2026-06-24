@@ -39,7 +39,7 @@ function ShipItemsPanel({ categories, itemTypeLabel, accentColor, filterConfig =
     fetch('/data/wiki-items.json')
       .then(r => r.ok ? r.json() : { items: {} })
       .then(data => setWikiItems(data.items || {}))
-      .catch(() => {});
+      .catch(() => console.warn('Failed to load wiki items'));
   }, []);
 
   const {
@@ -66,7 +66,7 @@ function ShipItemsPanel({ categories, itemTypeLabel, accentColor, filterConfig =
     fetch('/data/weapon-type-stats.json')
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setWeaponStats(data); })
-      .catch(() => {});
+      .catch(() => console.warn('Failed to load weapon stats'));
   }, []);
 
   const getWeaponStats = useCallback((itemType, size) => {

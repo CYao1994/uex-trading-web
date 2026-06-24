@@ -29,7 +29,7 @@ function ChainPanel({ onResult }) {
   useEffect(() => {
     loadAllVehicles().then(vehicles => {
       setAllVehicles(vehicles);
-    }).catch(() => {});
+    }).catch(() => { console.warn('Failed to load vehicles'); });
   }, []);
 
   const vehicleOptions = vehicleInput

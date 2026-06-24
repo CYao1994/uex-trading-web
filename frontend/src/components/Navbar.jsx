@@ -23,7 +23,7 @@ function Navbar({ activeTab, onTabChange, onFeedbackOpen }) {
   useEffect(() => {
     api.get('/version')
       .then(res => setVersion(res.data.version || ''))
-      .catch(() => {});
+      .catch(() => console.warn('Failed to load version'));
   }, []);
 
   useEffect(() => {

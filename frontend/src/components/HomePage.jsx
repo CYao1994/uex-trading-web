@@ -67,7 +67,7 @@ function HomePage({ onTabChange }) {
           }));
         setAllItems(prev => [...prev, ...ships]);
       })
-      .catch(() => {});
+      .catch(() => console.warn('Failed to load vehicles'));
 
     return () => {
       if (searchTimerRef.current) clearTimeout(searchTimerRef.current);

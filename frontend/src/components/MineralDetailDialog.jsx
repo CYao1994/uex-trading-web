@@ -1,71 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Typography, Dialog, DialogTitle, DialogContent, IconButton, Chip, Divider } from '@mui/material';
-import { Close, Place } from '@mui/icons-material';
-
-const LOCATION_KEY_MAP = {
-  'Ore_Agricium': 'Agricium_Ore',
-  'Ore_Aluminum': 'Aluminum',
-  'Ore_Borase': 'Borase_Ore',
-  'Ore_Copper': 'Copper_Ore',
-  'Ore_Gold': 'Gold_Ore',
-  'Ore_Iron': 'Iron_Ore',
-  'Ore_Lindinium': 'Lindinium',
-  'Ore_Riccite': 'Riccite_Ore',
-  'Ore_Savrilium': 'Savrilium',
-  'Ore_Stileron': 'Stileron',
-  'Ore_Tin': 'Tin_Ore',
-  'Ore_Titanium': 'Titanium_Ore',
-  'Ore_Torite': 'Torite_Ore',
-  'Ore_Tungsten': 'Tungsten_Ore',
-  'Ore_Jaclium': 'Jaclium',
-  'Ore_Saldynium': 'Saldynium',
-  'Aluminium_Ore': 'Aluminum',
-  'Ice_Raw': 'Raw Ice',
-  'RawOuratite': 'Raw Ouratite',
-  'RawSilicon': 'Raw Silicon',
-  'Raw_Aslarite': 'Aslarite_Raw',
-  'Raw_Beryl': 'Beryl_Raw',
-  'Raw_Bexalite': 'Bexalite_Raw',
-  'Raw_Corundum': 'Corundum_Raw',
-  'Raw_Hephaestanite': 'Hephaestanite_Raw',
-  'Raw_Ice': 'Raw Ice',
-  'Raw_Laranite': 'Laranite_Raw',
-  'Raw_Quantainium': 'Quantainium_Raw',
-  'Raw_Quartz': 'Quartz_Raw',
-  'Raw_Taranite': 'Taranite_Raw',
-  'MinableElement_FPS_Aphorite': 'MinableElement_FPS_Aphorite',
-  'MinableElement_FPS_Dolivine': 'MinableElement_FPS_Dolivine',
-  'MinableElement_FPS_Hadanite': 'MinableElement_FPS_Hadanite',
-  'MinableElement_FPS_Janalite': 'MinableElement_FPS_Janalite',
-  'MinableElement_FPS_Carinite': 'Carinite',
-  'MinableElement_FPS_CarinitePure': 'CarinitePure',
-  'MinableElement_FPS_Flowstone': 'Flowstone',
-  'MinableElement_FPS_Sadaryx': 'Sadaryx',
-  'MinableElement_FPS_Saldynium': 'Saldynium',
-  'MinableElement_FPS_VLKLimpet': 'Vlk_Limpet',
-  'MinableElement_GroundVehicle_Beradom': 'MinableElement_GroundVehicle_Beradom',
-  'MinableElement_GroundVehicle_Feynmaline': 'MinableElement_GroundVehicle_Feynmaline',
-  'MinableElement_GroundVehicle_Glacosite': 'MinableElement_GroundVehicle_Glacosite',
-  'MinableElement_GroundVehicle_Carinite': 'Carinite',
-  'Diamond_Raw': 'Diamond',
-  'Lindinium_Ore': 'Lindinium',
-  'Ouratite_Raw': 'Raw Ouratite',
-  'Riccite_Ore': 'Riccite',
-  'Savrilium_Ore': 'Savrilium',
-  'Sileron_Ore': 'Stileron',
-  'Silicon_Raw': 'Raw Silicon',
-  'Aphorite': 'MinableElement_FPS_Aphorite',
-  'Beradom': 'MinableElement_GroundVehicle_Beradom',
-  'Dolivine': 'MinableElement_FPS_Dolivine',
-  'Feynmaline': 'MinableElement_GroundVehicle_Feynmaline',
-  'Glacosite': 'MinableElement_GroundVehicle_Glacosite',
-  'Hadanite': 'MinableElement_FPS_Hadanite',
-  'Janalite': 'MinableElement_FPS_Janalite',
-};
-
-function rawNameToLocationKey(rawName) {
-  return LOCATION_KEY_MAP[rawName] || rawName;
-}
+import { Close, Place, Warning } from '@mui/icons-material';
+import { rawNameToLocationKey } from '../utils/mineralKeys';
 
 const FIELD_LABELS = {
   elementInstability: '\u4e0d\u7a33\u5b9a\u6027',
@@ -112,6 +48,8 @@ function LocationCard({ loc }) {
   const probPct = Math.min(100, loc.probability);
   const qualMin = loc.quality_range?.[0] || 0;
   const qualMax = loc.quality_range?.[1] || 1000;
+  const qualPctMin = (qualMin / 1000) * 100;
+  const qualPctMax = (qualMax / 1000) * 100;
 
   return (
     <Box sx={{
@@ -140,7 +78,7 @@ function LocationCard({ loc }) {
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.3 }}>
-        <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Noto Sans SC",sans-serif', minWidth: 28 }}>
+        <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.4)', fontFamily: '"Noto Sans SC",sans-serif', minWidth: 28 }}>
           \u6982\u7387
         </Typography>
         <Box sx={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
@@ -152,17 +90,17 @@ function LocationCard({ loc }) {
       </Box>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
+        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.4)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
           \u542b\u91cf {qualMin.toFixed(0)}-{qualMax.toFixed(0)}
         </Typography>
-        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
+        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.4)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
           \u963b\u529b {loc.resistance}
         </Typography>
-        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
+        <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.4)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
           \u4e0d\u7a33\u5b9a\u6027 {loc.instability}
         </Typography>
         {loc.signature > 0 && (
-          <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
+          <Typography sx={{ fontSize: '0.5rem', color: 'rgba(255,255,255,0.4)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
             \u4fe1\u53f7 {loc.signature}
           </Typography>
         )}
@@ -291,7 +229,7 @@ function MineralDetailDialog({ open, mineral, price, onClose }) {
 
           {locations.length === 0 ? (
             <Box sx={{ py: 2, textAlign: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '4px' }}>
-              <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani","Noto Sans SC",sans-serif' }}>
+              <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', fontFamily: '"Rajdhani","Noto Sans SC",sans-serif' }}>
                 \u6682\u65e0 Stanton \u7cfb\u7edf\u5237\u65b0\u5730\u70b9\u6570\u636e
               </Typography>
             </Box>
