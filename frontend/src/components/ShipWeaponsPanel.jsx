@@ -24,12 +24,17 @@ const WEAPON_FILTER_CONFIG = {
 export default function ShipWeaponsPanel() {
   const [view, setView] = useState('list');
   const [wikiWeapons, setWikiWeapons] = useState([]);
+  const [wikiItems, setWikiItems] = useState({});
 
   useEffect(() => {
     fetch('/data/wiki-weapons.json')
       .then(r => r.ok ? r.json() : { weapons: [] })
       .then(data => setWikiWeapons(data.weapons || []))
       .catch(() => console.warn('Failed to load wiki weapons'));
+    fetch('/data/wiki-items.json')
+      .then(r => r.ok ? r.json() : { items: {} })
+      .then(data => setWikiItems(data.items || {}))
+      .catch(() => console.warn('Failed to load wiki items'));
   }, []);
 
   return (
@@ -67,7 +72,7 @@ export default function ShipWeaponsPanel() {
           wikiWeapons={wikiWeapons}
         />
       ) : (
-        <DPSRanking wikiWeapons={wikiWeapons} />
+        <DPSRanking wikiWeapons={wikiWeapons} wikiItems={wikiItems} />
       )}
     </Box>
   );

@@ -6,7 +6,7 @@ import WeaponDetailDialog from './WeaponDetailDialog';
 const DMG_TYPE_ZH = { physical: '物理', energy: '能量', distortion: '扭曲', thermal: '热能' };
 const DMG_TYPE_COLORS = { physical: '#ff6644', energy: '#44aaff', distortion: '#aa66ff', thermal: '#ff8844' };
 
-function DPSRanking({ wikiWeapons = [] }) {
+function DPSRanking({ wikiWeapons = [], wikiItems = {} }) {
   const [ammoData, setAmmoData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -144,6 +144,7 @@ function DPSRanking({ wikiWeapons = [] }) {
         onClose={() => { setDetailOpen(false); setDetailItem(null); }}
         catalogItem={detailItem}
         wikiWeapons={wikiWeapons}
+        wikiItems={wikiItems}
       />
     </Box>
   );

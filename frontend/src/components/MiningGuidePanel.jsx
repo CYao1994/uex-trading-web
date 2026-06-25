@@ -48,7 +48,6 @@ const MINERAL_SYSTEM_MAP = {
   'Ore_Titanium': [' Stanton ', ' Pyro '],
   'Ore_Torite': [' Pyro ', ' Nyx '],
   'Ore_Tungsten': [' Stanton ', ' Pyro ', ' Nyx '],
-  'Ore_Borase': [' Stanton ', ' Pyro ', ' Nyx '],
   'Raw_Aslarite': [' Stanton ', ' Pyro '],
   'Raw_Beryl': [' Stanton '],
   'Raw_Bexalite': [' Stanton ', ' Pyro ', ' Nyx '],

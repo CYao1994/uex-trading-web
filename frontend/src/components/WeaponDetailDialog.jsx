@@ -18,23 +18,44 @@ function findWikiWeapon(weapons, catalogItem) {
   return null;
 }
 
-function WeaponDetailDialog({ open, onClose, catalogItem, wikiWeapons }) {
+function WeaponDetailDialog({ open, onClose, catalogItem, wikiWeapons, wikiItems = {} }) {
   const wikiWeapon = useMemo(
     () => findWikiWeapon(wikiWeapons, catalogItem),
     [wikiWeapons, catalogItem]
   );
 
+  const wikiItem = useMemo(() => {
+    if (!catalogItem || !wikiItems) return null;
+    const slug = (catalogItem.slug || '').toLowerCase();
+    for (const [key, val] of Object.entries(wikiItems)) {
+      if (key.toLowerCase() === slug) return val;
+    }
+    return null;
+  }, [catalogItem, wikiItems]);
+
   if (!catalogItem) return null;
 
   const dps = wikiWeapon?.damage?.dps || {};
-  const _dominantType = ['physical', 'energy', 'distortion'].reduce(
-    (best, t) => (dps[t] || 0) > (dps[best] || 0) ? t : best, 'physical'
-  );
 
   const purchaseLocations = [];
-  if (catalogItem.buy_location_zh) {
+  const uexPurchases = wikiItem?.uex_prices?.purchase || [];
+  if (uexPurchases.length > 0) {
+    for (const p of uexPurchases) {
+      const sm = p.starmap_location || {};
+      purchaseLocations.push({
+        terminal: p.terminal_name || '',
+        location: sm.name || '',
+        planet: sm.parent_name || '',
+        system: sm.star_system_name || '',
+        price: p.price_buy || 0,
+      });
+    }
+  } else if (catalogItem.buy_location_zh) {
     purchaseLocations.push({
+      terminal: '',
       location: catalogItem.buy_location_zh,
+      planet: '',
+      system: '',
       price: catalogItem.best_price_buy,
     });
   }
@@ -191,28 +212,61 @@ function WeaponDetailDialog({ open, onClose, catalogItem, wikiWeapons }) {
         {/* 购买地点 */}
         <Typography sx={{ color: '#c9a227', fontSize: '0.75rem', fontFamily: '"Orbitron","Noto Sans SC",sans-serif', mb: 1, letterSpacing: '0.05em', fontWeight: 600 }}>
           <ShoppingCart sx={{ fontSize: 14, verticalAlign: 'middle', mr: 0.5 }} />
-          购买地点
+          购买地点 {purchaseLocations.length > 0 && <span style={{ fontSize: '0.65rem', color: 'rgba(201,162,39,0.5)', fontFamily: '"Rajdhani",sans-serif', ml: 0.5 }}>({purchaseLocations.length}个站点)</span>}
         </Typography>
-        {purchaseLocations.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-            {purchaseLocations.map((loc, i) => (
-              <Box key={i} sx={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                py: 0.75, px: 1, background: 'rgba(0,10,20,0.3)', border: '1px solid rgba(201,162,39,0.08)',
-                borderRadius: '3px',
-              }}>
-                <Typography sx={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
-                  {loc.location}
-                </Typography>
-                {loc.price > 0 && (
-                  <Typography sx={{ fontSize: '0.85rem', color: '#c9a227', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
-                    {loc.price.toLocaleString()} <span style={{ fontSize: '0.6rem', opacity: 0.7 }}>aUEC</span>
+        {purchaseLocations.length > 0 ? (() => {
+          const tree = {};
+          for (const loc of purchaseLocations) {
+            const sys = loc.system || '未知星系';
+            const planet = loc.planet || '未知星球';
+            if (!tree[sys]) tree[sys] = {};
+            if (!tree[sys][planet]) tree[sys][planet] = [];
+            tree[sys][planet].push(loc);
+          }
+          const sortedSystems = Object.keys(tree).sort();
+          const systemColors = { Stanton: '#44aaff', Pyro: '#ff6644', Nyx: '#aa66ff' };
+          return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+              {sortedSystems.map(sys => (
+                <Box key={sys} sx={{ borderLeft: `2px solid ${systemColors[sys] || 'rgba(255,255,255,0.15)'}`, pl: 1 }}>
+                  <Typography sx={{ fontSize: '0.75rem', color: systemColors[sys] || 'rgba(255,255,255,0.7)', fontFamily: '"Orbitron","Noto Sans SC",sans-serif', fontWeight: 600, mb: 0.25 }}>
+                    {sys}
                   </Typography>
-                )}
-              </Box>
-            ))}
-          </Box>
-        ) : (
+                  {Object.keys(tree[sys]).sort().map(planet => (
+                    <Box key={planet} sx={{ ml: 1, mb: 0.25 }}>
+                      <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Noto Sans SC",sans-serif', mb: 0.15 }}>
+                        {planet}
+                      </Typography>
+                      {tree[sys][planet].map((loc, i) => (
+                        <Box key={i} sx={{
+                          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                          py: 0.5, px: 0.75, ml: 0.5, background: 'rgba(0,10,20,0.3)',
+                          border: '1px solid rgba(201,162,39,0.05)', borderRadius: '2px', mb: 0.25,
+                        }}>
+                          <Box>
+                            <Typography sx={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.8)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif' }}>
+                              {loc.location || '-'}
+                            </Typography>
+                            {loc.terminal && (
+                              <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.35)', fontFamily: '"Rajdhani",sans-serif' }}>
+                                {loc.terminal}
+                              </Typography>
+                            )}
+                          </Box>
+                          {loc.price > 0 && (
+                            <Typography sx={{ fontSize: '0.75rem', color: '#c9a227', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
+                              {loc.price.toLocaleString()} <span style={{ fontSize: '0.5rem', opacity: 0.7 }}>aUEC</span>
+                            </Typography>
+                          )}
+                        </Box>
+                      ))}
+                    </Box>
+                  ))}
+                </Box>
+              ))}
+            </Box>
+          );
+        })() : (
           <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', fontStyle: 'italic' }}>
             暂无购买地点数据
           </Typography>
