@@ -97,13 +97,10 @@ function ShipPanel() {
       }
       return allVehicles;
     };
-    Promise.all([
-      loadWiki(),
-      fetch('/data/paratranz-cache.json').then(r => r.json()).catch(() => ({})),
-    ]).then(([wiki, paratranz]) => {
+    loadWiki().then(wiki => {
       setWikiData(wiki);
-      setTranslations(paratranz || {});
       setLoading(false);
+      fetch('/data/paratranz-cache.json').then(r => r.json()).then(p => setTranslations(p || {})).catch(() => {});
     }).catch(() => setLoading(false));
   }, []);
 

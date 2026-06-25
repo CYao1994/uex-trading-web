@@ -3371,7 +3371,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fs-9-blacklist-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/19c405b8-8b59-44fa-9bf9-a378aeb6e3bd",
-      "name_zh": "",
+      "name_zh": "FS9黑名单LMG",
       "acquisition": "locked"
     },
     "88fab358-7849-428d-9b7f-a58b09a38ba2": {
@@ -3593,7 +3593,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/s-38-scorched-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/5c3e378d-69b1-47dd-86ef-4a154a9c84c2",
-      "name_zh": "",
+      "name_zh": "S38灼烧手枪",
       "acquisition": "locked"
     },
     "fa4f0260-02e9-4079-9b60-8df31811fe8c": {
@@ -3975,7 +3975,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/p4-ar-blacklist-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/9aded579-9c99-4c61-8f70-d0f5c1b177c8",
-      "name_zh": "",
+      "name_zh": "P4AR黑名单步枪",
       "acquisition": "locked"
     },
     "510d2cc3-9836-435b-bbd7-47f8e81a47ae": {
@@ -4090,7 +4090,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/p8-ar-rifle-magazine-15-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/dd21edb8-a0ba-42ab-a02a-bec325e96c87",
-      "name_zh": "",
+      "name_zh": "P8AR步枪Magazine(15Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -4322,7 +4322,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/br-2-permafrost-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/6c39587a-f569-4093-9cdc-bb0b63636642",
-      "name_zh": "",
+      "name_zh": "BR2永冻霰弹枪",
       "acquisition": "locked"
     },
     "e191cc6b-bc91-4a06-a410-c8e0cfee3f61": {
@@ -4526,7 +4526,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/br-2-purgatory-camo-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/342413af-8554-4c32-af63-1690dc948883",
-      "name_zh": "",
+      "name_zh": "BR2炼狱迷彩霰弹枪",
       "acquisition": "locked"
     },
     "73d270f0-3fc9-4bff-860d-aace2a6abbeb": {
@@ -5492,7 +5492,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/p6-lr-blacklist-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/0c53417e-eb43-40da-b6c2-edc045bd2e23",
-      "name_zh": "",
+      "name_zh": "P6LR黑名单狙击枪步枪",
       "acquisition": "locked"
     },
     "c9c67e69-063a-4d28-a156-d5809776ee22": {
@@ -5540,7 +5540,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/metamaterial-test-146",
       "item_web_url": "https://api.star-citizen.wiki/items/905ba346-0202-4ee4-853e-cfdb2350b195",
-      "name_zh": "",
+      "name_zh": "超材料Test#146",
       "acquisition": "mission",
       "missions": [
         {
@@ -18077,7 +18077,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-arms-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/978726a2-90b7-4c93-a4f5-80b25faa5cbf",
-      "name_zh": "",
+      "name_zh": "ORCmkVArms灼烧",
       "acquisition": "locked"
     },
     "2482eae9-1882-401c-bf3d-80e1457ce099": {
@@ -18118,7 +18118,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-arms-covalex-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/3d1c919f-a17b-4e58-9b4f-33634b50b292",
-      "name_zh": "",
+      "name_zh": "ORCmkVArms科瓦力克斯Edition",
       "acquisition": "locked"
     },
     "782bd6ea-3c2d-40bb-bd07-ecddc4b7a6f7": {
@@ -18200,7 +18200,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-arms-greycat-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/b0d891a5-f143-4793-9c9c-a6957610eed6",
-      "name_zh": "",
+      "name_zh": "ORCmkVArms灰猫Edition",
       "acquisition": "locked"
     },
     "eaf37fc6-52e8-48cb-8362-c3e889de3409": {
@@ -19139,7 +19139,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-core-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/d90c510b-3f4e-485c-9be9-3a704bba197d",
-      "name_zh": "",
+      "name_zh": "ORCmkVCore灼烧",
       "acquisition": "locked"
     },
     "ee45a00b-b31d-4be2-ac4f-519ac26b696f": {
@@ -19180,7 +19180,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-core-covalex-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/26ae8404-354e-4071-98b4-f09ec5db03aa",
-      "name_zh": "",
+      "name_zh": "ORCmkVCore科瓦力克斯Edition",
       "acquisition": "locked"
     },
     "e5c06177-804b-4100-ade3-638edb44bba0": {
@@ -19262,7 +19262,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-core-greycat-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/7da789ac-8865-4bbc-a6cd-b6cea65e6933",
-      "name_zh": "",
+      "name_zh": "ORCmkVCore灰猫Edition",
       "acquisition": "locked"
     },
     "24c8dde3-d930-487c-8924-5d70c379b8cd": {
@@ -20283,7 +20283,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/g-2-helmet-covalex-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/c790b326-5270-47bb-a0ef-a0ed8829767a",
-      "name_zh": "",
+      "name_zh": "G2Helmet科瓦力克斯Edition",
       "acquisition": "locked"
     },
     "365faf04-f752-4c41-941a-108b60ff18d1": {
@@ -20365,7 +20365,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/g-2-helmet-greycat-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/3ebf0955-87bb-42eb-9a0a-74b5357f39c5",
-      "name_zh": "",
+      "name_zh": "G2Helmet灰猫Edition",
       "acquisition": "locked"
     },
     "974ca763-27a2-45ba-906c-7b1c8aab2108": {
@@ -21304,7 +21304,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-legs-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/6b89d308-07cb-4500-9f73-5495acf99022",
-      "name_zh": "",
+      "name_zh": "ORCmkVLegs灼烧",
       "acquisition": "locked"
     },
     "6c8441dc-218a-41d1-a6d8-2481d60bcfe3": {
@@ -21345,7 +21345,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-legs-covalex-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/85f3bb3f-4902-4427-8529-cc1cb82a2e0e",
-      "name_zh": "",
+      "name_zh": "ORCmkVLegs科瓦力克斯Edition",
       "acquisition": "locked"
     },
     "df7d7640-5725-4aeb-8b20-ba4b7563e9c1": {
@@ -21427,7 +21427,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-legs-greycat-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/ace93f5a-ec11-4a8c-9158-8c4ff5dfaa8d",
-      "name_zh": "",
+      "name_zh": "ORCmkVLegs灰猫Edition",
       "acquisition": "locked"
     },
     "9a54a60d-dab8-4155-ae9e-29c2a57a8b7e": {
@@ -30695,7 +30695,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/f55-scorched-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/4a98ac2d-1bd6-42c9-a2a4-e617a9ec120f",
-      "name_zh": "",
+      "name_zh": "F55灼烧LMG",
       "acquisition": "locked"
     },
     "9f11679b-027f-4a0b-903d-6655f2978e76": {
@@ -30933,7 +30933,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lh86-permafrost-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/27b1ae96-778f-443e-b74f-204888ae35c6",
-      "name_zh": "",
+      "name_zh": "LH86永冻手枪",
       "acquisition": "locked"
     },
     "38bb9577-255b-4e90-b5db-e7914f0c78d0": {
@@ -30991,7 +30991,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lh86-scorched-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/bff327cb-0cec-4fa9-bba2-88f237cf506e",
-      "name_zh": "",
+      "name_zh": "LH86灼烧手枪",
       "acquisition": "locked"
     },
     "d8eb623e-26af-4478-a063-9bd88fa7758e": {
@@ -31211,7 +31211,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lh86-pistol-magazine-25-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/068c28b8-3ea3-409a-b08d-1d53ae1e3303",
-      "name_zh": "",
+      "name_zh": "LH86手枪Magazine(25cap)",
       "acquisition": "locked"
     },
     "9105a3ce-c2f5-4935-885d-23434e2d0eed": {
@@ -31596,7 +31596,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/s71-justified-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/9e2aa597-8e3a-472e-926e-b1ba6acf32c5",
-      "name_zh": "",
+      "name_zh": "S71Justified步枪",
       "acquisition": "locked"
     },
     "2ab23481-28dc-400c-b883-b226be8f9e64": {
@@ -31737,7 +31737,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/s71-purgatory-camo-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/4f40a177-91d9-4a93-b2bb-c076938c6f0b",
-      "name_zh": "",
+      "name_zh": "S71炼狱迷彩步枪",
       "acquisition": "locked"
     },
     "b08ee11e-5e2c-4fe5-9a10-b99c2a105d9b": {
@@ -32055,7 +32055,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/r97-scorched-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/2e15ad7c-79d0-48fc-91a1-bda4fbd45c6a",
-      "name_zh": "",
+      "name_zh": "R97灼烧霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -32479,7 +32479,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/r97-righteous-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/97b5b51a-a161-4477-92df-1f35fefdb9c4",
-      "name_zh": "",
+      "name_zh": "R97Righteous霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -32655,7 +32655,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/c54-scorched-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/74c2cdbe-238a-4709-a55c-810a91dd7627",
-      "name_zh": "",
+      "name_zh": "C54灼烧SMG",
       "acquisition": "locked"
     },
     "d2ea7543-aa70-4f08-9ade-1b13bcdf7587": {
@@ -33107,7 +33107,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/a03-scorched-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/7ce6eb8b-ede9-451a-83c9-52ec18f9a173",
-      "name_zh": "",
+      "name_zh": "A03灼烧狙击枪步枪",
       "acquisition": "locked"
     },
     "d99fc359-65fc-45a7-9723-5b77531e2a25": {
@@ -36499,7 +36499,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-hemlock-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/fb77fe68-a6d9-44a3-b24d-426140557784",
-      "name_zh": "",
+      "name_zh": "MondeArmsHemlock迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -36634,7 +36634,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-crimson-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/6c826b04-85b7-4972-8380-d73aa8e3a560",
-      "name_zh": "",
+      "name_zh": "MondeArmsCrimson迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -36698,7 +36698,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-delta-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/ba8e1c12-5923-4a03-a717-6e450b582105",
-      "name_zh": "",
+      "name_zh": "MondeArmsDelta迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -37015,7 +37015,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/f2bb659a-2f68-494a-b28f-328b76513dc5",
-      "name_zh": "",
+      "name_zh": "MondeArms炼狱迷彩",
       "acquisition": "locked"
     },
     "42dd7691-8119-4643-9477-512b31aaccc8": {
@@ -37309,7 +37309,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-hemlock-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/d1748942-0ee7-457c-8beb-d3c838aa62ea",
-      "name_zh": "",
+      "name_zh": "MondeCoreHemlock迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -37444,7 +37444,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-crimson-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/ae2616c4-766f-4cf0-ac88-fc392c7a85cc",
-      "name_zh": "",
+      "name_zh": "MondeCoreCrimson迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -37508,7 +37508,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-delta-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/4b24e755-9cdf-45d4-86af-dcf52b081347",
-      "name_zh": "",
+      "name_zh": "MondeCoreDelta迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -37825,7 +37825,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/cc40d00a-15f4-437d-b0ba-1ba88289dd07",
-      "name_zh": "",
+      "name_zh": "MondeCore炼狱迷彩",
       "acquisition": "locked"
     },
     "029d8838-3f83-4d3c-b44e-ba388cb5e347": {
@@ -38119,7 +38119,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-daimyo",
       "item_web_url": "https://api.star-citizen.wiki/items/6c740727-7f6a-44d4-81d0-e7a1717382f3",
-      "name_zh": "",
+      "name_zh": "MondeHelmetHemlock迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -38254,7 +38254,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-crimson-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/532de455-b2c5-460e-b1a2-216641b9bc32",
-      "name_zh": "",
+      "name_zh": "MondeHelmetCrimson迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -38318,7 +38318,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-delta-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/8f605d77-af20-4576-bfb9-bd97ca6ae5c5",
-      "name_zh": "",
+      "name_zh": "MondeHelmetDelta迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -38635,7 +38635,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/aa369676-fd5d-48cf-b8fc-f20dd89faec0",
-      "name_zh": "",
+      "name_zh": "MondeHelmet炼狱迷彩",
       "acquisition": "locked"
     },
     "81f972e5-634e-42e4-bcfd-37e0a72ee9c3": {
@@ -38929,7 +38929,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-hemlock-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/5c94a154-e25a-4a27-aea2-52868429f14e",
-      "name_zh": "",
+      "name_zh": "MondeLegsHemlock迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -39064,7 +39064,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-crimson-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/20c72bc9-00df-4a8d-b433-45c2217523da",
-      "name_zh": "",
+      "name_zh": "MondeLegsCrimson迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -39128,7 +39128,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-delta-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/61dab9b9-cabf-4dad-b5d5-c7306b056a56",
-      "name_zh": "",
+      "name_zh": "MondeLegsDelta迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -39445,7 +39445,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/7f6f828f-1508-4e01-bbad-a60b59b7c24d",
-      "name_zh": "",
+      "name_zh": "MondeLegs炼狱迷彩",
       "acquisition": "locked"
     },
     "e17d42b5-71f1-40cb-b545-fa95baea8653": {
@@ -39877,7 +39877,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-snow-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/bfc2d914-873d-45a3-866d-c5757fb20c7b",
-      "name_zh": "",
+      "name_zh": "GeistArmorArmsSnow迷彩",
       "acquisition": "locked"
     },
     "2d626cac-783d-482f-b9d3-d4fdb3574c6a": {
@@ -40309,7 +40309,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-snow-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/a15e9077-c94b-4123-9179-1eeb20c1b10a",
-      "name_zh": "",
+      "name_zh": "GeistArmorCoreSnow迷彩",
       "acquisition": "locked"
     },
     "9ad2c193-7246-4a14-a79d-642e0854fb13": {
@@ -40741,7 +40741,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-snow-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/c2bc9db2-8317-4ace-9480-a822c15b39e5",
-      "name_zh": "",
+      "name_zh": "GeistArmorHelmetSnow迷彩",
       "acquisition": "locked"
     },
     "73ded5e4-44c7-4eb0-a293-87a0e785b1da": {
@@ -41173,7 +41173,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-snow-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/a0518e3b-8d71-44d6-a153-05f4e0a4184b",
-      "name_zh": "",
+      "name_zh": "GeistArmorLegsSnow迷彩",
       "acquisition": "locked"
     },
     "ad0494d5-ca83-4f6a-a4c0-f29b7b221a20": {
@@ -42198,7 +42198,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/demeco-purgatory-camo-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/656afe86-dc53-4b83-8121-4084992d13df",
-      "name_zh": "",
+      "name_zh": "Demeco炼狱迷彩LMG",
       "acquisition": "locked"
     },
     "b8f01d8f-9673-4a3b-8454-54ddb7962d47": {
@@ -46185,7 +46185,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/coda-ultraviolet-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/0338e1a7-10a6-4397-99a8-d9f214380612",
-      "name_zh": "",
+      "name_zh": "CodaUltraviolet手枪",
       "acquisition": "locked"
     },
     "c83fdbb2-4c21-4e7c-8b20-1fab0670c784": {
@@ -46243,7 +46243,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/coda-pistol-modified",
       "item_web_url": "https://api.star-citizen.wiki/items/052b79e7-6c1d-4aee-96f6-e6d92559892f",
-      "name_zh": "",
+      "name_zh": "Coda手枪Modified)",
       "acquisition": "locked"
     },
     "089e5827-ec15-480a-877c-eca20dfd166f": {
@@ -46301,7 +46301,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/coda-big-boss-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/32f77bdf-86e9-4eff-97cd-53f1c7c67da2",
-      "name_zh": "",
+      "name_zh": "CodaBigBoss手枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -46633,7 +46633,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/karna-rager-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/afee958a-8da3-48a3-aac7-14047d9de20e",
-      "name_zh": "",
+      "name_zh": "KarnaRager步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -46695,7 +46695,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/karna-rifle-battery-35-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/91cfb7dc-660b-4505-b86a-6028c9a3f54d",
-      "name_zh": "",
+      "name_zh": "Karna步枪Battery(35cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -47005,7 +47005,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/karna-brimstone-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/b5a8e588-4d57-410f-a784-99403cf65fc4",
-      "name_zh": "",
+      "name_zh": "KarnaBrimstone步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -47097,7 +47097,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/karna-alpine-sunset-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/96337f4f-4743-4b41-808e-6b0b8a9bf486",
-      "name_zh": "",
+      "name_zh": "KarnaAlpineSunset步枪",
       "acquisition": "locked"
     },
     "a98a8834-d924-468d-8d1b-8e4aba3e8291": {
@@ -47222,7 +47222,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/ravager-212-outcast-twin-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/03e1fa47-a15e-41bb-81f9-17d3be857a0d",
-      "name_zh": "",
+      "name_zh": "Ravager212OutcastTwin霰弹枪",
       "acquisition": "locked"
     },
     "d3e96412-ae77-4b5a-8e80-bc7575563be7": {
@@ -47577,7 +47577,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/devastator-rager-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/82c475c9-7e54-4991-ad37-66f08cbc54f3",
-      "name_zh": "",
+      "name_zh": "DevastatorRager霰弹枪",
       "acquisition": "locked"
     },
     "cb996de4-1703-4cc9-91d3-44454b1e0765": {
@@ -47976,7 +47976,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/devastator-brimstone-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/45a5b5c4-043b-4bd5-9b14-4d993ff2d03c",
-      "name_zh": "",
+      "name_zh": "DevastatorBrimstone霰弹枪",
       "acquisition": "locked"
     },
     "9e2ac1f2-267c-4d33-805c-f22bef5605da": {
@@ -48312,7 +48312,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/custodian-scorched-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/dd24b515-3d1c-4adf-9b34-781c089169cc",
-      "name_zh": "",
+      "name_zh": "Custodian灼烧SMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -50768,7 +50768,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pitman-mining-laser",
       "item_web_url": "https://api.star-citizen.wiki/items/5a704f96-c339-43e7-b918-7fc9957673ed",
-      "name_zh": "",
+      "name_zh": "Pitman采矿激光",
       "acquisition": "mission",
       "missions": [
         {
@@ -51571,7 +51571,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lawson-mining-laser",
       "item_web_url": "https://api.star-citizen.wiki/items/40bd6a85-5695-409c-9d6c-ae1babde416a",
-      "name_zh": "",
+      "name_zh": "Lawson采矿激光",
       "acquisition": "mission",
       "missions": [
         {
@@ -52265,7 +52265,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/mirai-racing-flight-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/a8493a6e-25b6-4b4a-aa72-c2a8d7195d3b",
-      "name_zh": "",
+      "name_zh": "未来RacingFlightSuit",
       "acquisition": "locked"
     },
     "ef2fe5ec-e7c3-4c44-b589-b3cdf2f83db5": {
@@ -52385,7 +52385,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/blueflame-racing-flight-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/5ed3e5f5-2fe5-480b-8018-03e3cb2f3605",
-      "name_zh": "",
+      "name_zh": "Blue烈焰RacingFlightSuit",
       "acquisition": "mission",
       "missions": [
         {
@@ -52428,7 +52428,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/mirai-racing-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/52bb6c3d-003c-4c01-8517-79e910ebf7fb",
-      "name_zh": "",
+      "name_zh": "未来RacingHelmet",
       "acquisition": "locked"
     },
     "7aa43fa1-11d7-4ad2-a1b7-9b11a92b4d5c": {
@@ -52548,7 +52548,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/blueflame-racing-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/7850121e-2968-44c7-82b3-65c51e20d34e",
-      "name_zh": "",
+      "name_zh": "Blue烈焰RacingHelmet",
       "acquisition": "mission",
       "missions": [
         {
@@ -52888,7 +52888,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/nn-15-cannon",
       "item_web_url": "https://api.star-citizen.wiki/items/231fd67b-49a6-40e9-8eef-20268cfc0b2c",
-      "name_zh": "",
+      "name_zh": "NN15加农炮",
       "acquisition": "mission",
       "missions": [
         {
@@ -53310,7 +53310,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tripledown-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/9f047e7d-1324-473c-b944-03e87976f25a",
-      "name_zh": "",
+      "name_zh": "Tripledown手枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -53372,7 +53372,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tripledown-pistol-magazine-12-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/02f5904f-62ef-48e7-b63c-4ea3d4a7385f",
-      "name_zh": "",
+      "name_zh": "Tripledown手枪Magazine(12Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -53434,7 +53434,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/killshot-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/c098e722-902a-435b-83f8-a96cec36a012",
-      "name_zh": "",
+      "name_zh": "Killshot步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -53496,7 +53496,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/killshot-dominion-camo-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/0eec337e-d8e4-402c-98dd-c7c16bea2e1d",
-      "name_zh": "",
+      "name_zh": "KillshotDominion迷彩步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -53551,7 +53551,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/killshot-rifle-magazine-45-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/c40b7e8e-0f04-43d7-ac3a-7ffb8df071d8",
-      "name_zh": "",
+      "name_zh": "Killshot步枪Magazine(45Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -60632,7 +60632,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/inquisitor-legs-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/2f67ac96-ab81-461a-b54d-fcd159137477",
-      "name_zh": "",
+      "name_zh": "InquisitorLegs灼烧",
       "acquisition": "locked"
     },
     "43b31eb9-4ca1-4df3-90f9-4accce8aadf9": {
@@ -69501,7 +69501,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/8b26ce90-6d22-4d50-8828-b2b37a0491d4",
-      "name_zh": "",
+      "name_zh": "TestudoArms炼狱迷彩",
       "acquisition": "locked"
     },
     "1ef86967-9f09-43af-b234-a5e9088345cc": {
@@ -69834,7 +69834,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/91d97a2d-2b19-48a9-9246-b64567fe0e88",
-      "name_zh": "",
+      "name_zh": "TestudoBackpack炼狱迷彩",
       "acquisition": "locked"
     },
     "82b03018-62d2-412e-b8c3-2471605e76fe": {
@@ -70230,7 +70230,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/8ba85453-091a-4471-8be5-6bbc75487a33",
-      "name_zh": "",
+      "name_zh": "TestudoCore炼狱迷彩",
       "acquisition": "locked"
     },
     "6024a6ca-197f-42eb-8446-91fb06953b27": {
@@ -70683,7 +70683,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/bc29c9de-ceda-43da-a03d-d14f0e2cc113",
-      "name_zh": "",
+      "name_zh": "TestudoHelmet炼狱迷彩",
       "acquisition": "locked"
     },
     "07e49825-48e7-454a-a20d-8e4257c52e61": {
@@ -71136,7 +71136,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/93f14d45-b05f-4163-bb90-8a5f1f80043b",
-      "name_zh": "",
+      "name_zh": "TestudoLegs炼狱迷彩",
       "acquisition": "locked"
     },
     "fba490b7-13e5-463b-a774-c8ebd215738e": {
@@ -71960,7 +71960,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-moss-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/15074483-7839-4581-a257-e8a367bf81b2",
-      "name_zh": "",
+      "name_zh": "AntiumArmsMoss迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -72889,7 +72889,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-moss-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/cd3e2da2-98cc-48a3-9f75-9bc0ea075858",
-      "name_zh": "",
+      "name_zh": "AntiumCoreMoss迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -73818,7 +73818,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-moss-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/f0139701-4e14-46c1-a92a-e79a768dc788",
-      "name_zh": "",
+      "name_zh": "AntiumHelmetMoss迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -74747,7 +74747,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-moss-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/1f5e4a0d-ca1b-449b-b2ad-f165df283c91",
-      "name_zh": "",
+      "name_zh": "AntiumLegsMoss迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -84563,7 +84563,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/morozov-sh-helmet-scorched-x",
       "item_web_url": "https://api.star-citizen.wiki/items/45402114-63a5-4ac6-8465-9949ec7198ac",
-      "name_zh": "",
+      "name_zh": "MorozovSHHelmet灼烧X",
       "acquisition": "locked"
     },
     "981ed143-c8ee-4eb4-9560-d69354229cd1": {
@@ -85041,7 +85041,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/morozov-sh-legs-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/5982a672-c426-4537-b76d-10076a837cc2",
-      "name_zh": "",
+      "name_zh": "MorozovSHLegs灼烧",
       "acquisition": "locked"
     },
     "8b98dbad-b296-4278-a615-1fa6890f32a6": {
@@ -91411,7 +91411,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/defiance-core-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/cfeabbfd-7a4b-4bdf-a24d-7cb752be03d8",
-      "name_zh": "",
+      "name_zh": "DefianceCore灼烧",
       "acquisition": "locked"
     },
     "0a844deb-5635-4f77-aa28-f3c03bf9bd32": {
@@ -95529,7 +95529,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/thlilye-laser-gatling",
       "item_web_url": "https://api.star-citizen.wiki/items/6e3a862f-d13e-4873-ba34-24f3e554984d",
-      "name_zh": "",
+      "name_zh": "Thlilye激光加特林",
       "acquisition": "locked"
     },
     "e03e2902-6fbc-49b5-8d97-08aa6cc8d043": {
@@ -98639,7 +98639,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/argus-helmet-scorched",
       "item_web_url": "https://api.star-citizen.wiki/items/acf39e6f-3d0b-4a71-b006-5163e6e9ccff",
-      "name_zh": "",
+      "name_zh": "ArgusHelmet灼烧",
       "acquisition": "locked"
     },
     "1363635d-8c6c-4463-ae26-2bb1a681b5b5": {
@@ -99645,7 +99645,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/warden-backpack-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/5ca7d59d-99a5-4b49-8c32-60d8368e6181",
-      "name_zh": "",
+      "name_zh": "WardenBackpack炼狱迷彩",
       "acquisition": "locked"
     },
     "4a8393d9-81a5-43da-86a1-0257d810ade4": {
@@ -99729,7 +99729,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-suit-dominion-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/af097f7a-9c3c-4ba9-8155-54f71cd49d73",
-      "name_zh": "",
+      "name_zh": "TailwindFlightSuitDominion迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -99772,7 +99772,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-dominion-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/42176077-e614-4bdf-8cce-24383458f875",
-      "name_zh": "",
+      "name_zh": "TailwindFlightHelmetDominion迷彩",
       "acquisition": "mission",
       "missions": [
         {
@@ -100265,7 +100265,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-arms-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/ac73e9b7-9bca-4537-9456-71700ee2fa70",
-      "name_zh": "",
+      "name_zh": "ChironArms炼狱迷彩",
       "acquisition": "locked"
     },
     "b411ee6c-20ba-4697-a77c-3338e0062ab1": {
@@ -100299,7 +100299,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-backpack-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/649b433d-93ef-4fa2-85c2-c54eb5b44595",
-      "name_zh": "",
+      "name_zh": "ChironBackpack炼狱迷彩",
       "acquisition": "locked"
     },
     "371b65bf-8ea6-472a-9c30-31779ba3bc3a": {
@@ -100405,7 +100405,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-core-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/32efc648-0489-4293-ba06-57b715e18714",
-      "name_zh": "",
+      "name_zh": "ChironCore炼狱迷彩",
       "acquisition": "locked"
     },
     "76438070-9e7d-4518-999a-1965162ec5b4": {
@@ -100511,7 +100511,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-helmet-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/9226de19-21c4-4d22-a9b9-04e8ab2d7d1a",
-      "name_zh": "",
+      "name_zh": "ChironHelmet炼狱迷彩",
       "acquisition": "locked"
     },
     "6cf12e3d-6e7f-4c75-aeed-dfda398a3a8b": {
@@ -100617,7 +100617,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-legs-purgatory-camo",
       "item_web_url": "https://api.star-citizen.wiki/items/6379240a-3e25-4ce5-ae4b-047d26097038",
-      "name_zh": "",
+      "name_zh": "ChironLegs炼狱迷彩",
       "acquisition": "locked"
     },
     "408fbaaf-41b0-4059-9ca8-08cfbe9f84e3": {
@@ -100670,7 +100670,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fresnel-energy-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/af55f514-d7fd-49fd-89c8-6aee01f25859",
-      "name_zh": "",
+      "name_zh": "Fresnel能量LMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -100725,7 +100725,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fresnel-energy-lmg-battery-165-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/923fcb3c-ad02-4a9a-96c2-1fb61fb6c794",
-      "name_zh": "",
+      "name_zh": "Fresnel能量LMGBattery(165Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -100801,7 +100801,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fresnel-molten-energy-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/dc6043c9-6080-4e03-b95b-6ab79c736215",
-      "name_zh": "",
+      "name_zh": "FresnelMolten能量LMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -100863,7 +100863,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fresnel-icebox-energy-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/506e8192-ca9c-4c3a-8115-36e90e432148",
-      "name_zh": "",
+      "name_zh": "FresnelIcebox能量LMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -100925,7 +100925,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/fresnel-rockfall-energy-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/065dbfdb-63dc-4a30-9f50-80e540eb5696",
-      "name_zh": "",
+      "name_zh": "FresnelRockfall能量LMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -100982,7 +100982,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulse-laser-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/02e848a0-d729-4826-a780-8506a2ae4a89",
-      "name_zh": "",
+      "name_zh": "Pulse激光手枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101058,7 +101058,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulse-laser-pistol-battery-60-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/b76f9795-28fe-40a3-9a60-ffdbc4e8c713",
-      "name_zh": "",
+      "name_zh": "Pulse激光手枪Battery(60Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -101178,7 +101178,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulse-blacklist-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/280070a1-de10-4ea8-9e27-bf4229ad67fd",
-      "name_zh": "",
+      "name_zh": "Pulse黑名单手枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101249,7 +101249,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulse-rouge-pistol",
       "item_web_url": "https://api.star-citizen.wiki/items/29c0224c-6c6a-4689-9552-ac148119f911",
-      "name_zh": "",
+      "name_zh": "PulseRouge手枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101353,7 +101353,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/parallax-energy-assault-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/b144a16c-bba4-427e-9f78-bd379f9509f8",
-      "name_zh": "",
+      "name_zh": "Parallax能量Assault步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101478,7 +101478,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/parallax-shock-trooper-energy-assault-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/98efd8ff-b0ba-48cf-bb48-3ff4e1bd3b3f",
-      "name_zh": "",
+      "name_zh": "ParallaxShockTrooper能量Assault步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101568,7 +101568,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/parallax-rifle-battery-80-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/3efb1be1-8935-4124-8bf0-aec410297785",
-      "name_zh": "",
+      "name_zh": "Parallax步枪Battery(80Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -101819,7 +101819,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/parallax-sunstone-energy-assault-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/3e58c8fd-19ff-47b6-9b3a-333addb2573d",
-      "name_zh": "",
+      "name_zh": "ParallaxSunstone能量Assault步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -101916,7 +101916,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/parallax-sanguine-energy-assault-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/75ca08ba-6edc-46ed-a13c-56d788e258f9",
-      "name_zh": "",
+      "name_zh": "ParallaxSanguine能量Assault步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102013,7 +102013,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/prism-laser-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/7dd1988f-77cf-40f0-a29e-dac5e2186aad",
-      "name_zh": "",
+      "name_zh": "Prism激光霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102068,7 +102068,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/prism-laser-shotgun-battery-20-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/14e12fed-37fd-4c75-b61e-1b21d1bbade7",
-      "name_zh": "",
+      "name_zh": "Prism激光霰弹枪Battery(20cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -102130,7 +102130,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/prism-bonedust-laser-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/2085a682-db46-4fa4-a00c-16925aaa26a4",
-      "name_zh": "",
+      "name_zh": "PrismBonedust激光霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102192,7 +102192,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/prism-deep-sea-laser-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/ca19298f-a111-46ed-bc88-870148c6d2b7",
-      "name_zh": "",
+      "name_zh": "PrismDeepSea激光霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102254,7 +102254,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/prism-firesteel-laser-shotgun",
       "item_web_url": "https://api.star-citizen.wiki/items/bc328b41-ebc6-4d85-aba1-9e04cb752fa7",
-      "name_zh": "",
+      "name_zh": "PrismFiresteel激光霰弹枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102316,7 +102316,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/quartz-energy-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/bf262b5e-71dc-4376-8afb-48eafe885d6d",
-      "name_zh": "",
+      "name_zh": "Quartz能量SMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -102385,7 +102385,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/quartz-energy-smg-battery-45-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/83ac5196-05d0-45a1-8982-aa549650f9d9",
-      "name_zh": "",
+      "name_zh": "Quartz能量SMGBattery(45cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -102482,7 +102482,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/quartz-deadfall-energy-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/beffa2d9-b633-452c-91d3-ed852e3e1014",
-      "name_zh": "",
+      "name_zh": "QuartzDeadfall能量SMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -102572,7 +102572,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/quartz-black-op-energy-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/b84b275c-2413-49fa-8664-b40b188e7369",
-      "name_zh": "",
+      "name_zh": "QuartzBlackOp能量SMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -102648,7 +102648,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/quartz-lumen-energy-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/64bbccfd-dac2-456e-b25f-a695e58bc121",
-      "name_zh": "",
+      "name_zh": "QuartzLumen能量SMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -102745,7 +102745,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-laser-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/0c37582b-ab78-440d-911e-c39322bccf1f",
-      "name_zh": "",
+      "name_zh": "Zenith激光狙击枪步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -102814,7 +102814,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-snow-camo-laser-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/601a0c77-6e96-4bbd-ae76-15c0fa1e5928",
-      "name_zh": "",
+      "name_zh": "ZenithSnow迷彩激光狙击枪步枪",
       "acquisition": "locked"
     },
     "7ba122fe-2879-47f5-a424-c5f9a21c516a": {
@@ -102860,7 +102860,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-laser-sniper-rifle-battery-22-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/fa12a7a5-6fdd-4e7b-9237-1f2e131a43c4",
-      "name_zh": "",
+      "name_zh": "Zenith激光狙击枪步枪Battery(22Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -102936,7 +102936,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-darkwave-laser-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/7e37741d-8090-48b3-ab84-b60fd138761d",
-      "name_zh": "",
+      "name_zh": "ZenithDarkwave激光狙击枪步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -103005,7 +103005,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-landslide-laser-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/b1662474-624e-453d-93fa-64638bcf9317",
-      "name_zh": "",
+      "name_zh": "ZenithLandslide激光狙击枪步枪",
       "acquisition": "mission",
       "missions": [
         {
@@ -103074,7 +103074,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/zenith-thunderstrike-laser-sniper-rifle",
       "item_web_url": "https://api.star-citizen.wiki/items/8df5d8a3-8052-4504-91ff-4a4c9d33218d",
-      "name_zh": "",
+      "name_zh": "ZenithThunderstrike激光狙击枪步枪",
       "acquisition": "mission",
       "missions": [
         {

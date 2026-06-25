@@ -23,7 +23,12 @@
   "VARIANT_ZH": {
     "ballistic": "弹道", "laser": "激光", "distortion": "扭曲",
     "neutron": "中子", "plasma": "等离子", "tachyon": "超光速",
-    "massdriver": "质量驱动", "energy": "能量", "attrition": "磨损"
+    "massdriver": "质量驱动", "energy": "能量", "attrition": "磨损",
+    "blacklist": "黑名单", "scorched": "灼烧", "permafrost": "永冻",
+    "purgatory": "炼狱", "camo": "迷彩", "metamaterial": "超材料",
+    "covalex": "科瓦力克斯", "silt": "粉砂", "arctic": "极地",
+    "inferno": "地狱火", "icebreak": "碎冰", "sabre": "佩刀",
+    "flame": "烈焰", "tiger": "虎纹", "phantom": "幻影"
   },
   "PART_ZH": {
     "mag": "弹匣", "magazine": "弹匣", "barrel": "枪管", "grip": "握把",
@@ -71,6 +76,7 @@
     "backpack": "背包", "core": "核心", "utility": "工具",
     "undersuit": "内衬服", "torso": "躯干", "gauntlets": "护手",
     "leggings": "护腿", "boots": "靴子", "shoulders": "护肩",
+    "armor": "护甲", "armour": "护甲", "flight": "飞行",
     "cooler": "冷却器", "powerplant": "发电机", "quantumdrive": "量子驱动器",
     "shield": "护盾", "radar": "雷达", "quantumfuel": "量子燃料",
     "mininglaser": "采矿激光器", "tractorbeam": "牵引光束",
@@ -81,6 +87,10 @@
     "c54": "C54", "fs9": "FS9", "lh86": "LH86",
     "r97": "R97", "gp33": "GP33", "atls": "ATLS",
     "multi": "多功能", "tool": "工具",
-    "quality": "品质", "grade": "等级"
+    "quality": "品质", "grade": "等级", "edition": "版",
+    "racing": "竞速", "smolder": "余烬", "tailwind": "顺风",
+    "monde": "蒙德", "testudo": "龟甲", "strata": "地层",
+    "geist": "幽影", "antium": "安提乌姆", "palatino": "帕拉蒂诺",
+    "corbel": "科贝尔", "artimex": "阿尔提麦克斯"
   }
 }
