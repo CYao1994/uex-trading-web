@@ -7,6 +7,7 @@ import LaunchButton from './LaunchButton';
 import SearchBox from './SearchBox';
 import FeatureCardGroups from './FeatureCardGroups';
 import FleetSidebar from './FleetSidebar';
+import WikiStats from './WikiStats';
 
 const WEAPON_SECTIONS = new Set(['Vehicle Weapons']);
 
@@ -111,7 +112,18 @@ function HomePage({ onTabChange }) {
       <HomePageTitle />
 
       {!launched && (
-        <LaunchButton onLaunch={() => setLaunched(true)} sfx={sfx} />
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: { xs: 2, sm: 3 },
+          alignItems: { xs: 'stretch', sm: 'flex-start' },
+          mb: 2,
+          animation: 'fadeInUp 0.6s ease-out',
+          animationDelay: '0.2s',
+        }}>
+          <WikiStats />
+          <LaunchButton onLaunch={() => setLaunched(true)} sfx={sfx} />
+        </Box>
       )}
 
       {launched && (
