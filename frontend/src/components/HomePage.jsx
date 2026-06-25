@@ -116,10 +116,9 @@ function HomePage({ onTabChange }) {
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'row' },
           gap: { xs: 2, sm: 3 },
-          alignItems: { xs: 'stretch', sm: 'flex-start' },
+          alignItems: { xs: 'stretch', sm: 'center' },
           mb: 2,
-          animation: 'fadeInUp 0.6s ease-out',
-          animationDelay: '0.2s',
+          animation: 'fadeInUp 0.6s ease-out 0.2s both',
         }}>
           <WikiStats />
           <LaunchButton onLaunch={() => setLaunched(true)} sfx={sfx} />

@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { Rocket } from '@mui/icons-material';
 import HangarTimer from './HangarTimer';
-import WikiStats from './WikiStats';
 
 function FleetSidebar() {
   return (
@@ -12,7 +11,6 @@ function FleetSidebar() {
       flexDirection: 'column',
       gap: 2,
     }}>
-      <WikiStats />
       <HangarTimer />
 
       <Box
