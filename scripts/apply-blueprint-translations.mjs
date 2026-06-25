@@ -17,6 +17,7 @@ const MFR_ZH = dict.MFR_ZH;
 const WEAPON_TYPE_ZH = dict.WEAPON_TYPE_ZH;
 const VARIANT_ZH = dict.VARIANT_ZH;
 const GRADE_ZH = dict.GRADE_ZH;
+const SC_WORD_ZH = dict.SC_WORD_ZH || {};
 
 let paratranz = {};
 try {
@@ -55,6 +56,7 @@ for (const [key, bp] of Object.entries(blueprints)) {
     else if (WEAPON_TYPE_ZH[pl]) { zhParts.push(WEAPON_TYPE_ZH[pl]); matched = true; }
     else if (VARIANT_ZH[pl]) { zhParts.push(VARIANT_ZH[pl]); matched = true; }
     else if (GRADE_ZH[pl]) { zhParts.push(GRADE_ZH[pl]); matched = true; }
+    else if (SC_WORD_ZH[pl]) { zhParts.push(SC_WORD_ZH[pl]); matched = true; }
     else { zhParts.push(p); }
   }
 

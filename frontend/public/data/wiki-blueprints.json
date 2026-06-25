@@ -3639,7 +3639,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/s-38-magazine-20-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/8ec810e2-2d9e-4bbf-9b64-c603aaef01db",
-      "name_zh": "",
+      "name_zh": "S38弹匣(20cap)",
       "acquisition": "default"
     },
     "30e48bec-41ec-4322-92b5-da628e85830c": {
@@ -3859,7 +3859,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/p4-ar-magazine-40-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/1f8845fb-22de-4c73-b6e6-ed1d1b066808",
-      "name_zh": "",
+      "name_zh": "P4AR弹匣(40cap)",
       "acquisition": "default"
     },
     "07cf5e1e-ec19-4a0c-9750-b8897de97cb8": {
@@ -9631,7 +9631,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/adp-arms-hurston-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/f25afa5d-1fca-4343-bab9-f7578fcf99fc",
-      "name_zh": "",
+      "name_zh": "ADP臂甲Hurston版",
       "acquisition": "locked"
     },
     "4e0f7613-d986-49c5-8e5a-9a56d3cdb2a7": {
@@ -10674,7 +10674,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/adp-core-hurston-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/c0d24124-2f68-4799-a2d8-00e72ef148f3",
-      "name_zh": "",
+      "name_zh": "ADP核心Hurston版",
       "acquisition": "locked"
     },
     "f87a78b5-ec6b-46fc-9ab8-7709eed33a38": {
@@ -11717,7 +11717,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/balor-hch-helmet-hurston-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/d7806607-bf24-4de4-b452-d87abd8e9219",
-      "name_zh": "",
+      "name_zh": "BalorHCH头盔Hurston版",
       "acquisition": "locked"
     },
     "a5a2a777-c9df-4ba0-a112-fc60c7ff9173": {
@@ -12719,7 +12719,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/adp-legs-hurston-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/daa51c80-7720-4ece-8de3-598cdc8929d1",
-      "name_zh": "",
+      "name_zh": "ADP腿甲Hurston版",
       "acquisition": "locked"
     },
     "3f8c326a-5bce-48ff-94d4-b11bd8a6612e": {
@@ -18159,7 +18159,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-arms-cry-astro-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/f9189dcf-9a10-46ea-ab92-8edec6336bc6",
-      "name_zh": "",
+      "name_zh": "ORCMkV臂甲CryAstro版",
       "acquisition": "locked"
     },
     "9646f5a7-5415-47f8-9392-420af13b68d8": {
@@ -19221,7 +19221,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-core-cry-astro-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/47bbf85b-5063-4238-871e-6c757b2e4a65",
-      "name_zh": "",
+      "name_zh": "ORCMkV核心CryAstro版",
       "acquisition": "locked"
     },
     "fbd12344-5403-4c33-a04c-9ad9aa81845e": {
@@ -19303,7 +19303,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-core-microtech-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/18f560ef-cf68-439b-9eec-4d9167268417",
-      "name_zh": "",
+      "name_zh": "ORCMkV核心microTech版",
       "acquisition": "locked"
     },
     "b934ed35-86f5-443b-bdd9-a9521562c4c3": {
@@ -20324,7 +20324,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/g-2-helmet-cry-astro-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/f4faf578-bbf9-40ee-adc4-70cc163813ae",
-      "name_zh": "",
+      "name_zh": "G2头盔CryAstro版",
       "acquisition": "locked"
     },
     "e6509908-a6db-4348-a51d-f0600d71705b": {
@@ -21386,7 +21386,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/orc-mkv-legs-cry-astro-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/7b5c4a78-e680-42ee-9aa8-266ab4ba8060",
-      "name_zh": "",
+      "name_zh": "ORCMkV腿甲CryAstro版",
       "acquisition": "locked"
     },
     "e50452be-40e5-4296-9710-d70a51381693": {
@@ -21577,7 +21577,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/a23-helmet-woodland",
       "item_web_url": "https://api.star-citizen.wiki/items/9a26bc89-a35b-4317-adfd-ec4a285d7e72",
-      "name_zh": "",
+      "name_zh": "A23飞行头盔Woodland",
       "acquisition": "locked"
     },
     "850ad61b-2bd1-4c0c-be77-84a7133ce899": {
@@ -21623,7 +21623,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/badami-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/305c8b36-61a3-4065-b514-199719de9ac0",
-      "name_zh": "",
+      "name_zh": "Badami头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -21809,7 +21809,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novikov-backpack-smolder",
       "item_web_url": "https://api.star-citizen.wiki/items/855aabae-2c59-4a79-9e81-0376f9ddc7f6",
-      "name_zh": "",
+      "name_zh": "Novikov背包余烬",
       "acquisition": "mission",
       "missions": [
         {
@@ -21846,7 +21846,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novikov-backpack-halcyon",
       "item_web_url": "https://api.star-citizen.wiki/items/26f34f18-206a-485e-bf5e-ddda6852a8c5",
-      "name_zh": "",
+      "name_zh": "Novikov背包Halcyon",
       "acquisition": "mission",
       "missions": [
         {
@@ -21883,7 +21883,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novikov-backpack-mire",
       "item_web_url": "https://api.star-citizen.wiki/items/0bcd0305-b5a4-4ddc-b69c-861886a6b3ee",
-      "name_zh": "",
+      "name_zh": "Novikov背包Mire",
       "acquisition": "mission",
       "missions": [
         {
@@ -21920,7 +21920,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novikov-backpack-patina",
       "item_web_url": "https://api.star-citizen.wiki/items/278f244d-4dff-411e-bf23-c795135a6852",
-      "name_zh": "",
+      "name_zh": "Novikov背包Patina",
       "acquisition": "mission",
       "missions": [
         {
@@ -22194,7 +22194,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/stirling-exploration-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/90a3923f-ba5d-403b-a0e5-c85290a22e1e",
-      "name_zh": "",
+      "name_zh": "StirlingExploration头盔",
       "acquisition": "locked"
     },
     "7e181fa5-d8a6-4877-89b7-40c04c03d4a1": {
@@ -22313,7 +22313,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/stirling-exploration-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/711208e1-0378-42f3-a503-cdac8ee56e31",
-      "name_zh": "",
+      "name_zh": "斯特林探索套装",
       "acquisition": "mission",
       "missions": [
         {
@@ -23461,7 +23461,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/exotherm",
       "item_web_url": "https://api.star-citizen.wiki/items/45c6aee2-f38c-4d59-88a8-8cbbc395e938",
-      "name_zh": "",
+      "name_zh": "放热",
       "acquisition": "locked"
     },
     "3c10e4f9-a125-4171-acfc-b9b51c5b19e1": {
@@ -29564,7 +29564,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-shooting-star",
       "item_web_url": "https://api.star-citizen.wiki/items/7d2d71de-993f-4a41-aeef-fcb431962974",
-      "name_zh": "",
+      "name_zh": "地层头盔ShootingStar",
       "acquisition": "mission",
       "missions": [
         {
@@ -29647,7 +29647,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-amber",
       "item_web_url": "https://api.star-citizen.wiki/items/33251b3f-ff0c-412d-80d2-2dc02a35c088",
-      "name_zh": "",
+      "name_zh": "地层头盔Amber",
       "acquisition": "locked"
     },
     "061aaab3-bc05-4e95-96f3-b8aadb36af55": {
@@ -29700,7 +29700,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/29a98f61-d24a-46de-9284-c863ee69fb26",
-      "name_zh": "",
+      "name_zh": "地层头盔",
       "acquisition": "locked"
     },
     "5ec9b5d7-b8ed-458c-aa86-2e1a58808b99": {
@@ -29753,7 +29753,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-neptune",
       "item_web_url": "https://api.star-citizen.wiki/items/60c6e3ab-c510-4eaf-87a4-93d1b10c6a89",
-      "name_zh": "",
+      "name_zh": "地层头盔Neptune",
       "acquisition": "locked"
     },
     "7161dc5b-693f-4478-9d8f-0a9e10051497": {
@@ -29806,7 +29806,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-lodestar",
       "item_web_url": "https://api.star-citizen.wiki/items/cf258b0f-534f-4e2d-bd92-a6ba04e63751",
-      "name_zh": "",
+      "name_zh": "地层头盔Lodestar",
       "acquisition": "locked"
     },
     "b2f1909b-1124-4b05-93d6-daa683560f39": {
@@ -29859,7 +29859,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-onyx",
       "item_web_url": "https://api.star-citizen.wiki/items/93913c87-7031-4058-844b-21e6c4b00d7e",
-      "name_zh": "",
+      "name_zh": "地层头盔Onyx",
       "acquisition": "locked"
     },
     "f761ccfd-d1df-42c9-8360-ccfdf06a8d09": {
@@ -29912,7 +29912,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-calico",
       "item_web_url": "https://api.star-citizen.wiki/items/14e936e1-938c-46d6-8552-4958b43e33d2",
-      "name_zh": "",
+      "name_zh": "地层头盔Calico",
       "acquisition": "locked"
     },
     "3cf4c7d4-2326-4b8f-b081-843b11a03106": {
@@ -29965,7 +29965,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-shire",
       "item_web_url": "https://api.star-citizen.wiki/items/9c8a751a-b2ad-4e81-a83e-79e48ef97c3c",
-      "name_zh": "",
+      "name_zh": "地层头盔Shire",
       "acquisition": "locked"
     },
     "8e1de994-1b26-4193-9b30-c541763760c4": {
@@ -30018,7 +30018,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-helmet-piston",
       "item_web_url": "https://api.star-citizen.wiki/items/86323e60-13a2-40c9-a3bc-3c164ffc1e99",
-      "name_zh": "",
+      "name_zh": "地层头盔Piston",
       "acquisition": "locked"
     },
     "511c22a9-7ba1-487b-b768-1b14d2ddbf2f": {
@@ -30642,7 +30642,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/f55-mark-i-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/8260cda3-1bbf-4f0e-9162-0bd921b5ff4d",
-      "name_zh": "",
+      "name_zh": "F55型号ILMG",
       "acquisition": "locked"
     },
     "c9d98450-88f4-4f0d-a9aa-41e4cc1c06c6": {
@@ -32771,7 +32771,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/c54-justified-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/7ba300fa-c867-453e-bd54-53203b98c60a",
-      "name_zh": "",
+      "name_zh": "C54JustifiedSMG",
       "acquisition": "locked"
     },
     "d84901a7-cdf5-40fc-8f9b-a3610ef333c5": {
@@ -32817,7 +32817,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/c54-smg-magazine-50-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/3f4a69ef-0bcf-4cd6-a272-782f6641c242",
-      "name_zh": "",
+      "name_zh": "C54SMGMagazine(50cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -33662,7 +33662,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/80ebb28f-cf3f-4a06-82f4-981a2467a9eb",
-      "name_zh": "",
+      "name_zh": "地层臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -33745,7 +33745,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-arms-amber",
       "item_web_url": "https://api.star-citizen.wiki/items/1592dd21-3634-4778-a284-24ef5d393389",
-      "name_zh": "",
+      "name_zh": "地层臂甲Amber",
       "acquisition": "locked"
     },
     "b3cdcbf9-6bba-4e6f-906f-0236c4fa532c": {
@@ -33798,7 +33798,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-arms-neptune",
       "item_web_url": "https://api.star-citizen.wiki/items/61d7efaf-c389-4807-acc8-c70a645ef3cc",
-      "name_zh": "",
+      "name_zh": "地层臂甲Neptune",
       "acquisition": "locked"
     },
     "c3613c25-c1e3-423f-b4e5-ee8185336d81": {
@@ -33851,7 +33851,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-arms-lodestar",
       "item_web_url": "https://api.star-citizen.wiki/items/ac489d5c-a45b-4b1d-ad5d-4d51d6083a76",
-      "name_zh": "",
+      "name_zh": "地层臂甲Lodestar",
       "acquisition": "locked"
     },
     "f53ea339-4c02-479a-9e37-a43d0175454c": {
@@ -33904,7 +33904,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-arms-shire",
       "item_web_url": "https://api.star-citizen.wiki/items/2ec9519a-232e-45b6-8310-5480387f295f",
-      "name_zh": "",
+      "name_zh": "地层臂甲Shire",
       "acquisition": "locked"
     },
     "bea0f8d3-d764-49cc-ae71-855252ddb717": {
@@ -33996,7 +33996,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-backpack",
       "item_web_url": "https://api.star-citizen.wiki/items/a5bb46f9-c728-46c6-a4b2-53f21d96813a",
-      "name_zh": "",
+      "name_zh": "地层背包",
       "acquisition": "locked"
     },
     "5aa839d6-93ce-4919-a039-a3f15fb7a331": {
@@ -34158,7 +34158,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-core",
       "item_web_url": "https://api.star-citizen.wiki/items/068b179e-bb1b-471e-9bf8-2f27b0ff2d26",
-      "name_zh": "",
+      "name_zh": "地层核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -34241,7 +34241,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-core-amber",
       "item_web_url": "https://api.star-citizen.wiki/items/6227ba71-1b64-4cdc-997a-fca6ac7d1cbe",
-      "name_zh": "",
+      "name_zh": "地层核心Amber",
       "acquisition": "locked"
     },
     "f75317d2-3629-4ddb-b246-55012c980fde": {
@@ -34294,7 +34294,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-core-neptune",
       "item_web_url": "https://api.star-citizen.wiki/items/8c505189-76de-43ae-a10a-7ab42dea987c",
-      "name_zh": "",
+      "name_zh": "地层核心Neptune",
       "acquisition": "locked"
     },
     "b9d1e342-9ce0-46ce-a8b1-c50602b44d9a": {
@@ -34347,7 +34347,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-core-lodestar",
       "item_web_url": "https://api.star-citizen.wiki/items/1714e5cb-00ed-414f-bea7-61585c628bb6",
-      "name_zh": "",
+      "name_zh": "地层核心Lodestar",
       "acquisition": "locked"
     },
     "49964d8a-91a3-480d-b784-1ef5202d40c3": {
@@ -34400,7 +34400,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-core-shire",
       "item_web_url": "https://api.star-citizen.wiki/items/b80a76eb-9243-4a00-941a-40a0f1ae60f2",
-      "name_zh": "",
+      "name_zh": "地层核心Shire",
       "acquisition": "locked"
     },
     "ffdede8d-4029-45d4-ae6e-582190efd062": {
@@ -34671,7 +34671,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/245424cb-f2fc-4ac5-8959-a971009e8607",
-      "name_zh": "",
+      "name_zh": "地层腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -34754,7 +34754,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-legs-amber",
       "item_web_url": "https://api.star-citizen.wiki/items/e7df3807-737a-4f09-984c-e68fb3e0a1b9",
-      "name_zh": "",
+      "name_zh": "地层腿甲Amber",
       "acquisition": "locked"
     },
     "c6f7db85-ebe6-4164-acd1-ae8b898f21f8": {
@@ -34807,7 +34807,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-legs-neptune",
       "item_web_url": "https://api.star-citizen.wiki/items/c7b9de5a-0887-4c57-a4b7-d8a6699218f9",
-      "name_zh": "",
+      "name_zh": "地层腿甲Neptune",
       "acquisition": "locked"
     },
     "63376f48-b012-4f02-82e1-a67f0e6dc54c": {
@@ -34860,7 +34860,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-legs-lodestar",
       "item_web_url": "https://api.star-citizen.wiki/items/f2c1b30f-7ec6-4175-a114-1e524ec12f6a",
-      "name_zh": "",
+      "name_zh": "地层腿甲Lodestar",
       "acquisition": "locked"
     },
     "30637e47-8ac2-4a52-8e60-df437baaf9d4": {
@@ -34913,7 +34913,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/strata-legs-shire",
       "item_web_url": "https://api.star-citizen.wiki/items/9f69fbf7-b71e-4255-a91d-4f47cc65cc29",
-      "name_zh": "",
+      "name_zh": "地层腿甲Shire",
       "acquisition": "locked"
     },
     "d55d8b7a-398b-43d9-9391-805a5d0b1d5a": {
@@ -34954,7 +34954,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/carnifex-armor-core",
       "item_web_url": "https://api.star-citizen.wiki/items/a27c00b7-9eea-4025-bec7-395e3edf3ee9",
-      "name_zh": "",
+      "name_zh": "Carnifex护甲核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -35011,7 +35011,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/carnifex-armor-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/9b5f61f6-ea52-4c42-a95e-d99a51e8d84c",
-      "name_zh": "",
+      "name_zh": "Carnifex护甲腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -35061,7 +35061,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/deep-space-undersuit",
       "item_web_url": "https://api.star-citizen.wiki/items/e1edb8e9-7287-4ff2-8425-bd505288e892",
-      "name_zh": "",
+      "name_zh": "DeepSpace内衬服",
       "acquisition": "locked"
     },
     "e329b3df-81b3-4fa8-ad86-cc9ddd835e0c": {
@@ -36253,7 +36253,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/6467d7c1-a303-4ed6-9f6a-7c5a796258eb",
-      "name_zh": "",
+      "name_zh": "蒙德臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -36570,7 +36570,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-daimyo",
       "item_web_url": "https://api.star-citizen.wiki/items/8ac5b124-b847-4eb6-a862-e032df662c70",
-      "name_zh": "",
+      "name_zh": "蒙德臂甲Daimyo",
       "acquisition": "mission",
       "missions": [
         {
@@ -36769,7 +36769,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-arms-hiro",
       "item_web_url": "https://api.star-citizen.wiki/items/2f871290-4387-479b-ba21-00107c5e0695",
-      "name_zh": "",
+      "name_zh": "蒙德臂甲Hiro",
       "acquisition": "mission",
       "missions": [
         {
@@ -37063,7 +37063,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core",
       "item_web_url": "https://api.star-citizen.wiki/items/5e798b5e-17a2-4e77-9585-863d6d65c8c7",
-      "name_zh": "",
+      "name_zh": "蒙德核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -37380,7 +37380,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-daimyo",
       "item_web_url": "https://api.star-citizen.wiki/items/d61c205d-300a-4b24-aefa-7e0bcbbfadc1",
-      "name_zh": "",
+      "name_zh": "蒙德核心Daimyo",
       "acquisition": "mission",
       "missions": [
         {
@@ -37579,7 +37579,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-core-hiro",
       "item_web_url": "https://api.star-citizen.wiki/items/992f3418-4a1b-42f8-b56c-d90bfc576472",
-      "name_zh": "",
+      "name_zh": "蒙德核心Hiro",
       "acquisition": "mission",
       "missions": [
         {
@@ -37873,7 +37873,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/f8b0fa46-02ef-45fb-ab05-d8e1e7306e0a",
-      "name_zh": "",
+      "name_zh": "蒙德头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -38190,7 +38190,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-daimyo-2",
       "item_web_url": "https://api.star-citizen.wiki/items/a97f17aa-dc11-4415-aea5-7de6f530d296",
-      "name_zh": "",
+      "name_zh": "蒙德头盔Daimyo",
       "acquisition": "mission",
       "missions": [
         {
@@ -38389,7 +38389,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-helmet-hiro",
       "item_web_url": "https://api.star-citizen.wiki/items/212751b6-643d-451d-a598-2d17e83bd1b0",
-      "name_zh": "",
+      "name_zh": "蒙德头盔Hiro",
       "acquisition": "mission",
       "missions": [
         {
@@ -38683,7 +38683,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/3f638756-9a20-4e2c-a6cb-1bd7118ca54c",
-      "name_zh": "",
+      "name_zh": "蒙德腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -39000,7 +39000,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-daimyo",
       "item_web_url": "https://api.star-citizen.wiki/items/59e43548-46ad-434e-b2ff-f9ac9b4019c2",
-      "name_zh": "",
+      "name_zh": "蒙德腿甲Daimyo",
       "acquisition": "mission",
       "missions": [
         {
@@ -39199,7 +39199,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/monde-legs-hiro",
       "item_web_url": "https://api.star-citizen.wiki/items/bcbece46-cb89-409c-85fc-714b3b763ddf",
-      "name_zh": "",
+      "name_zh": "蒙德腿甲Hiro",
       "acquisition": "mission",
       "missions": [
         {
@@ -39498,7 +39498,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/ff40b10e-b358-4e20-8036-780d9c11984e",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -39560,7 +39560,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-rogue",
       "item_web_url": "https://api.star-citizen.wiki/items/3ef831f9-8efc-48f7-ac79-d4c304a345a6",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲Rogue",
       "acquisition": "mission",
       "missions": [
         {
@@ -39622,7 +39622,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-whiteout",
       "item_web_url": "https://api.star-citizen.wiki/items/310d5039-73e1-4843-aeaf-60194d767e03",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲Whiteout",
       "acquisition": "mission",
       "missions": [
         {
@@ -39691,7 +39691,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-desert",
       "item_web_url": "https://api.star-citizen.wiki/items/8efe48dd-e730-440e-9526-cbc87443e357",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲Desert",
       "acquisition": "mission",
       "missions": [
         {
@@ -39753,7 +39753,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-forest",
       "item_web_url": "https://api.star-citizen.wiki/items/b14102dd-6b92-40b7-85e9-3aec7c6011fa",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲Forest",
       "acquisition": "mission",
       "missions": [
         {
@@ -39815,7 +39815,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-arms-asd-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/67e7b5a3-eea2-4a72-b362-e5b9dc70e722",
-      "name_zh": "",
+      "name_zh": "幽影护甲臂甲ASD版",
       "acquisition": "mission",
       "missions": [
         {
@@ -39930,7 +39930,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core",
       "item_web_url": "https://api.star-citizen.wiki/items/619bfecf-f076-46aa-bc4f-bf2b1e1b5aeb",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -39992,7 +39992,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-rogue",
       "item_web_url": "https://api.star-citizen.wiki/items/911df062-bafa-43e0-9ddc-d8a4330a5df2",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心Rogue",
       "acquisition": "mission",
       "missions": [
         {
@@ -40054,7 +40054,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-whiteout",
       "item_web_url": "https://api.star-citizen.wiki/items/57423ca0-cb0b-4572-bca0-bec8eb8349eb",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心Whiteout",
       "acquisition": "mission",
       "missions": [
         {
@@ -40123,7 +40123,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-desert",
       "item_web_url": "https://api.star-citizen.wiki/items/7ad4c67c-57f0-48bf-9ef0-19238aa2d65c",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心Desert",
       "acquisition": "mission",
       "missions": [
         {
@@ -40185,7 +40185,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-forest",
       "item_web_url": "https://api.star-citizen.wiki/items/5d366ec5-3d1e-4434-b6c1-856527f2a1eb",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心Forest",
       "acquisition": "mission",
       "missions": [
         {
@@ -40247,7 +40247,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-core-asd-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/d42f4198-292d-44cf-8a9e-c8dfa8cb6954",
-      "name_zh": "",
+      "name_zh": "幽影护甲核心ASD版",
       "acquisition": "mission",
       "missions": [
         {
@@ -40362,7 +40362,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/fe6ecbc9-a063-4c1c-9249-d3203aa08619",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -40424,7 +40424,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-rogue",
       "item_web_url": "https://api.star-citizen.wiki/items/dad9dec1-4e24-45c2-b8c9-fc286a8d688a",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔Rogue",
       "acquisition": "mission",
       "missions": [
         {
@@ -40486,7 +40486,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-whiteout",
       "item_web_url": "https://api.star-citizen.wiki/items/a13542f1-e244-4cb4-a39d-54634ca0115e",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔Whiteout",
       "acquisition": "mission",
       "missions": [
         {
@@ -40555,7 +40555,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-desert",
       "item_web_url": "https://api.star-citizen.wiki/items/1d79c531-1c44-40c8-872d-aa686b3b943c",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔Desert",
       "acquisition": "mission",
       "missions": [
         {
@@ -40617,7 +40617,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-forest",
       "item_web_url": "https://api.star-citizen.wiki/items/e56c096e-33c7-487c-8cea-b479d7dbc58e",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔Forest",
       "acquisition": "mission",
       "missions": [
         {
@@ -40679,7 +40679,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-helmet-asd-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/92eac214-942c-4b1c-8f2e-2a1288a9992e",
-      "name_zh": "",
+      "name_zh": "幽影护甲头盔ASD版",
       "acquisition": "mission",
       "missions": [
         {
@@ -40794,7 +40794,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/7cc3a072-0145-459e-b76e-1401f7e6dfc6",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -40856,7 +40856,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-rogue",
       "item_web_url": "https://api.star-citizen.wiki/items/9fa29481-192f-48ce-bc15-8108a46c63ed",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲Rogue",
       "acquisition": "mission",
       "missions": [
         {
@@ -40918,7 +40918,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-whiteout",
       "item_web_url": "https://api.star-citizen.wiki/items/3234c6a8-4540-4e97-beb7-cfd1ddc6869d",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲Whiteout",
       "acquisition": "mission",
       "missions": [
         {
@@ -40987,7 +40987,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-desert",
       "item_web_url": "https://api.star-citizen.wiki/items/e097e020-392e-428e-830e-1a4495092697",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲Desert",
       "acquisition": "mission",
       "missions": [
         {
@@ -41049,7 +41049,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-forest",
       "item_web_url": "https://api.star-citizen.wiki/items/ea4937fb-b502-41fd-83de-b967e99a6007",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲Forest",
       "acquisition": "mission",
       "missions": [
         {
@@ -41111,7 +41111,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/geist-armor-legs-asd-edition",
       "item_web_url": "https://api.star-citizen.wiki/items/9f19f5f7-cae2-4700-ab1f-5ba645f93fe8",
-      "name_zh": "",
+      "name_zh": "幽影护甲腿甲ASD版",
       "acquisition": "mission",
       "missions": [
         {
@@ -48259,7 +48259,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/custodian-big-boss-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/856c9b52-3336-498c-a2e0-70353ac565bc",
-      "name_zh": "",
+      "name_zh": "守护者BigBossSMG",
       "acquisition": "locked"
     },
     "6a325380-0126-497e-9b2f-86e8add090a1": {
@@ -48535,7 +48535,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/custodian-brimstone-smg",
       "item_web_url": "https://api.star-citizen.wiki/items/04f4d949-9504-4dda-ad33-fadcdec04d8f",
-      "name_zh": "",
+      "name_zh": "守护者BrimstoneSMG",
       "acquisition": "locked"
     },
     "5073e731-9842-469c-9440-0a387e6e9daa": {
@@ -52299,7 +52299,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/whitehot-racing-flight-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/3cdddf2e-f467-4ef9-9860-bf573a2c5e58",
-      "name_zh": "",
+      "name_zh": "WhiteHot竞速飞行Suit",
       "acquisition": "mission",
       "missions": [
         {
@@ -52342,7 +52342,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/blackfire-racing-flight-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/da759ccf-9532-421a-b728-cb89d2050688",
-      "name_zh": "",
+      "name_zh": "BlackFire竞速飞行Suit",
       "acquisition": "mission",
       "missions": [
         {
@@ -52462,7 +52462,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/whitehot-racing-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/73bec6ec-6618-42f7-bbb5-805f5052b6e9",
-      "name_zh": "",
+      "name_zh": "WhiteHot竞速头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -52505,7 +52505,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/blackfire-racing-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/d175c150-9207-42b2-9d0d-c340cc81dcdb",
-      "name_zh": "",
+      "name_zh": "BlackFire竞速头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -53186,7 +53186,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulverizer-lmg",
       "item_web_url": "https://api.star-citizen.wiki/items/bca92494-a6de-4a81-880c-a9f7bb10427a",
-      "name_zh": "",
+      "name_zh": "粉碎者LMG",
       "acquisition": "mission",
       "missions": [
         {
@@ -53248,7 +53248,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/pulverizer-lmg-magazine-120-cap",
       "item_web_url": "https://api.star-citizen.wiki/items/b4df80a2-7aa6-412c-b1ff-67467bcf43ec",
-      "name_zh": "",
+      "name_zh": "粉碎者LMG弹匣(120Cap)",
       "acquisition": "mission",
       "missions": [
         {
@@ -54738,7 +54738,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-arms-smolder",
       "item_web_url": "https://api.star-citizen.wiki/items/f7bc48ae-f075-43d3-a4b9-ce6ab3dc7fac",
-      "name_zh": "",
+      "name_zh": "科贝尔臂甲余烬",
       "acquisition": "mission",
       "missions": [
         {
@@ -54805,7 +54805,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-arms-halcyon",
       "item_web_url": "https://api.star-citizen.wiki/items/3c69369e-d63b-45de-bfc7-5b6bf5d8c72d",
-      "name_zh": "",
+      "name_zh": "科贝尔臂甲Halcyon",
       "acquisition": "mission",
       "missions": [
         {
@@ -54872,7 +54872,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-arms-mire",
       "item_web_url": "https://api.star-citizen.wiki/items/5ebbcd20-815d-4f90-ba7d-75f7ad717b46",
-      "name_zh": "",
+      "name_zh": "科贝尔臂甲Mire",
       "acquisition": "mission",
       "missions": [
         {
@@ -54939,7 +54939,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-arms-patina",
       "item_web_url": "https://api.star-citizen.wiki/items/cbae9bb8-472f-41f6-bdce-06fb5f01837e",
-      "name_zh": "",
+      "name_zh": "科贝尔臂甲Patina",
       "acquisition": "mission",
       "missions": [
         {
@@ -55006,7 +55006,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-arms-crush",
       "item_web_url": "https://api.star-citizen.wiki/items/ad41bd3f-b1a6-4b01-84e5-6cf2f7bab8a4",
-      "name_zh": "",
+      "name_zh": "科贝尔臂甲Crush",
       "acquisition": "locked"
     },
     "d4bcbab1-b2e8-432d-9427-9a471eef2aa9": {
@@ -55064,7 +55064,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-core-smolder",
       "item_web_url": "https://api.star-citizen.wiki/items/49b52040-a1f0-407f-a64b-0896274cfe82",
-      "name_zh": "",
+      "name_zh": "科贝尔核心余烬",
       "acquisition": "mission",
       "missions": [
         {
@@ -55131,7 +55131,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-core-halcyon",
       "item_web_url": "https://api.star-citizen.wiki/items/0c784b35-76dc-4b43-b74e-268b12dec72c",
-      "name_zh": "",
+      "name_zh": "科贝尔核心Halcyon",
       "acquisition": "mission",
       "missions": [
         {
@@ -55198,7 +55198,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-core-mire",
       "item_web_url": "https://api.star-citizen.wiki/items/b14463e1-adf4-4c1b-84c2-360216c97402",
-      "name_zh": "",
+      "name_zh": "科贝尔核心Mire",
       "acquisition": "mission",
       "missions": [
         {
@@ -55265,7 +55265,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-core-patina",
       "item_web_url": "https://api.star-citizen.wiki/items/3e9b3246-d5a8-415b-9857-6cc210efe871",
-      "name_zh": "",
+      "name_zh": "科贝尔核心Patina",
       "acquisition": "mission",
       "missions": [
         {
@@ -55332,7 +55332,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-core-crush",
       "item_web_url": "https://api.star-citizen.wiki/items/f6de17fd-cacf-4841-b1b3-412151558e88",
-      "name_zh": "",
+      "name_zh": "科贝尔核心Crush",
       "acquisition": "locked"
     },
     "3f68723c-a32c-4b03-b300-14fec1dc025d": {
@@ -55390,7 +55390,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-helmet-smolder",
       "item_web_url": "https://api.star-citizen.wiki/items/fdaffa09-1693-4db2-a3b1-99d90fdfb384",
-      "name_zh": "",
+      "name_zh": "科贝尔头盔余烬",
       "acquisition": "mission",
       "missions": [
         {
@@ -55457,7 +55457,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-helmet-halcyon",
       "item_web_url": "https://api.star-citizen.wiki/items/4ee6abaf-5b55-4877-9904-087210ecfc6d",
-      "name_zh": "",
+      "name_zh": "科贝尔头盔Halcyon",
       "acquisition": "mission",
       "missions": [
         {
@@ -55524,7 +55524,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-helmet-mire",
       "item_web_url": "https://api.star-citizen.wiki/items/00638fba-f80d-4848-8807-b70d0035992c",
-      "name_zh": "",
+      "name_zh": "科贝尔头盔Mire",
       "acquisition": "mission",
       "missions": [
         {
@@ -55591,7 +55591,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-helmet-patina",
       "item_web_url": "https://api.star-citizen.wiki/items/ef4fdab4-4713-4518-bf3d-8043661be18e",
-      "name_zh": "",
+      "name_zh": "科贝尔头盔Patina",
       "acquisition": "mission",
       "missions": [
         {
@@ -55658,7 +55658,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-helmet-crush",
       "item_web_url": "https://api.star-citizen.wiki/items/a94304be-1967-428a-94d9-48f9f16bb808",
-      "name_zh": "",
+      "name_zh": "科贝尔头盔Crush",
       "acquisition": "locked"
     },
     "42af157a-aa29-4784-88f6-374984d4c4cd": {
@@ -55716,7 +55716,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-legs-smolder",
       "item_web_url": "https://api.star-citizen.wiki/items/acb808af-0c02-4459-97e4-9e3ac06d6a15",
-      "name_zh": "",
+      "name_zh": "科贝尔腿甲余烬",
       "acquisition": "mission",
       "missions": [
         {
@@ -55783,7 +55783,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-legs-halcyon",
       "item_web_url": "https://api.star-citizen.wiki/items/8dadd817-c5c4-4bba-8fec-dec029eb029b",
-      "name_zh": "",
+      "name_zh": "科贝尔腿甲Halcyon",
       "acquisition": "mission",
       "missions": [
         {
@@ -55850,7 +55850,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-legs-mire",
       "item_web_url": "https://api.star-citizen.wiki/items/f9c95695-1aff-4963-8432-f43fe65249be",
-      "name_zh": "",
+      "name_zh": "科贝尔腿甲Mire",
       "acquisition": "mission",
       "missions": [
         {
@@ -55917,7 +55917,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-legs-patina",
       "item_web_url": "https://api.star-citizen.wiki/items/dd047930-4575-452f-ae06-006245f50a34",
-      "name_zh": "",
+      "name_zh": "科贝尔腿甲Patina",
       "acquisition": "mission",
       "missions": [
         {
@@ -55984,7 +55984,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/corbel-legs-crush",
       "item_web_url": "https://api.star-citizen.wiki/items/922b899e-9464-4411-9a6b-09785f744605",
-      "name_zh": "",
+      "name_zh": "科贝尔腿甲Crush",
       "acquisition": "locked"
     },
     "ac19ee92-4541-49a7-a18c-c8bbe166f3db": {
@@ -56624,7 +56624,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lynx-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/48609392-c78c-4909-8714-387900059785",
-      "name_zh": "",
+      "name_zh": "Lynx臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -56725,7 +56725,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lynx-core",
       "item_web_url": "https://api.star-citizen.wiki/items/52fe2c27-32f5-4a17-82fe-5fce8c8fbe41",
-      "name_zh": "",
+      "name_zh": "Lynx核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -56826,7 +56826,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/oracle-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/5512d873-28bb-4e2c-a452-f2474ec26d36",
-      "name_zh": "",
+      "name_zh": "Oracle头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -56927,7 +56927,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/lynx-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/be1ffc25-c87f-4c26-8a55-692f752a80fe",
-      "name_zh": "",
+      "name_zh": "Lynx腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -60678,7 +60678,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/morningstar-helmet-icefall",
       "item_web_url": "https://api.star-citizen.wiki/items/73754ce9-d505-4510-9a7e-e7be4c1943bc",
-      "name_zh": "",
+      "name_zh": "Morningstar头盔Icefall",
       "acquisition": "mission",
       "missions": [
         {
@@ -69153,7 +69153,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/cb8be778-fb01-4dad-85e4-aa99a7a69c9d",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -69210,7 +69210,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-combustion",
       "item_web_url": "https://api.star-citizen.wiki/items/7ad4b3e9-343d-4fc5-a4a7-951350eef978",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲Combustion",
       "acquisition": "mission",
       "missions": [
         {
@@ -69295,7 +69295,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-nightveil",
       "item_web_url": "https://api.star-citizen.wiki/items/ffe92800-4681-4d22-ac4d-5a664b16d016",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲Nightveil",
       "acquisition": "mission",
       "missions": [
         {
@@ -69366,7 +69366,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-earthshake",
       "item_web_url": "https://api.star-citizen.wiki/items/f7753764-2420-446d-9b79-2eda37667d7a",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲Earthshake",
       "acquisition": "mission",
       "missions": [
         {
@@ -69430,7 +69430,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-turfwar",
       "item_web_url": "https://api.star-citizen.wiki/items/796b201a-bc50-43de-b116-4b6c4179d18e",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲Turfwar",
       "acquisition": "mission",
       "missions": [
         {
@@ -69549,7 +69549,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-arms-clanguard",
       "item_web_url": "https://api.star-citizen.wiki/items/6300f7b8-e8af-487c-8df3-4f73929aa9a0",
-      "name_zh": "",
+      "name_zh": "龟甲臂甲Clanguard",
       "acquisition": "mission",
       "missions": [
         {
@@ -69586,7 +69586,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack",
       "item_web_url": "https://api.star-citizen.wiki/items/7176bf25-ae7d-45d7-b99b-7974d3e8b599",
-      "name_zh": "",
+      "name_zh": "龟甲背包",
       "acquisition": "mission",
       "missions": [
         {
@@ -69623,7 +69623,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack-combustion",
       "item_web_url": "https://api.star-citizen.wiki/items/d463ff3b-ada2-4fd3-8155-6e8c5ecc6bbc",
-      "name_zh": "",
+      "name_zh": "龟甲背包Combustion",
       "acquisition": "mission",
       "missions": [
         {
@@ -69688,7 +69688,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack-nightveil",
       "item_web_url": "https://api.star-citizen.wiki/items/a22612b1-4479-43fb-9bfb-7c054a0f1de1",
-      "name_zh": "",
+      "name_zh": "龟甲背包Nightveil",
       "acquisition": "mission",
       "missions": [
         {
@@ -69739,7 +69739,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack-earthshake",
       "item_web_url": "https://api.star-citizen.wiki/items/17d9c6b5-8a2c-4900-9639-2026707570b6",
-      "name_zh": "",
+      "name_zh": "龟甲背包Earthshake",
       "acquisition": "mission",
       "missions": [
         {
@@ -69783,7 +69783,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-backpack-turfwar",
       "item_web_url": "https://api.star-citizen.wiki/items/5f7161bc-36a1-443e-aace-59ff91ab8a06",
-      "name_zh": "",
+      "name_zh": "龟甲背包Turfwar",
       "acquisition": "mission",
       "missions": [
         {
@@ -69882,7 +69882,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core",
       "item_web_url": "https://api.star-citizen.wiki/items/edaf0b70-e1a4-48ff-b827-37e9324014bd",
-      "name_zh": "",
+      "name_zh": "龟甲核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -69939,7 +69939,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-combustion",
       "item_web_url": "https://api.star-citizen.wiki/items/7824c3f1-40ce-47c3-9f8b-6775037479ef",
-      "name_zh": "",
+      "name_zh": "龟甲核心Combustion",
       "acquisition": "mission",
       "missions": [
         {
@@ -70024,7 +70024,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-nightveil",
       "item_web_url": "https://api.star-citizen.wiki/items/75903fea-f957-46d1-a45b-77bcb3fbf2cb",
-      "name_zh": "",
+      "name_zh": "龟甲核心Nightveil",
       "acquisition": "mission",
       "missions": [
         {
@@ -70095,7 +70095,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-earthshake",
       "item_web_url": "https://api.star-citizen.wiki/items/a7d15d5d-ccbc-4f22-bc73-aa449a9827cf",
-      "name_zh": "",
+      "name_zh": "龟甲核心Earthshake",
       "acquisition": "mission",
       "missions": [
         {
@@ -70159,7 +70159,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-turfwar",
       "item_web_url": "https://api.star-citizen.wiki/items/ca5d29ea-e118-401f-9da0-c36594958867",
-      "name_zh": "",
+      "name_zh": "龟甲核心Turfwar",
       "acquisition": "mission",
       "missions": [
         {
@@ -70278,7 +70278,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-core-clanguard",
       "item_web_url": "https://api.star-citizen.wiki/items/6384133d-4fc0-49e5-9481-0e5160c0e383",
-      "name_zh": "",
+      "name_zh": "龟甲核心Clanguard",
       "acquisition": "mission",
       "missions": [
         {
@@ -70335,7 +70335,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/4aeeae6c-c596-4327-a804-cb966ed7ae16",
-      "name_zh": "",
+      "name_zh": "龟甲头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -70392,7 +70392,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-combustion",
       "item_web_url": "https://api.star-citizen.wiki/items/f2075bc7-d9b4-45e7-9765-dbfb9d5cbda3",
-      "name_zh": "",
+      "name_zh": "龟甲头盔Combustion",
       "acquisition": "mission",
       "missions": [
         {
@@ -70477,7 +70477,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-nightveil",
       "item_web_url": "https://api.star-citizen.wiki/items/59814847-c7a3-4744-a40c-2496e9c2f7d9",
-      "name_zh": "",
+      "name_zh": "龟甲头盔Nightveil",
       "acquisition": "mission",
       "missions": [
         {
@@ -70548,7 +70548,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-earthshake",
       "item_web_url": "https://api.star-citizen.wiki/items/6514f103-dc40-4f90-ba79-f1a041c7dfac",
-      "name_zh": "",
+      "name_zh": "龟甲头盔Earthshake",
       "acquisition": "mission",
       "missions": [
         {
@@ -70612,7 +70612,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-turfwar",
       "item_web_url": "https://api.star-citizen.wiki/items/9b8cd51e-a5f4-4b09-83cd-5ff6e729c8f3",
-      "name_zh": "",
+      "name_zh": "龟甲头盔Turfwar",
       "acquisition": "mission",
       "missions": [
         {
@@ -70731,7 +70731,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-helmet-clanguard",
       "item_web_url": "https://api.star-citizen.wiki/items/e5e93d7e-28e6-487b-8920-38734a27d071",
-      "name_zh": "",
+      "name_zh": "龟甲头盔Clanguard",
       "acquisition": "mission",
       "missions": [
         {
@@ -70788,7 +70788,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/9b57d452-10ab-4473-9235-19da966ebadb",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -70845,7 +70845,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-combustion",
       "item_web_url": "https://api.star-citizen.wiki/items/c7af38cb-0172-49bb-b075-2815349ce59c",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲Combustion",
       "acquisition": "mission",
       "missions": [
         {
@@ -70930,7 +70930,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-nightveil",
       "item_web_url": "https://api.star-citizen.wiki/items/11bfd42b-929a-4e45-88d7-11aab92e6176",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲Nightveil",
       "acquisition": "mission",
       "missions": [
         {
@@ -71001,7 +71001,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-earthshake",
       "item_web_url": "https://api.star-citizen.wiki/items/7bc5259c-6462-4c30-84ab-2ac895895ba3",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲Earthshake",
       "acquisition": "mission",
       "missions": [
         {
@@ -71065,7 +71065,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-turfwar",
       "item_web_url": "https://api.star-citizen.wiki/items/2d05b029-1dfa-4d6b-885d-ab6eee86a237",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲Turfwar",
       "acquisition": "mission",
       "missions": [
         {
@@ -71184,7 +71184,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/testudo-legs-clanguard",
       "item_web_url": "https://api.star-citizen.wiki/items/d9602c31-f133-44bc-a749-3e6bf77c5815",
-      "name_zh": "",
+      "name_zh": "龟甲腿甲Clanguard",
       "acquisition": "mission",
       "missions": [
         {
@@ -71261,7 +71261,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/calva-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/57386b72-68c8-4d08-ab87-2e2c9e1380e5",
-      "name_zh": "",
+      "name_zh": "Calva竞速头盔",
       "acquisition": "locked"
     },
     "bd59af9e-e55c-40ca-8568-27fb2b8e10f3": {
@@ -71314,7 +71314,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/127fb2c6-6566-4e17-8e6c-ce214e2ec408",
-      "name_zh": "",
+      "name_zh": "安提乌姆臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -71439,7 +71439,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-storm",
       "item_web_url": "https://api.star-citizen.wiki/items/05304794-a87c-4a00-8517-6a0470c898f9",
-      "name_zh": "",
+      "name_zh": "安提乌姆臂甲Storm",
       "acquisition": "mission",
       "missions": [
         {
@@ -71536,7 +71536,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-jet",
       "item_web_url": "https://api.star-citizen.wiki/items/caa2922b-8512-4430-9980-6238747acaab",
-      "name_zh": "",
+      "name_zh": "安提乌姆臂甲Jet",
       "acquisition": "mission",
       "missions": [
         {
@@ -71633,7 +71633,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-maroon",
       "item_web_url": "https://api.star-citizen.wiki/items/572a21b6-4c39-4311-89af-93bbfefbef6a",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔Jet",
       "acquisition": "mission",
       "missions": [
         {
@@ -71863,7 +71863,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-sand",
       "item_web_url": "https://api.star-citizen.wiki/items/699b532b-69bc-4c1f-885f-7a82ff97e3c1",
-      "name_zh": "",
+      "name_zh": "安提乌姆臂甲Sand",
       "acquisition": "mission",
       "missions": [
         {
@@ -72190,7 +72190,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-arms-midnight-sun",
       "item_web_url": "https://api.star-citizen.wiki/items/46400a70-d299-4fd9-8d7a-285538740bb4",
-      "name_zh": "",
+      "name_zh": "安提乌姆臂甲MidnightSun",
       "acquisition": "locked"
     },
     "b9f0a8df-dabd-4f3e-a898-4164ac1e9eba": {
@@ -72243,7 +72243,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core",
       "item_web_url": "https://api.star-citizen.wiki/items/3c09b16a-0c8b-41df-84c9-e0a4a271c0fa",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -72368,7 +72368,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-storm",
       "item_web_url": "https://api.star-citizen.wiki/items/02c2ca44-c632-4db8-b969-be44a8562f1b",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心Storm",
       "acquisition": "mission",
       "missions": [
         {
@@ -72465,7 +72465,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-jet",
       "item_web_url": "https://api.star-citizen.wiki/items/7ffc92db-5f68-40a2-9709-227a7e00a9aa",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心Jet",
       "acquisition": "mission",
       "missions": [
         {
@@ -72562,7 +72562,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-maroon",
       "item_web_url": "https://api.star-citizen.wiki/items/dc04cecd-1e9d-4e9d-b64e-8b1c5867de1c",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心Maroon",
       "acquisition": "mission",
       "missions": [
         {
@@ -72792,7 +72792,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-sand",
       "item_web_url": "https://api.star-citizen.wiki/items/565d53c3-7152-4562-b8eb-437ce7018cc2",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心Sand",
       "acquisition": "mission",
       "missions": [
         {
@@ -73119,7 +73119,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-core-midnight-sun",
       "item_web_url": "https://api.star-citizen.wiki/items/f78d7ac5-5e6d-43e1-9256-d30c0bb4a316",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心MidnightSun",
       "acquisition": "locked"
     },
     "c34c4d92-30da-4d8e-9049-869a10ca66e5": {
@@ -73172,7 +73172,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/8821103e-f5fa-46d9-99c4-f3d6b5e5cb24",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -73297,7 +73297,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-storm",
       "item_web_url": "https://api.star-citizen.wiki/items/11c7bd0d-8194-4c77-841f-154bf7cb3e7a",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔Storm",
       "acquisition": "mission",
       "missions": [
         {
@@ -73394,7 +73394,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-jet",
       "item_web_url": "https://api.star-citizen.wiki/items/4ddd8283-1b5c-422b-825d-5dee1e776fcf",
-      "name_zh": "",
+      "name_zh": "安提乌姆核心Jet",
       "acquisition": "mission",
       "missions": [
         {
@@ -73491,7 +73491,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-maroon",
       "item_web_url": "https://api.star-citizen.wiki/items/9a87b121-6acb-40c8-a40e-303e2f4d2fe4",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔Maroon",
       "acquisition": "mission",
       "missions": [
         {
@@ -73721,7 +73721,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-sand",
       "item_web_url": "https://api.star-citizen.wiki/items/71f5e2d7-bc27-4b65-95d3-c3e928f7d44c",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔Sand",
       "acquisition": "mission",
       "missions": [
         {
@@ -74048,7 +74048,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-helmet-midnight-sun",
       "item_web_url": "https://api.star-citizen.wiki/items/6e0b78ef-3bab-49d1-abb0-aa8f092918de",
-      "name_zh": "",
+      "name_zh": "安提乌姆头盔MidnightSun",
       "acquisition": "locked"
     },
     "1eb42a53-06ea-4436-a45e-bcd6d0f77de0": {
@@ -74101,7 +74101,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/4221af8b-ae76-423e-b178-169756aa1757",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -74226,7 +74226,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-storm",
       "item_web_url": "https://api.star-citizen.wiki/items/23dba495-9b54-4a33-be6a-365ff8eebb14",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲Storm",
       "acquisition": "mission",
       "missions": [
         {
@@ -74323,7 +74323,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-jet",
       "item_web_url": "https://api.star-citizen.wiki/items/8ca8d79b-1672-4213-a1f8-d063b0752e47",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲Jet",
       "acquisition": "mission",
       "missions": [
         {
@@ -74420,7 +74420,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-maroon",
       "item_web_url": "https://api.star-citizen.wiki/items/bf7b7917-961c-42df-b8a0-cde68286250b",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲Maroon",
       "acquisition": "mission",
       "missions": [
         {
@@ -74650,7 +74650,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-sand",
       "item_web_url": "https://api.star-citizen.wiki/items/da5e04ed-dfc4-4877-98ef-8c5c1776de79",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲Sand",
       "acquisition": "mission",
       "missions": [
         {
@@ -74977,7 +74977,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/antium-legs-midnight-sun",
       "item_web_url": "https://api.star-citizen.wiki/items/8e4c40b3-f9eb-40f3-811d-01a5099fdcd6",
-      "name_zh": "",
+      "name_zh": "安提乌姆腿甲MidnightSun",
       "acquisition": "locked"
     },
     "d997d044-7777-4675-a872-7f1c389b4af5": {
@@ -75457,7 +75457,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-arms-starchaser",
       "item_web_url": "https://api.star-citizen.wiki/items/6f0c55f8-fe90-4a32-b2c5-33c4fd722f91",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯臂甲Starchaser",
       "acquisition": "locked"
     },
     "252413bb-9bd4-4e25-9b7e-4112bab36043": {
@@ -75510,7 +75510,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-arms-elysium",
       "item_web_url": "https://api.star-citizen.wiki/items/80720f8a-00ad-4bf5-b04b-42fcb146446e",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯臂甲Elysium",
       "acquisition": "locked"
     },
     "2d17080d-2aac-4ee4-b23c-e373b1900c7d": {
@@ -76140,7 +76140,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-core-starchaser",
       "item_web_url": "https://api.star-citizen.wiki/items/787a2c0a-1311-44b9-b195-3793100ca518",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯核心Starchaser",
       "acquisition": "locked"
     },
     "be8c1c5d-1635-410a-94cb-2e153b77c32c": {
@@ -76193,7 +76193,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-core-elysium",
       "item_web_url": "https://api.star-citizen.wiki/items/e2b6e746-44aa-493a-acaf-0db55caf87c7",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯核心Elysium",
       "acquisition": "locked"
     },
     "52bdf189-2df3-4e37-bdcc-c40255c81d81": {
@@ -76823,7 +76823,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-helmet-starchaser",
       "item_web_url": "https://api.star-citizen.wiki/items/3e954276-5977-48d9-9385-fcc00cc8224b",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯头盔Starchaser",
       "acquisition": "locked"
     },
     "391607ba-7a41-4638-854d-b293e9d24cd5": {
@@ -76876,7 +76876,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-helmet-elysium",
       "item_web_url": "https://api.star-citizen.wiki/items/b3aebd44-acf3-4b2b-a171-7770d1eade90",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯头盔Elysium",
       "acquisition": "locked"
     },
     "8f2565f5-3f79-4db8-8fa5-c0c7676084bc": {
@@ -77409,7 +77409,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-legs-starchaser",
       "item_web_url": "https://api.star-citizen.wiki/items/3f31149c-b9cc-4700-9585-f924cda83daf",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯腿甲Starchaser",
       "acquisition": "locked"
     },
     "46e1c410-4171-4b7d-ba99-55c93d3fc950": {
@@ -77462,7 +77462,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/artimex-legs-elysium",
       "item_web_url": "https://api.star-citizen.wiki/items/c17e3812-5939-4508-ae14-2f696520bbad",
-      "name_zh": "",
+      "name_zh": "阿尔提麦克斯腿甲Elysium",
       "acquisition": "locked"
     },
     "39c0637f-0c86-4906-8bd4-447fd621adbc": {
@@ -77568,7 +77568,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/018cf498-5ff0-4382-9549-372dc92c6a9c",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -77637,7 +77637,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms-sunstone",
       "item_web_url": "https://api.star-citizen.wiki/items/024e0420-6902-40f7-8f1a-0c13e92064a3",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲Sunstone",
       "acquisition": "mission",
       "missions": [
         {
@@ -77699,7 +77699,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms-daystar",
       "item_web_url": "https://api.star-citizen.wiki/items/9dc4078f-9598-4453-92e8-d479acadfca8",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲Daystar",
       "acquisition": "mission",
       "missions": [
         {
@@ -77761,7 +77761,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms-moonfall",
       "item_web_url": "https://api.star-citizen.wiki/items/bcadecab-e062-4b97-8d82-8b52e795bdec",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲Moonfall",
       "acquisition": "mission",
       "missions": [
         {
@@ -77830,7 +77830,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms-necropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/1b0b51c5-b6e4-4bd7-b4fe-d763909e429a",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲Necropolis",
       "acquisition": "locked"
     },
     "cbdb6663-b54a-482f-a194-c6c2edccbbec": {
@@ -77883,7 +77883,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-arms-metropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/b12adbab-eba8-4c27-b44c-de4501b8394e",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺臂甲Metropolis",
       "acquisition": "mission",
       "missions": [
         {
@@ -77945,7 +77945,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core",
       "item_web_url": "https://api.star-citizen.wiki/items/cef54c0b-81d1-4ccb-a67f-f7304f198184",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -78014,7 +78014,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core-sunstone",
       "item_web_url": "https://api.star-citizen.wiki/items/89c91b5c-3006-4777-a870-9059b4f3efb2",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心Sunstone",
       "acquisition": "mission",
       "missions": [
         {
@@ -78076,7 +78076,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core-daystar",
       "item_web_url": "https://api.star-citizen.wiki/items/bc01680a-2d65-4572-b1b5-c09af2783c0c",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心Daystar",
       "acquisition": "mission",
       "missions": [
         {
@@ -78138,7 +78138,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core-moonfall",
       "item_web_url": "https://api.star-citizen.wiki/items/a554ed13-c5d6-46df-a7b0-dce25cefe9d2",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心Moonfall",
       "acquisition": "mission",
       "missions": [
         {
@@ -78207,7 +78207,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core-necropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/1bc01620-1781-4a5d-ad27-6251653c071d",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心Necropolis",
       "acquisition": "locked"
     },
     "c12bbffd-b102-4ea2-81ff-f0bad777a3d3": {
@@ -78260,7 +78260,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-core-metropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/336e2289-16ea-4c51-934c-39aca677b21b",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺核心Metropolis",
       "acquisition": "mission",
       "missions": [
         {
@@ -78322,7 +78322,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/138ffa9b-26b2-4b6f-b831-425948234fb2",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺头盔",
       "acquisition": "mission",
       "missions": [
         {
@@ -78391,7 +78391,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-helmet-sunstone",
       "item_web_url": "https://api.star-citizen.wiki/items/61f488da-7fd1-4ab9-b295-d93bb891bf23",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺头盔Sunstone",
       "acquisition": "mission",
       "missions": [
         {
@@ -78453,7 +78453,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-helmet-daystar",
       "item_web_url": "https://api.star-citizen.wiki/items/cf8dcddd-a095-4b1b-851d-274a53cfc833",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺头盔Daystar",
       "acquisition": "mission",
       "missions": [
         {
@@ -78515,7 +78515,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-helmet-moonfall",
       "item_web_url": "https://api.star-citizen.wiki/items/4f7a0a87-41f7-4157-bd67-faf15c29934b",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺头盔Moonfall",
       "acquisition": "mission",
       "missions": [
         {
@@ -78584,7 +78584,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-helmet-metropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/5ce49f2a-62f5-4a76-b948-6acff599b41c",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺头盔Metropolis",
       "acquisition": "mission",
       "missions": [
         {
@@ -78646,7 +78646,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/987c74f3-73bc-40fa-b3ba-71fc6379321d",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -78715,7 +78715,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs-sunstone",
       "item_web_url": "https://api.star-citizen.wiki/items/5d00db0e-c92b-4379-ab41-79708c02d7dd",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲Sunstone",
       "acquisition": "mission",
       "missions": [
         {
@@ -78777,7 +78777,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs-sunstone-2",
       "item_web_url": "https://api.star-citizen.wiki/items/c7fb0fc2-20b5-4c23-9a22-de9c7d5052d9",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲Daystar",
       "acquisition": "mission",
       "missions": [
         {
@@ -78839,7 +78839,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs-moonfall",
       "item_web_url": "https://api.star-citizen.wiki/items/80f66f6f-8b0b-4517-87e9-8f094dcb2b55",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲Moonfall",
       "acquisition": "mission",
       "missions": [
         {
@@ -78908,7 +78908,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs-necropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/fea0df3c-6b88-4de2-ab90-dd318f70eb8f",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲Necropolis",
       "acquisition": "locked"
     },
     "2d5c93b6-edb6-4203-a8b4-5fdff0bf19eb": {
@@ -78961,7 +78961,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/palatino-legs-metropolis",
       "item_web_url": "https://api.star-citizen.wiki/items/05d400eb-2cd2-41f4-9054-ba8e87bbdcd1",
-      "name_zh": "",
+      "name_zh": "帕拉蒂诺腿甲Metropolis",
       "acquisition": "mission",
       "missions": [
         {
@@ -84505,7 +84505,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/morozov-sh-helmet-iceflow",
       "item_web_url": "https://api.star-citizen.wiki/items/e5c78cf7-bac6-412b-92ca-e3ba047ef20a",
-      "name_zh": "",
+      "name_zh": "MorozovSH头盔Iceflow",
       "acquisition": "locked"
     },
     "cbeb1d01-9184-4282-b6aa-02ad16cd7b22": {
@@ -86073,7 +86073,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/odyssey-ii-helmet-alpha",
       "item_web_url": "https://api.star-citizen.wiki/items/0190a637-936f-4834-812b-f945a0413467",
-      "name_zh": "",
+      "name_zh": "OdysseyII竞速头盔Alpha",
       "acquisition": "locked"
     },
     "db6e6d7e-1a74-4170-b196-b989f1327b0e": {
@@ -86121,7 +86121,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/stirling-exploration-backpack",
       "item_web_url": "https://api.star-citizen.wiki/items/ec96a58f-4675-4fc4-bbd7-33e3332e105f",
-      "name_zh": "",
+      "name_zh": "StirlingExploration背包",
       "acquisition": "locked"
     },
     "4e834db6-9b0e-461a-8465-ec90847bd7e5": {
@@ -93483,7 +93483,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/dustup-arms-firestarter",
       "item_web_url": "https://api.star-citizen.wiki/items/b3d88e1c-122e-4801-96fc-3ecb71cc06ff",
-      "name_zh": "",
+      "name_zh": "DustUp臂甲Firestarter",
       "acquisition": "locked"
     },
     "27eb9328-960e-45cc-a888-8dd685fc719f": {
@@ -93678,7 +93678,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/dustup-core-firestarter",
       "item_web_url": "https://api.star-citizen.wiki/items/890b8d44-eaad-4771-ad6b-abe683833867",
-      "name_zh": "",
+      "name_zh": "DustUp核心Firestarter",
       "acquisition": "locked"
     },
     "098b09fb-23ff-474b-9c5d-274f793c75b2": {
@@ -93873,7 +93873,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/dustup-helmet-firestarter",
       "item_web_url": "https://api.star-citizen.wiki/items/3751a609-b189-4a4e-a31d-e864459b5dcc",
-      "name_zh": "",
+      "name_zh": "DustUp头盔Firestarter",
       "acquisition": "locked"
     },
     "1755e0f3-0aac-45c1-8245-4270f474b7fc": {
@@ -94569,7 +94569,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/piecemeal-armor-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/21e26536-0dfd-4d43-8247-679ce76ce06a",
-      "name_zh": "",
+      "name_zh": "Piecemeal护甲臂甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -94631,7 +94631,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/piecemeal-armor-core",
       "item_web_url": "https://api.star-citizen.wiki/items/9b2d97da-d08f-4df8-99bb-7af97983bd5c",
-      "name_zh": "",
+      "name_zh": "Piecemeal护甲核心",
       "acquisition": "mission",
       "missions": [
         {
@@ -94693,7 +94693,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/piecemeal-armor-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/36200c80-ecf8-472f-9cbe-4994e11ecbab",
-      "name_zh": "",
+      "name_zh": "Piecemeal护甲腿甲",
       "acquisition": "mission",
       "missions": [
         {
@@ -94777,7 +94777,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/why-not-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/7edb4266-770c-4e29-8881-36d5b90637aa",
-      "name_zh": "",
+      "name_zh": "WhyNot?飞行头盔",
       "acquisition": "locked"
     },
     "20bbe7b6-d270-4d01-bbd8-b9b6073e6542": {
@@ -94811,7 +94811,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/xanthule-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/13a62c08-7324-47ac-be0d-885b6ef8a07d",
-      "name_zh": "",
+      "name_zh": "Xanthule飞行头盔",
       "acquisition": "locked"
     },
     "7fba708c-7044-4fc8-96f1-a03caf78985b": {
@@ -94845,7 +94845,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/xanthule-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/d820fc23-3490-4ef7-90fe-4fa82731c1f8",
-      "name_zh": "",
+      "name_zh": "Xanthule飞行Suit",
       "acquisition": "locked"
     },
     "ce6d1ae3-2501-4fe0-acc0-d4cb34df1311": {
@@ -95564,7 +95564,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novian-crossbow",
       "item_web_url": "https://api.star-citizen.wiki/items/cb57dee1-c2f2-4328-bd7f-8ff1c8481008",
-      "name_zh": "",
+      "name_zh": "诺维安弩",
       "acquisition": "mission",
       "missions": [
         {
@@ -95608,7 +95608,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novian-nighthunter-crossbow",
       "item_web_url": "https://api.star-citizen.wiki/items/53309dc8-6988-4923-b765-d0846542e27f",
-      "name_zh": "",
+      "name_zh": "诺维安Nighthunter弩",
       "acquisition": "mission",
       "missions": [
         {
@@ -95652,7 +95652,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novian-ghostmaker-crossbow",
       "item_web_url": "https://api.star-citizen.wiki/items/aa5b80da-8bb8-4712-9277-e2cb3a052d4c",
-      "name_zh": "",
+      "name_zh": "诺维安Ghostmaker弩",
       "acquisition": "mission",
       "missions": [
         {
@@ -95696,7 +95696,7 @@
       "dismantle_returns": [],
       "web_url": "https://api.star-citizen.wiki/blueprints/novian-wildshot-crossbow",
       "item_web_url": "https://api.star-citizen.wiki/items/d0e8d997-381b-44fe-a098-3c3ba6293b18",
-      "name_zh": "",
+      "name_zh": "诺维安Wildshot弩",
       "acquisition": "mission",
       "missions": [
         {
@@ -99679,7 +99679,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-suit",
       "item_web_url": "https://api.star-citizen.wiki/items/e7ba6337-2972-46db-b122-df73c4176027",
-      "name_zh": "",
+      "name_zh": "顺风飞行Suit",
       "acquisition": "mission",
       "missions": [
         {
@@ -99815,7 +99815,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-big-bite",
       "item_web_url": "https://api.star-citizen.wiki/items/0723a3ce-0452-44ff-9b4c-8aa281002590",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔BigBite",
       "acquisition": "mission",
       "missions": [
         {
@@ -99858,7 +99858,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-blackbolt",
       "item_web_url": "https://api.star-citizen.wiki/items/718b049c-3c47-432d-8b68-d1dcf3d8371f",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔Blackbolt",
       "acquisition": "mission",
       "missions": [
         {
@@ -99901,7 +99901,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-thunderstruck",
       "item_web_url": "https://api.star-citizen.wiki/items/4a114179-8aa5-4048-819c-7579e7097d00",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔Thunderstruck",
       "acquisition": "mission",
       "missions": [
         {
@@ -99944,7 +99944,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-adrenaline",
       "item_web_url": "https://api.star-citizen.wiki/items/52c8d15c-d5da-4fd6-8b70-97f897c66d79",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔Adrenaline",
       "acquisition": "mission",
       "missions": [
         {
@@ -99987,7 +99987,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-blue-skies",
       "item_web_url": "https://api.star-citizen.wiki/items/911b5684-5b43-41ce-83d4-7e464d1cf226",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔BlueSkies",
       "acquisition": "mission",
       "missions": [
         {
@@ -100030,7 +100030,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-frostshock",
       "item_web_url": "https://api.star-citizen.wiki/items/5ddf7fa8-522f-4091-889a-de760e9834b0",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔Frostshock",
       "acquisition": "mission",
       "missions": [
         {
@@ -100073,7 +100073,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-green-streak",
       "item_web_url": "https://api.star-citizen.wiki/items/69ac7a79-6546-450f-9a02-b35180030e05",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔GreenStreak",
       "acquisition": "mission",
       "missions": [
         {
@@ -100116,7 +100116,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/tailwind-flight-helmet-airwolf",
       "item_web_url": "https://api.star-citizen.wiki/items/17065bb4-fbc3-497d-8900-508a03a9b692",
-      "name_zh": "",
+      "name_zh": "顺风飞行头盔Airwolf",
       "acquisition": "mission",
       "missions": [
         {
@@ -100212,7 +100212,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-arms",
       "item_web_url": "https://api.star-citizen.wiki/items/0ab89717-e3bc-42e4-b610-f01895d0f2dc",
-      "name_zh": "",
+      "name_zh": "Chiron臂甲",
       "acquisition": "locked"
     },
     "8e0b43aa-3353-4601-9053-c8bf63b1aa68": {
@@ -100352,7 +100352,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-core",
       "item_web_url": "https://api.star-citizen.wiki/items/c01a3ba9-8c23-4ca2-b380-4442ae2a89de",
-      "name_zh": "",
+      "name_zh": "Chiron核心",
       "acquisition": "locked"
     },
     "315a8008-c78b-4536-bb02-f9177de66f14": {
@@ -100458,7 +100458,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-helmet",
       "item_web_url": "https://api.star-citizen.wiki/items/73fb9b7d-0fc4-4cf6-ac1f-cfd03170341e",
-      "name_zh": "",
+      "name_zh": "Chiron头盔",
       "acquisition": "locked"
     },
     "fd0caafc-d49d-4eb4-ad4d-5f57d64f4f34": {
@@ -100564,7 +100564,7 @@
       ],
       "web_url": "https://api.star-citizen.wiki/blueprints/chiron-legs",
       "item_web_url": "https://api.star-citizen.wiki/items/669b94eb-4d05-4e81-9eee-009bbd17dea8",
-      "name_zh": "",
+      "name_zh": "Chiron腿甲",
       "acquisition": "locked"
     },
     "89c217ab-473d-4464-ad24-3cf3e59b4cf7": {

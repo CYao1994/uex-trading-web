@@ -91,6 +91,10 @@
     "racing": "竞速", "smolder": "余烬", "tailwind": "顺风",
     "monde": "蒙德", "testudo": "龟甲", "strata": "地层",
     "geist": "幽影", "antium": "安提乌姆", "palatino": "帕拉蒂诺",
-    "corbel": "科贝尔", "artimex": "阿尔提麦克斯"
+    "corbel": "科贝尔", "artimex": "阿尔提麦克斯", "novian": "诺维安",
+    "crossbow": "弩", "magazine": "弹匣", "smg": "冲锋枪",
+    "custodian": "守护者", "pulverizer": "粉碎者", "lmg": "轻机枪",
+    "stirling": "斯特林", "exploration": "探索", "suit": "套装",
+    "exotherm": "放热", "broadspec": "广谱", "placeholder": "占位"
   }
 }
