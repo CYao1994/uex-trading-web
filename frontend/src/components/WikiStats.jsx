@@ -29,10 +29,10 @@ function WikiStats() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    fetch('https://api.star-citizen.wiki/stats')
+    fetch('https://api.star-citizen.wiki/api/stats')
       .then(r => r.ok ? r.json() : null)
       .then(data => {
-        if (data) setStats(data);
+        if (data?.data?.[0]) setStats(data.data[0]);
       })
       .catch(() => {});
   }, []);
@@ -41,7 +41,7 @@ function WikiStats() {
 
   const funds = parseFloat(stats.funds) || 0;
   const fleet = parseInt(String(stats.fleet).replace(/\s/g, '')) || 0;
-  const updated = stats.updated_at || '';
+  const updated = stats.timestamp || '';
 
   return (
     <Box sx={{
