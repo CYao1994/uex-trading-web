@@ -1,7 +1,7 @@
 # MiMo 技能清单（统一版）
 
 > 最后更新: 2026-06-25
-> 技能安装路径: `~\.agents\skills\` + `~\.claude\skills\`
+> 技能安装路径: `~\.agents\skills\` (29个) + `~\.claude\skills\` (7个)
 
 ---
 
@@ -29,7 +29,7 @@
 
 ## 二、已安装的项目技能（22个）
 
-### 项目开发专用（8个）
+### 项目开发专用（15个）
 
 | 技能名 | 来源 | 安装量 | 用途 | 安装时间 |
 |--------|------|--------|------|----------|
@@ -41,6 +41,13 @@
 | **ui-ux-pro-max** | nexu-io/open-design@ui-ux-pro-max | — | UI/UX模式库(仅catalog) | 2026-06-24 |
 | **crawl4ai-skill** | lancelin111/crawl4ai-skill | — | AI爬虫(UEX/RSI数据抓取) | 2026-06-24 |
 | **kernel-cli** | kernel/skills@kernel-cli | — | 云端浏览器自动化(CDP) | 2026-06-24 |
+| **react-devtools** | callstackincubator/agent-react-devtools | 1.7K | React调试工具 | 2026-06-25 |
+| **react-expert** | reactjs/react.dev@react-expert | 1K | React官方最佳实践 | 2026-06-25 |
+| **python-backend** | jiatastic/open-python-skills | 1.7K | Python后端模式 | 2026-06-25 |
+| **web-scraping** | mindrally/skills@web-scraping | 3.9K | Web爬虫 | 2026-06-25 |
+| **api-rate-limiting** | secondsky/claude-skills | 308 | API限流设计 | 2026-06-25 |
+| **token-optimization** | claude-dev-suite/claude-dev-suite | 251 | Agent token优化 | 2026-06-25 |
+| **api-endpoint-builder** | sickn33/antigravity-awesome-skills | 165 | API端点构建 | 2026-06-25 |
 
 ### 安全审计套件（13个）
 
@@ -82,7 +89,7 @@
 
 ## 四、未安装的推荐技能
 
-### 高优先级
+### 高优先级（全部已安装 ✅）
 
 | 技能名 | 来源 | 安装量 | 用途 | 推荐理由 |
 |--------|------|--------|------|----------|
@@ -92,22 +99,28 @@
 | **python-backend** | jiatastic/open-python-skills@python-backend | 1.7K | Python后端模式 | 补充通用Python最佳实践 |
 | **web-scraping** | mindrally/skills@web-scraping | 3.9K | Web爬虫 | UEX/RSI数据抓取 |
 
-### 中优先级
+### 中优先级（已安装 ✅）
 
 | 技能名 | 来源 | 安装量 | 用途 |
 |--------|------|--------|------|
 | **api-rate-limiting** | secondsky/claude-skills@api-rate-limiting | 308 | API限流设计 |
-| **token-optimization** | claude-dev-suite/claude-dev-suite@token-optimization | 251 | Agent token优化 |
-| **performance-optimizer** | daffy0208/ai-dev-standards@performance-optimizer | 196 | 通用性能优化 |
+| **token-optimization** | claude-dev-suite/claude-dev-suite@token-optimization | 251 | Agent token使用优化 |
 | **api-endpoint-builder** | sickn33/antigravity-awesome-skills@api-endpoint-builder | 165 | API端点构建 |
 
 ### 低优先级
 
 | 技能名 | 来源 | 安装量 | 用途 |
 |--------|------|--------|------|
-| **fastapi** | martinholovsky/claude-skills-generator@fastapi | 214 | FastAPI模式（可能与已装重叠） |
+| **fastapi** | martinholovsky/claude-skills-generator@fastapi | 214 | FastAPI模式（可能与已装的重叠） |
 | **vite** | display-design-studio/skills@vite | 24 | Vite配置 |
 | **charting** | starchild-ai-agent/official-skills@charting | 4.4K | 图表（可能与chart-visualization重叠） |
+
+### 安装失败
+
+| 技能名 | 失败原因 |
+|--------|----------|
+| **owasp-security** (hoodini, 2.3K) | 仓库极大，git clone超时(120s) |
+| **performance-optimizer** (daffy0208, 196) | skill名不存在（仓库有64个其他skill） |
 
 ---
 
