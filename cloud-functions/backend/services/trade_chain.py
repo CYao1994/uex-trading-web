@@ -577,12 +577,25 @@ def _resolve_origin_terminals(
             if loc.get("location_id") == location_id:
                 return loc.get("terminal_ids", [])
 
-    # Try by name match
+    # Try by name match (location name or location name_zh)
     if location_name:
         q = location_name.lower().strip()
         for loc in locations:
             if q in loc.get("location_name", "").lower() or q in loc.get("location_name_zh", "").lower():
                 return loc.get("terminal_ids", [])
+
+    # Fallback: search terminal names directly (e.g. "IO北塔" is a terminal, not a location)
+    if location_name:
+        terminals = load_terminals()
+        q = location_name.lower().strip()
+        matched_tids = []
+        for t in terminals:
+            tname = (t.get("name") or "").lower()
+            tname_zh = (t.get("name_zh") or "").lower()
+            if q in tname or q in tname_zh:
+                matched_tids.append(t.get("id"))
+        if matched_tids:
+            return matched_tids
 
     warnings.append("未指定出发地或出发地未找到")
     return []
