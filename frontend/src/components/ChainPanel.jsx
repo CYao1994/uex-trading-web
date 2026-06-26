@@ -225,18 +225,21 @@ function ChainPanel({ onResult }) {
           <Box
             onClick={() => setUseCustomScu(!useCustomScu)}
             sx={{
-              width: 16, height: 16,
-              border: `1px solid ${useCustomScu ? '#c9a227' : 'rgba(201, 162, 39, 0.2)'}`,
-              borderRadius: '2px',
+              width: 44, height: 44,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
-              background: useCustomScu ? 'rgba(201, 162, 39, 0.15)' : 'transparent',
-              transition: 'all 0.2s',
             }}
           >
-            {useCustomScu && (
-              <Box sx={{ width: 8, height: 8, background: '#c9a227', borderRadius: '1px' }} />
-            )}
+            <Box sx={{
+              width: 18, height: 18,
+              border: `1px solid ${useCustomScu ? '#c9a227' : 'rgba(201, 162, 39, 0.3)'}`,
+              borderRadius: '3px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: useCustomScu ? 'rgba(201, 162, 39, 0.15)' : 'transparent',
+              transition: 'all 0.2s',
+            }}>
+              {useCustomScu && <CheckBox sx={{ fontSize: 14, color: '#c9a227' }} />}
+            </Box>
           </Box>
           <Typography
             onClick={() => setUseCustomScu(!useCustomScu)}
@@ -433,25 +436,27 @@ function ChainPanel({ onResult }) {
       {/* System filter */}
       <Box sx={{ mb: 1.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5 }}>
-          <Typography sx={{ fontSize: '0.7rem', color: 'rgba(201,162,39,0.5)', fontFamily: '"Orbitron",sans-serif', fontWeight: 600, letterSpacing: '0.05em' }}>
+          <Typography sx={{ fontSize: '0.7rem', color: 'rgba(201,162,39,0.7)', fontFamily: '"Orbitron",sans-serif', fontWeight: 600, letterSpacing: '0.05em' }}>
             星系筛选
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
           <Chip label="全部星系" size="small" onClick={() => setSystemFilter('')}
             sx={{
+              height: 32,
               background: !systemFilter ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
               border: `1px solid ${!systemFilter ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
-              color: !systemFilter ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+              color: !systemFilter ? '#00ddaa' : 'rgba(255,255,255,0.7)',
               fontSize: '0.65rem',
             }} />
           {['Stanton', 'Pyro', 'Nyx'].map(sys => (
             <Chip key={sys} label={sys} size="small"
               onClick={() => setSystemFilter(systemFilter === sys ? '' : sys)}
               sx={{
+                height: 32,
                 background: systemFilter === sys ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
                 border: `1px solid ${systemFilter === sys ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
-                color: systemFilter === sys ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+                color: systemFilter === sys ? '#00ddaa' : 'rgba(255,255,255,0.7)',
                 fontSize: '0.65rem',
               }} />
           ))}
@@ -463,18 +468,21 @@ function ChainPanel({ onResult }) {
         <Box
           onClick={() => setExcludeContraband(!excludeContraband)}
           sx={{
-            width: 16, height: 16,
-            border: `1px solid ${excludeContraband ? '#ff6644' : 'rgba(255,102,68,0.3)'}`,
-            borderRadius: '2px',
+            width: 44, height: 44,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer',
-            background: excludeContraband ? 'rgba(255,102,68,0.15)' : 'transparent',
-            transition: 'all 0.2s',
           }}
         >
-          {excludeContraband && (
-            <Box sx={{ width: 8, height: 8, background: '#ff6644', borderRadius: '1px' }} />
-          )}
+          <Box sx={{
+            width: 18, height: 18,
+            border: `1px solid ${excludeContraband ? '#ff6644' : 'rgba(255,102,68,0.3)'}`,
+            borderRadius: '3px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: excludeContraband ? 'rgba(255,102,68,0.15)' : 'transparent',
+            transition: 'all 0.2s',
+          }}>
+            {excludeContraband && <CheckBox sx={{ fontSize: 14, color: '#ff6644' }} />}
+          </Box>
         </Box>
         <Typography
           onClick={() => setExcludeContraband(!excludeContraband)}

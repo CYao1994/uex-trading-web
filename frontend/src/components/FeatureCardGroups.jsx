@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { ShoppingCart, Link, MilitaryTech, Build, GpsFixed, SwapHoriz, PrecisionManufacturing, DirectionsBoat, Science } from '@mui/icons-material';
+import { ShoppingCart, Link, MilitaryTech, Build, GpsFixed, SwapHoriz, PrecisionManufacturing, Rocket, Science } from '@mui/icons-material';
 import FeatureCard from './FeatureCard';
 
 const FEATURES = [
@@ -28,7 +28,7 @@ const FEATURES = [
     group: 'trade',
   },
   {
-    icon: <DirectionsBoat sx={{ fontSize: 26 }} />,
+    icon: <Rocket sx={{ fontSize: 26 }} />,
     title: '舰船数据库',
     desc: '飞船参数、价格与出厂配置',
     tab: 'ships',

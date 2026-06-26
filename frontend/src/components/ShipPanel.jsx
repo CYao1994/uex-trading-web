@@ -1,7 +1,7 @@
 // ShipPanel.jsx - 舰船数据库面板 (Wiki-primary)
 import React, { useState, useEffect, useMemo, useCallback, Component } from 'react';
 import { Box, Typography, CircularProgress, Button, Tooltip, Dialog, IconButton, Chip } from '@mui/material';
-import { DirectionsBoat, OpenInNew, People, Inventory2, Close, CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
+import { Rocket, OpenInNew, People, Inventory2, Close, CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
 import ShipFilterBar from './ShipFilterBar';
 import ShipCompareDialog from './ShipCompareDialog';
 import ShipDetailWeaponsLoadout from './ShipDetailWeaponsLoadout';
@@ -217,12 +217,12 @@ function ShipPanel() {
   return (
     <Box sx={{ p: { xs: 1.5, md: 3 }, display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <DirectionsBoat sx={{ color: '#c9a227', fontSize: 24 }} />
+        <Rocket sx={{ color: '#c9a227', fontSize: 24 }} />
         <Box>
           <Typography sx={{ fontFamily: '"Orbitron",sans-serif', fontWeight: 700, fontSize: '1rem', color: '#c9a227' }}>
             舰船数据库
           </Typography>
-          <Typography sx={{ fontSize: '0.65rem', color: 'rgba(201,162,39,0.4)' }}>
+          <Typography sx={{ fontSize: '0.65rem', color: 'rgba(201,162,39,0.7)' }}>
             {filtered.length} / {allShips.length} 艘飞船
           </Typography>
         </Box>
@@ -339,7 +339,7 @@ const WikiShipCard = React.memo(function WikiShipCard({ ship, zhName, compareMod
             </Tooltip>
           )}
           <Tooltip title="船员">
-            <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Orbitron",sans-serif' }}>
+            <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.7)', fontFamily: '"Orbitron",sans-serif' }}>
               <People sx={{ fontSize: 10, mr: 0.3, verticalAlign: 'middle' }} />{crewStr}
             </Typography>
           </Tooltip>
@@ -466,7 +466,7 @@ function ShipDetailDialog({ ship, zhName, onClose, translations }) {
             sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, p: 2.5, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }}>
             <Typography sx={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Rajdhani",sans-serif', mb: 0.2 }}>
-              {mfrCode && <span style={{ color: 'rgba(201,162,39,0.5)' }}>[{mfrCode}] </span>}
+              {mfrCode && <span style={{ color: 'rgba(201,162,39,0.7)' }}>[{mfrCode}] </span>}
               {mfrName}
             </Typography>
             {zhName && (
@@ -494,7 +494,7 @@ function ShipDetailDialog({ ship, zhName, onClose, translations }) {
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, mb: 2.5 }}>
           {specs.filter(s => s.value !== '—').map(s => (
             <Box key={s.label} sx={{ background: 'rgba(0,10,20,0.4)', border: '1px solid rgba(201,162,39,0.06)', borderRadius: '2px', p: 1 }}>
-              <Typography sx={{ fontSize: '0.6rem', color: 'rgba(201,162,39,0.4)', fontFamily: '"Rajdhani",sans-serif', mb: 0.3 }}>
+               <Typography sx={{ fontSize: '0.6rem', color: 'rgba(201,162,39,0.7)', fontFamily: '"Rajdhani",sans-serif', mb: 0.3 }}>
                 {s.label}
               </Typography>
               <Typography sx={{ fontSize: '0.85rem', color: s.color || 'rgba(255,255,255,0.9)', fontFamily: '"Orbitron",sans-serif', fontWeight: 600 }}>
@@ -541,7 +541,7 @@ function ShipDetailDialog({ ship, zhName, onClose, translations }) {
           </Button>
         </Box>
 
-        <Button fullWidth onClick={onClose} sx={{ mt: 1, color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem' }}>
+         <Button fullWidth onClick={onClose} sx={{ mt: 1, color: 'rgba(255,255,255,0.7)', fontSize: '0.75rem' }}>
           关闭
         </Button>
       </Box>

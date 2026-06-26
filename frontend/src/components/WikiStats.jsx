@@ -53,7 +53,7 @@ function WikiStats() {
       <Typography sx={{
         fontFamily: '"Orbitron","Noto Sans SC",sans-serif',
         fontSize: '0.6rem',
-        color: 'rgba(201, 162, 39, 0.4)',
+        color: 'rgba(201, 162, 39, 0.7)',
         letterSpacing: '0.1em',
         textTransform: 'uppercase',
         mb: 1,
@@ -84,7 +84,7 @@ function WikiStats() {
             <Typography sx={{
               fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
               fontSize: '0.55rem',
-              color: 'rgba(255,255,255,0.4)',
+              color: 'rgba(255,255,255,0.7)',
             }}>
               众筹总额
             </Typography>
@@ -113,7 +113,7 @@ function WikiStats() {
             <Typography sx={{
               fontFamily: '"Rajdhani","Noto Sans SC",sans-serif',
               fontSize: '0.55rem',
-              color: 'rgba(255,255,255,0.4)',
+              color: 'rgba(255,255,255,0.7)',
             }}>
               注册飞行员
             </Typography>
@@ -125,7 +125,7 @@ function WikiStats() {
         <Typography sx={{
           fontFamily: '"Rajdhani",sans-serif',
           fontSize: '0.5rem',
-          color: 'rgba(255,255,255,0.2)',
+          color: 'rgba(255,255,255,0.6)',
           mt: 0.75,
           textAlign: 'right',
         }}>

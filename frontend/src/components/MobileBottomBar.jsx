@@ -1,7 +1,7 @@
 // MobileBottomBar.jsx - 移动端底部导航栏（优化版）
 import { useState } from 'react';
 import { BottomNavigation, BottomNavigationAction, Paper, Box, Typography } from '@mui/material';
-import { Home, SwapHoriz, ShoppingCart, Link, Build, GpsFixed, MilitaryTech, MoreHoriz, PrecisionManufacturing, DirectionsBoat, Science } from '@mui/icons-material';
+import { Home, SwapHoriz, ShoppingCart, Link, Build, GpsFixed, MilitaryTech, MoreHoriz, PrecisionManufacturing, Rocket, Science } from '@mui/icons-material';
 
 // 主要导航项（始终显示）
 const MAIN_TABS = [
@@ -13,7 +13,7 @@ const MAIN_TABS = [
 // 更多导航项（点击"更多"展开）
 const MORE_TABS = [
   { key: 'chain', label: '链式交易', icon: <Link sx={{ fontSize: 18 }} /> },
-  { key: 'ships', label: '舰船数据库', icon: <DirectionsBoat sx={{ fontSize: 18 }} /> },
+  { key: 'ships', label: '舰船数据库', icon: <Rocket sx={{ fontSize: 18 }} /> },
   { key: 'mining_guide', label: '采矿指南', icon: <Science sx={{ fontSize: 18 }} /> },
   { key: 'ship_components', label: '飞船组件', icon: <Build sx={{ fontSize: 18 }} /> },
   { key: 'ship_weapons', label: '飞船武器', icon: <GpsFixed sx={{ fontSize: 18 }} /> },

@@ -223,7 +223,7 @@ function MiningGuidePanel() {
           <Typography sx={{ fontFamily: '"Orbitron",sans-serif', fontWeight: 700, fontSize: '1rem', color: '#c9a227' }}>
             采矿指南
           </Typography>
-          <Typography sx={{ fontSize: '0.65rem', color: 'rgba(201,162,39,0.4)' }}>
+          <Typography sx={{ fontSize: '0.65rem', color: 'rgba(201,162,39,0.7)' }}>
             {sorted.length} / {minerals.length} 种矿物
           </Typography>
         </Box>
@@ -236,7 +236,7 @@ function MiningGuidePanel() {
           onFocus={() => setHistoryOpen(true)}
           onBlur={() => { if (searchQuery.trim()) addToHistory({ id: searchQuery.trim(), keyword: searchQuery.trim() }); setTimeout(() => setHistoryOpen(false), 150); }}
           InputProps={{
-            startAdornment: <InputAdornment position="start"><Search sx={{ color: 'rgba(201,162,39,0.4)' }} /></InputAdornment>,
+            startAdornment: <InputAdornment position="start"><Search sx={{ color: 'rgba(201,162,39,0.7)' }} /></InputAdornment>,
           }}
           sx={{ '& .MuiOutlinedInput-root': { color: 'rgba(255,255,255,0.8)', fontSize: '0.85rem' } }}
         />
@@ -245,7 +245,7 @@ function MiningGuidePanel() {
             {searchHistory.slice(0, 5).map(h => (
               <Box key={h.id} onClick={() => { setSearchQuery(h.keyword); setHistoryOpen(false); }}
                 sx={{ px: 1.5, py: 0.75, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 1, borderBottom: '1px solid rgba(255,255,255,0.03)', '&:hover': { background: 'rgba(201,162,39,0.08)' } }}>
-                <HistoryIcon sx={{ fontSize: 12, color: 'rgba(201,162,39,0.3)' }} />
+                <HistoryIcon sx={{ fontSize: 12, color: 'rgba(201,162,39,0.6)' }} />
                 <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>{h.keyword}</Typography>
               </Box>
             ))}
@@ -257,18 +257,20 @@ function MiningGuidePanel() {
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
         <Chip label="全部星系" size="small" onClick={() => setSystemFilter('')}
           sx={{
+            height: 32,
             background: !systemFilter ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
             border: `1px solid ${!systemFilter ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
-            color: !systemFilter ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+            color: !systemFilter ? '#00ddaa' : 'rgba(255,255,255,0.7)',
             fontSize: '0.65rem',
           }} />
         {['Stanton', 'Pyro', 'Nyx'].map(sys => (
           <Chip key={sys} label={sys} size="small"
             onClick={() => setSystemFilter(systemFilter === sys ? '' : sys)}
             sx={{
+              height: 32,
               background: systemFilter === sys ? 'rgba(0,221,170,0.15)' : 'rgba(255,255,255,0.05)',
               border: `1px solid ${systemFilter === sys ? 'rgba(0,221,170,0.3)' : 'rgba(255,255,255,0.08)'}`,
-              color: systemFilter === sys ? '#00ddaa' : 'rgba(255,255,255,0.5)',
+              color: systemFilter === sys ? '#00ddaa' : 'rgba(255,255,255,0.7)',
               fontSize: '0.65rem',
             }} />
         ))}
@@ -284,9 +286,10 @@ function MiningGuidePanel() {
             onClick={() => handleSort(opt.key)}
             icon={sortKey === opt.key ? (sortAsc ? <ArrowUpward sx={{ fontSize: 12 }} /> : <ArrowDownward sx={{ fontSize: 12 }} />) : undefined}
             sx={{
+              height: 32,
               background: sortKey === opt.key ? 'rgba(201,162,39,0.15)' : 'rgba(255,255,255,0.05)',
               border: `1px solid ${sortKey === opt.key ? 'rgba(201,162,39,0.3)' : 'rgba(255,255,255,0.08)'}`,
-              color: sortKey === opt.key ? '#c9a227' : 'rgba(255,255,255,0.5)',
+              color: sortKey === opt.key ? '#c9a227' : 'rgba(255,255,255,0.7)',
               fontSize: '0.65rem',
               '& .MuiChip-icon': { color: 'inherit' },
             }}
@@ -304,13 +307,13 @@ function MiningGuidePanel() {
       {miningDate && (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: 'center', pt: 1, opacity: 0.5 }}>
           {miningStale && <Warning sx={{ fontSize: 12, color: '#ffaa00' }} />}
-          <Typography sx={{ fontSize: '0.6rem', color: miningStale ? '#ffaa00' : 'rgba(255,255,255,0.3)', fontFamily: '"Rajdhani",sans-serif' }}>
+            <Typography sx={{ fontSize: '0.6rem', color: miningStale ? '#ffaa00' : 'rgba(255,255,255,0.6)', fontFamily: '"Rajdhani",sans-serif' }}>
             数据更新于 {miningDate.toISOString().slice(0, 10)}
           </Typography>
         </Box>
       )}
 
-      <Typography sx={{ fontSize: '0.5rem', color: 'rgba(201,162,39,0.3)', textAlign: 'center', mt: 0.5 }}>
+      <Typography sx={{ fontSize: '0.5rem', color: 'rgba(201,162,39,0.6)', textAlign: 'center', mt: 0.5 }}>
         点击查看刷新地点
       </Typography>
 
@@ -371,7 +374,7 @@ function MineralCard({ mineral, price, onClick }) {
         <Box sx={{ mt: 1, pt: 1, borderTop: '1px solid rgba(201,162,39,0.08)' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5 }}>
             <Place sx={{ fontSize: 12, color: 'rgba(201,162,39,0.4)' }} />
-            <Typography sx={{ fontSize: '0.55rem', color: 'rgba(201,162,39,0.5)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif', fontWeight: 600 }}>
+            <Typography sx={{ fontSize: '0.55rem', color: 'rgba(201,162,39,0.7)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif', fontWeight: 600 }}>
               采矿基地位置
             </Typography>
           </Box>
@@ -380,9 +383,9 @@ function MineralCard({ mineral, price, onClick }) {
               const trimmed = sys.trim();
               return (
                 <Typography key={trimmed} sx={{
-                  fontSize: '0.5rem', color: trimmed === 'Pyro' ? '#ff6644' : '#00ddaa',
-                  background: trimmed === 'Pyro' ? 'rgba(255,102,68,0.08)' : 'rgba(0,221,170,0.08)',
-                  px: 0.5, borderRadius: '2px', border: `1px solid ${trimmed === 'Pyro' ? 'rgba(255,102,68,0.15)' : 'rgba(0,221,170,0.15)'}`,
+                  fontSize: '0.5rem',                   color: trimmed === 'Pyro' ? '#ff6644' : trimmed === 'Nyx' ? '#aa66ff' : '#00ddaa',
+                  background: trimmed === 'Pyro' ? 'rgba(255,102,68,0.08)' : trimmed === 'Nyx' ? 'rgba(170,102,255,0.08)' : 'rgba(0,221,170,0.08)',
+                  px: 0.5, borderRadius: '2px', border: `1px solid ${trimmed === 'Pyro' ? 'rgba(255,102,68,0.15)' : trimmed === 'Nyx' ? 'rgba(170,102,255,0.15)' : 'rgba(0,221,170,0.15)'}`,
                 }}>
                   {trimmed} 矿区
                 </Typography>
@@ -398,7 +401,7 @@ function MineralCard({ mineral, price, onClick }) {
 function StatRow({ label, value, bar }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-      <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.35)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif', minWidth: 72, flexShrink: 0 }}>
+      <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.55)', fontFamily: '"Noto Sans SC","Rajdhani",sans-serif', minWidth: 72, flexShrink: 0 }}>
         {label}
       </Typography>
       <Box sx={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>

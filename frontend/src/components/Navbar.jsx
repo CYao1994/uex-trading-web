@@ -1,6 +1,6 @@
 // Navbar.jsx - 功能：顶部导航栏 + 功能Tab切换
 import { Box, Typography, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Tooltip, TextField, InputAdornment, Chip } from '@mui/material';
-import { SwapHoriz, ShoppingCart, MilitaryTech, Link, Build, GpsFixed, Menu as MenuIcon, Close as CloseIcon, Feedback, RocketLaunch, VolumeUp, VolumeOff, PrecisionManufacturing, DirectionsBoat, Science, Search, History as HistoryIcon } from '@mui/icons-material';
+import { SwapHoriz, ShoppingCart, MilitaryTech, Link, Build, GpsFixed, Menu as MenuIcon, Close as CloseIcon, Feedback, RocketLaunch, VolumeUp, VolumeOff, PrecisionManufacturing, Rocket, Science, Search, History as HistoryIcon } from '@mui/icons-material';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import api from '../api/client';
 import { useSfx } from '../hooks/useSfx';
@@ -121,7 +121,7 @@ function Navbar({ activeTab, onTabChange, onFeedbackOpen }) {
     { key: 'ship_components', label: '组件', icon: <Build sx={{ fontSize: 16 }} /> },
     { key: 'ship_weapons', label: '武器', icon: <GpsFixed sx={{ fontSize: 16 }} /> },
     { key: 'blueprint', label: '蓝图', icon: <PrecisionManufacturing sx={{ fontSize: 16 }} /> },
-    { key: 'ships', label: '舰船', icon: <DirectionsBoat sx={{ fontSize: 16 }} /> },
+    { key: 'ships', label: '舰船', icon: <Rocket sx={{ fontSize: 16 }} /> },
     { key: 'mining_guide', label: '采矿指南', icon: <Science sx={{ fontSize: 16 }} /> },
     { key: 'warbond', label: '战争债券', icon: <MilitaryTech sx={{ fontSize: 16 }} /> },
   ];
@@ -495,7 +495,7 @@ function Navbar({ activeTab, onTabChange, onFeedbackOpen }) {
                               <Typography sx={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.85)', fontFamily: '"Noto Sans SC", "Rajdhani", sans-serif', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {r.name}
                               </Typography>
-                              <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.5)', fontFamily: '"Rajdhani", sans-serif' }}>
+                              <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.7)', fontFamily: '"Rajdhani", sans-serif' }}>
                                 {r.sub}
                               </Typography>
                             </Box>
@@ -522,7 +522,7 @@ function Navbar({ activeTab, onTabChange, onFeedbackOpen }) {
           )}
         </Box>
         <Tooltip title={sfxOn ? '关闭音效' : '开启音效'}>
-          <IconButton aria-label={sfxOn ? '关闭音效' : '开启音效'} onClick={() => { const next = soundManager.toggle(); setSfxOn(next); if (next) sfx('toggle_on'); }} sx={{ color: sfxOn ? '#c9a227' : 'rgba(255,255,255,0.3)' }}>
+          <IconButton aria-label={sfxOn ? '关闭音效' : '开启音效'} onClick={() => { const next = soundManager.toggle(); setSfxOn(next); if (next) sfx('toggle_on'); }} sx={{ color: sfxOn ? '#c9a227' : 'rgba(255,255,255,0.6)' }}>
             {sfxOn ? <VolumeUp sx={{ fontSize: 18 }} /> : <VolumeOff sx={{ fontSize: 18 }} />}
           </IconButton>
         </Tooltip>

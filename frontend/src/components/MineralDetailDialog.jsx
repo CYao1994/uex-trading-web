@@ -229,7 +229,7 @@ function MineralDetailDialog({ open, mineral, price, onClose }) {
 
           {locations.length === 0 ? (
             <Box sx={{ py: 2, textAlign: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '4px' }}>
-              <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', fontFamily: '"Rajdhani","Noto Sans SC",sans-serif' }}>
+              <Typography sx={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', fontFamily: '"Rajdhani","Noto Sans SC",sans-serif' }}>
                 \u6682\u65e0 Stanton \u7cfb\u7edf\u5237\u65b0\u5730\u70b9\u6570\u636e
               </Typography>
             </Box>

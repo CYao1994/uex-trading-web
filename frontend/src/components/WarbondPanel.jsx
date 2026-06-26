@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
-import { MilitaryTech, OpenInNew, Refresh, DirectionsBoat, Inventory2, Settings, Extension, CardGiftcard } from '@mui/icons-material';
+import { MilitaryTech, OpenInNew, Refresh, Rocket, Inventory2, Settings, Extension, CardGiftcard } from '@mui/icons-material';
 import { getWarbonds } from '../api/client';
 
 function formatPrice(cents) {
@@ -27,7 +27,7 @@ const CATEGORY_STYLES = {
   "Gear": { icon: Settings, color: '#00ccff' },
   "Packs": { icon: Inventory2, color: '#ff6644' },
   "Add-Ons": { icon: Extension, color: '#aa66ff' },
-  "Standalone Ships": { icon: DirectionsBoat, color: '#c9a227' },
+  "Standalone Ships": { icon: Rocket, color: '#c9a227' },
   "Package": { icon: CardGiftcard, color: '#00ff88' },
 };
 

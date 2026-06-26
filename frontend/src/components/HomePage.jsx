@@ -145,7 +145,7 @@ function HomePage({ onTabChange }) {
         mt: 4,
         fontFamily: '"Rajdhani", sans-serif',
         fontSize: '0.6rem',
-        color: 'rgba(201, 162, 39, 0.2)',
+        color: 'rgba(201, 162, 39, 0.6)',
       }}>
         数据来源: UEXCORP & 游戏文件 · 作者: CYao1994
       </Typography>
