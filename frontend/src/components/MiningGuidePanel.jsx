@@ -1,7 +1,7 @@
 // MiningGuidePanel.jsx - 采矿矿物数据库面板
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Box, Typography, TextField, InputAdornment, Chip, CircularProgress } from '@mui/material';
-import { Search, Science, ArrowUpward, ArrowDownward, AttachMoney, Place, Warning, History as HistoryIcon } from '@mui/icons-material';
+import { Search, Science, ArrowUpward, ArrowDownward, Place, Warning, History as HistoryIcon } from '@mui/icons-material';
 import { useDataFreshness } from '../hooks/useDataFreshness';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 import MineralDetailDialog from './MineralDetailDialog';
@@ -24,12 +24,6 @@ const SORT_OPTIONS = [
   { key: 'elementOptimalWindowMidpoint', label: '最佳窗口中点' },
   { key: 'elementExplosionMultiplier', label: '爆炸倍率' },
   { key: 'elementClusterFactor', label: '聚簇系数' },
-];
-
-const STANTON_MINING_BASES = [
-  'Mining Base #001', 'Mining Base #002', 'Mining Base #003', 'Mining Base #004',
-  'Mining Base #005', 'Mining Base #006', 'Mining Base #007', 'Mining Base #008',
-  'Mining Base #009', 'Mining Base #010', 'Mining Base #011', 'Mining Base #012',
 ];
 
 const MINERAL_SYSTEM_MAP = {

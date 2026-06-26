@@ -1,6 +1,6 @@
 // ChainPanel.jsx - 功能：链式跑商规划(loading状态+路线结果展示)+ 输入框focus管理
 import { useState, useCallback, useEffect } from 'react';
-import { Box, Typography, Button, Divider, Alert, Autocomplete, TextField, InputAdornment, CircularProgress, Chip } from '@mui/material';
+import { Box, Typography, Button, Divider, Alert, Autocomplete, TextField, InputAdornment, CircularProgress, Chip, Checkbox as CheckBox } from '@mui/material';
 import { Link, RocketLaunch, Refresh, DirectionsCar, Replay } from '@mui/icons-material';
 import { searchLocations, tradeChain, loadAllVehicles } from '../api/client';
 import { useSfx } from '../hooks/useSfx';
