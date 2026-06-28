@@ -4,7 +4,7 @@ import { Box, Typography, Chip } from '@mui/material';
 import { Lock, LockOpen, OpenInNew } from '@mui/icons-material';
 
 // Hangar cycle parameters
-const CYCLE_DRIFT_MS = 226;
+const CYCLE_DRIFT_MS = 266;
 const DESIGN_ONLINE_MIN = 65;
 const DESIGN_OFFLINE_MIN = 120;
 const DESIGN_CYCLE_MIN = DESIGN_ONLINE_MIN + DESIGN_OFFLINE_MIN;
