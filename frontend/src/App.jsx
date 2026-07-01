@@ -29,17 +29,32 @@ const HomePage = lazy(() => import('./components/HomePage'));
 
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState('home');
+  const getInitialTab = () => {
+    const hash = window.location.hash.replace('#', '');
+    return hash || 'home';
+  };
+  const [activeTab, setActiveTab] = useState(getInitialTab);
   const [result, setResult] = useState(null);
   const { showToast } = useToast();
 
-  // Track which tabs have been visited — only mount a tab's component
-  // after the user first navigates to it (lazy mounting).
-  // Once visited, the tab stays mounted (hidden via CSS) to preserve state.
-  const [visitedTabs, setVisitedTabs] = useState(() => new Set(['home']));
-
-  // Per-tab result storage
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([getInitialTab()]));
   const resultsRef = useRef({});
+
+  // Listen for browser back/forward
+  useEffect(() => {
+    const onHashChange = () => {
+      const hash = window.location.hash.replace('#', '') || 'home';
+      setActiveTab(hash);
+      setVisitedTabs(prev => {
+        if (prev.has(hash)) return prev;
+        const next = new Set(prev);
+        next.add(hash);
+        return next;
+      });
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const handleResult = useCallback((data) => {
     setResult(data);
@@ -50,6 +65,7 @@ function AppContent() {
   }, [activeTab, showToast]);
 
   const handleTabChange = useCallback((tab) => {
+    window.location.hash = tab;
     setActiveTab(tab);
     setVisitedTabs(prev => {
       if (prev.has(tab)) return prev;
@@ -57,7 +73,6 @@ function AppContent() {
       next.add(tab);
       return next;
     });
-    // Restore previous result for this tab (if any)
     setResult(resultsRef.current[tab] || null);
   }, []);
 
