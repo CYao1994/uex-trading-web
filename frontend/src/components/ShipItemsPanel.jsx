@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Box, Typography, TextField, InputAdornment, Chip, CircularProgress, Alert } from '@mui/material';
 import { Search, CompareArrows, Warning } from '@mui/icons-material';
+import EmptyState from './EmptyState';
 import useShipItemsData from '../hooks/useShipItemsData';
 import ItemDetailDialog from './ItemDetailDialog';
 import FilterBar from './FilterBar';
@@ -402,7 +403,11 @@ function ShipItemsPanel({ categories, itemTypeLabel, accentColor, filterConfig =
             overflow: 'hidden',
             alignItems: 'stretch',
           }}>
-            {filteredItems.map((item) => (
+            {filteredItems.length === 0 ? (
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <EmptyState message="未找到匹配项" sub="试试其他关键词或筛选条件" />
+              </Box>
+            ) : filteredItems.map((item) => (
               <ItemCard
                 key={item.id}
                 item={item}

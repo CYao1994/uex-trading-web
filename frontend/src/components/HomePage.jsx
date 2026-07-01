@@ -21,7 +21,8 @@ function HomePage({ onTabChange }) {
   const searchRef = useRef(null);
   const searchTimerRef = useRef(null);
 
-  useEffect(() => {
+  const loadData = () => {
+    if (allItems.length > 0 || itemsLoading) return;
     setItemsLoading(true);
     fetch('/data/items-catalog.json')
       .then(r => r.ok ? r.json() : null)
@@ -52,24 +53,24 @@ function HomePage({ onTabChange }) {
       })
       .catch(() => setItemsLoading(false));
 
-    fetch('https://api.uexcorp.space/2.0/vehicles')
+    fetch('/api/vehicles?q=')
       .then(r => r.ok ? r.json() : null)
       .then(data => {
-        if (!data?.data) return;
-        const ships = data.data
-          .filter(v => v.is_spaceship === 1 && !v.is_addon)
-          .map(v => ({
-            id: v.id,
-            name: v.name_full || v.name,
-            name_zh: v.name_full || v.name,
-            tab: 'ships',
-            type_label: '舰船',
-            slug: v.url_name,
-          }));
+        if (!data) return;
+        const ships = (Array.isArray(data) ? data : []).map(v => ({
+          id: v.id,
+          name: v.name || '',
+          name_zh: v.name_zh || v.name || '',
+          tab: 'ships',
+          type_label: '舰船',
+          slug: v.name ? v.name.toLowerCase().replace(/\s+/g, '-') : '',
+        }));
         setAllItems(prev => [...prev, ...ships]);
       })
-      .catch(() => console.warn('Failed to load vehicles'));
+      .catch(() => {});
+  };
 
+  useEffect(() => {
     return () => {
       if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     };
@@ -77,6 +78,7 @@ function HomePage({ onTabChange }) {
 
   const handleSearch = (q) => {
     setSearchQuery(q);
+    loadData();
     if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     if (!q.trim()) {
       setSearchResults([]);
