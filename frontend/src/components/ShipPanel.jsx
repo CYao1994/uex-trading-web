@@ -276,12 +276,12 @@ function ShipPanel() {
 
 const WikiShipCard = React.memo(function WikiShipCard({ ship, zhName, compareMode, isSelected, onCompareClick: _onCompareClick, onClick }) {
   const [imgError, setImgError] = useState(0);
+  const localImgWebp = `/ships/${ship.slug}.webp`;
   const localImgJpg = `/ships/${ship.slug}.jpg`;
   const localImgPng = `/ships/${ship.slug}.png`;
-  const localImgWebp = `/ships/${ship.slug}.webp`;
   const wikiImgUrl = ship.image_url || '';
   const placeholderSrc = getPlaceholderSvg(ship.name_zh || ship.name, ship.manufacturer?.name);
-  const imgSrc = imgError === 0 ? localImgJpg : imgError === 1 ? localImgPng : imgError === 2 ? localImgWebp : imgError === 3 ? wikiImgUrl : placeholderSrc;
+  const imgSrc = imgError === 0 ? localImgWebp : imgError === 1 ? localImgJpg : imgError === 2 ? localImgPng : imgError === 3 ? wikiImgUrl : placeholderSrc;
   const mfrName = ship.manufacturer?.name || ship.manufacturer || '';
   const crewStr = ship.crew?.min && ship.crew?.max ? (ship.crew.min === ship.crew.max ? `${ship.crew.min}` : `${ship.crew.min}-${ship.crew.max}`) : '—';
   const normalizedRole = normalizeRole(ship.role);
@@ -395,11 +395,11 @@ function ShipDetailDialog({ ship, zhName, onClose, translations }) {
   const pilotDps = ship.weaponry?.pilot_dps?.toFixed(0) || ship.weaponry_enriched?.pilot_dps?.toFixed(0) || '—';
   const turretDps = ship.weaponry?.turret_dps?.toFixed(0) || ship.weaponry_enriched?.turret_dps?.toFixed(0) || null;
   const normalizedRole = normalizeRole(ship.role);
+  const localDetailImgWebp = `/ships/${ship.slug}.webp`;
   const localDetailImgJpg = `/ships/${ship.slug}.jpg`;
   const localDetailImgPng = `/ships/${ship.slug}.png`;
-  const localDetailImgWebp = `/ships/${ship.slug}.webp`;
   const wikiImg = ship.image_url || '';
-  const detailImgSrc = detailImgError === 0 ? localDetailImgJpg : detailImgError === 1 ? localDetailImgPng : detailImgError === 2 ? localDetailImgWebp : detailImgError === 3 ? wikiImg : getPlaceholderSvg(ship.name_zh || ship.name, mfrName);
+  const detailImgSrc = detailImgError === 0 ? localDetailImgWebp : detailImgError === 1 ? localDetailImgJpg : detailImgError === 2 ? localDetailImgPng : detailImgError === 3 ? wikiImg : getPlaceholderSvg(ship.name_zh || ship.name, mfrName);
 
   const purchaseData = ship.uex_prices?.purchase || [];
   const rentalData = ship.uex_prices?.rental || [];
