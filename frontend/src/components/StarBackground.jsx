@@ -5,11 +5,12 @@ function StarBackground() {
   const videoRef = useRef(null);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [isDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
 
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      video.play().catch(() => console.warn('Video autoplay was prevented'));
+      video.play().catch(() => {});
     }
   }, []);
 
@@ -147,13 +148,15 @@ function StarBackground() {
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, pointerEvents: 'none', overflow: 'hidden', background: '#010308' }}>
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
+      {isDesktop && (
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -165,6 +168,7 @@ function StarBackground() {
       >
         <source src="/sc-combat-bg.mp4" type="video/mp4" />
       </video>
+      )}
       <canvas
         ref={canvasRef}
         style={{

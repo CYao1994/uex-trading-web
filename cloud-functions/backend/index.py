@@ -7,8 +7,12 @@ because EdgeOne scans for this entry identifier to register the function.
 
 import sys
 import os
+import time
 import logging
+from collections import defaultdict
 from contextlib import asynccontextmanager
+from fastapi import Request
+from fastapi.responses import JSONResponse
 
 # Ensure cloud-functions/backend dir is in path for both package and direct execution
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -51,6 +55,34 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Simple sliding window rate limiter
+_rate_limits = defaultdict(list)
+
+RATE_LIMITS = {
+    "/sell-route": (2, 1),
+    "/buy-route": (2, 1),
+    "/trade-chain": (1, 1),
+    "/commodities": (5, 1),
+    "/terminals": (5, 1),
+}
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    path = request.url.path
+    client_ip = request.client.host if request.client else "unknown"
+    key = f"{client_ip}:{path}"
+
+    for pattern, (max_req, window) in RATE_LIMITS.items():
+        if path.startswith(pattern):
+            now = time.time()
+            _rate_limits[key] = [t for t in _rate_limits[key] if now - t < window]
+            if len(_rate_limits[key]) >= max_req:
+                return JSONResponse(status_code=429, content={"detail": "Too many requests"})
+            _rate_limits[key].append(now)
+            break
+
+    return await call_next(request)
 
 @app.get("/health")
 async def health():
