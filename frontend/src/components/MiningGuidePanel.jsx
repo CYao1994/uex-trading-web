@@ -109,10 +109,11 @@ function MiningGuidePanel() {
   const searchBoxRef = useRef(null);
 
   useEffect(() => {
+    const ctrl = new AbortController();
     Promise.all([
-      fetch('/data/mining-data.json').then(r => r.ok ? r.json() : null),
-      fetch('/data/shop-inventory-summary.json').then(r => r.ok ? r.json() : null),
-      fetch('/data/mining-locations.json').then(r => r.ok ? r.json() : null),
+      fetch('/data/mining-data.json', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null),
+      fetch('/data/shop-inventory-summary.json', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null),
+      fetch('/data/mining-locations.json', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null),
     ]).then(([miningData, shopData, locationData]) => {
       if (miningData?.minerals) setMinerals(miningData.minerals);
       if (shopData?.profiles) {
@@ -140,6 +141,7 @@ function MiningGuidePanel() {
       }
       setLoading(false);
     }).catch(() => setLoading(false));
+    return () => ctrl.abort();
   }, []);
 
   const mineralPriceLookup = useMemo(() => {

@@ -295,7 +295,7 @@ const WikiShipCard = React.memo(function WikiShipCard({ ship, zhName, compareMod
     }}>
       <Box sx={{ height: 120, background: 'rgba(0,10,20,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
         <Box component="img" src={imgSrc} alt={ship.name}
-          referrerPolicy="no-referrer"
+          loading="lazy" referrerPolicy="no-referrer"
           onError={() => setImgError(prev => prev + 1)}
           sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         {compareMode && (

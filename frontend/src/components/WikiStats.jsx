@@ -29,12 +29,14 @@ function WikiStats() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    fetch('https://api.star-citizen.wiki/api/stats')
+    const ctrl = new AbortController();
+    fetch('https://api.star-citizen.wiki/api/stats', { signal: ctrl.signal })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data?.data?.[0]) setStats(data.data[0]);
       })
       .catch(() => {});
+    return () => ctrl.abort();
   }, []);
 
   if (!stats) return null;

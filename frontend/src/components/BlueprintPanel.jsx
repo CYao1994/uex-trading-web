@@ -210,7 +210,8 @@ export default function BlueprintPanel() {
   const bpSearchBoxRef = useRef(null);
 
   useEffect(() => {
-    fetch('/data/wiki-blueprints.json')
+    const ctrl = new AbortController();
+    fetch('/data/wiki-blueprints.json', { signal: ctrl.signal })
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .then(data => {
         const list = Object.values(data.blueprints || {});
@@ -218,9 +219,12 @@ export default function BlueprintPanel() {
         setLoading(false);
       })
       .catch(err => {
-        setError(err.message);
-        setLoading(false);
+        if (err.name !== 'AbortError') {
+          setError(err.message);
+          setLoading(false);
+        }
       });
+    return () => ctrl.abort();
   }, []);
 
   const types = useMemo(() => {
