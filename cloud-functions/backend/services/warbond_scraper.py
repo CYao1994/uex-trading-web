@@ -788,35 +788,64 @@ def _get_image_url(name: str, rsi_slug: str = "") -> str:
     return ""
 
 
-def _http_get(url: str, timeout: int = 15) -> str:
-    """HTTP GET using urllib.request (no curl dependency).
-    Equivalent to curl -s -k --tlsv1.2.
-    """
+def _http_get(url: str, timeout: int = 15, retries=2) -> str:
+    """HTTP GET using urllib.request with retry logic."""
     _ssl_ctx = ssl.create_default_context()
     _ssl_ctx.check_hostname = False
     _ssl_ctx.verify_mode = ssl.CERT_NONE
 
-    req = urllib.request.Request(url, headers={
-        "Accept": "text/html,application/json",
-        "User-Agent": "UEX-Trade-Navigator/3.18.0",
-    })
-    with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
-        return resp.read().decode("utf-8")
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            req = urllib.request.Request(url, headers={
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept-Language": "en-US,en;q=0.9",
+            })
+            with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
+                return resp.read().decode("utf-8")
+        except Exception as e:
+            last_error = e
+            if attempt < retries:
+                time.sleep(1 * (attempt + 1))
+                continue
+            break
+
+    raise last_error
 
 
-def _http_post_json(url, data, timeout=30):
+def _http_post_json(url, data, timeout=30, retries=2):
+    """HTTP POST JSON with retry logic."""
     import json as json_mod
     _ssl_ctx = ssl.create_default_context()
     _ssl_ctx.check_hostname = False
     _ssl_ctx.verify_mode = ssl.CERT_NONE
     body = json_mod.dumps(data).encode("utf-8")
-    req = urllib.request.Request(url, data=body, headers={
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "User-Agent": "UEX-Trade-Navigator/3.22.0",
-    })
-    with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
-        return json_mod.loads(resp.read().decode("utf-8"))
+
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            req = urllib.request.Request(url, data=body, headers={
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Origin": "https://robertsspaceindustries.com",
+                "Referer": "https://robertsspaceindustries.com/store",
+            })
+            with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
+                result = json_mod.loads(resp.read().decode("utf-8"))
+                # Check for GraphQL errors
+                if isinstance(result, list) and len(result) > 0 and "errors" in result[0]:
+                    raise Exception(f"GraphQL error: {result[0]['errors'][0].get('message', 'Unknown')}")
+                return result
+        except Exception as e:
+            last_error = e
+            if attempt < retries:
+                time.sleep(1 * (attempt + 1))  # Exponential backoff
+                continue
+            break
+
+    raise last_error
 
 
 def _fetch_from_starnotifier() -> list:
@@ -1007,20 +1036,39 @@ def fetch_warbonds(refresh: bool = False) -> dict:
                     resources = store_data["resources"]
                     total = store_data["totalCount"]
                     for item in resources:
-                        if item.get("isWarbond"):
-                            native = item.get("nativePrice") or {}
-                            price = item.get("price") or {}
+                        # Multi-factor warbond detection
+                        is_warbond = item.get("isWarbond", False)
+                        label = item.get("label", "") or ""
+                        item_name = item.get("name", "") or ""
+                        native = item.get("nativePrice") or {}
+                        price = item.get("price") or {}
+                        native_amount = native.get("amount", 0) or 0
+                        standard_amount = price.get("amount", 0) or 0
+
+                        # Also detect warbond by label or name containing "Warbond"
+                        if not is_warbond:
+                            if "warbond" in label.lower() or "warbond" in item_name.lower():
+                                is_warbond = True
+
+                        # Also detect by price difference (native price < standard price)
+                        if not is_warbond and native_amount and standard_amount and native_amount < standard_amount:
+                            # Only if difference is significant (more than 5%)
+                            diff = standard_amount - native_amount
+                            if diff > standard_amount * 0.05:
+                                is_warbond = True
+
+                        if is_warbond:
                             all_items.append({
                                 "name": item["name"],
                                 "name_zh": _get_name_zh(item["name"]),
                                 "category": category_name,
                                 "category_id": category_id,
-                                "warbond_price": native.get("amount") or price.get("amount"),
-                                "standard_price": price.get("amount"),
+                                "warbond_price": native_amount or standard_amount,
+                                "standard_price": standard_amount or native_amount,
                                 "url": f"https://robertsspaceindustries.com{item['url']}" if item.get("url") else "",
                                 "image_url": _get_image_url(item["name"], item.get("slug", "")),
                                 "is_limited": item.get("isVip", False),
-                                "label": item.get("label", ""),
+                                "label": label,
                             })
                     if page * 50 >= total:
                         break

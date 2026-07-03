@@ -38,3 +38,6 @@ Thumbs.db
 
 # CodeGraph
 .codegraph/
+
+# Temp build dirs
+frontend/public/ships-webp/

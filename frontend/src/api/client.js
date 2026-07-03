@@ -90,7 +90,8 @@ async function cachedGet(endpoint, params = {}, refresh = false, timeoutOverride
   }
 
   // No cache or forced refresh — fetch synchronously
-  const response = await api.get(endpoint, { params, ...(timeoutOverride ? { timeout: timeoutOverride } : {}) });
+  const requestParams = refresh ? { ...params, refresh: 'true' } : params;
+  const response = await api.get(endpoint, { params: requestParams, ...(timeoutOverride ? { timeout: timeoutOverride } : {}) });
   const ttl = getTTLForEndpoint(endpoint);
   set(cacheKey, response.data, ttl);
   return response;

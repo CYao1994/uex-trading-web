@@ -19,7 +19,7 @@ TTL_TERMINALS = 6 * 3600       # 6 hours
 TTL_COMMODITIES = 6 * 3600     # 6 hours
 TTL_PRICES = 2 * 3600          # 2 hours
 TTL_DISTANCES = 24 * 3600      # 24 hours
-TTL_WARBONDS = 4 * 3600        # 4 hours
+TTL_WARBONDS = 2 * 3600        # 2 hours (was 4h, reduced for fresher data)
 TTL_LOCATIONS = 24 * 3600      # 24 hours (game locations change very slowly)
 
 

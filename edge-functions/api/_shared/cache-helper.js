@@ -10,7 +10,8 @@
 
 export const TTL = {
   STATIC_6H: 21600,      // 6 hours - terminals, commodities, vehicles, locations, items, item-attrs
-  STATIC_4H: 14400,      // 4 hours - warbonds
+  STATIC_4H: 14400,      // 4 hours - general static data
+  STATIC_1H: 3600,       // 1 hour - warbonds (fresher data)
   STATIC_24H: 86400,     // 24 hours - categories-attrs
   PRICE_1H: 3600,        // 1 hour - prices (was 2h, reduced for fresher data)
 };

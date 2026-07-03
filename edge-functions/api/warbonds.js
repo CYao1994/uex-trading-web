@@ -12,7 +12,7 @@ export async function onRequestGet(ctx) {
     ctx,
     'warbonds',
     'UEX_CACHE_STATIC',
-    TTL.STATIC_4H,
+    TTL.STATIC_1H,
     '/warbonds',
     () => ({})
   );

@@ -154,14 +154,35 @@ function WarbondCard({ item, accentColor = '#c9a227', index }) {
   );
 }
 
+function formatRelativeTime(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return '刚刚更新';
+  if (diffMins < 60) return `${diffMins} 分钟前更新`;
+  if (diffHours < 24) return `${diffHours} 小时前更新`;
+  if (diffDays < 7) return `${diffDays} 天前更新`;
+  return date.toLocaleDateString('zh-CN');
+}
+
 function WarbondPanel() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
   const panelRef = useRef(null);
 
   const fetchData = async (refresh = false) => {
-    setLoading(true);
+    if (refresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
     setError('');
     try {
       const res = await getWarbonds(refresh);
@@ -170,6 +191,7 @@ function WarbondPanel() {
       setError(e.response?.data?.detail || e.message || '获取战争债券数据失败');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -252,11 +274,16 @@ function WarbondPanel() {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           {data?.last_updated && (
-            <Typography sx={{ color: 'rgba(255, 170, 0, 0.25)', fontSize: '0.6rem', fontFamily: '"Rajdhani", sans-serif' }}>
-              更新于 {new Date(data.last_updated).toLocaleString('zh-CN', {
-                month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
-              })}
-            </Typography>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography sx={{ color: '#ffaa00', fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif', fontWeight: 600 }}>
+                {formatRelativeTime(data.last_updated)}
+              </Typography>
+              <Typography sx={{ color: 'rgba(255, 170, 0, 0.3)', fontSize: '0.6rem', fontFamily: '"Rajdhani", sans-serif' }}>
+                {new Date(data.last_updated).toLocaleString('zh-CN', {
+                  month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+                })}
+              </Typography>
+            </Box>
           )}
           <Box
             component="a"
@@ -276,19 +303,21 @@ function WarbondPanel() {
             <Typography sx={{ fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif', fontWeight: 600 }}>RSI商店</Typography>
           </Box>
           <Box
-            onClick={() => fetchData(true)}
+            onClick={() => !refreshing && fetchData(true)}
             sx={{
               display: 'flex', alignItems: 'center', gap: 0.5,
-              px: 1.5, py: 1, cursor: 'pointer',
-              color: 'rgba(255, 170, 0, 0.4)',
+              px: 1.5, py: 1, cursor: refreshing ? 'wait' : 'pointer',
+              color: refreshing ? 'rgba(255, 170, 0, 0.7)' : 'rgba(255, 170, 0, 0.4)',
               border: '1px solid rgba(255, 170, 0, 0.15)',
               borderRadius: '2px',
               transition: 'color 0.2s, border-color 0.2s',
               '&:hover': { color: '#ffaa00', borderColor: 'rgba(255, 170, 0, 0.4)' },
             }}
           >
-            <Refresh sx={{ fontSize: 14 }} />
-            <Typography sx={{ fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif', fontWeight: 600 }}>刷新</Typography>
+            <Refresh sx={{ fontSize: 14, animation: refreshing ? 'spin 1s linear infinite' : 'none' }} />
+            <Typography sx={{ fontSize: '0.7rem', fontFamily: '"Rajdhani", sans-serif', fontWeight: 600 }}>
+              {refreshing ? '刷新中...' : '刷新数据'}
+            </Typography>
           </Box>
         </Box>
       </Box>
