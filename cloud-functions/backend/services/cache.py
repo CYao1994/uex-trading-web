@@ -1,3 +1,4 @@
+import logging
 """
 TTL Cache Manager - Unified caching with time-to-live for all API data.
 
@@ -196,9 +197,9 @@ class DistanceCache:
                     if (now - ts) < self._ttl:
                         self._queried.add(int(tid))
                         self._query_timestamps[int(tid)] = ts
-                print(f"[DistanceCache] Loaded {loaded} distances from disk cache")
+                logging.info(f"[DistanceCache] Loaded {loaded} distances from disk cache")
         except Exception as e:
-            print(f"[DistanceCache] Failed to load disk cache: {e}")
+            logging.warning(f"[DistanceCache] Failed to load disk cache: {e}")
 
     def _persist(self) -> None:
         """Save current cache state to disk."""

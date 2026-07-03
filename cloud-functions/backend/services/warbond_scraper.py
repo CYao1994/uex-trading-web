@@ -1,3 +1,4 @@
+import logging
 """
 Warbond Scraper Service
 Fetches current warbond items from starnotifier.com and RSI store API.
@@ -1025,7 +1026,7 @@ def fetch_warbonds(refresh: bool = False) -> dict:
                         break
                     page += 1
             except Exception as e:
-                print(f"RSI GraphQL API failed for category {category_name} ({category_id}): {e}")
+                logging.warning(f"RSI GraphQL API failed for category {category_name} ({category_id}): {e}")
 
         # 2. Merge starnotifier.com data (always, not just fallback)
         # RSI GraphQL may not return all warbond items, so we merge from both sources
@@ -1041,9 +1042,9 @@ def fetch_warbonds(refresh: bool = False) -> dict:
                 if item["name"] not in cat_names:
                     all_items.append(item)
                     cat_names.add(item["name"])
-            print(f"Merged {len(starnotifier_items)} items from starnotifier, total now: {len(all_items)}")
+            logging.info(f"Merged {len(starnotifier_items)} items from starnotifier, total now: {len(all_items)}")
         except Exception as e:
-            print(f"starnotifier.com merge failed: {e}")
+            logging.warning(f"starnotifier.com merge failed: {e}")
 
         # 3. Supplement images from Upgrade API
         try:
@@ -1085,9 +1086,9 @@ def fetch_warbonds(refresh: bool = False) -> dict:
                             item["image_url"] = img_map[key]
                             filled += 1
                             break
-            print(f"Upgrade API: {len(img_map)} images, filled {filled} missing")
+            logging.info(f"Upgrade API: {len(img_map)} images, filled {filled} missing")
         except Exception as e:
-            print(f"Upgrade API image fetch failed: {e}")
+            logging.warning(f"Upgrade API image fetch failed: {e}")
 
         # 4. Build result
         result = {

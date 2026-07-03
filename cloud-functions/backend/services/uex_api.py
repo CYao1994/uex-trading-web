@@ -1,3 +1,4 @@
+import logging
 """
 UEX API Client - Handles TLS compatibility, authentication and caching.
 Uses centralized TTL cache from cache.py.
@@ -953,7 +954,7 @@ def _load_prices_from_disk() -> Optional[list]:
             return None  # Too old, don't use
         prices = data.get('prices', [])
         if prices:
-            print(f"[PricesCache] Loaded {len(prices)} prices from disk ({int((time.time()-ts)/60)}min old)")
+            logging.info(f"[PricesCache] Loaded {len(prices)} prices from disk ({int((time.time()-ts)/60)}min old)")
             return prices
     except Exception:
         pass
@@ -988,7 +989,7 @@ def _load_static_from_disk(name: str):
             return None
         result = data.get('data')
         if result:
-            print(f"[{name}Cache] Loaded from disk ({int((time.time()-ts)/60)}min old)")
+            logging.info(f"[{name}Cache] Loaded from disk ({int((time.time()-ts)/60)}min old)")
             return result
     except Exception:
         pass

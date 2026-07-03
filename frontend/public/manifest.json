@@ -1,21 +1,29 @@
 {
   "name": "Astral Lance 星槊 - 星际公民交易工具",
   "short_name": "星槊交易",
-  "description": "星际公民交易路线规划工具",
+  "description": "Star Citizen星际公民交易路线规划工具。支持清仓路线、进货路线、链式跑商、舰船数据库、组件武器对比、采矿指南等。",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020810",
   "theme_color": "#c9a227",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["games", "utilities"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
-  ],
-  "categories": ["games", "utilities"],
-  "lang": "zh-CN",
-  "dir": "ltr"
+  ]
 }
