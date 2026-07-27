@@ -4,7 +4,7 @@ import { Box, Typography, Chip } from '@mui/material';
 import { Lock, LockOpen, OpenInNew } from '@mui/icons-material';
 
 // Hangar cycle parameters
-const CYCLE_DRIFT_MS = 266;
+const CYCLE_DRIFT_MS = 261;
 const DESIGN_ONLINE_MIN = 65;
 const DESIGN_OFFLINE_MIN = 120;
 const DESIGN_CYCLE_MIN = DESIGN_ONLINE_MIN + DESIGN_OFFLINE_MIN;
@@ -13,7 +13,7 @@ const DESIGN_CYCLE_MS = DESIGN_CYCLE_MIN * 60 * 1000;
 const CYCLE_DURATION = DESIGN_CYCLE_MS + CYCLE_DRIFT_MS;
 const OPEN_DURATION = Math.round(CYCLE_DURATION * DESIGN_ONLINE_MS / DESIGN_CYCLE_MS);
 const CLOSE_DURATION = CYCLE_DURATION - OPEN_DURATION;
-const INITIAL_OPEN_TIME = new Date('2026-07-22T19:37:42.439-04:00');
+const INITIAL_OPEN_TIME = new Date('2026-07-23T20:18:06.115-04:00');
 
 // Reference URL for calibration
 const REFERENCE_URL = 'https://exec.xyxyll.com/';
